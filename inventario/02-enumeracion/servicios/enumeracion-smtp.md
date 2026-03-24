@@ -1,7 +1,7 @@
 # Enumeración SMTP (Simple Mail Transfer Protocol)
 
 ## Descripción
-SMTP (Simple Mail Transfer Protocol) es el protocolo estándar para envío de correo electronico, operando en los puertos 25/tcp (relay), 465/tcp (SMTPS) y 587/tcp (submission). La enumeración SMTP permite identificar la versión del servidor de correo, verificar la existencia de usuarios mediante los comandos VRFY, EXPN y RCPT TO, y descubrir configuraciones inseguras como open relay. La enumeración de usuarios SMTP es especialmente valiosa porque permite construir una lista de cuentas validas del sistema sin autenticación, que luego puede usarse para ataques de fuerza bruta contra otros servicios (SSH, SMB, RDP). Los servidores mal configurados que permiten open relay tambien pueden usarse para enviar correos de phishing.
+SMTP (Simple Mail Transfer Protocol) es el protocolo estándar para envío de correo electrónico, operando en los puertos 25/tcp (relay), 465/tcp (SMTPS) y 587/tcp (submission). La enumeración SMTP permite identificar la versión del servidor de correo, verificar la existencia de usuarios mediante los comandos VRFY, EXPN y RCPT TO, y descubrir configuraciones inseguras como open relay. La enumeración de usuarios SMTP es especialmente valiosa porque permite construir una lista de cuentas válidas del sistema sin autenticación, que luego puede usarse para ataques de fuerza bruta contra otros servicios (SSH, SMB, RDP). Los servidores mal configurados que permiten open relay también pueden usarse para enviar correos de phishing.
 
 ## Clasificación
 - **Fase**: Enumeración
@@ -27,7 +27,7 @@ nmap -sV -p 25 <target>
 nmap -p 25 --script smtp-commands <target>
 # Resultado: VRFY, EXPN, ETRN, DSN, SIZE, HELP — indica que comandos acepta
 
-# Enumeracion de usuarios via RCPT TO
+# Enumeración de usuarios vía RCPT TO
 nmap -p 25 --script smtp-enum-users \
   --script-args smtp-enum-users.methods={VRFY,EXPN,RCPT} <target>
 
@@ -57,27 +57,27 @@ RCPT TO:<admin@domain.com>      # 250 OK = usuario existe
 RCPT TO:<noexiste@domain.com>   # 550 User unknown = no existe
 ```
 
-**Codigos de respuesta clave:**
+**Códigos de respuesta clave:**
 | Código | Significado |
 |--------|-------------|
-| 250 | OK — usuario existe / accion completada |
-| 251 | Usuario no local, se reenviara |
-| 252 | No se puede verificar, pero se intentara entregar |
+| 250 | OK — usuario existe / acción completada |
+| 251 | Usuario no local, se reenviará |
+| 252 | No se puede verificar, pero se intentará entregar |
 | 550 | Usuario no existe / mailbox no disponible |
 | 553 | Nombre de mailbox no permitido |
 
 ### Enumeración con smtp-user-enum
 ```bash
-# Enumeracion via VRFY (metodo por defecto)
+# Enumeración vía VRFY (método por defecto)
 smtp-user-enum -M VRFY -U /usr/share/wordlists/metasploit/unix_users.txt -t <target>
 
-# Enumeracion via EXPN
+# Enumeración vía EXPN
 smtp-user-enum -M EXPN -U /usr/share/wordlists/metasploit/unix_users.txt -t <target>
 
-# Enumeracion via RCPT TO
+# Enumeración vía RCPT TO
 smtp-user-enum -M RCPT -U /usr/share/wordlists/metasploit/unix_users.txt -t <target>
 
-# Especificar puerto no estandar
+# Especificar puerto no estándar
 smtp-user-enum -M VRFY -U users.txt -t <target> -p 587
 ```
 
@@ -89,7 +89,7 @@ set RHOSTS <target>
 run
 # Resultado: version del MTA (Postfix, Sendmail, Exim, hMailServer, etc.)
 
-# Enumeracion de usuarios
+# Enumeración de usuarios
 use auxiliary/scanner/smtp/smtp_enum
 set RHOSTS <target>
 set USER_FILE /usr/share/wordlists/metasploit/unix_users.txt
@@ -105,14 +105,14 @@ swaks --to test@domain.com --server <target>
 # Probar open relay
 swaks --to externo@gmail.com --from falso@domain.com --server <target>
 
-# Probar autenticacion
+# Probar autenticación
 swaks --to user@domain.com --server <target> --auth LOGIN --auth-user admin --auth-password pass
 ```
 
 ## Contramedidas
 - Deshabilitar los comandos VRFY y EXPN en la configuración del servidor SMTP
-- Configurar RCPT TO para no revelar si un usuario existe (respuesta generica para todos los casos)
-- No permitir open relay: restringir el reenvio a dominios y redes autorizadas
+- Configurar RCPT TO para no revelar si un usuario existe (respuesta genérica para todos los casos)
+- No permitir open relay: restringir el reenvío a dominios y redes autorizadas
 - Implementar rate limiting para prevenir enumeración masiva de usuarios
 - Usar autenticación SMTP (SMTP AUTH) en los puertos de submission (587)
 - Habilitar STARTTLS o usar SMTPS (465) para cifrar comunicaciones

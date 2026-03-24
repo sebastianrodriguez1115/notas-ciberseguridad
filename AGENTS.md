@@ -157,6 +157,10 @@ inventario/
     └── malware-analysis/    # static, dynamic, yara rules
 ```
 
+## Idioma y Ortografía
+
+Todo el contenido del inventario debe estar escrito en español con ortografía correcta, incluyendo acentos (á, é, í, ó, ú), eñes (ñ) y signos de puntuación invertidos (¿, ¡) donde corresponda. Ejemplos: "Descripción", "Clasificación", "Técnica", "contraseña", "enumeración", "gestión", "configuración", "básica", etc.
+
 ## Formato de cada Tecnica
 
 Cada tecnica del inventario se documenta como un archivo Markdown con la siguiente estructura:

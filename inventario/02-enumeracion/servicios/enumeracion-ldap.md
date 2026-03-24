@@ -1,7 +1,7 @@
 # Enumeración LDAP (Lightweight Directory Access Protocol)
 
 ## Descripción
-LDAP (Lightweight Directory Access Protocol) es un protocolo de acceso a servicios de directorio que opera en el puerto 389/tcp (texto claro) y 636/tcp (LDAPS/SSL). Es el pilar de Active Directory en entornos Windows y se usa para almacenar información de usuarios, grupos, equipos, politicas y estructura organizativa. La enumeración LDAP permite extraer el esquema completo del directorio: usuarios y sus atributos (descripción, email, último login), grupos y membresias, unidades organizativas (OUs), politicas de contraseñas, cuentas deshabilitadas, SPNs (Service Principal Names) para ataques Kerberoasting, y relaciones de confianza entre dominios. En entornos mal configurados, es posible realizar consultas anonimas (anonymous bind) que exponen toda esta información sin credenciales.
+LDAP (Lightweight Directory Access Protocol) es un protocolo de acceso a servicios de directorio que opera en el puerto 389/tcp (texto claro) y 636/tcp (LDAPS/SSL). Es el pilar de Active Directory en entornos Windows y se usa para almacenar información de usuarios, grupos, equipos, políticas y estructura organizativa. La enumeración LDAP permite extraer el esquema completo del directorio: usuarios y sus atributos (descripción, email, último login), grupos y membresías, unidades organizativas (OUs), políticas de contraseñas, cuentas deshabilitadas, SPNs (Service Principal Names) para ataques Kerberoasting, y relaciones de confianza entre dominios. En entornos mal configurados, es posible realizar consultas anónimas (anonymous bind) que exponen toda esta información sin credenciales.
 
 ## Clasificación
 - **Fase**: Enumeración
@@ -20,7 +20,7 @@ LDAP (Lightweight Directory Access Protocol) es un protocolo de acceso a servici
 
 ### Enumeración con Nmap NSE
 ```bash
-# Obtener informacion del Root DSE (naming contexts, dominio, funcionalidad)
+# Obtener información del Root DSE (naming contexts, dominio, funcionalidad)
 nmap -p 389 --script ldap-rootdse <target>
 # Resultado: namingContexts, defaultNamingContext, domainFunctionality level
 
@@ -34,10 +34,10 @@ nmap -p 389 --script ldap-brute \
 
 ### Enumeración con ldapsearch
 ```bash
-# Consulta anonima: obtener naming contexts (punto de partida)
+# Consulta anónima: obtener naming contexts (punto de partida)
 ldapsearch -x -H ldap://<target> -b '' -s base '(objectClass=*)' namingContexts
 
-# Consulta anonima: extraer todos los objetos del dominio
+# Consulta anónima: extraer todos los objetos del dominio
 ldapsearch -x -H ldap://<target> -b 'dc=domain,dc=com'
 
 # Con credenciales: enumerar todos los usuarios del dominio
@@ -60,7 +60,7 @@ ldapsearch -x -H ldap://<target> -D 'user@domain.com' -w 'password' \
 ldapsearch -x -H ldap://<target> -D 'user@domain.com' -w 'password' \
   -b 'dc=domain,dc=com' '(objectClass=computer)' cn operatingSystem operatingSystemVersion
 
-# Conexion LDAPS (SSL, puerto 636)
+# Conexión LDAPS (SSL, puerto 636)
 ldapsearch -x -H ldaps://<target>:636 -b 'dc=domain,dc=com'
 ```
 
@@ -78,7 +78,7 @@ python3 windapsearch.py -d domain.com --dc-ip <target> -u 'user@domain.com' -p '
 # Enumerar cuentas con privilegios (Domain Admins, etc.)
 python3 windapsearch.py -d domain.com --dc-ip <target> -u 'user@domain.com' -p 'password' --privileged-users
 
-# Intentar enumeracion anonima
+# Intentar enumeración anónima
 python3 windapsearch.py -d domain.com --dc-ip <target> --users
 ```
 
@@ -94,8 +94,8 @@ ldapdomaindump -u 'domain\user' -p 'password' ldap://<target>
 - Deshabilitar anonymous bind en el controlador de dominio (configuración por defecto en AD moderno)
 - Requerir LDAPS (puerto 636) o LDAP con StartTLS para cifrar las comunicaciones
 - Habilitar LDAP Signing para prevenir ataques man-in-the-middle
-- Aplicar principio de minimo privilegio: no otorgar permisos de lectura amplia a cuentas de servicio
-- Monitorear consultas LDAP anomalas mediante logs de eventos de Windows (Event ID 2889 para binds sin firma)
+- Aplicar principio de mínimo privilegio: no otorgar permisos de lectura amplia a cuentas de servicio
+- Monitorear consultas LDAP anómalas mediante logs de eventos de Windows (Event ID 2889 para binds sin firma)
 - Limpiar el campo description de usuarios: no almacenar contraseñas ni información sensible en atributos LDAP
 
 ## Referencias
