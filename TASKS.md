@@ -30,7 +30,6 @@ Para cada sección del inventario, se seguirá este ciclo:
 
 ### Limpieza de Fuentes
 - [ ] Mover versión redundante (18K) de `DOM XSS...` a `redundancia/`.
-- [ ] Corregir dobles espacios en nombres de archivos HTML para evitar errores de mapeo futuros.
 
 ### Ejecución
 - [x] Iniciar piloto: Extraer técnicas de **Reconocimiento Pasivo** (Fase 01/pasivo).

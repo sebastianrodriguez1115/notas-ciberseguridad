@@ -163,7 +163,9 @@ Todo el contenido del inventario debe estar escrito en español con ortografía 
 
 ## Formato de cada Tecnica
 
-Cada tecnica del inventario se documenta como un archivo Markdown con la siguiente estructura:
+Cada tecnica del inventario se documenta como un archivo Markdown siguiendo el template de referencia en **`inventario/TEMPLATE.md`**. Ese archivo contiene la estructura exacta, ejemplos de formato para cada campo y notas detalladas para el redactor en un bloque de comentario HTML al final. **Antes de crear o editar cualquier archivo del inventario, leer el template completo.**
+
+La estructura resumida es:
 
 ```markdown
 # Nombre de la Tecnica
