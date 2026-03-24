@@ -1,0 +1,5 @@
+# **nslookup**
+
+```
+nslookup facebook.com
+```
