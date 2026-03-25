@@ -8,8 +8,8 @@
     - [x] Definición de agentes y heurísticas en `AGENTS.md`.
 - [x] **Fase 01: Reconocimiento** — 14 técnicas (8 pasivo, 6 activo)
 - [x] **Fase 02: Enumeración** — 19 técnicas (5 web, 4 red, 6 servicios, 4 fuzzing)
-- [ ] **Fase 03: Análisis de Vulnerabilidades**
-- [ ] **Fase 04: Explotación**
+- [x] **Fase 03: Análisis de Vulnerabilidades** — 20 técnicas (3 scanning, 13 web, 4 sistema)
+- [x] **Fase 04: Explotación** — 24 técnicas (7 web, 5 red, 6 sistema, 3 client-side, 3 credenciales)
 - [ ] **Fase 05: Post-Explotación**
 - [ ] **Fase 06: Frameworks y Herramientas**
 - [ ] **Fase 07: Fundamentos**
@@ -34,4 +34,6 @@ Para cada sección del inventario, se seguirá este ciclo:
 ### Ejecución
 - [x] Iniciar piloto: Extraer técnicas de **Reconocimiento Pasivo** (Fase 01/pasivo).
 - [ ] Validar que las imágenes en `notas-md/` se referencian correctamente en el nuevo inventario.
-- [ ] Continuar con **Fase 03: Análisis de Vulnerabilidades** (scanning/, web/, sistema/).
+- [x] ~~Continuar con **Fase 03: Análisis de Vulnerabilidades**~~ (scanning/, web/, sistema/) — completada.
+- [x] ~~Continuar con **Fase 04: Explotación**~~ (web/, red/, sistema/, client-side/, credenciales/) — completada.
+- [ ] Continuar con **Fase 05: Post-Explotación**.

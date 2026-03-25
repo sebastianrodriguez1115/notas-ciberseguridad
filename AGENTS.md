@@ -27,26 +27,43 @@ Notas propias organizadas por tecnica/herramienta:
 - **General** (~22 archivos): Cryptography, Active Directory, Linux/Windows commands, OSI Model, JWT, CVSS, GRC Frameworks, Yara Rules, Bash/Python scripting
 - **TryHackMe** (~20 archivos): CTF writeups (Lateral Movement, DOM-Based Attacks, WAF Bypass, HTTP/2 Tunneling, Data Exfiltration)
 
-### 2. `referencias/` — Libros de referencia (16 PDFs)
+### 2. `referencias/` — Libros de referencia (33 PDFs)
 
-| Libro | Area |
+| Libro | Área |
 |-------|------|
 | Mastering Kali Linux for Advanced Penetration Testing | Pentesting avanzado |
-| The Hacker Playbook 3 | Pentesting practico |
+| The Hacker Playbook 3 | Pentesting práctico |
 | Gray Hat Hacking | Hacking ofensivo/defensivo |
-| Metasploit for Beginners | Frameworks de explotacion |
-| Social Engineering - The Art of Human Hacking | Ingenieria social |
-| Advanced Persistent Threat Hacking | APTs |
-| CompTIA Security+ Certification Guide | Fundamentos seguridad |
-| Computer Security Fundamentals | Fundamentos seguridad |
-| Crypto 101 | Criptografia |
-| Digital Forensics and Incident Response | DFIR |
-| Practical Mobile Forensics | Forense movil |
+| The Web Application Hacker's Handbook | Pentesting Web (Referencia principal) |
+| The Tangled Web | Pentesting Web (Seguridad de navegadores) |
+| Web Hacking 101 | Pentesting Web (Vulnerabilidades reales) |
+| Modern Web Penetration Testing | Pentesting Web |
+| Burp Suite Essentials | Pentesting Web (Herramientas) |
+| Web Application Security (Andrew Hoffman) | Pentesting Web |
+| Black Hat GraphQL | Seguridad de APIs / GraphQL |
+| Complete Guide to Shodan | OSINT / Reconocimiento |
+| Nmap Network Exploration and Security Auditing Cookbook | Escaneo y auditoría de red |
+| Network Analysis Using Wireshark 2 Cookbook | Análisis de tráfico de red |
+| Hands-On AWS Penetration Testing | Pentesting Cloud (AWS) |
+| Metasploit for Beginners | Frameworks de explotación |
+| Metasploit Penetration Testing Cookbook | Frameworks de explotación |
+| Advanced Persistent Threat Hacking | APTs y post-explotación |
+| Social Engineering - The Art of Human Hacking | Ingeniería social |
+| CompTIA Security+ Certification Guide | Fundamentos de seguridad |
+| Computer Security Fundamentals | Fundamentos de seguridad |
+| Crypto 101 | Criptografía |
+| Digital Forensics and Incident Response | DFIR / Análisis forense |
+| Practical Mobile Forensics | Forense móvil |
 | Linux Basics for Hackers | Linux para hacking |
-| Kali Revealed | Kali Linux |
-| Linux Firewalls | Seguridad de red |
-| Begin Ethical Hacking with Python | Scripting ofensivo |
+| Kali Revealed | Administración de Kali Linux |
+| Linux Firewalls | Seguridad de red / Defensiva |
+| Honeypots and Routers | Redes / Defensa activa |
+| Begin Ethical Hacking with Python | Scripting ofensivo (Python) |
 | Foundations of Python Network Programming | Redes con Python |
+| Network Attacks and Exploitation | Pentesting de red |
+| Network Security Through Data Analysis | Análisis de seguridad y monitoreo |
+| TCP/IP in 24 Hours | Fundamentos de redes |
+| Web Penetration Testing with Kali Linux | Pentesting Web |
 
 ### 3. Internet — Frameworks, Bases de Conocimiento y Recursos Abiertos
 

