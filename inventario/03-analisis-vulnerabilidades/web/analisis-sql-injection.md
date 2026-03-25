@@ -4,10 +4,10 @@
 La inyección SQL (SQLi) ocurre cuando una aplicación web inserta datos de entrada no confiables directamente en una consulta SQL sin la debida sanitización o parametrización. Según *The Web Application Hacker's Handbook*, la explotación exitosa puede permitir la lectura de bases de datos completas, modificación de datos (U/I/D) y, en configuraciones débiles (ej. `xp_cmdshell` en MSSQL), la ejecución de comandos en el sistema operativo.
 
 ## Clasificación
-- **Fase**: Análisis de Vulnerabilidades / Explotación
+- **Fase**: Análisis de Vulnerabilidades
 - **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
-- **Plataforma**: Web / Base de Datos
-- **Dificultad**: Intermedia a Avanzada (Blind/Time-based)
+- **Plataforma**: Web
+- **Dificultad**: Avanzada
 
 ## Herramientas
 - **SQLMap** — Estándar de la industria para automatizar la detección y explotación.

@@ -6,8 +6,8 @@ La inclusión de archivos (File Inclusion) permite a un atacante incluir archivo
 ## Clasificación
 - **Fase**: Análisis de Vulnerabilidades
 - **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
-- **Plataforma**: Web / Multi
-- **Dificultad**: Intermedia a Avanzada (Log Poisoning)
+- **Plataforma**: Web
+- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Burp Suite (Intruder)** — Fuzzing de rutas sistemático con SecLists.
