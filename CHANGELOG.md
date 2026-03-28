@@ -2,6 +2,43 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-03-27] — Sesión 5
+
+### Añadido
+- **Fase 05 - Post-Explotación** — 20 técnicas nuevas:
+    - **privilege-escalation/linux/** (7): `suid-sgid.md`, `abuso-sudo.md`, `abuso-cron-jobs.md`, `capabilities-linux.md`, `kernel-exploits-privesc-linux.md`, `nfs-no-root-squash.md`, `enumeracion-privesc-linux.md`
+    - **privilege-escalation/windows/** (5): `token-impersonation.md`, `credential-dumping.md`, `abuso-servicios-windows.md`, `abuso-tareas-programadas.md`, `enumeracion-privesc-windows.md`
+    - **persistencia/** (3): `persistencia-linux.md`, `persistencia-windows.md`, `web-shells.md`
+    - **lateral-movement/** (3): `pass-the-hash.md`, `pivoting-tunneling.md`, `ejecucion-remota-windows.md`
+    - **exfiltracion/** (2): `canales-encubiertos.md`, `transferencia-archivos.md`
+
+### Corregido
+- Edición incorrecta del libro de Allen en 7 archivos: corregido de "(4th ed.)" a "(2nd ed.)" según el PDF existente en `referencias/`
+- Formato de entrada de herramientas LOLBAS en `enumeracion-privesc-linux.md`
+
+### Actualizado
+- Tabla de libros en `AGENTS.md` ordenada alfabéticamente por título
+
+---
+
+## [2026-03-24] — Sesión 4
+
+### Añadido
+- **Biblioteca de Referencias**: Incorporados 17 nuevos PDFs a la carpeta `referencias/` (total 33 libros), incluyendo *The Web Application Hacker's Handbook*, *Black Hat GraphQL* y *Wireshark 2 Cookbook*.
+- **AGENTS.md**: Actualizada la tabla de fuentes de información para incluir los 33 libros categorizados por área técnica.
+
+### Actualizado (Enriquecimiento Técnico)
+- **Fase 03 - Análisis de Vulnerabilidades Web** (4 técnicas clave):
+    - `analisis-xss.md`: Añadidos contextos de inyección (HTML, Atributos, JS), DOM-Based XSS y técnicas de evasión de filtros.
+    - `analisis-ssrf.md`: Añadida exfiltración de metadatos de Cloud (AWS, GCP, DigitalOcean) y bypasses de filtros de IP/DNS.
+    - `analisis-sql-injection.md`: Añadidas metodologías para Blind SQLi (Boolean/Time-based) y lectura de archivos con `load_file`.
+    - `analisis-lfi-rfi.md`: Añadidos vectores avanzados con PHP Wrappers y técnica de RCE vía Log Poisoning.
+
+### Corregido
+- **Estandarización**: Restaurada la consistencia en los campos `Fase`, `Plataforma` y `Dificultad` en las técnicas web enriquecidas para mantener la compatibilidad con el sistema de índices.
+
+---
+
 ## [2026-03-23] — Sesión 3
 
 ### Añadido
