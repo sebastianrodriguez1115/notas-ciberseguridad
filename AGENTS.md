@@ -318,3 +318,14 @@ Registrar en `CHANGELOG.md` bajo la fecha actual:
 - Correcciones aplicadas
 - Cambios a `AGENTS.md` o formato
 
+## Configuración RAG
+
+Configuración para el motor de búsqueda semántica local sobre los libros de `referencias/`.
+
+| Parámetro | Valor |
+|-----------|-------|
+| `--source-dir` | `/home/sebastian/Documentos/inventario-tecnicas-ciberseguridad/referencias/` |
+| `--db-path` | `/home/sebastian/Documentos/rag/chroma_db/` |
+| `--collection-name` | `ciberseguridad-referencias` |
+| `--n-results` | `5` |
+

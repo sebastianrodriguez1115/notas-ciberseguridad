@@ -2,6 +2,35 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-04-07] — Sesión 6 (FINALIZACIÓN DEL PROYECTO)
+
+### Añadido
+- **Fase 06 - Frameworks y Herramientas** — 4 guías avanzadas:
+    - **burp-suite/**: `configuracion-uso-avanzado.md` (Scope, Intruder, Macros de sesión).
+    - **metasploit/**: `metasploit-avanzado.md` (Workspaces, Resource files, Post-exploitation).
+    - **powershell-empire/**: `empire-framework.md` (Listeners, Stagers, C2 workflow).
+    - **otros/**: `bloodhound.md` (SharpHound, Graph theory, AD attack paths).
+- **Fase 07 - Fundamentos** — 4 guías base:
+    - **redes/**: `modelo-osi-tcp-ip.md` (PDU, Three-Way Handshake, Comandos de diagnóstico).
+    - **sistemas/**: `linux-arquitectura-permisos.md` (FHS, Permisos rwx, SUID/SGID, Gestión de procesos).
+    - **sistemas/**: `windows-arquitectura-ad.md` (Procesos críticos,lsass, Kerberos/NTLM, Fundamentos AD).
+    - **criptografia/**: `hashing-codificacion.md` (Diferencias Codificación/Hash/Cifrado, Algoritmos, Herramientas).
+- **Fase 08 - Forense y DFIR** — 4 guías de investigación:
+    - **analisis-forense/**: `artefactos-windows-host.md` (Prefetch, ShimCache, LNK, Eric Zimmerman's tools).
+    - **analisis-forense/**: `volatility-memoria.md` (Adquisición RAM, netscan, malfind, procdump).
+    - **incident-response/**: `metodologia-picerl.md` (Fases SANS, Contención vs Erradicación, SIEM/EDR).
+    - **malware-analysis/**: `analisis-estatico-dinamico.md` (Hashing, Strings, PE analysis, YARA rules, Sandboxing).
+- **Fase 09 - Sistema de Índices** — Implementación de navegación recursiva:
+    - Creado `inventario/INDEX.md` maestro con enlaces a todas las fases.
+    - Creados archivos `INDEX.md` en cada una de las 8 carpetas de fase y sus 20 subcarpetas de categoría.
+    - Tablas de referencia rápida con MITRE IDs y dificultad en cada nivel de subcategoría.
+
+### Actualizado
+- **Estado del Proyecto**: Todas las fases del roadmap original han sido completadas con éxito.
+- **TASKS.md**: Archivo eliminado tras la consecución de todos los objetivos.
+
+---
+
 ## [2026-03-27] — Sesión 5
 
 ### Añadido
