@@ -1,3 +1,0 @@
-# Censys
-
-- <https://censys.io/>

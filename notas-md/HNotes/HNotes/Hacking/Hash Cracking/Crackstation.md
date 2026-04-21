@@ -1,3 +1,0 @@
-# Crackstation
-
-crackstation.net

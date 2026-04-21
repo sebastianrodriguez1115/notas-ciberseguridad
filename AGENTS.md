@@ -1,5 +1,16 @@
 # Inventario de Tecnicas de Ciberseguridad - AGENTS.md
 
+## Protocolo de Interacción (Uso del Agente)
+
+Para cualquier consulta o tarea solicitada por el usuario, el agente debe seguir este flujo de trabajo:
+
+1. **Búsqueda Local Primero**: Agotar siempre las fuentes internas antes de recurrir a Internet.
+   - Consultar el `inventario/` existente para coherencia.
+   - Buscar en `notas-md/` usando `grep_search` y `glob`.
+   - Utilizar el motor `rag` para extraer información de los libros en `referencias/`.
+2. **Recurso a la Web**: Solo se utilizarán herramientas de búsqueda externa (`google_web_search`, `web_fetch`) si la información no se encuentra localmente o si se requiere validación de una fuente oficial (Priority 1).
+3. **Mantenimiento**: Si se descubre información relevante en la web que no está en el inventario, el agente debe proponer su incorporación.
+
 ## Objetivo
 
 Construir un inventario estructurado y completo de tecnicas de ciberseguridad, organizado por fases del ciclo de penetration testing, cubriendo desde reconocimiento hasta post-explotacion.
@@ -27,7 +38,7 @@ Notas propias organizadas por tecnica/herramienta:
 - **General** (~22 archivos): Cryptography, Active Directory, Linux/Windows commands, OSI Model, JWT, CVSS, GRC Frameworks, Yara Rules, Bash/Python scripting
 - **TryHackMe** (~20 archivos): CTF writeups (Lateral Movement, DOM-Based Attacks, WAF Bypass, HTTP/2 Tunneling, Data Exfiltration)
 
-### 2. `referencias/` — Libros de referencia (33 PDFs)
+### 2. `referencias/` — Libros de referencia (34 PDFs)
 
 | Libro | Área |
 |-------|------|
@@ -63,6 +74,7 @@ Notas propias organizadas por tecnica/herramienta:
 | The Web Application Hacker's Handbook | Pentesting Web (Referencia principal) |
 | Web Application Security (Andrew Hoffman) | Pentesting Web |
 | Web Hacking 101 | Pentesting Web (Vulnerabilidades reales) |
+| No SQL, No Injection? Examining NoSQL Security (Ron et al., IBM, 2015) | Seguridad NoSQL / Inyecciones |
 | Web Penetration Testing with Kali Linux | Pentesting Web |
 
 ### 3. Internet — Frameworks, Bases de Conocimiento y Recursos Abiertos

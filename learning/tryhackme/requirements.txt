@@ -1,0 +1,7 @@
+beautifulsoup4
+gmpy2
+pycryptodome
+pymodbus==3.6.8
+requests
+requests-toolbelt
+sympy

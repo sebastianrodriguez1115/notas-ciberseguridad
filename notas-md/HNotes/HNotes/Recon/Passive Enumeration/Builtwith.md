@@ -1,3 +1,0 @@
-# Builtwith
-
-**https://builtwith.com/**
