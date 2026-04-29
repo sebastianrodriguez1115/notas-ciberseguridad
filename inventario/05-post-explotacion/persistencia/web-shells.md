@@ -123,6 +123,3 @@ curl "http://target.com/page.php?file=../../../var/log/mail.log&cmd=id"
 - epinna. (s.f.). *weevely3* [Software]. GitHub. https://github.com/epinna/weevely3
 - Stuttard, D., & Pinto, M. (2011). *The Web Application Hacker's Handbook* (2nd ed.). Wiley.
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Exploits.md
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Sequence Room.md
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Include.md

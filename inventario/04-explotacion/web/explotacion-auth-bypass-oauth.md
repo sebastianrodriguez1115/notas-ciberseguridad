@@ -54,4 +54,3 @@ https://client.com/oauth/authorize?code=ATTACKER_CODE
 ## Referencias
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking* (5th ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/
-- Notas del proyecto: notas-md/inventario/03-analisis-vulnerabilidades/web/analisis-open-redirect.md

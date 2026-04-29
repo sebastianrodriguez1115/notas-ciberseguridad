@@ -81,4 +81,3 @@ msf6 > show options
 - Rahalkar, S. (2017). *Metasploit for Beginners*. Packt Publishing.
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1210: Exploitation of Remote Services. https://attack.mitre.org/techniques/T1210/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Metasploit Framework.md

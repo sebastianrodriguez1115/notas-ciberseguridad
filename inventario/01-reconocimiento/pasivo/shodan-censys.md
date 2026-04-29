@@ -49,6 +49,5 @@ Proporciona informacion detallada sobre el certificado SSL y el stack tecnologic
 
 ## Referencias
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/HNotes/Recon/Passive Enumeration/Shodan.md
 - MITRE Corporation. (2024). ATT&CK Technique T1596: Search Open Technical Databases. https://attack.mitre.org/techniques/T1596/
 - Shodan. (s.f.). *Command-Line Interface: Stats*. https://help.shodan.io/command-line-interface/stats

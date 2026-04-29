@@ -50,5 +50,4 @@ dig axfr @ns1.target.com target.com
 ## Referencias
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
 - Kim, P. (2018). *The Hacker Playbook 3: Practical Guide to Penetration Testing*. Secure Planet.
-- Notas del proyecto: notas-md/HNotes/Recon/Active Enumeration/nslookup.md
 - MITRE Corporation. (2024). ATT&CK Technique T1590.002: Gather Victim Network Information: DNS. https://attack.mitre.org/techniques/T1590/002/

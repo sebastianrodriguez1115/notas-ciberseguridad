@@ -39,4 +39,3 @@ ${{<%[%'"}}%
 ## Referencias
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Injectics.md

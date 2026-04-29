@@ -99,4 +99,3 @@ chmod +x /usr/local/bin/backup
 - DominicBreuker. (s.f.). *pspy* [Software]. GitHub. https://github.com/DominicBreuker/pspy
 - OccupyTheWeb. (2018). *Linux Basics for Hackers*. No Starch Press.
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Privilege Escalation.md

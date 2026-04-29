@@ -53,5 +53,4 @@ gopher://127.0.0.1:6379/_*1%0d%0a$8%0d%0aflushall%0d%0a...
 ## Referencias
 - Stuttard, D., & Pinto, M. (2011). *The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws* (2nd ed.). Wiley.
 - Cheng, P. (2016). *Web Hacking 101*. Leanpub.
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Extract Room.md
 - MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/

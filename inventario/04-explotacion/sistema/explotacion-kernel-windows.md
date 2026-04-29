@@ -49,4 +49,3 @@ exploit
 ## Referencias
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking* (5th ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). ATT&CK Technique T1210: Exploitation of Remote Services. https://attack.mitre.org/techniques/T1210/
-- Notas del proyecto: notas-md/inventario/02-enumeracion/servicios/enumeracion-rdp.md

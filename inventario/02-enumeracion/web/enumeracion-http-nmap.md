@@ -68,5 +68,3 @@ PORT   STATE SERVICE
 ## Referencias
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1046: Network Service Discovery. https://attack.mitre.org/techniques/T1046/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/HTTP/HTTP IIS Nmap Script.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/HTTP/Apache Recon.md

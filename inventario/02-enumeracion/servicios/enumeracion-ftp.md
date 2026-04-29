@@ -92,5 +92,3 @@ ftp> bye
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking: The Ethical Hacker's Handbook* (5th ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). ATT&CK Technique T1110.001: Brute Force: Password Guessing. https://attack.mitre.org/techniques/T1110/001/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/ftp/vsftpd recon.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/ftp/ProFTP.md

@@ -45,4 +45,3 @@ crackmapexec smb 192.168.1.10 -u 'guest' -p '' --pass-pol
 ## Referencias
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - MITRE Corporation. (2024). ATT&CK Technique T1110.003: Brute Force: Password Spraying. https://attack.mitre.org/techniques/T1110/003/
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Passwords.md

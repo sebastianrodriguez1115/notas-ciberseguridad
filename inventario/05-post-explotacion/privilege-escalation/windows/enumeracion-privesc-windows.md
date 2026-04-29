@@ -154,4 +154,3 @@ Get-ModifiableServiceFile
 - PowerShellMafia. (s.f.). *PowerSploit* [Software]. GitHub. https://github.com/PowerShellMafia/PowerSploit
 - GhostPack. (s.f.). *Seatbelt* [Software]. GitHub. https://github.com/GhostPack/Seatbelt
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Exploits/winPEAS.md

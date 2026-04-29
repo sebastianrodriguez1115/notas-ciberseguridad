@@ -50,4 +50,3 @@ cat /etc/passwd | head -n 1
 ## Referencias
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1068: Exploitation for Privilege Escalation. https://attack.mitre.org/techniques/T1068/
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Exploits.md

@@ -61,5 +61,3 @@ Ocurre cuando el JS del lado del cliente procesa datos de una "fuente" (Source) 
 ## Referencias
 - Stuttard, D., & Pinto, M. (2011). *The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws* (2nd ed.). Wiley.
 - Hoffman, A. (2020). *Web Application Security: Exploitation and Countermeasures for Modern Web Applications*. O'Reilly Media.
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/XSS.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Burp Suite Labs/XSS Cross Site Scripting.md

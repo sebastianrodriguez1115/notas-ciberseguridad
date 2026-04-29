@@ -103,4 +103,3 @@ chmod 600 /tmp/nfs_mount/target_user/.ssh/authorized_keys
 - MITRE Corporation. (2024). ATT&CK Technique T1548.001: Abuse Elevation Control Mechanism: Setuid and Setgid. https://attack.mitre.org/techniques/T1548/001/
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
 - OccupyTheWeb. (2018). *Linux Basics for Hackers*. No Starch Press.
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Privilege Escalation.md

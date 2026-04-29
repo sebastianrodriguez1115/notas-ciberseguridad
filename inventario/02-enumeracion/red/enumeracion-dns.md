@@ -103,7 +103,3 @@ cat subfinder.txt | httpx | sort -u > activos_vivos.txt
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking: The Ethical Hacker's Handbook* (5th ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). ATT&CK Technique T1590.002: Gather Victim Network Information: DNS. https://attack.mitre.org/techniques/T1590/002/
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Active Enumeration/dnsrecon.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Active Enumeration/Amass.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Active Enumeration/Subfinder.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Information Gathering/Active Information Gathering.md

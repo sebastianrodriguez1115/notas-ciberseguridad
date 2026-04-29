@@ -48,4 +48,3 @@ $DllPath = "C:\temp\malicious.dll"
 ## Referencias
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - MITRE Corporation. (2024). ATT&CK Technique T1055: Process Injection. https://attack.mitre.org/techniques/T1055/
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Exploits.md

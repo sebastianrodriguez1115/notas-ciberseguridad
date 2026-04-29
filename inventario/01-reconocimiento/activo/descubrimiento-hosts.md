@@ -53,5 +53,4 @@ El escaneo ARP es el mas fiable en redes locales ya que no puede ser filtrado po
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
 - Kim, P. (2018). *The Hacker Playbook 3: Practical Guide to Penetration Testing*. Secure Planet.
 - Harper, A., Harris, S., Ness, J., Eagle, C., Lenkey, G., & Williams, T. (2018). *Gray Hat Hacking: The Ethical Hacker's Handbook* (5th ed.). McGraw-Hill Education.
-- Notas del proyecto: notas-md/HNotes/Recon/Active Enumeration/nmap.md
 - MITRE Corporation. (2024). ATT&CK Technique T1018: Remote System Discovery. https://attack.mitre.org/techniques/T1018/

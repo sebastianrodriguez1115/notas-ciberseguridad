@@ -48,4 +48,3 @@ exploit
 ## Referencias
 - Rahalkar, S. (2017). *Metasploit for Beginners*. Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/
-- Notas del proyecto: notas-md/inventario/02-enumeracion/web/banner-grabbing-http.md

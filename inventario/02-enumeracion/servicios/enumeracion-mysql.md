@@ -112,6 +112,3 @@ hydra -l root -P /usr/share/wordlists/metasploit/unix_passwords.txt 192.127.56.3
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - Rahalkar, S. (2017). *Metasploit for Beginners*. Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1046: Network Service Discovery. https://attack.mitre.org/techniques/T1046/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/MySQL/Recon Basics.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/MySQL/Dictionary Attack.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Metasploit Framework/Information Gathering & Enumeration/MySQL enumeration.md

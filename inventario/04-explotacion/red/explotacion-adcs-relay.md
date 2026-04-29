@@ -46,4 +46,3 @@ python3 PetitPotam.py 10.10.10.15 10.10.10.10
 ## Referencias
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1557.001: Adversary-in-the-Middle: LLMNR/NBT-NS Poisoning and SMB Relay. https://attack.mitre.org/techniques/T1557/001/
-- Notas del proyecto: notas-md/AGENTS.md

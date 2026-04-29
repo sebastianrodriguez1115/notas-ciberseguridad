@@ -54,4 +54,3 @@ Permite extraer datos específicos de las respuestas del servidor para visualiza
 - Dafydd, S., & Marcus, P. (2011). *The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws* (2nd ed.). John Wiley & Sons.
 - Carlos, P. (2022). *Burp Suite Essentials*. Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1595.002: Active Scanning. https://attack.mitre.org/techniques/T1595/002/
-- Notas del proyecto: notas-md/HNotes/HNotes/Burp Suite Labs.md

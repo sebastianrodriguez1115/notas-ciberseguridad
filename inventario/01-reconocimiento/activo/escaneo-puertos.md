@@ -58,6 +58,4 @@ Permite escanear un objetivo usando un host "zombie" (que tenga un IP ID predeci
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
 - Kim, P. (2018). *The Hacker Playbook 3: Practical Guide to Penetration Testing*. Secure Planet.
 - Hertzog, R., O'Gorman, J., & Aharoni, M. (2017). *Kali Linux Revealed*. OffSec Press.
-- Notas del proyecto: notas-md/HNotes/Recon/Active Enumeration/nmap.md
-- Notas del proyecto: notas-md/INE Courses/Assessment Methodologies Footprinting & Scanning.md
 - MITRE Corporation. (2024). ATT&CK Technique T1046: Network Service Discovery. https://attack.mitre.org/techniques/T1046/

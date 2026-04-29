@@ -134,5 +134,3 @@ echo "sysupdate:Password123" | chpasswd
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - OccupyTheWeb. (2018). *Linux Basics for Hackers*. No Starch Press.
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Voyage Room.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Privilege Escalation.md

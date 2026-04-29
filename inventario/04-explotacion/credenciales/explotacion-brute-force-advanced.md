@@ -45,4 +45,3 @@ hydra -l admin -P passwords.txt 10.10.10.10 http-post-form "/login.php:user=^USE
 ## Referencias
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - MITRE Corporation. (2024). ATT&CK Technique T1110.001: Brute Force: Password Guessing. https://attack.mitre.org/techniques/T1110/001/
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Brute Force.md

@@ -50,4 +50,3 @@ proxychains smbclient //192.168.1.50/C$ -U "DOMAIN/USER"
 ## Referencias
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - MITRE Corporation. (2024). ATT&CK Technique T1557.001: Adversary-in-the-Middle: LLMNR/NBT-NS Poisoning and SMB Relay. https://attack.mitre.org/techniques/T1557/001/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Network Based Attacks.md

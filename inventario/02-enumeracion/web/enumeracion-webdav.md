@@ -69,4 +69,3 @@ dav:/webdav/> delete archivo.txt               # eliminar archivo
 ## Referencias
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1046: Network Service Discovery. https://attack.mitre.org/techniques/T1046/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Host & Network Penetration Testing System Host Bas/Exploiting Windows Vulnerabilities/WebDav.md

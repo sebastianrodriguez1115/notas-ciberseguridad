@@ -139,7 +139,3 @@ exploit
 - Hackplayers. (s.f.). *Evil-WinRM* [Software]. GitHub. https://github.com/Hackplayers/evil-winrm
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Host & Network Penetration Testing System Host Bas/Exploiting Windows Vulnerabilities/WinRM.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Host & Network Penetration Testing System Host Bas/Exploiting Windows Vulnerabilities/SMB.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Host & Network Penetration Testing System Host Bas/Exploiting Windows Vulnerabilities/RDP.md
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Lateral Movement and Pivoting.md

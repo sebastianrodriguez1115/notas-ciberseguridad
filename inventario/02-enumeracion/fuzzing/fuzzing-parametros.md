@@ -91,6 +91,3 @@ ffuf -w /opt/useful/SecLists/Fuzzing/4-digits-0000-9999.txt:W1 \
 - MITRE Corporation. (2024). ATT&CK Technique T1595.002: Active Scanning: Vulnerability Scanning. https://attack.mitre.org/techniques/T1595/002/
 - danielmiessler. (s.f.). *SecLists* [Repositorio]. GitHub. https://github.com/danielmiessler/SecLists
 - Assetnote. (s.f.). *Wordlists* [Repositorio]. https://wordlists.assetnote.io/
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Fuzzing/FUFF.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Cheatsheet.md
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Include.md

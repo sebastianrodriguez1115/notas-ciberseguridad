@@ -161,7 +161,3 @@ type C:\temp\secrets.b64
 - LOLBAS Project. (s.f.). *LOLBAS* [Base de datos]. https://lolbas-project.github.io/
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - OccupyTheWeb. (2018). *Linux Basics for Hackers*. No Starch Press.
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/dataxexfilt.md
-- Notas del proyecto: notas-md/HNotes/HNotes/General/Windows Commands.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Host & Network Penetration Testing Exploitation/Netcat Fundamentals.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Cheatsheet.md

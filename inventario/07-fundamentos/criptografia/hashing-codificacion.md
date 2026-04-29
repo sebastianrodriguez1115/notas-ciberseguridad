@@ -53,4 +53,3 @@ john --wordlist=/usr/share/wordlists/rockyou.txt <hash_file>
 ## Referencias
 - Stallings, W. (2017). *Cryptography and Network Security: Principles and Practice* (7th ed.). Pearson.
 - Rahalkar, S. (2017). *Metasploit for Beginners*. Packt Publishing.
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Hash Cracking.md

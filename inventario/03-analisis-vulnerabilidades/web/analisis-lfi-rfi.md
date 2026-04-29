@@ -49,5 +49,4 @@ Ejecución de un script malicioso alojado externamente:
 ## Referencias
 - Stuttard, D., & Pinto, M. (2011). *The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws* (2nd ed.). Wiley.
 - Rahalkar, S. (2017). *Metasploit Penetration Testing Cookbook* (3rd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/File Inclusion.md
 - MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/

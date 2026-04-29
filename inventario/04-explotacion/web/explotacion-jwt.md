@@ -43,4 +43,3 @@ python3 jwt_tool.py <TOKEN> -S hs256 -k public.pem
 ## Referencias
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking* (5th ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/
-- Notas del proyecto: notas-md/HNotes/HNotes/General/JWT.md

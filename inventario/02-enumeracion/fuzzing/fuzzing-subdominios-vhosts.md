@@ -93,7 +93,3 @@ cat subdominios.txt | httpx | sort -u > activos_vivos.txt
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1595.002: Active Scanning: Vulnerability Scanning. https://attack.mitre.org/techniques/T1595/002/
 - danielmiessler. (s.f.). *SecLists* [Repositorio]. GitHub. https://github.com/danielmiessler/SecLists
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Fuzzing/FUFF.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Active Enumeration/Gobuster.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Active Enumeration/Amass.md
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Lookup CTF.md

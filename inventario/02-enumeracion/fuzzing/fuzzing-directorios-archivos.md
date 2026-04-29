@@ -93,6 +93,3 @@ gobuster dir -u http://TARGET -w wordlist.txt -U admin -P password
 - OccupyTheWeb. (2018). *Linux Basics for Hackers*. No Starch Press.
 - MITRE Corporation. (2024). ATT&CK Technique T1595.002: Active Scanning: Vulnerability Scanning. https://attack.mitre.org/techniques/T1595/002/
 - danielmiessler. (s.f.). *SecLists* [Repositorio]. GitHub. https://github.com/danielmiessler/SecLists
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Fuzzing/FUFF.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Active Enumeration/Gobuster.md
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Sequence Room.md

@@ -47,6 +47,5 @@ Extrae los nombres de los parametros historicos para alimentar herramientas de f
 
 ## Referencias
 - Kim, P. (2018). *The Hacker Playbook 3: Practical Guide to Penetration Testing*. Secure Planet.
-- Notas del proyecto: notas-md/HNotes/Recon/Passive Enumeration/Wayback URLs.md
 - MITRE Corporation. (2024). ATT&CK Technique T1593: Search Open Websites/Domains. https://attack.mitre.org/techniques/T1593/
 - Internet Archive. (s.f.). *Wayback Machine*. https://web.archive.org/

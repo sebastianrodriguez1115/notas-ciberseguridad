@@ -61,4 +61,3 @@ Disable-ADAccount -Identity "usuario_comprometido"
 - SANS Institute. (s.f.). *Incident Management and Response*. https://www.sans.org/incident-response/
 - Luttgens, J., Pepe, M., & Hollebeek, K. (2014). *Incident Response & Computer Forensics* (3rd ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). *Incident Response Plan*. https://attack.mitre.org/resources/incident-response-plan/
-- Notas del proyecto: notas-md/HNotes/HNotes/General/Network Analysis/Network Analysis.md

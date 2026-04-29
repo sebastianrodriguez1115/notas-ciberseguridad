@@ -93,5 +93,3 @@ ffuf -w ports.txt:FUZZ \
 - OWASP Foundation. (2021). *OWASP Top Ten - A10: Server-Side Request Forgery*. https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/
 - MITRE Corporation. (2024). ATT&CK Technique T1595.002: Active Scanning: Vulnerability Scanning. https://attack.mitre.org/techniques/T1595/002/
 - danielmiessler. (s.f.). *SecLists* [Repositorio]. GitHub. https://github.com/danielmiessler/SecLists
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Include.md
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Extract Room.md

@@ -104,4 +104,3 @@ cap_fowner          → Ignorar verificación de propietario en archivos
 - GTFOBins. (s.f.). *GTFOBins* [Base de datos]. https://gtfobins.github.io/
 - OccupyTheWeb. (2018). *Linux Basics for Hackers*. No Starch Press.
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Privilege Escalation.md

@@ -39,6 +39,4 @@ Busca todos los bloques de red asignados oficialmente a la organizacion "Target 
 
 ## Referencias
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/HNotes/Recon/Active Enumeration/whois.md
-- Notas del proyecto: notas-md/HNotes/Recon/Active Enumeration/Reverse whois.md
 - MITRE Corporation. (2024). ATT&CK Technique T1596.002: Search Open Technical Databases: WHOIS. https://attack.mitre.org/techniques/T1596/002/

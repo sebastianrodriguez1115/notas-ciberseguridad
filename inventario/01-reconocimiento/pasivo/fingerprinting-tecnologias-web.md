@@ -45,5 +45,4 @@ Proporciona visibilidad sobre que proveedores de autenticacion (Okta, Auth0) o C
 
 ## Referencias
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/HNotes/Recon/Passive Enumeration/Tech enumeration.md
 - MITRE Corporation. (2024). ATT&CK Technique T1592.002: Gather Victim Host Information: Software. https://attack.mitre.org/techniques/T1592/002/

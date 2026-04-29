@@ -36,7 +36,6 @@ comando_2 --opciones <target>
 - Apellido, I. (Año). *Título del libro* (Edición). Editorial.
 - Apellido, I. (Año). *Título del libro*. Editorial.
 - MITRE Corporation. (2024). ATT&CK Technique TXXXX: Nombre. https://attack.mitre.org/techniques/TXXXX/
-- Notas del proyecto: notas-md/ruta/al/archivo.md
 
 <!--
 NOTAS PARA EL REDACTOR:
@@ -62,7 +61,6 @@ NOTAS PARA EL REDACTOR:
    - Hertzog, R., & O'Gorman, J. (2017). *Kali Linux Revealed*. Offensive Security.
    - OccupyTheWeb. (2018). *Linux Basics for Hackers*. No Starch Press.
    Para herramientas/repos: Autor. (s.f.). *Nombre* [Software]. GitHub. URL
-   Para notas: Notas del proyecto: notas-md/ruta/al/archivo.md
 
 5. ORTOGRAFÍA — Todo el contenido en español con acentos y ortografía correcta.
    Ver sección "Idioma y Ortografía" en AGENTS.md.

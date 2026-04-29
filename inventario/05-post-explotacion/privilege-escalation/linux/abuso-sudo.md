@@ -93,5 +93,3 @@ sudo LD_PRELOAD=/tmp/shell.so /usr/bin/any_allowed_command
 - GTFOBins. (s.f.). *GTFOBins* [Base de datos]. https://gtfobins.github.io/
 - OccupyTheWeb. (2018). *Linux Basics for Hackers*. No Starch Press.
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
-- Notas del proyecto: notas-md/HNotes/HNotes/General/Linux/sudo.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Privilege Escalation.md

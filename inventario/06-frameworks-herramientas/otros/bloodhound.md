@@ -55,4 +55,3 @@ Al seleccionar un usuario o computadora, en la pestaña **Node Info**:
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - SpecterOps. (s.f.). *BloodHound* [Software]. GitHub. https://github.com/BloodHoundAD/BloodHound
 - MITRE Corporation. (2024). ATT&CK Technique T1087.002: Domain Account Discovery. https://attack.mitre.org/techniques/T1087/002/
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Exploits.md

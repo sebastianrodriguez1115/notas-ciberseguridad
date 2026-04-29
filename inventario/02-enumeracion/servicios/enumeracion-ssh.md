@@ -88,5 +88,3 @@ exploit
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - Hertzog, R., & O'Gorman, J. (2017). *Kali Linux Revealed*. Offensive Security.
 - MITRE Corporation. (2024). ATT&CK Technique T1110.001: Brute Force: Password Guessing. https://attack.mitre.org/techniques/T1110/001/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/SSH/SSH Recon.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/SSH/SSH Dictionary attack.md

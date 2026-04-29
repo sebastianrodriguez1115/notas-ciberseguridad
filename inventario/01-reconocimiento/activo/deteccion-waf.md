@@ -51,6 +51,5 @@ Esta tecnica puede evadir WAFs que no reconstruyen el cuerpo de la peticion ante
 
 ## Referencias
 - Harper, A., Harris, S., Ness, J., Eagle, C., Lenkey, G., & Williams, T. (2018). *Gray Hat Hacking: The Ethical Hacker's Handbook* (5th ed.). McGraw-Hill Education.
-- Notas del proyecto: notas-md/INE Courses/Assessment Methodologies Information Gathering/Passive Information Gathering.md
 - EnableSecurity. (s.f.). *wafw00f* [Software]. GitHub. https://github.com/EnableSecurity/wafw00f
 - MITRE Corporation. (2024). ATT&CK Technique T1595: Active Scanning. https://attack.mitre.org/techniques/T1595/

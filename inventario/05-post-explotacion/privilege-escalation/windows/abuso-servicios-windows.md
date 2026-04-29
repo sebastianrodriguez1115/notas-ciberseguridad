@@ -118,4 +118,3 @@ sc start VulnerableService
 - PowerShellMafia. (s.f.). *PowerSploit* [Software]. GitHub. https://github.com/PowerShellMafia/PowerSploit
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking* (5th ed.). McGraw-Hill Education.
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Windows Privilege Escalation.md

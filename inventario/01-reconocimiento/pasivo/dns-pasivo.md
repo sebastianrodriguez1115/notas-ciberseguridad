@@ -40,6 +40,5 @@ Combina scraping de motores de busqueda y APIs de servicios de inteligencia DNS.
 
 ## Referencias
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/INE Courses/Assessment Methodologies Information Gathering/Passive Information Gathering.md
 - MITRE Corporation. (2024). ATT&CK Technique T1590.002: Gather Victim Network Information: DNS. https://attack.mitre.org/techniques/T1590/002/
 - Rapid7. (s.f.). *Project Sonar: Open Data*. https://opendata.rapid7.com/

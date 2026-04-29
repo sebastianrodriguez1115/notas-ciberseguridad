@@ -136,5 +136,3 @@ execute
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking* (5th ed.). McGraw-Hill Education.
 - Cole, E. (2014). *Advanced Persistent Threat Hacking*. Syngress.
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Host & Network Penetration Testing Exploitation/PowerShell-Empire.md
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Lateral Movement and Pivoting.md

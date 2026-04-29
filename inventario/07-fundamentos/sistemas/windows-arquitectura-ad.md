@@ -60,4 +60,3 @@ reg query "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies
 ## Referencias
 - Russinovich, M., Solomon, D., & Ionescu, A. (2017). *Windows Internals* (7th ed.). Microsoft Press.
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
-- Notas del proyecto: notas-md/HNotes/HNotes/General/Windows Commands.md

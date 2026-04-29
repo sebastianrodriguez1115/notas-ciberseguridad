@@ -66,4 +66,3 @@ chmod +s /mnt/nfs/bash
 ## Referencias
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1135: Network Share Discovery. https://attack.mitre.org/techniques/T1135/
-- Notas del proyecto: notas-md/HNotes/HNotes/General/Linux/NFS.md

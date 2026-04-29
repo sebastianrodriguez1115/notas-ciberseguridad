@@ -48,4 +48,3 @@ PECmd.exe -d "C:\Windows\Prefetch" --csv "C:\Análisis\Prefetch_Resultados.csv"
 - Luttgens, J., Pepe, M., & Hollebeek, K. (2014). *Incident Response & Computer Forensics* (3rd ed.). McGraw-Hill Education.
 - Anson, S., Bunting, S., Johnson, R., & Pearson, A. (2020). *Mastering Windows Network Forensics and Investigation*. Sybex.
 - MITRE Corporation. (2024). ATT&CK Matrix for Enterprise: Forensics. https://attack.mitre.org/matrices/enterprise/
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/AoC 2025.md

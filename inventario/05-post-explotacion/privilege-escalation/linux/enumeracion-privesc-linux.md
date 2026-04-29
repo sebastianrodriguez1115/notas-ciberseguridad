@@ -131,4 +131,3 @@ curl http://127.0.0.1:8080 2>/dev/null
 - The-Z-Labs. (s.f.). *linux-exploit-suggester* [Software]. GitHub. https://github.com/The-Z-Labs/linux-exploit-suggester
 - GTFOBins. (s.f.). *GTFOBins* [Base de datos]. https://gtfobins.github.io/
 - OccupyTheWeb. (2018). *Linux Basics for Hackers*. No Starch Press.
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Exploits/linPEAS.md

@@ -69,4 +69,3 @@ netstat -ano   # Windows
 ## Referencias
 - Lammle, T. (2016). *CompTIA Network+ Study Guide*. Sybex.
 - Odom, W. (2020). *CCNA 200-301 Official Cert Guide*. Cisco Press.
-- Notas del proyecto: notas-md/HNotes/HNotes/General/OSI.md

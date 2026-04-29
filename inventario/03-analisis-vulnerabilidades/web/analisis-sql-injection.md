@@ -43,5 +43,4 @@ Si el usuario de la DB tiene permisos de lectura y la variable `secure_file_priv
 ## Referencias
 - Stuttard, D., & Pinto, M. (2011). *The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws* (2nd ed.). Wiley.
 - Rahalkar, S. (2017). *Metasploit Penetration Testing Cookbook* (3rd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/HNotes/HNotes/Burp Suite Labs/SQL Injection.md
 - OWASP Foundation. (2021). *SQL Injection Prevention Cheat Sheet*. https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html

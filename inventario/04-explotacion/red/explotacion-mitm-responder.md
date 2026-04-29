@@ -46,4 +46,3 @@ sudo responder -I eth0 -r -w -F
 ## Referencias
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1557.001: Adversary-in-the-Middle: LLMNR/NBT-NS Poisoning and SMB Relay. https://attack.mitre.org/techniques/T1557/001/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Network Based Attacks.md

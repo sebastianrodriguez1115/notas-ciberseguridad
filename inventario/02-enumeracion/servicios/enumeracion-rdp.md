@@ -66,4 +66,3 @@ run
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking: The Ethical Hacker's Handbook* (5th ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). ATT&CK Technique T1021.001: Remote Services: Remote Desktop Protocol. https://attack.mitre.org/techniques/T1021/001/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Host & Network Penetration Testing System Host Bas/Exploiting Windows Vulnerabilities/RDP.md

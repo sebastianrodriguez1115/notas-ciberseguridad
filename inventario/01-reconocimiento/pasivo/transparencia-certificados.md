@@ -36,6 +36,5 @@ Buscar certificados emitidos para paneles VPN o administracion (ej: `vpn.target.
 
 ## Referencias
 - Kim, P. (2018). *The Hacker Playbook 3: Practical Guide to Penetration Testing*. Secure Planet.
-- Notas del proyecto: notas-md/HNotes/Recon/Passive Enumeration/Certificate Fingerprinting.md
 - MITRE Corporation. (2024). ATT&CK Technique T1596.003: Search Open Technical Databases: Digital Certificates. https://attack.mitre.org/techniques/T1596/003/
 - Google. (s.f.). *Certificate Transparency*. https://certificate.transparency.dev/

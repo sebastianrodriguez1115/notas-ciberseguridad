@@ -40,6 +40,5 @@ Permite obtener una lista de emails y sus contraseñas (en texto claro o hash) f
 
 ## Referencias
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/HNotes/Recon/Emails.md
 - MITRE Corporation. (2024). ATT&CK Technique T1589.002: Gather Victim Identity Information: Email Addresses. https://attack.mitre.org/techniques/T1589/002/
 - Hunt, T. (s.f.). *Have I Been Pwned*. https://haveibeenpwned.com/

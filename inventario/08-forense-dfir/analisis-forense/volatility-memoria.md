@@ -61,4 +61,3 @@ vol.py -f memory_dump.raw --profile=Win7SP1x64 hashdump
 - Ligh, M. H., Case, A., Levy, J., & Walters, B. (2014). *The Art of Memory Forensics*. John Wiley & Sons.
 - Volatility Foundation. (s.f.). *Volatility Framework* [Software]. https://www.volatilityfoundation.org/
 - MITRE Corporation. (2024). ATT&CK Technique T1055: Process Injection. https://attack.mitre.org/techniques/T1055/
-- Notas del proyecto: notas-md/HNotes/HNotes/Hacking/Exploits/winPEAS.md (referencia a vulnerabilidades locales detectables en memoria).

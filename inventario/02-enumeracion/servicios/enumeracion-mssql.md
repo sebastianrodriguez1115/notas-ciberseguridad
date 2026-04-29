@@ -101,5 +101,3 @@ run
 - Rahalkar, S. (2017). *Metasploit for Beginners*. Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1046: Network Service Discovery. https://attack.mitre.org/techniques/T1046/
 - MITRE Corporation. (2024). ATT&CK Technique T1059.003: Command and Scripting Interpreter: Windows Command Shell. https://attack.mitre.org/techniques/T1059/003/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/MS SQL/Nmap scripts.md
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Assessment Methodologies Enumeration/MS SQL/Metasploit.md

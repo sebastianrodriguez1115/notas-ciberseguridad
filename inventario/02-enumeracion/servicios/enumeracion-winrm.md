@@ -80,4 +80,3 @@ evil-winrm.rb -u administrator -H <NTLM_HASH> -i 10.4.18.67
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking: The Ethical Hacker's Handbook* (5th ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). ATT&CK Technique T1021.006: Remote Services: Windows Remote Management. https://attack.mitre.org/techniques/T1021/006/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Host & Network Penetration Testing System Host Bas/Exploiting Windows Vulnerabilities/WinRM.md

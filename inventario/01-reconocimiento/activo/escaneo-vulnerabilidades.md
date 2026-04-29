@@ -51,8 +51,4 @@ Nuclei permite usar plantillas creadas por la comunidad para detectar fallos muy
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
 - Sinha, S. (2017). *Metasploit for Beginners*. Packt Publishing.
 - Kim, P. (2018). *The Hacker Playbook 3: Practical Guide to Penetration Testing*. Secure Planet.
-- Notas del proyecto: notas-md/HNotes/Recon/Vulnerabilities/nikto.md
-- Notas del proyecto: notas-md/HNotes/Recon/Vulnerabilities/Vulnerability Scanning.md
-- Notas del proyecto: notas-md/INE Courses/Metasploit Framework/Vulnerability Scanning.md
-- Notas del proyecto: notas-md/INE Courses/Host & Network Penetration Testing Exploitation/Vulnerability Scanning With Nmap Scripts.md
 - MITRE Corporation. (2024). ATT&CK Technique T1595.002: Active Scanning: Vulnerability Scanning. https://attack.mitre.org/techniques/T1595/002/

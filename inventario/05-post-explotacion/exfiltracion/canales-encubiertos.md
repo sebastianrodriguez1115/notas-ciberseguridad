@@ -123,4 +123,3 @@ done < /etc/shadow
 - yarrick. (s.f.). *iodine* [Software]. GitHub. https://github.com/yarrick/iodine
 - Sanders, C. (2017). *Network Security Through Data Analysis* (2nd ed.). O'Reilly Media.
 - Cole, E. (2014). *Advanced Persistent Threat Hacking*. Syngress.
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/dataxexfilt.md

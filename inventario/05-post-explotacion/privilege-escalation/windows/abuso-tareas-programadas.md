@@ -96,4 +96,3 @@ schtasks /run /s 10.10.10.50 /u Administrator /p Password123 /tn "RemoteTask"
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking* (5th ed.). McGraw-Hill Education.
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Windows Privilege Escalation.md

@@ -44,4 +44,3 @@ hashid -m '$6$somerandomstring$...'
 ## Referencias
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1110.002: Brute Force: Password Cracking. https://attack.mitre.org/techniques/T1110/002/
-- Notas del proyecto: notas-md/HNotes/HNotes/Cheatsheet.md

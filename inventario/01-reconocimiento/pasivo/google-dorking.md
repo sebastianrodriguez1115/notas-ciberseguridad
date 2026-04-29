@@ -53,6 +53,5 @@ intitle:"index of" inurl:auth site:target.com
 ## Referencias
 - Kim, P. (2018). *The Hacker Playbook 3: Practical Guide to Penetration Testing*. Secure Planet.
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/HNotes/General/Google Fu.md
 - OffSec. (s.f.). *Google Hacking Database*. Exploit-DB. https://www.exploit-db.com/google-hacking-database
 - MITRE Corporation. (2024). ATT&CK Technique T1593: Search Open Websites/Domains. https://attack.mitre.org/techniques/T1593/

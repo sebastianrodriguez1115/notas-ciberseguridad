@@ -54,7 +54,3 @@ X-Generator: Drupal 8
 ## Referencias
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1592.002: Gather Victim Host Information: Software. https://attack.mitre.org/techniques/T1592/002/
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Active Enumeration/WhatWeb.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Active Enumeration/Httpx.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Passive Enumeration/Wappalyzer.md
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Passive Enumeration/Builtwith.md

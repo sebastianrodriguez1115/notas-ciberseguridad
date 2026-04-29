@@ -76,4 +76,3 @@ Una vez que el agente se conecta, podemos interactuar con él.
 - Harper, A., Linn, R., Sims, S., & Baucom, M. (2018). *Gray Hat Hacking* (5th ed.). McGraw-Hill Education.
 - BC Security. (s.f.). *Empire* [Software]. GitHub. https://github.com/BC-SECURITY/Empire
 - MITRE Corporation. (2024). ATT&CK Technique T1059.001: PowerShell. https://attack.mitre.org/techniques/T1059/001/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Host & Network Penetration Testing Exploitation/PowerShell-Empire.md

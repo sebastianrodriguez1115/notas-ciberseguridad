@@ -52,4 +52,3 @@ sessions <id>
 ## Referencias
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - MITRE Corporation. (2024). ATT&CK Technique T1566: Phishing. https://attack.mitre.org/techniques/T1566/
-- Notas del proyecto: notas-md/HNotes/HNotes/Recon/Emails.md

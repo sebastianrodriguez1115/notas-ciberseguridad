@@ -52,5 +52,4 @@ Aumenta la intensidad de los probes para intentar identificar servicios altament
 ## Referencias
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
 - Kim, P. (2018). *The Hacker Playbook 3: Practical Guide to Penetration Testing*. Secure Planet.
-- Notas del proyecto: notas-md/INE Courses/Host & Network Penetration Testing Exploitation/Banner Grabbing.md
 - MITRE Corporation. (2024). ATT&CK Technique T1592.002: Gather Victim Host Information: Software. https://attack.mitre.org/techniques/T1592/002/

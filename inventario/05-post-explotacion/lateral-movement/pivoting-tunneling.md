@@ -151,6 +151,3 @@ sshuttle -r user@10.10.10.50 --ssh-cmd "ssh -i key.pem" 192.168.100.0/24
 - nicocha30. (s.f.). *Ligolo-ng* [Software]. GitHub. https://github.com/nicocha30/ligolo-ng
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - Allen, L. (2018). *Mastering Kali Linux for Advanced Penetration Testing* (2nd ed.). Packt Publishing.
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Lateral Movement and Pivoting.md
-- Notas del proyecto: notas-md/HNotes/HNotes/TryHackMe/Voyage Room.md
-- Notas del proyecto: notas-md/HNotes/HNotes/General/MSFConsole.md

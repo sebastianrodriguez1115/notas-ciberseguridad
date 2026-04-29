@@ -61,4 +61,3 @@ kill -9 <PID>      # Forzar la finalización de un proceso
 ## Referencias
 - OccupyTheWeb. (2018). *Linux Basics for Hackers*. No Starch Press.
 - Shotts, W. (2019). *The Linux Command Line: A Complete Introduction*. No Starch Press.
-- Notas del proyecto: notas-md/HNotes/HNotes/General/Linux.md
