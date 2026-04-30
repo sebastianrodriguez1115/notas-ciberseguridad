@@ -2,6 +2,25 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-04-29] — Sesión 13 (Lab PortSwigger XML encoding bypass + WAF bypass en inventario)
+
+Sesión continuando la serie SQLi de PortSwigger: cambio de tipo de lab de blind a **UNION-based con WAF + bypass via XML hex entities**. Solved al primer intento. Aprovechamos para añadir al inventario dos huecos nuevos: la distinción numeric/string SQLi y la categoría completa de WAF bypass (encoding asimétrico + bypasses a nivel SQL).
+
+### Añadido
+- **`learning/portswigger/sqli-filter-bypass-xml-encoding/`** — sexto writeup en el directorio `learning/portswigger/`. Construido iterativamente:
+    - `writeup.md` (10 secciones): objetivo y cambio de patrón (de cookie a body XML, de blind a UNION-based con WAF), recon del endpoint `/product/stock` con `Content-Type: application/xml`, **sondeo aritmético `3-1` para confirmar numeric SQLi sin tocar keywords del WAF** (técnica didácticamente clave: pasa por debajo del radar del WAF de patrones), confirmación del WAF con respuestas 403 "Attack detected" en `'` y `UNION`, explicación de la asimetría WAF-vs-parser (WAF inspecciona wire format, backend ve XML parseado) que habilita el bypass, construcción del bypass mínimo encodeando sólo la primera letra de las keywords (`&#x55;NION &#x53;ELECT`) más las comillas (`&#x27;`), validación con `UNION SELECT NULL` (200 OK + body con `null`) y descubrimiento bonus de que el endpoint imprime todos los rows del result set (permite extraer toda la tabla en una request), extracción con `username||'~'||password FROM users`, login admin, contramedidas específicas (parametrización, validación de tipo numeric en valores XML, WAFs que parsean el formato antes de aplicar reglas, allow-list).
+    - `solved.png`: confirmación visual del lab solved.
+
+### Actualizado
+- **`inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md`**:
+    - **Bloque nuevo "Sondeo previo — numeric vs string SQLi"** al inicio de "Comandos / Ejemplos", explicando la distinción y proponiendo el test aritmético (`3-1`) y el test de comilla como sondeos complementarios. Útil contexto antes de los 6 tipos de inyección.
+    - **Nueva sección 6 "WAF Bypass — Encoding asimétrico"** después de load_file. Documenta el patrón general (WAF inspecciona wire format, parser decodea), tabla de esquemas de encoding por formato del body (XML entities, JSON unicode escapes, URL-encoding, multipart Content-Transfer-Encoding, gzip), ejemplo XML completo con bypass mínimo vs agresivo, y bloque de bypasses a nivel SQL (comentarios inline `UN/**/ION`, whitespace alternativo `%09`/`%0a`/`/**/`, equivalencias semánticas `&&`/`||`/`MID`/`IIF`). Cierra con heurística de orden de prueba.
+    - Referencias ampliadas con el nuevo writeup.
+- **`inventario/04-explotacion/web/explotacion-sqli.md`**:
+    - Sondeo aritmético `3-1` añadido al bloque "Pruebas manuales básicas" como primer test antes del bypass clásico de login.
+    - Bloque XML hex entities bypass añadido después del bloque OOB, con bypass mínimo vs agresivo + bloque adicional de bypasses SQL-level (comentarios inline, whitespace alternativo, equivalencias semánticas) y heurística de orden de prueba.
+    - Referencias ampliadas con el nuevo writeup.
+
 ## [2026-04-29] — Sesión 12 (Lab PortSwigger OOB + categoría OOB en inventario)
 
 Sesión continuando la serie de blind SQLi: lab de **out-of-band interaction** (Oracle, XXE via `xmltype`). El lab no se cerró como **Solved** porque PortSwigger Academy bloquea outbound hacia cualquier dominio distinto de `*.oastify.com` (Burp Pro Collaborator, no disponible). El conocimiento técnico y el diagnóstico se capturan igualmente: la categoría OOB queda añadida al inventario como cuarta familia blind, y el writeup documenta tanto la técnica como la limitación operacional encontrada.
