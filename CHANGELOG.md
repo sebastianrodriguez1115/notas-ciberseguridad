@@ -2,6 +2,19 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-04-29] — Sesión 10 (Lab PortSwigger + enriquecimiento SQLi time-based)
+
+Sesión de aprendizaje guiada paso a paso resolviendo el lab de PortSwigger **"Blind SQL injection with time delays"**, con captura del conocimiento operativo derivado en el inventario.
+
+### Añadido
+- **`learning/portswigger/blind-sqli-time-delays/`** — tercer writeup en el directorio `learning/portswigger/`. Construido iterativamente durante la sesión:
+    - `writeup.md` (8 secciones): objetivo, baseline cuantificado (~185ms estable), descarte explícito de canales más cómodos (test `'` suelto sin error reflejado → no error-based; `AND '1'='1` vs `AND '1'='2` con respuestas idénticas → no boolean-based) que justifica el salto a tiempo, payload final con stacked queries (`x'%3BSELECT+pg_sleep(10)--`) con explicación pieza por pieza, **detalle didáctico del `;` como delimitador de cookies y la necesidad de URL-encodearlo como `%3B`** (gotcha específico de inyectar en headers Cookie), tabla de primitivos de retardo por motor (PG `pg_sleep`, MySQL `SLEEP`, MS SQL `WAITFOR DELAY`, Oracle `dbms_pipe.receive_message`, SQLite con queries pesadas), variantes equivalentes (concat `||`, cláusula `AND`), resumen con diagrama Mermaid y contramedidas (statement_timeout, deshabilitar multi-statement, monitoreo de latencia anómala).
+    - `solved.png`: confirmación visual del lab resuelto al primer intento.
+
+### Actualizado
+- **`inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md`** — sección 3 "Inyección Ciega Basada en Tiempo" reescrita y ampliada. Antes solo listaba MySQL `SLEEP` y el patrón complejo PostgreSQL `CASE WHEN ... pg_sleep ... ELSE pg_sleep END`; ahora documenta tabla de primitivos por motor (PG/MySQL/MSSQL/Oracle/SQLite), las tres formas de inyectar el sleep (stacked queries `;`, concat `||`, cláusula `AND`) según qué tolere el sink, el patrón `CASE WHEN` reservado explícitamente para inferencia bit a bit, ejemplos de inferencia en PG/MySQL/MS SQL, y nota sobre el `;` URL-encoded cuando el sink es header Cookie. Mención del baseline como pre-requisito metodológico. Referencias ampliadas con el nuevo writeup.
+- **`inventario/04-explotacion/web/explotacion-sqli.md`** — bloque "Pruebas manuales básicas" extendido con un nuevo bloque dedicado a payloads time-based, paralelo al de error-based añadido en sesión 9. Cubre los 5 motores principales, payload de inferencia con `CASE WHEN`, gotcha del `;` URL-encoded en cookies, y ejemplo de `sqlmap --technique=T --time-sec=5`. Referencias con enlace al writeup.
+
 ## [2026-04-29] — Sesión 9 (Lab PortSwigger + enriquecimiento SQLi error-based)
 
 Sesión de aprendizaje guiada paso a paso resolviendo el lab de PortSwigger **"Visible error-based SQL injection"**, con captura del conocimiento operativo derivado en el inventario.

