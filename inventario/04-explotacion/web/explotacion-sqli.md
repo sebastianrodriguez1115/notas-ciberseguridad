@@ -84,6 +84,8 @@ admin' #
 sqlmap -u "http://target.com/products?id=1" --technique=T --time-sec=5 --batch
 ```
 
+> **Nota operacional — paralelismo en time-based**: la extraccion bit-a-bit con time-based es paralelizable trivialmente (cada `(posicion, candidato)` es independiente). Burp Suite **Community** limita a 1 thread, lo que para 20 chars × 36 candidatos = 720 requests con `pg_sleep(5)` da ~6 minutos. Un script Python con `requests + concurrent.futures.ThreadPoolExecutor` (10 workers) baja eso a ~1 minuto al saturar el pool de conexiones de la DB. El cuello de botella deja de ser el cliente y pasa a ser cuantas conexiones concurrentes acepta la DB para los `pg_sleep`. Ver writeup `learning/portswigger/blind-sqli-time-delays-info-retrieval/` para implementacion completa.
+
 ## Contramedidas
 - Uso de consultas preparadas (Prepared Statements) con parametrización.
 - Implementación de una lista blanca (Allow-list) para la validación de entradas.

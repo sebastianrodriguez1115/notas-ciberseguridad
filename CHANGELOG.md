@@ -2,6 +2,19 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-04-29] — Sesión 11 (Lab PortSwigger time-delays info retrieval + script de extracción)
+
+Sesión continuando la serie de blind SQLi: del lab anterior (sólo provocar retardo) al lab "info-retrieval" donde hay que **extraer la password** de `administrator` por inferencia carácter a carácter via `CASE WHEN ... pg_sleep ... ELSE pg_sleep(0) END`. Pivote operacional clave: descartar Burp Intruder (1 thread en Community → ~6 min) y scriptear la extracción en Python con `ThreadPoolExecutor` (~1 min real medido).
+
+### Añadido
+- **`learning/portswigger/blind-sqli-time-delays-info-retrieval/`** — cuarto writeup en el directorio `learning/portswigger/`. Construido iterativamente durante la sesión:
+    - `writeup.md` (8 secciones): objetivo y diferencia con el lab base, **validación de las dos ramas del `CASE` antes de extraer** (test `(1=1)` → 10s, test `(1=2)` → baseline; sin esto los falsos positivos invalidarían toda la extracción), determinación de longitud (`LENGTH(password)=20` → 10s confirma 20 chars), narrativa del pivote Burp Intruder → script Python con análisis del coste real (~6 min Community vs 67s medidos con 10 workers, sleep=5s, threshold=3s) y discusión de por qué no escala linealmente (serialización de `pg_sleep` en el pool de conexiones de la DB), resumen con diagrama Mermaid y contramedidas específicas para extracción time-based (`statement_timeout` corto como contramedida quirúrgica, rate limiting, decorrelación tiempo-de-respuesta vs tiempo-de-backend).
+    - `extract.py`: script funcional autocontenido (~80 líneas). Usa `requests` + `concurrent.futures.ThreadPoolExecutor`, encodea la cookie con `urllib.parse.quote_plus` (resuelve `;` → `%3B`, `'` → `%27`, espacios → `+` de un golpe), imprime hits en streaming, parametrizable por `--url`, `--session` y `--workers`.
+    - `solved.png`: confirmación visual del lab resuelto (login con la password extraída `jyuepelyogm45rdshesl`).
+
+### Actualizado
+- **`inventario/04-explotacion/web/explotacion-sqli.md`** — añadida nota operacional al final del bloque time-based: paralelismo en extracción time-based, limitación de Burp Community (1 thread), patrón `requests + ThreadPoolExecutor` con cuello de botella en el pool de conexiones de la DB, link al writeup como implementación de referencia.
+
 ## [2026-04-29] — Sesión 10 (Lab PortSwigger + enriquecimiento SQLi time-based)
 
 Sesión de aprendizaje guiada paso a paso resolviendo el lab de PortSwigger **"Blind SQL injection with time delays"**, con captura del conocimiento operativo derivado en el inventario.
