@@ -212,7 +212,9 @@ Defensas en orden de robustez:
 
 ### Anti-patrón frecuente
 
-Escapar sólo `$` literal (sin considerar la secuencia `${`) y declarar el problema resuelto. Bypass conocido: `${alert(1)}` aprovecha que el motor JS resuelve los Unicode escapes ANTES de identificar tokens, así que `$` se transforma en `$` en la fase léxica y forma `${alert(1)}` que dispara la interpolación. La protección correcta es a nivel de **secuencia** `${`, no del carácter `$`.
+Filtrar a ciegas con un blocklist de "caracteres peligrosos para JS strings" (`'`, `"`, `\`, `` ` ``) y olvidar `$` y `{` porque "no son delimitadores". Es exactamente el bug del lab. La regla operativa: cuando el container es un template literal, la secuencia `${` es tan peligrosa como una comilla en un string regular. El escape correcto es reemplazar la secuencia literal `${` por `\${` (que el motor interpreta como dollar-sign + abrir-llave sin disparar interpolación), y mantener el escape de `\` y `` ` `` para no dejar romper el container.
+
+Nota sobre Unicode escapes: en template literals, el reconocimiento de `${` se hace a nivel de carácter fuente antes de resolver escapes, así que `` `${alert(1)}` `` produce el string literal `"${alert(1)}"` y NO dispara interpolación. Esto cierra una ruta que parece prometedora pero no funciona; el bypass real es directo (mandar `${...}` sin ofuscación), no por escape Unicode.
 
 ---
 
