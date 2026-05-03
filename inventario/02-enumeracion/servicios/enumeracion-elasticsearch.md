@@ -1,13 +1,19 @@
+---
+title: Enumeración Elasticsearch (Puerto 9200)
+slug: enumeracion-elasticsearch
+aliases: [Enumeración Elasticsearch (Puerto 9200)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1046]
+related: []
+learning_refs: []
+---
+
 # Enumeración Elasticsearch (Puerto 9200)
 
 ## Descripción
 Elasticsearch es un motor de búsqueda y analítica distribuido basado en JSON. Las instancias de Elasticsearch a menudo se configuran sin autenticación por defecto en versiones antiguas o en configuraciones erróneas, permitiendo el acceso total a los datos almacenados. La enumeración de Elasticsearch se centra en identificar la versión, listar índices y nodos, y extraer documentos sensibles mediante la API REST.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **curl** — para interactuar directamente con la API REST

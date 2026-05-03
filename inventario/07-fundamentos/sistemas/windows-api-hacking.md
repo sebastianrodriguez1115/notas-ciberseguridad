@@ -1,3 +1,15 @@
+---
+title: Windows API para Hacking
+slug: windows-api-hacking
+aliases: [Windows API para Hacking]
+fase: [Fundamentos]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1106, T1055]
+related: []
+learning_refs: []
+---
+
 # Windows API para Hacking
 
 ## Descripción
@@ -6,12 +18,6 @@ La Windows API (Win32 API) es la interfaz nativa que permite a las aplicaciones 
 ### Conceptos Clave
 - **Handle (Manejador)**: Es un valor abstracto (un "ticket") que el sistema operativo entrega a una aplicación para que esta pueda referenciar un objeto interno (archivo, proceso, hilo, ventana) sin tener acceso directo a su dirección de memoria. Proporciona una capa de seguridad y abstracción.
 - **Pseudo Handle**: Un valor especial (frecuentemente `-1`) que representa al proceso actual. Solo es válido dentro del contexto del propio proceso y no puede ser utilizado por otros procesos para referenciarlo. Para obtener un handle real y único, se suelen usar funciones como `OpenProcess` o `GetModuleHandle`.
-
-## Clasificación
-- **Fase**: Fundamentos
-- **MITRE ATT&CK**: T1106 (Native API); T1055 (Process Injection)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **msfvenom** (`-f c`, `-f powershell`) — genera shellcode compatible con llamadas a la API de Windows.

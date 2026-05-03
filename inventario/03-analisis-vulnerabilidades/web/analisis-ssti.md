@@ -1,13 +1,19 @@
+---
+title: Análisis de SSTI (Server-Side Template Injection)
+slug: analisis-ssti
+aliases: [Análisis de SSTI (Server-Side Template Injection)]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de SSTI (Server-Side Template Injection)
 
 ## Descripción
 El SSTI ocurre cuando las entradas de usuario se concatenan directamente en las plantillas de servidor sin una sanitización adecuada. Dependiendo del motor de plantillas (Jinja2, Twig, Mako, etc.), un atacante puede ejecutar código arbitrario en el servidor, leer archivos locales o acceder a variables de entorno sensibles.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Burp Suite** (Intruder) — para probar payloads de detección y exfiltración de forma sistemática.

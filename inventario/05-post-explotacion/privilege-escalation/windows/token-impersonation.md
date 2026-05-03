@@ -1,13 +1,19 @@
+---
+title: Token Impersonation (Suplantación de Tokens)
+slug: token-impersonation
+aliases: [Token Impersonation (Suplantación de Tokens)]
+fase: [Post-Explotación]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1134.001]
+related: []
+learning_refs: []
+---
+
 # Token Impersonation (Suplantación de Tokens)
 
 ## Descripción
 En Windows, cada proceso y hilo de ejecución tiene asociado un access token que define su contexto de seguridad (identidad, privilegios, grupo). La suplantación de tokens (token impersonation) permite a un atacante con acceso a una sesión comprometida robar o duplicar el token de seguridad de otro usuario (típicamente un administrador o SYSTEM) para ejecutar acciones con sus privilegios. Existen dos tipos de tokens: delegation tokens (creados al iniciar sesión interactivamente) e impersonation tokens (creados al acceder a recursos de red). Un atacante con privilegios `SeImpersonatePrivilege` o `SeAssignPrimaryTokenPrivilege` puede explotar esta técnica para escalar a SYSTEM.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1134.001 (Access Token Manipulation: Token Impersonation/Theft)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Incognito** (módulo de Metasploit) — enumeración y suplantación de tokens en sesiones Meterpreter

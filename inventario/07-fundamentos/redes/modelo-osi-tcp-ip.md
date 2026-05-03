@@ -1,13 +1,19 @@
+---
+title: Modelo OSI y Protocolos TCP/IP
+slug: modelo-osi-tcp-ip
+aliases: [Modelo OSI y Protocolos TCP/IP]
+fase: [Fundamentos]
+plataforma: Red
+dificultad: Básica
+mitre: []
+related: []
+learning_refs: []
+---
+
 # Modelo OSI y Protocolos TCP/IP
 
 ## Descripción
 El Modelo OSI (Open Systems Interconnection) es un marco conceptual de siete capas que estandariza las funciones de un sistema de telecomunicaciones. Comprender este modelo y su implementación práctica en el stack TCP/IP es fundamental para el pentesting, ya que permite identificar en qué nivel ocurre una comunicación y cómo manipularla (ej. ataques de Capa 2 como ARP Spoofing vs ataques de Capa 7 como Inyección SQL).
-
-## Clasificación
-- **Fase**: Fundamentos
-- **MITRE ATT&CK**: N/A (Concepto Base)
-- **Plataforma**: Red
-- **Dificultad**: Básica
 
 ## Capas del Modelo OSI vs TCP/IP
 

@@ -1,13 +1,19 @@
+---
+title: Persistencia en Windows
+slug: persistencia-windows
+aliases: [Persistencia en Windows]
+fase: [Post-Explotación]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1547.001, T1543.003, T1053.005]
+related: []
+learning_refs: []
+---
+
 # Persistencia en Windows
 
 ## Descripción
 La persistencia en Windows abarca las técnicas que permiten a un atacante mantener el acceso a un sistema comprometido a través de reinicios, cierre de sesiones o cambios de credenciales. Los vectores principales incluyen la manipulación de claves del registro de autoarranque (Run/RunOnce), la creación de tareas programadas, la instalación de servicios maliciosos, el DLL hijacking en aplicaciones legítimas, y la modificación de la carpeta Startup. Estas técnicas aprovechan mecanismos legítimos del sistema operativo, lo que dificulta su detección si no se cuenta con monitoreo adecuado.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1547.001 (Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder); T1543.003 (Create or Modify System Process: Windows Service); T1053.005 (Scheduled Task/Job: Scheduled Task)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **reg.exe** — manipulación directa del registro de Windows

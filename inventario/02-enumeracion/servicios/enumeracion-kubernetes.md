@@ -1,13 +1,19 @@
+---
+title: Enumeración Kubernetes (K8s) (Puerto 6443 / 443 / 10250)
+slug: enumeracion-kubernetes
+aliases: [Enumeración Kubernetes (K8s) (Puerto 6443 / 443 / 10250)]
+fase: [Enumeración, Explotación]
+plataforma: Multi
+dificultad: Avanzada
+mitre: [T1613]
+related: []
+learning_refs: []
+---
+
 # Enumeración Kubernetes (K8s) (Puerto 6443 / 443 / 10250)
 
 ## Descripción
 Kubernetes es un orquestador de contenedores líder. La superficie de ataque de K8s incluye el API Server (típicamente en el puerto 6443 o 443) y el Kubelet (puerto 10250). La enumeración de Kubernetes se enfoca en descubrir la versión del cluster, identificar si el acceso anónimo está habilitado en el API Server o Kubelet, y extraer información sensible como secretos, configuraciones de pods y redes si se tiene acceso no autorizado.
-
-## Clasificación
-- **Fase**: Enumeración, Explotación
-- **MITRE ATT&CK**: T1613 (Container and Cloud Infrastructure: Kubernetes)
-- **Plataforma**: Multi
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **kubectl** — herramienta de línea de comandos oficial para gestionar clusters de K8s

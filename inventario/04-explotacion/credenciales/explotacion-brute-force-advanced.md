@@ -1,13 +1,19 @@
+---
+title: Ataques de Fuerza Bruta Avanzados
+slug: explotacion-brute-force-advanced
+aliases: [Ataques de Fuerza Bruta Avanzados]
+fase: [Explotación]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1110.001, T1110.003]
+related: []
+learning_refs: []
+---
+
 # Ataques de Fuerza Bruta Avanzados
 
 ## Descripción
 Los ataques de fuerza bruta avanzados van más allá del simple intento de adivinación de contraseñas. Involucran el conocimiento profundo de los flujos de protocolos complejos (como SSH, RDP, MSSQL o formularios web con tokens anti-CSRF) y la gestión de técnicas de evasión para evitar bloqueos de cuenta o detección por IDS/IPS. Esta técnica utiliza diccionarios optimizados, reglas de permutación y ataques de "password spraying" para maximizar la probabilidad de éxito contra servicios corporativos.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1110.001 (Brute Force: Password Guessing); T1110.003 (Brute Force: Password Spraying)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Hydra** — herramienta de cracking de login paralela que soporta numerosos protocolos.

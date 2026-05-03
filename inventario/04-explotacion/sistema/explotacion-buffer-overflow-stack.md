@@ -1,13 +1,19 @@
+---
+title: Explotación de Buffer Overflow (Stack-based x86)
+slug: explotacion-buffer-overflow-stack
+aliases: [Explotación de Buffer Overflow (Stack-based x86)]
+fase: [Explotación]
+plataforma: Multi
+dificultad: Avanzada
+mitre: [T1203, T1211]
+related: []
+learning_refs: []
+---
+
 # Explotación de Buffer Overflow (Stack-based x86)
 
 ## Descripción
 La explotación de desbordamiento de búfer en la pila (stack) ocurre cuando una aplicación escribe más datos en un búfer de memoria de los que este puede contener, sobrescribiendo estructuras de control adyacentes como el puntero de instrucción (EIP/RIP). En sistemas x86, esto permite a un atacante redirigir el flujo de ejecución hacia código malicioso (shellcode) mediante la manipulación del registro EIP. Esta técnica es fundamental en el desarrollo de exploits para software legacy o servicios binarios mal programados.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1203 (Exploitation for Client Execution); T1211 (Exploitation for Privilege Escalation)
-- **Plataforma**: Multi
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **Immunity Debugger** — depurador dinámico para Windows orientado al desarrollo de exploits.

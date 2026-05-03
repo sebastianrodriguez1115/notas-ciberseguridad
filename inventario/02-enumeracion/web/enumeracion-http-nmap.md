@@ -1,13 +1,19 @@
+---
+title: Enumeración HTTP con Scripts NSE de Nmap
+slug: enumeracion-http-nmap
+aliases: [Enumeración HTTP con Scripts NSE de Nmap]
+fase: [Enumeración]
+plataforma: Web
+dificultad: Básica
+mitre: [T1046]
+related: []
+learning_refs: []
+---
+
 # Enumeración HTTP con Scripts NSE de Nmap
 
 ## Descripción
 Uso de scripts NSE (Nmap Scripting Engine) especificos para HTTP que permiten enumerar rutas y directorios conocidos, inspeccionar cabeceras de respuesta, identificar métodos HTTP permitidos y detectar la presencia de WebDAV en servidores web (IIS, Apache, nginx). Mas silencioso que Nikto pero menos exhaustivo. Ideal como paso inicial de enumeración web antes de herramientas mas ruidosas.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** — escaner de red con motor de scripts NSE

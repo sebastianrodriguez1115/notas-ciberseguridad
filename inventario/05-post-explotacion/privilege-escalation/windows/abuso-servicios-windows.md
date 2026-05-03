@@ -1,13 +1,19 @@
+---
+title: Abuso de Servicios de Windows
+slug: abuso-servicios-windows
+aliases: [Abuso de Servicios de Windows]
+fase: [Post-Explotación]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1574.010, T1574.001]
+related: []
+learning_refs: []
+---
+
 # Abuso de Servicios de Windows
 
 ## Descripción
 Los servicios de Windows son procesos que se ejecutan en segundo plano, frecuentemente con privilegios de SYSTEM. Cuando un servicio tiene permisos de configuración débiles — como permitir a usuarios sin privilegios modificar la ruta del ejecutable, detener/reiniciar el servicio, o escribir en el directorio donde reside el binario — un atacante puede abusar de estas configuraciones para ejecutar código arbitrario como SYSTEM. Los vectores principales incluyen: modificación de la ruta del binario del servicio (binPath), reemplazo del ejecutable (unquoted service paths), DLL hijacking en el directorio del servicio, y abuso de permisos débiles en el registro de servicios.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1574.010 (Hijack Execution Flow: Services File Permissions Weakness); T1574.001 (Hijack Execution Flow: DLL Search Order Hijacking)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **accesschk.exe** (Sysinternals, `accesschk -uwcqv`) — verificar permisos sobre servicios, archivos y directorios

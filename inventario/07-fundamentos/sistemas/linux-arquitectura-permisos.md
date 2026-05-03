@@ -1,13 +1,19 @@
+---
+title: Sistemas: Arquitectura y Permisos en Linux
+slug: linux-arquitectura-permisos
+aliases: ["Sistemas: Arquitectura y Permisos en Linux"]
+fase: [Fundamentos]
+plataforma: Linux
+dificultad: Básica
+mitre: []
+related: []
+learning_refs: []
+---
+
 # Sistemas: Arquitectura y Permisos en Linux
 
 ## Descripción
 Linux es el sistema operativo predominante en servidores y entornos de nube. Para un pentester, es crucial comprender su estructura jerárquica de archivos, el funcionamiento del kernel, la gestión de procesos y el modelo de seguridad basado en permisos. Este conocimiento es la base para las técnicas de escalada de privilegios y persistencia.
-
-## Clasificación
-- **Fase**: Fundamentos
-- **MITRE ATT&CK**: N/A (Concepto Base)
-- **Plataforma**: Linux
-- **Dificultad**: Básica
 
 ## Estructura Jerárquica de Archivos (FHS)
 

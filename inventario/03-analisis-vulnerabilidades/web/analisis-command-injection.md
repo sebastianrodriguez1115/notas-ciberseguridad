@@ -1,13 +1,19 @@
+---
+title: Análisis de Command Injection
+slug: analisis-command-injection
+aliases: [Análisis de Command Injection]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de Command Injection
 
 ## Descripción
 La inyección de comandos ocurre cuando una aplicación web pasa datos no sanitizados del usuario (como parámetros de formularios, cookies o cabeceras HTTP) directamente a una shell del sistema operativo. Esto permite al atacante ejecutar comandos arbitrarios con los privilegios de la cuenta que ejecuta el servidor web, comprometiendo la integridad del sistema.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Metasploit** (`exploit/unix/webapp/elfinder_php_connector_exiftran_cmd_injection`) — módulo específico para explotar vulnerabilidades en conectores elFinder.

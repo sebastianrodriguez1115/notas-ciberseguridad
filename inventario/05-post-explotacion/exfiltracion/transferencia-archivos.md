@@ -1,13 +1,19 @@
+---
+title: Transferencia de Archivos en Post-Explotación
+slug: transferencia-archivos
+aliases: [Transferencia de Archivos en Post-Explotación]
+fase: [Post-Explotación]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1105, T1041]
+related: []
+learning_refs: []
+---
+
 # Transferencia de Archivos en Post-Explotación
 
 ## Descripción
 La transferencia de archivos es una actividad fundamental durante la post-explotación que permite al atacante subir herramientas al sistema comprometido (ingress tool transfer) y descargar datos sensibles (exfiltración). Las técnicas varían según el sistema operativo, los controles de seguridad presentes y los protocolos permitidos. En Linux se usan comúnmente wget, curl, netcat y Python HTTP servers, mientras que en Windows se aprovechan certutil, PowerShell, bitsadmin y SMB. La elección del método depende de qué herramientas están disponibles en el sistema y qué tráfico de red está permitido por el firewall.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1105 (Ingress Tool Transfer); T1041 (Exfiltration Over C2 Channel)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **python3** (`-m http.server`) — servidor HTTP simple para servir archivos

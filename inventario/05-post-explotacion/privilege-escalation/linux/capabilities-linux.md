@@ -1,13 +1,19 @@
+---
+title: Explotación de Linux Capabilities
+slug: capabilities-linux
+aliases: [Explotación de Linux Capabilities]
+fase: [Post-Explotación]
+plataforma: Linux
+dificultad: Intermedia
+mitre: [T1548.001]
+related: []
+learning_refs: []
+---
+
 # Explotación de Linux Capabilities
 
 ## Descripción
 Las capabilities de Linux son un mecanismo de control de acceso que divide los privilegios de root en unidades granulares independientes. En lugar de otorgar todos los privilegios de root a un binario (como con SUID), se pueden asignar capacidades específicas como `cap_setuid`, `cap_net_raw` o `cap_dac_override`. Sin embargo, cuando se asignan capabilities peligrosas a binarios accesibles por usuarios sin privilegios, un atacante puede abusar de ellas para escalar privilegios. Por ejemplo, `cap_setuid` permite cambiar el UID del proceso a 0 (root), y `cap_dac_override` permite ignorar permisos de lectura/escritura en archivos.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1548.001 (Abuse Elevation Control Mechanism: Setuid and Setgid)
-- **Plataforma**: Linux
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **getcap** — enumeración de capabilities asignadas a binarios en el sistema

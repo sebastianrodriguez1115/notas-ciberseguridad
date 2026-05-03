@@ -1,13 +1,19 @@
+---
+title: SMB Relay Attack
+slug: explotacion-smb-relay
+aliases: [SMB Relay Attack]
+fase: [Explotación]
+plataforma: Red
+dificultad: Avanzada
+mitre: [T1557.001]
+related: []
+learning_refs: []
+---
+
 # SMB Relay Attack
 
 ## Descripción
 Técnica de ataque de tipo Adversary-in-the-Middle (AiTM) donde un atacante intercepta una solicitud de autenticación SMB y la retransmite (relays) hacia otro servidor en la red. Si el usuario interceptado tiene privilegios administrativos en el destino, el atacante puede ejecutar comandos de forma remota (RCE) sin conocer la contraseña.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1557.001 (Adversary-in-the-Middle: LLMNR/NBT-NS Poisoning and SMB Relay)
-- **Plataforma**: Red
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **ntlmrelayx.py** (`-t`, `-smb2support`, `-socks`) — parte de la suite Impacket, permite realizar el relay de hashes NTLM hacia múltiples protocolos.

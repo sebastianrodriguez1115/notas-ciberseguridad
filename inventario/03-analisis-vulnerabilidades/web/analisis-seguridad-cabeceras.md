@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP
+slug: analisis-seguridad-cabeceras
+aliases: ["Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP"]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Básica
+mitre: [T1595.002]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP
 
 ## Descripción
 Las cabeceras de respuesta HTTP permiten a los servidores web indicar a los navegadores cómo comportarse respecto a la seguridad del contenido servido. La ausencia o configuración incorrecta de estas cabeceras puede facilitar ataques como XSS, Clickjacking o Sniffing de contenido. El análisis de cabeceras es una fase fundamental en cualquier auditoría web.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **curl** — Herramienta de línea de comandos para inspeccionar cabeceras de respuesta HTTP de forma rápida.

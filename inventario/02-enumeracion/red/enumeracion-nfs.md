@@ -1,13 +1,19 @@
+---
+title: Enumeración NFS (Network File System)
+slug: enumeracion-nfs
+aliases: [Enumeración NFS (Network File System)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1135, T1548.001]
+related: []
+learning_refs: []
+---
+
 # Enumeración NFS (Network File System)
 
 ## Descripción
 NFS (Network File System) es un protocolo de sistema de archivos distribuido que permite a los clientes montar particiones remotas como si fueran locales. Opera principalmente sobre el puerto 2049/tcp y UDP, usando RPC (puerto 111). La enumeración NFS permite descubrir que directorios exporta el servidor y, si los controles de acceso son debiles, montarlos localmente para leer o escribir archivos. La misconfiguracion critica es la opcion `no_root_squash`, que permite a un cliente conectarse como root y escribir archivos con privilegios de root en el servidor.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1135 (Network Share Discovery) — enumeración de exports; T1548.001 (Abuse Elevation Control Mechanism: Setuid and Setgid) — explotación de no_root_squash
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** (scripts NSE nfs-ls, nfs-showmount, nfs-statfs) — detección y listado de exports

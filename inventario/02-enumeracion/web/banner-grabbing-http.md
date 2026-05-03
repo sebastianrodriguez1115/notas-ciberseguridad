@@ -1,13 +1,19 @@
+---
+title: Banner Grabbing HTTP
+slug: banner-grabbing-http
+aliases: [Banner Grabbing HTTP]
+fase: [Enumeración]
+plataforma: Web
+dificultad: Básica
+mitre: [T1046]
+related: []
+learning_refs: []
+---
+
 # Banner Grabbing HTTP
 
 ## Descripción
 Identificación de la versión exacta del servidor web (IIS, Apache, nginx) y el sistema operativo subyacente a partir de banners de servicio HTTP. Los servidores web incluyen información de versión en cabeceras de respuesta como `Server` y `X-Powered-By`. Esta información permite buscar CVEs especificos de esa versión y priorizar vectores de ataque. Es una de las primeras técnicas de enumeración activa en cualquier evaluacion web.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** (`-sV -O`) — detección de versión de servicio y sistema operativo

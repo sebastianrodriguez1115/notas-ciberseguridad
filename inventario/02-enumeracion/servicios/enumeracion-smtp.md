@@ -1,13 +1,19 @@
+---
+title: Enumeración SMTP (Simple Mail Transfer Protocol)
+slug: enumeracion-smtp
+aliases: [Enumeración SMTP (Simple Mail Transfer Protocol)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1589.002, T1046]
+related: []
+learning_refs: []
+---
+
 # Enumeración SMTP (Simple Mail Transfer Protocol)
 
 ## Descripción
 SMTP (Simple Mail Transfer Protocol) es el protocolo estándar para envío de correo electrónico, operando en los puertos 25/tcp (relay), 465/tcp (SMTPS) y 587/tcp (submission). La enumeración SMTP permite identificar la versión del servidor de correo, verificar la existencia de usuarios mediante los comandos VRFY, EXPN y RCPT TO, y descubrir configuraciones inseguras como open relay. La enumeración de usuarios SMTP es especialmente valiosa porque permite construir una lista de cuentas válidas del sistema sin autenticación, que luego puede usarse para ataques de fuerza bruta contra otros servicios (SSH, SMB, RDP). Los servidores mal configurados que permiten open relay también pueden usarse para enviar correos de phishing.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1589.002 (Gather Victim Identity Information: Email Addresses) — enumeración de usuarios; T1046 (Network Service Discovery) — descubrimiento del servicio
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** (`smtp-commands`, `smtp-enum-users`, `smtp-open-relay`, `smtp-vuln-cve2010-4344`) — enumeración vía NSE

@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades: LFI y RFI
+slug: analisis-lfi-rfi
+aliases: ["Análisis de Vulnerabilidades: LFI y RFI"]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades: LFI y RFI
 
 ## Descripción
 La inclusión de archivos (File Inclusion) permite a un atacante incluir archivos locales (LFI) o remotos (RFI) en el contexto de ejecución de la aplicación. Según *The Web Application Hacker's Handbook*, estas fallas suelen ser precursores directos de la Ejecución Remota de Comandos (RCE). El LFI ocurre cuando la entrada del usuario se usa para construir rutas de archivos; el RFI, cuando la aplicación permite incluir scripts desde servidores externos.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Burp Suite (Intruder)** — Fuzzing de rutas sistemático con SecLists.

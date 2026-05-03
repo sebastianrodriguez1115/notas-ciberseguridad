@@ -1,13 +1,19 @@
+---
+title: Shellshock (CVE-2014-6271)
+slug: explotacion-shellshock
+aliases: [Shellshock (CVE-2014-6271)]
+fase: [Explotación]
+plataforma: Linux
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Shellshock (CVE-2014-6271)
 
 ## Descripción
 Vulnerabilidad crítica en Bash que permite la ejecución remota de código (RCE) mediante la manipulación de variables de entorno. Afecta especialmente a servidores web que utilizan scripts CGI para procesar solicitudes HTTP, donde el atacante puede inyectar comandos en cabeceras como User-Agent.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Linux
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **curl** — para realizar peticiones HTTP manuales con cabeceras maliciosas.

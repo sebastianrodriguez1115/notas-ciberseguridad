@@ -1,13 +1,19 @@
+---
+title: Escaneo de Vulnerabilidades con OpenVAS / GVM
+slug: escaneo-openvas-gvm
+aliases: [Escaneo de Vulnerabilidades con OpenVAS / GVM]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1595.002]
+related: []
+learning_refs: []
+---
+
 # Escaneo de Vulnerabilidades con OpenVAS / GVM
 
 ## Descripción
 OpenVAS (Open Vulnerability Assessment System) es un framework robusto para el escaneo y la gestión de vulnerabilidades. Ahora mantenido bajo el nombre Greenbone Vulnerability Management (GVM), es capaz de realizar miles de pruebas de vulnerabilidad de red (NVT) actualizadas regularmente. Es una herramienta fundamental para realizar evaluaciones exhaustivas en entornos empresariales.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **GVM / OpenVAS** — Framework de escaneo y gestión de vulnerabilidades de código abierto.

@@ -1,13 +1,19 @@
+---
+title: Web Shells
+slug: web-shells
+aliases: [Web Shells]
+fase: [Post-Explotación]
+plataforma: Web
+dificultad: Básica
+mitre: [T1505.003]
+related: []
+learning_refs: []
+---
+
 # Web Shells
 
 ## Descripción
 Una web shell es un script malicioso desplegado en un servidor web que proporciona al atacante una interfaz de ejecución de comandos a través de HTTP/HTTPS. Típicamente escritas en PHP, ASP/ASPX, JSP o Python, las web shells permiten ejecutar comandos del sistema operativo, navegar el sistema de archivos, transferir archivos y mantener acceso persistente al servidor sin necesidad de mantener una conexión activa. Se despliegan comúnmente a través de vulnerabilidades de file upload, inyección de código, o explotación de aplicaciones web. Su detección es difícil porque el tráfico se mezcla con peticiones HTTP legítimas.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1505.003 (Server Software Component: Web Shell)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **p0wny-shell** (https://github.com/flozz/p0wny-shell) — web shell PHP minimalista con interfaz de terminal interactiva

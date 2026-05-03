@@ -1,13 +1,19 @@
+---
+title: Pass-the-Hash (PtH)
+slug: pass-the-hash
+aliases: [Pass-the-Hash (PtH)]
+fase: [Post-Explotación]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1550.002]
+related: []
+learning_refs: []
+---
+
 # Pass-the-Hash (PtH)
 
 ## Descripción
 Pass-the-Hash (PtH) es una técnica de movimiento lateral que permite a un atacante autenticarse en un servicio remoto usando directamente el hash NTLM de un usuario, sin necesidad de conocer o crackear la contraseña en texto plano. Esto es posible porque el protocolo NTLM de Windows utiliza el hash de la contraseña para la autenticación, no la contraseña en sí. Una vez obtenidos los hashes mediante credential dumping (SAM, LSASS, NTDS.dit), el atacante puede reutilizarlos para acceder a otros sistemas donde esas credenciales sean válidas, expandiendo significativamente el alcance del compromiso. Esta técnica es especialmente devastadora en entornos Active Directory donde las mismas credenciales de administrador local se reutilizan en múltiples máquinas.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1550.002 (Use Alternate Authentication Material: Pass the Hash)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **psexec.py** (Impacket) — ejecución remota de comandos vía SMB usando hashes NTLM

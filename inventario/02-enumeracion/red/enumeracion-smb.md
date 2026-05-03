@@ -1,13 +1,19 @@
+---
+title: Enumeración SMB (Server Message Block)
+slug: enumeracion-smb
+aliases: [Enumeración SMB (Server Message Block)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1135, T1087, T1069, T1007, T1110]
+related: []
+learning_refs: []
+---
+
 # Enumeración SMB (Server Message Block)
 
 ## Descripción
 SMB (Server Message Block) es un protocolo de red para compartir archivos, impresoras y otros recursos entre nodos de una red. Ampliamente usado en entornos Windows (puertos 139/tcp y 445/tcp). La enumeración SMB permite obtener información del sistema operativo, usuarios, grupos, recursos compartidos, sesiones activas, politicas de contraseñas y servicios en ejecución. Con credenciales validas (o sesion nula en versiones antiguas), la cantidad de información obtenible es muy elevada.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1135 (Network Share Discovery) — shares; T1087 (Account Discovery) — usuarios; T1069 (Permission Groups Discovery) — grupos; T1007 (System Service Discovery) — servicios; T1110 (Brute Force) — fuerza bruta de credenciales
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** (scripts NSE SMB) — enumeración sin/con credenciales vía NSE

@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades: Software Obsoleto
+slug: analisis-software-obsoleto
+aliases: ["Análisis de Vulnerabilidades: Software Obsoleto"]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1595.002]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades: Software Obsoleto
 
 ## Descripción
 El software obsoleto (End-of-Life - EOL) es aquel que ya no recibe actualizaciones de seguridad por parte del fabricante. Mantener este tipo de aplicaciones en entornos productivos representa un riesgo crítico, ya que cualquier vulnerabilidad descubierta después de su fin de soporte permanecerá sin parchear permanentemente.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **GVM / OpenVAS** — Escáner de vulnerabilidades para la detección automática de versiones de software obsoletas.

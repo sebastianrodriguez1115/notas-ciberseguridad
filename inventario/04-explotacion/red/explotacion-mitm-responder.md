@@ -1,13 +1,19 @@
+---
+title: Envenenamiento LLMNR/NBT-NS con Responder
+slug: explotacion-mitm-responder
+aliases: [Envenenamiento LLMNR/NBT-NS con Responder]
+fase: [Explotación]
+plataforma: Red
+dificultad: Intermedia
+mitre: [T1557.001]
+related: []
+learning_refs: []
+---
+
 # Envenenamiento LLMNR/NBT-NS con Responder
 
 ## Descripción
 Técnica que aprovecha los protocolos de resolución de nombres por defecto en Windows (LLMNR y NBT-NS) para interceptar intentos de conexión fallidos. El atacante responde a estas solicitudes pretendiendo ser el recurso buscado, lo que induce a la víctima a enviar su hash NTLMv2 para autenticarse.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1557.001 (Adversary-in-the-Middle: LLMNR/NBT-NS Poisoning and SMB Relay)
-- **Plataforma**: Red
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Responder** (`-I`, `-f`, `-r`) — herramienta principal para envenenamiento de red y captura de credenciales.

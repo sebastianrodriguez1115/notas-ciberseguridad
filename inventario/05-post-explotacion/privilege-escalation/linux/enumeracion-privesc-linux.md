@@ -1,13 +1,19 @@
+---
+title: Enumeración para Escalada de Privilegios en Linux
+slug: enumeracion-privesc-linux
+aliases: [Enumeración para Escalada de Privilegios en Linux]
+fase: [Post-Explotación]
+plataforma: Linux
+dificultad: Básica
+mitre: [T1082, T1083]
+related: []
+learning_refs: []
+---
+
 # Enumeración para Escalada de Privilegios en Linux
 
 ## Descripción
 La enumeración para escalada de privilegios en Linux es el proceso sistemático de recolectar información del sistema comprometido para identificar vectores que permitan elevar privilegios de un usuario sin permisos a root. Incluye la inspección de permisos SUID/SGID, configuraciones sudo, capabilities, cron jobs, servicios en ejecución, versión del kernel, archivos sensibles accesibles, variables de entorno y configuraciones de red internas. Herramientas automatizadas como linPEAS y linux-exploit-suggester aceleran este proceso al consolidar múltiples verificaciones en una sola ejecución.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1082 (System Information Discovery); T1083 (File and Directory Discovery)
-- **Plataforma**: Linux
-- **Dificultad**: Básica
 
 ## Herramientas
 - **linPEAS** (`linpeas.sh`) — script de enumeración integral que identifica vectores de privesc con código de colores por severidad

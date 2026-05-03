@@ -1,13 +1,19 @@
+---
+title: PowerShell Empire: Post-Explotación y C2
+slug: empire-framework
+aliases: ["PowerShell Empire: Post-Explotación y C2"]
+fase: [Post-Explotación]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1059.001, T1548.002, T1021.006]
+related: []
+learning_refs: []
+---
+
 # PowerShell Empire: Post-Explotación y C2
 
 ## Descripción
 PowerShell Empire es un framework de comando y control (C2) de post-explotación basado inicialmente en agentes PowerShell (Windows) y ampliado a Python (Linux/macOS). Es altamente eficaz para el movimiento lateral, la escalada de privilegios y la persistencia en redes corporativas, permitiendo la ejecución de agentes en memoria sin tocar el disco. Su integración con herramientas como Mimikatz y BloodHound lo convierte en una plataforma central para operaciones de Red Team.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1059.001 (Command and Scripting Interpreter: PowerShell); T1548.002 (Abuse Elevation Control Mechanism); T1021.006 (Remote Services: Windows Remote Management)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Server/Client (Empire)** — Arquitectura cliente-servidor para la gestión de agentes.

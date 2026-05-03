@@ -1,13 +1,19 @@
+---
+title: Enumeración Oracle Database
+slug: enumeracion-oracle
+aliases: [Enumeración Oracle Database]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1046, T1110]
+related: []
+learning_refs: []
+---
+
 # Enumeración Oracle Database
 
 ## Descripción
 Oracle Database es un sistema de gestión de bases de datos relacional empresarial que opera en el puerto 1521/tcp (TNS Listener). La enumeración de Oracle incluye: identificar la versión del TNS Listener y sus componentes, descubrir SIDs (System Identifiers) e instancias de la base de datos, realizar fuerza bruta de credenciales (especialmente cuentas por defecto como SYS, SYSTEM, SCOTT, DBSNMP), y con acceso, extraer hashes de contraseñas, tablas y datos sensibles. Oracle tiene una superficie de ataque amplia debido a sus cuentas por defecto, procedimientos PL/SQL con privilegios elevados, y la posibilidad de ejecutar comandos del sistema operativo a través de Java o paquetes como DBMS_SCHEDULER.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery) — descubrimiento del servicio; T1110 (Brute Force) — fuerza bruta de credenciales
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **nmap** (`oracle-tns-version`, `oracle-sid-brute`, `oracle-brute`, `oracle-enum-users`) — enumeración vía NSE

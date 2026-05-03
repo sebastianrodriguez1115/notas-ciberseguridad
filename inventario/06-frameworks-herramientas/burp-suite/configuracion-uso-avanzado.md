@@ -1,13 +1,19 @@
+---
+title: Burp Suite: Configuración y Uso Avanzado
+slug: configuracion-uso-avanzado
+aliases: ["Burp Suite: Configuración y Uso Avanzado"]
+fase: [Análisis de Vulnerabilidades, Explotación]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1595.002, T1190]
+related: []
+learning_refs: []
+---
+
 # Burp Suite: Configuración y Uso Avanzado
 
 ## Descripción
 Burp Suite es la plataforma líder para realizar auditorías de seguridad en aplicaciones web. Su uso avanzado permite interceptar, analizar y modificar el tráfico HTTP/S entre el navegador y el servidor, automatizar ataques de fuerza bruta o de diccionario con precisión, y gestionar sesiones complejas que requieren tokens dinámicos (CSRF). Es fundamental para identificar vulnerabilidades lógicas, de control de acceso y de inyección que las herramientas automáticas suelen pasar por alto.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades, Explotación
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning); T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Proxy** — Intercepta y modifica el tráfico en tiempo real entre el cliente y el servidor.

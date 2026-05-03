@@ -1,13 +1,19 @@
+---
+title: File Upload Exploitation
+slug: explotacion-fileupload
+aliases: [File Upload Exploitation]
+fase: [Explotación]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # File Upload Exploitation
 
 ## Descripción
 Técnica que aprovecha la falta de validación en las funcionalidades de carga de archivos de una aplicación web. Permite a un atacante subir archivos maliciosos (como webshells) para ejecutar código en el servidor, realizar defacement o escalar privilegios.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Burp Suite** (Proxy, Repeater) — esencial para interceptar y modificar el Content-Type y la extensión del archivo.

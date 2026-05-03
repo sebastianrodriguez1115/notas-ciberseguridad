@@ -1,13 +1,19 @@
+---
+title: Enumeración para Escalada de Privilegios en Windows
+slug: enumeracion-privesc-windows
+aliases: [Enumeración para Escalada de Privilegios en Windows]
+fase: [Post-Explotación]
+plataforma: Windows
+dificultad: Básica
+mitre: [T1082, T1083]
+related: []
+learning_refs: []
+---
+
 # Enumeración para Escalada de Privilegios en Windows
 
 ## Descripción
 La enumeración para escalada de privilegios en Windows es el proceso de recolección sistemática de información de un sistema comprometido para identificar vectores que permitan elevar privilegios. Incluye la inspección de permisos de servicios, tareas programadas, parches faltantes, privilegios del token del usuario actual, configuraciones de registro, archivos con credenciales almacenadas, software instalado vulnerable y configuraciones de autorun. Herramientas automatizadas como winPEAS, Sherlock y PowerUp consolidan cientos de verificaciones en una sola ejecución, identificando rápidamente las rutas más probables hacia SYSTEM o administrador.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1082 (System Information Discovery); T1083 (File and Directory Discovery)
-- **Plataforma**: Windows
-- **Dificultad**: Básica
 
 ## Herramientas
 - **winPEAS** (`winpeas.exe`, `winpeas.bat`) — enumeración integral con colores por severidad, la herramienta más completa para privesc Windows

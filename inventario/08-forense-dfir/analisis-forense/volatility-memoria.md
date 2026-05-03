@@ -1,13 +1,19 @@
+---
+title: Volatility: Análisis Forense de Memoria
+slug: volatility-memoria
+aliases: ["Volatility: Análisis Forense de Memoria"]
+fase: [Forense y DFIR]
+plataforma: Multi
+dificultad: Avanzada
+mitre: [T1055, T1014]
+related: []
+learning_refs: []
+---
+
 # Volatility: Análisis Forense de Memoria
 
 ## Descripción
 El análisis de memoria RAM (Forensics in RAM) permite identificar actividades volátiles que no dejan rastro en el disco duro, como procesos en ejecución, conexiones de red activas, claves de cifrado, contraseñas en texto plano y código malicioso inyectado (Rootkits/Beacons). Volatility es el framework de código abierto líder en la industria para el análisis forense de volcados de memoria (dumps).
-
-## Clasificación
-- **Fase**: Forense y DFIR
-- **MITRE ATT&CK**: T1055 (Process Injection); T1014 (Rootkit)
-- **Plataforma**: Multi
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **Volatility 2.6 / 3** — Framework principal para el análisis de volcados de memoria.

@@ -1,13 +1,19 @@
+---
+title: EternalBlue (MS17-010)
+slug: explotacion-eternalblue
+aliases: [EternalBlue (MS17-010)]
+fase: [Explotación]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1210]
+related: []
+learning_refs: []
+---
+
 # EternalBlue (MS17-010)
 
 ## Descripción
 Vulnerabilidad crítica en el protocolo SMBv1 de Windows que permite la ejecución remota de código (RCE) sin autenticación mediante paquetes especialmente diseñados. Fue utilizada masivamente en ataques como WannaCry y NotPetya.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1210 (Exploitation of Remote Services)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Metasploit Framework** (`exploit/windows/smb/ms17_010_eternalblue`) — framework principal para la explotación automatizada.

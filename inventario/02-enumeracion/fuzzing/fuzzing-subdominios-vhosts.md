@@ -1,13 +1,19 @@
+---
+title: Fuzzing de Subdominios y Virtual Hosts
+slug: fuzzing-subdominios-vhosts
+aliases: [Fuzzing de Subdominios y Virtual Hosts]
+fase: [Enumeración]
+plataforma: Web
+dificultad: Básica
+mitre: [T1595.002]
+related: []
+learning_refs: []
+---
+
 # Fuzzing de Subdominios y Virtual Hosts
 
 ## Descripción
 Técnica de descubrimiento de subdominios y Virtual Hosts (VHosts) de un objetivo mediante fuerza bruta. Existen dos modalidades distintas: (1) DNS fuzzing, que prueba si un nombre resuelve en el DNS; y (2) VHost fuzzing, que manipula el header HTTP `Host` para descubrir aplicaciones web que comparten la misma IP pero responden a nombres de host diferentes. El VHost fuzzing es especialmente util cuando el servidor web aloja múltiples aplicaciones en la misma IP y el DNS interno no es accesible desde el atacante.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **ffuf** — fuzzing de subdominios vía URL o vía header Host

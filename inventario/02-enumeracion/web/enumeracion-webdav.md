@@ -1,13 +1,19 @@
+---
+title: Enumeración y Prueba de WebDAV
+slug: enumeracion-webdav
+aliases: [Enumeración y Prueba de WebDAV]
+fase: [Enumeración]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1046, T1190]
+related: []
+learning_refs: []
+---
+
 # Enumeración y Prueba de WebDAV
 
 ## Descripción
 WebDAV (Web Distributed Authoring and Versioning) es una extensión del protocolo HTTP que permite a los clientes crear, modificar y mover documentos en un servidor web remoto. Extiende HTTP con métodos adicionales: PUT, DELETE, PROPFIND, MKCOL, COPY, MOVE. Cuando esta habilitado y mal configurado (especialmente en IIS), puede permitir subir archivos ejecutables y obtener ejecución remota de código. La enumeración implica detectar si esta activo, identificar métodos permitidos y probar que tipos de archivo se pueden subir y ejecutar.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery) — detección del servicio; T1190 (Exploit Public-Facing Application) — abuso de WebDAV para subida de webshell
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **nmap** (`http-webdav-scan`) — detecta WebDAV y lista métodos permitidos

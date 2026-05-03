@@ -1,13 +1,19 @@
+---
+title: Enumeración IPMI (Intelligent Platform Management Interface) (Puerto 623/UDP)
+slug: enumeracion-ipmi
+aliases: [Enumeración IPMI (Intelligent Platform Management Interface) (Puerto 623/UDP)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1046]
+related: []
+learning_refs: []
+---
+
 # Enumeración IPMI (Intelligent Platform Management Interface) (Puerto 623/UDP)
 
 ## Descripción
 IPMI es un conjunto de especificaciones de interfaz para subsistemas informáticos autónomos que permiten la gestión remota del hardware (encendido, apagado, monitorización) independientemente del sistema operativo. Se ejecuta típicamente en un Baseboard Management Controller (BMC). La enumeración de IPMI permite descubrir versiones del protocolo, configuraciones inseguras (como Cipher Zero) y extraer hashes de usuarios locales que pueden ser crackeados offline.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **ipmitool** — herramienta de línea de comandos para gestionar y configurar dispositivos IPMI

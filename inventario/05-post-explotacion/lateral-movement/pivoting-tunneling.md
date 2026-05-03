@@ -1,13 +1,19 @@
+---
+title: Pivoting y Tunneling
+slug: pivoting-tunneling
+aliases: [Pivoting y Tunneling]
+fase: [Post-Explotación]
+plataforma: Multi
+dificultad: Avanzada
+mitre: [T1572, T1090, T1090.001]
+related: []
+learning_refs: []
+---
+
 # Pivoting y Tunneling
 
 ## Descripción
 El pivoting es la técnica de usar un host comprometido como punto de acceso para alcanzar redes internas que no son directamente accesibles desde la máquina del atacante. El tunneling es el mecanismo mediante el cual se encapsula el tráfico de red dentro de otro protocolo (SSH, HTTP, DNS, etc.) para atravesar firewalls, segmentos de red o restricciones de acceso. Combinadas, estas técnicas permiten al atacante extender su alcance a toda la infraestructura interna partiendo de un único punto de compromiso, manteniendo el tráfico cifrado y difícil de detectar. Son fundamentales en pentests de redes corporativas con múltiples segmentos.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1572 (Protocol Tunneling); T1090 (Proxy); T1090.001 (Proxy: Internal Proxy)
-- **Plataforma**: Multi
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **SSH** (`-L`, `-R`, `-D`) — port forwarding local, remoto y dinámico (SOCKS proxy)

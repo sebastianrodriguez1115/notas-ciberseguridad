@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades: Permisos Inseguros en Linux
+slug: analisis-permisos-linux
+aliases: ["Análisis de Vulnerabilidades: Permisos Inseguros en Linux"]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Linux
+dificultad: Intermedia
+mitre: [T1068]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades: Permisos Inseguros en Linux
 
 ## Descripción
 El análisis de permisos en sistemas Linux se centra en identificar configuraciones incorrectas que podrían permitir una escalada de privilegios (Privilege Escalation). Esto incluye archivos con permisos de escritura para todos (world-writable), binarios con bits SUID/SGID configurados incorrectamente, y capacidades (capabilities) excesivas asignadas a procesos de usuario.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1068 (Exploitation for Privilege Escalation)
-- **Plataforma**: Linux
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **find** — Utilidad de búsqueda de archivos para identificar binarios con permisos especiales (SUID/SGID).

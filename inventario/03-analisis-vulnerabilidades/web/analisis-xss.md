@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)
+slug: analisis-xss
+aliases: ["Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)"]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)
 
 ## Descripción
 El Cross-Site Scripting (XSS) ocurre cuando una aplicación web procesa datos de entrada no confiables y los incluye en una página web sin la validación o el escape adecuados. Esto permite la ejecución de scripts maliciosos en el navegador de la víctima. Según *The Web Application Hacker's Handbook*, el éxito del XSS depende críticamente del **contexto** donde se refleja la entrada.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Burp Suite (Intruder/Repeater)** — Esencial para probar caracteres especiales y contextos.

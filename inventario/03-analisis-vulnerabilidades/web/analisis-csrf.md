@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)
+slug: analisis-csrf
+aliases: ["Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)"]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)
 
 ## Descripción
 El Cross-Site Request Forgery (CSRF) es una vulnerabilidad que obliga a un usuario autenticado a ejecutar acciones no deseadas en una aplicación web en la que se encuentra actualmente autenticado. Un atacante puede engañar al usuario para que haga clic en un enlace o cargue una página maliciosa que realice una solicitud POST (ej. cambiar contraseña, transferir fondos) sin su conocimiento.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Burp Suite** — Plataforma líder para pruebas de seguridad web, incluyendo generador de pruebas de concepto (PoC) para CSRF.

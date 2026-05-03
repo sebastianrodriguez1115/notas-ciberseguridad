@@ -1,13 +1,19 @@
+---
+title: Enumeración LDAP (Lightweight Directory Access Protocol)
+slug: enumeracion-ldap
+aliases: [Enumeración LDAP (Lightweight Directory Access Protocol)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1087.002, T1069.002, T1018]
+related: []
+learning_refs: []
+---
+
 # Enumeración LDAP (Lightweight Directory Access Protocol)
 
 ## Descripción
 LDAP (Lightweight Directory Access Protocol) es un protocolo de acceso a servicios de directorio que opera en el puerto 389/tcp (texto claro) y 636/tcp (LDAPS/SSL). Es el pilar de Active Directory en entornos Windows (uso primario), aunque también se usa en sistemas Unix con OpenLDAP. Almacena información de usuarios, grupos, equipos, políticas y estructura organizativa. La enumeración LDAP permite extraer el esquema completo del directorio: usuarios y sus atributos (descripción, email, último login), grupos y membresías, unidades organizativas (OUs), políticas de contraseñas, cuentas deshabilitadas, SPNs (Service Principal Names) para ataques Kerberoasting, y relaciones de confianza entre dominios. En entornos mal configurados, es posible realizar consultas anónimas (anonymous bind) que exponen toda esta información sin credenciales.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1087.002 (Account Discovery: Domain Account) — usuarios; T1069.002 (Permission Groups Discovery: Domain Groups) — grupos; T1018 (Remote System Discovery) — equipos del dominio
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **nmap** (`ldap-rootdse`, `ldap-search`, `ldap-brute`) — enumeración vía NSE

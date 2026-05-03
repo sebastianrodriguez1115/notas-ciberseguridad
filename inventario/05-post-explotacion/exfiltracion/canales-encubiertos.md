@@ -1,13 +1,19 @@
+---
+title: Exfiltración por Canales Encubiertos
+slug: canales-encubiertos
+aliases: [Exfiltración por Canales Encubiertos]
+fase: [Post-Explotación]
+plataforma: Multi
+dificultad: Avanzada
+mitre: [T1048.001, T1048.003, T1071.004]
+related: []
+learning_refs: []
+---
+
 # Exfiltración por Canales Encubiertos
 
 ## Descripción
 Los canales encubiertos (covert channels) son métodos de exfiltración que utilizan protocolos de red aparentemente legítimos para transportar datos de forma oculta. En lugar de transferir archivos directamente (lo cual puede ser detectado por firewalls y DLP), el atacante codifica los datos dentro de paquetes ICMP, consultas DNS, tráfico TCP con encoding especial, o túneles SSH. Estos canales son especialmente efectivos para evadir controles de seguridad perimetrales porque el tráfico se disfraza de comunicaciones normales de red. Los canales DNS son particularmente difíciles de bloquear ya que casi todas las redes permiten consultas DNS salientes.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1048.001 (Exfiltration Over Alternative Protocol: Exfiltration Over Symmetric Encrypted Non-C2 Protocol); T1048.003 (Exfiltration Over Alternative Protocol: Exfiltration Over Unencrypted Non-C2 Protocol); T1071.004 (Application Layer Protocol: DNS)
-- **Plataforma**: Multi
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **nping** (`--icmp --data-string`) — envío de datos dentro de paquetes ICMP

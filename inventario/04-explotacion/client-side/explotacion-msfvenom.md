@@ -1,13 +1,19 @@
+---
+title: Generación de Payloads con msfvenom
+slug: explotacion-msfvenom
+aliases: [Generación de Payloads con msfvenom]
+fase: [Explotación]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1587.001]
+related: []
+learning_refs: []
+---
+
 # Generación de Payloads con msfvenom
 
 ## Descripción
 Uso de la herramienta msfvenom para crear payloads personalizados (shell reversa, bind shell) para diferentes plataformas. Permite combinar payloads de Metasploit con diversos formatos de salida y técnicas de evasión mediante encoders.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1587.001 (Develop Capabilities: Malware)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **msfvenom** (`-p`, `-f`, `-e`, `-i`) — herramienta unificada para la generación de payloads y codificación.

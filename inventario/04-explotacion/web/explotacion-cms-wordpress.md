@@ -1,13 +1,19 @@
+---
+title: Explotación de CMS WordPress
+slug: explotacion-cms-wordpress
+aliases: [Explotación de CMS WordPress]
+fase: [Explotación]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Explotación de CMS WordPress
 
 ## Descripción
 La explotación de WordPress se centra en aprovechar vulnerabilidades en el núcleo (core), temas o complementos (plugins) de este gestor de contenidos. Dada su enorme cuota de mercado, es un objetivo frecuente para ataques automatizados. Los vectores más comunes incluyen la ejecución remota de código (RCE) a través de plugins vulnerables, la inyección SQL, y el abuso de funcionalidades legítimas como XML-RPC para ataques de fuerza bruta o escaneo de puertos internos.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **WPScan** — escáner de seguridad especializado que identifica versiones, plugins vulnerables y realiza fuerza bruta.

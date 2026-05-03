@@ -1,13 +1,19 @@
+---
+title: Enumeración Memcached (Puerto 11211)
+slug: enumeracion-memcached
+aliases: [Enumeración Memcached (Puerto 11211)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1046]
+related: []
+learning_refs: []
+---
+
 # Enumeración Memcached (Puerto 11211)
 
 ## Descripción
 Memcached es un sistema de caché de objetos en memoria distribuido y de alto rendimiento. Las instancias de Memcached no suelen tener autenticación habilitada por defecto, permitiendo a cualquier atacante leer, modificar y extraer datos de la caché (Slab Dump). La enumeración de Memcached se centra en obtener estadísticas del servidor y extraer las claves y valores almacenados que pueden contener credenciales, sesiones o datos sensibles.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **telnet** / **nc** (netcat) — para interacción directa con el servicio

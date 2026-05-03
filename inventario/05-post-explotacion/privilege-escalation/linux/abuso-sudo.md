@@ -1,13 +1,19 @@
+---
+title: Abuso de Configuraciones Sudo
+slug: abuso-sudo
+aliases: [Abuso de Configuraciones Sudo]
+fase: [Post-Explotación]
+plataforma: Linux
+dificultad: Básica
+mitre: [T1548.003]
+related: []
+learning_refs: []
+---
+
 # Abuso de Configuraciones Sudo
 
 ## Descripción
 Sudo (superuser do) permite a usuarios sin privilegios ejecutar comandos como root u otros usuarios según la configuración definida en `/etc/sudoers`. Las configuraciones inseguras — como permitir comandos con `NOPASSWD`, asignar binarios que permiten escape a shell, o usar wildcards en las reglas — pueden ser explotadas por un atacante para escalar privilegios. Esta técnica es una de las primeras que se verifica tras obtener acceso inicial a un sistema Linux, ya que frecuentemente revela vectores de escalada directos.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1548.003 (Abuse Elevation Control Mechanism: Sudo and Sudo Caching)
-- **Plataforma**: Linux
-- **Dificultad**: Básica
 
 ## Herramientas
 - **sudo** (`-l`, `-u`) — enumeración y ejecución de comandos permitidos

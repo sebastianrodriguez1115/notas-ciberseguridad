@@ -1,13 +1,19 @@
+---
+title: Enumeración RabbitMQ (Puerto 5672 / 15672)
+slug: enumeracion-rabbitmq
+aliases: [Enumeración RabbitMQ (Puerto 5672 / 15672)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1021]
+related: []
+learning_refs: []
+---
+
 # Enumeración RabbitMQ (Puerto 5672 / 15672)
 
 ## Descripción
 RabbitMQ es un software de mensajería (Message Broker) popular que utiliza el protocolo AMQP. La superficie de ataque de RabbitMQ incluye el puerto AMQP (5672) y la interfaz de gestión HTTP (15672). La enumeración de RabbitMQ se enfoca en verificar si la interfaz de gestión está expuesta con credenciales por defecto (guest/guest), listar intercambios, colas, usuarios y mensajes que pueden contener datos críticos de la aplicación.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1021 (Remote Services)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **rabbitmqadmin** — herramienta de línea de comandos oficial para gestionar RabbitMQ

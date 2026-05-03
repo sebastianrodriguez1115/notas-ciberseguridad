@@ -1,13 +1,19 @@
+---
+title: Criptografía: Hashing y Codificación
+slug: hashing-codificacion
+aliases: ["Criptografía: Hashing y Codificación"]
+fase: [Fundamentos]
+plataforma: Multi
+dificultad: Básica
+mitre: []
+related: []
+learning_refs: []
+---
+
 # Criptografía: Hashing y Codificación
 
 ## Descripción
 La criptografía es el arte de proteger la información mediante técnicas matemáticas. En el pentesting, es fundamental distinguir entre **Codificación** (representación de datos para transporte), **Hashing** (verificación de integridad de un solo sentido) y **Cifrado** (confidencialidad con capacidad de reversión mediante claves). Comprender estas diferencias es clave para identificar y explotar vulnerabilidades de almacenamiento de credenciales.
-
-## Clasificación
-- **Fase**: Fundamentos
-- **MITRE ATT&CK**: N/A (Concepto Base)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Conceptos Clave
 

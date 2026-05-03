@@ -1,13 +1,19 @@
+---
+title: Análisis de Insecure Deserialization
+slug: analisis-deserialization
+aliases: [Análisis de Insecure Deserialization]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Avanzada
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de Insecure Deserialization
 
 ## Descripción
 La deserialización insegura ocurre cuando una aplicación utiliza datos controlados por el usuario para reconstruir objetos en memoria sin una validación adecuada. Un atacante puede manipular los datos serializados para instanciar clases inesperadas, ejecutar métodos mágicos y, en muchos casos, lograr la ejecución remota de código (RCE) o escalada de privilegios.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **ysoserial** / **ysoserial.net** — herramientas para generar payloads de deserialización para Java y .NET.

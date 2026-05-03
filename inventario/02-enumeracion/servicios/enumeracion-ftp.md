@@ -1,13 +1,19 @@
+---
+title: Enumeración FTP (File Transfer Protocol)
+slug: enumeracion-ftp
+aliases: [Enumeración FTP (File Transfer Protocol)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1046, T1110.001]
+related: []
+learning_refs: []
+---
+
 # Enumeración FTP (File Transfer Protocol)
 
 ## Descripción
 FTP (File Transfer Protocol) es un protocolo de transferencia de archivos que opera en los puertos 21/tcp (control) y 20/tcp (datos en modo activo). Transmite credenciales y datos en texto plano, siendo vulnerable a sniffing. La enumeración FTP incluye: identificar la versión del servidor (vsftpd, ProFTPD, Pure-FTPd), detectar si permite acceso anonimo, y realizar ataques de fuerza bruta. El acceso anonimo en servidores mal configurados puede exponer archivos sensibles sin necesidad de credenciales.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery) — enumeración del servicio; T1110.001 (Brute Force: Password Guessing) — fuerza bruta de credenciales
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** (`ftp-anon`) — detección de login anonimo y listado de archivos

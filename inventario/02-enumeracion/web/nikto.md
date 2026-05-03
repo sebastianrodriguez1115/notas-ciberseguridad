@@ -1,13 +1,19 @@
+---
+title: Escaneo de Vulnerabilidades Web con Nikto
+slug: nikto
+aliases: [Escaneo de Vulnerabilidades Web con Nikto]
+fase: [Enumeración]
+plataforma: Web
+dificultad: Básica
+mitre: [T1595.002]
+related: []
+learning_refs: []
+---
+
 # Escaneo de Vulnerabilidades Web con Nikto
 
 ## Descripción
 Nikto es un escaner web open source que realiza pruebas automatizadas contra servidores HTTP en busca de configuraciones inseguras, archivos y programas peligrosos, versiones de servidor vulnerables y cabeceras de seguridad ausentes. Genera una lista de hallazgos con referencias a CVEs y CWEs cuando aplica. Es altamente ruidoso y facil de detectar por firewalls e IDS/IPS; por ello se usa en pentests donde la detección no es una preocupacion o despues de confirmar ausencia de WAF.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nikto** — escaner web automatizado con base de datos de checks actualizable

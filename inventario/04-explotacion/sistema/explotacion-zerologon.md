@@ -1,13 +1,19 @@
+---
+title: Explotación de Zerologon (CVE-2020-1472)
+slug: explotacion-zerologon
+aliases: [Explotación de Zerologon (CVE-2020-1472)]
+fase: [Explotación]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1210]
+related: []
+learning_refs: []
+---
+
 # Explotación de Zerologon (CVE-2020-1472)
 
 ## Descripción
 Zerologon es una vulnerabilidad crítica en el protocolo Netlogon (MS-NRPC) que permite a un atacante no autenticado establecer una conexión segura con un Controlador de Dominio (DC) y restablecer la contraseña de su cuenta de computadora a un valor vacío (o conocido). El fallo reside en un uso incorrecto del vector de inicialización (IV) en el algoritmo de cifrado AES-CFB8, donde un IV compuesto solo por ceros puede provocar que el texto cifrado también sea cero en 1 de cada 256 intentos. Esto permite el bypass total de la autenticación del DC.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1210 (Exploitation of Remote Services)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **zerologon_tester.py** — script para verificar si un Controlador de Dominio es vulnerable sin realizar cambios.

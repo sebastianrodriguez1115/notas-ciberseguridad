@@ -1,13 +1,19 @@
+---
+title: Enumeración WinRM (Windows Remote Management)
+slug: enumeracion-winrm
+aliases: [Enumeración WinRM (Windows Remote Management)]
+fase: [Enumeración]
+plataforma: Windows
+dificultad: Básica
+mitre: [T1021.006]
+related: []
+learning_refs: []
+---
+
 # Enumeración WinRM (Windows Remote Management)
 
 ## Descripción
 WinRM (Windows Remote Management) es la implementacion de Microsoft del protocolo WS-Management, que permite la administración remota de sistemas Windows mediante PowerShell. Opera en el puerto 5985/tcp (HTTP) y 5986/tcp (HTTPS). La enumeración WinRM incluye: confirmar que el servicio esta activo, identificar la versión de Windows y realizar fuerza bruta de credenciales. Con credenciales validas y privilegios de administrador (indicado como "Pwn3d!" en CrackMapExec), se puede establecer una shell PowerShell interactiva completa.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1021.006 (Remote Services: Windows Remote Management)
-- **Plataforma**: Windows
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** — detección y fingerprinting del servicio WinRM

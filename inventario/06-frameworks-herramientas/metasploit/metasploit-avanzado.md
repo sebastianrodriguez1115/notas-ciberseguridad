@@ -1,13 +1,19 @@
+---
+title: Metasploit Framework: Uso Avanzado y Automatización
+slug: metasploit-avanzado
+aliases: ["Metasploit Framework: Uso Avanzado y Automatización"]
+fase: [Análisis de Vulnerabilidades, Explotación, Post-Explotación]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1595.002, T1210, T1059]
+related: []
+learning_refs: []
+---
+
 # Metasploit Framework: Uso Avanzado y Automatización
 
 ## Descripción
 Metasploit Framework (MSF) es el entorno de desarrollo y ejecución de exploits más utilizado del mundo. Su arquitectura modular permite desde el escaneo de vulnerabilidades hasta la post-explotación avanzada. El dominio avanzado de MSF implica el uso de la base de datos para gestionar objetivos, la automatización mediante archivos de recursos (.rc) y la manipulación de sesiones Meterpreter para el movimiento lateral y la persistencia en redes comprometidas.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades, Explotación, Post-Explotación
-- **MITRE ATT&CK**: T1595.002 (Active Scanning); T1210 (Exploitation of Remote Services); T1059 (Command and Scripting Interpreter)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **msfconsole** — Interfaz de línea de comandos principal de Metasploit.

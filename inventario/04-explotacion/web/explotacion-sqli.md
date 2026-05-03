@@ -1,13 +1,19 @@
+---
+title: Inyección SQL (SQLi)
+slug: explotacion-sqli
+aliases: [Inyección SQL (SQLi)]
+fase: [Explotación]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Inyección SQL (SQLi)
 
 ## Descripción
 Técnica de explotación que permite a un atacante interferir con las consultas que una aplicación realiza a su base de datos. Permite ver datos que normalmente no se pueden recuperar, modificar o eliminar datos, y en algunos casos, obtener acceso de administrador al servidor de la base de datos (RCE).
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **sqlmap** (`--batch`, `--dump`, `--risk`, `--level`) — herramienta automatizada para detectar y explotar fallos de inyección SQL.

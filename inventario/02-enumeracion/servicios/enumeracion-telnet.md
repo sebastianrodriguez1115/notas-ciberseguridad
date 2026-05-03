@@ -1,15 +1,19 @@
+---
+title: Enumeración Telnet (Puerto 23)
+slug: enumeracion-telnet
+aliases: [Enumeración Telnet (Puerto 23)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1046, T1021]
+related: []
+learning_refs: []
+---
+
 # Enumeración Telnet (Puerto 23)
 
 ## Descripción
 Telnet es un protocolo heredado utilizado para acceder a terminales remotos. Carece de cualquier tipo de cifrado, enviando tanto credenciales como datos en texto claro, lo que lo hace altamente vulnerable a ataques de intercepción (Sniffing). La enumeración de Telnet se centra en obtener el banner del servicio, descubrir el sistema operativo subyacente e intentar el acceso mediante credenciales por defecto o ataques de fuerza bruta.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: 
-    - T1046 (Network Service Discovery)
-    - T1021 (Remote Services)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **telnet** — cliente interactivo básico

@@ -1,13 +1,19 @@
+---
+title: Sistemas: Arquitectura de Windows y Active Directory
+slug: windows-arquitectura-ad
+aliases: ["Sistemas: Arquitectura de Windows y Active Directory"]
+fase: [Fundamentos]
+plataforma: Windows
+dificultad: Básica
+mitre: []
+related: []
+learning_refs: []
+---
+
 # Sistemas: Arquitectura de Windows y Active Directory
 
 ## Descripción
 Windows es el sistema operativo predominante en estaciones de trabajo y entornos corporativos. Comprender su arquitectura interna (Kernel vs User mode), sus procesos críticos y la estructura jerárquica de Active Directory (AD) es esencial para realizar pruebas de penetración eficaces, especialmente en las fases de post-explotación y movimiento lateral.
-
-## Clasificación
-- **Fase**: Fundamentos
-- **MITRE ATT&CK**: N/A (Concepto Base)
-- **Plataforma**: Windows
-- **Dificultad**: Básica
 
 ## Procesos Críticos de Windows
 

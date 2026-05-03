@@ -2,6 +2,38 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19c (Sprint 1: frontmatter YAML en Fases 02-08)
+
+Continuación de la sesión 19b. Tras validar el patrón en Fase 01, se construyó un script de migración para procesar las fases 02-08 sin escribir frontmatter a mano por 111 archivos.
+
+### Script `scripts/migrate_frontmatter.py` (nuevo)
+- Parsea el bloque `## Clasificación` existente, extrae title (del H1), fase (split coma+espacio), plataforma, dificultad, y mitre (regex sobre todo el bloque MITRE para soportar multi-IDs en una línea o multilínea con bullets indentados).
+- Deriva slug del nombre de archivo (sin extensión).
+- Genera frontmatter YAML al inicio con aliases default `[title]`, related y learning_refs default `[]`.
+- Elimina la sección `## Clasificación` del body.
+- Idempotente: salta archivos que ya tienen frontmatter (los 13 de Fase 01).
+- Permite `mitre: []` para contenido conceptual cuya fase incluye `Fundamentos` o `Forense y DFIR` (modelos teóricos, PICERL, fundamentos de redes/sistemas no tienen mapping limpio a MITRE).
+
+### Migración aplicada
+- 111 archivos migrados a frontmatter YAML (fases 02-08).
+- 13 archivos saltados (Fase 01, ya migrada manualmente en sesión 19b).
+- Total: 124 archivos técnicos con frontmatter, 0 con `## Clasificación` en body, 124 slugs únicos.
+
+### Conflicto de slug resuelto
+- `inventario/02-enumeracion/web/fingerprinting-tecnologias-web.md` colisionaba en slug con `inventario/01-reconocimiento/pasivo/fingerprinting-tecnologias-web.md` (mismo nombre de archivo en distintas fases). Renombrado vía `git mv` a `fingerprinting-tecnologias-web-activo.md` para alinear con la convención "base + modifier" descrita en AGENTS.md. Slug actualizado a `fingerprinting-tecnologias-web-activo`. Cross-link en el archivo pasivo y enlace en `02-enumeracion/web/INDEX.md` actualizados. `aliases` y `related` enriquecidos manualmente para este archivo en particular (incluye WhatWeb, httpx, Wappalyzer CLI; relacionado con la versión pasiva, banner-grabbing-http, deteccion-waf).
+
+### Verificación
+- `find inventario -name "*.md" -not -name INDEX.md -exec grep -l "^slug: " {} \; | wc -l` → 124.
+- `find inventario -name "*.md" -not -name INDEX.md -exec grep -h "^slug: " {} \; | sort | uniq -d` → 0 duplicados.
+- `grep -rl "^## Clasificación" inventario/` → 0 archivos.
+- Distribución por plataforma: 12 Linux, 21 Windows, 37 Web, 6 Red, 48 Multi (suma 124).
+- Queries facetadas funcionan: T1190 devuelve 10+ archivos web, intersección Avanzada+Web devuelve 5 archivos esperados, slugs con sustring `sqli` devuelve los 3 archivos relacionados (analisis-sqli, explotacion-sqli, explotacion-nosqli).
+
+### Limitación conocida (deuda para enriquecimiento posterior)
+- `aliases:` para los 111 archivos migrados por script contiene únicamente `[title]`. Búsquedas por sinónimo (ej. "Kerberoasting", "PtH") no encuentran los archivos correspondientes hasta que se enriquezcan a mano. Es una decisión consciente: el script no infiere aliases para no introducir ruido. La discoverabilidad por slug, fase, plataforma, dificultad y MITRE sí funciona.
+- `related:` está vacío para los 111 archivos migrados por script. Las relaciones cross-fase (analisis-sqli ↔ explotacion-sqli, etc.) deben añadirse a mano en una pasada de enriquecimiento posterior.
+- Sprint 2 (validate.py + build_indexes.py) sigue pendiente y detectará dangling refs cuando se enriquezca related.
+
 ## [2026-05-03] — Sesión 19b (Sprint 1 piloto: frontmatter YAML en Fase 01)
 
 Continuación de la sesión 19. Sprint 1 del plan de discoverabilidad ejecutado en Fase 01 (Reconocimiento) como piloto antes de escalar a fases 02-08.

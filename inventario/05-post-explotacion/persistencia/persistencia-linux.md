@@ -1,13 +1,19 @@
+---
+title: Persistencia en Linux
+slug: persistencia-linux
+aliases: [Persistencia en Linux]
+fase: [Post-Explotación]
+plataforma: Linux
+dificultad: Intermedia
+mitre: [T1053.003, T1098.004, T1547.006, T1546.004]
+related: []
+learning_refs: []
+---
+
 # Persistencia en Linux
 
 ## Descripción
 La persistencia en Linux se refiere al conjunto de técnicas que un atacante utiliza para mantener el acceso a un sistema comprometido a través de reinicios, cambios de contraseña o actualizaciones de seguridad. Los mecanismos más comunes incluyen la manipulación de cron jobs para ejecutar backdoors periódicamente, la adición de claves SSH autorizadas para acceso sin contraseña, la modificación de scripts de inicio del sistema (init, systemd), la inserción de comandos en archivos de perfil del usuario (.bashrc, .profile), y la carga de módulos maliciosos en el kernel. La efectividad de cada técnica depende del nivel de acceso obtenido y de las medidas de monitoreo implementadas en el sistema.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1053.003 (Scheduled Task/Job: Cron); T1098.004 (Account Manipulation: SSH Authorized Keys); T1547.006 (Boot or Logon Autostart Execution: Kernel Modules and Extensions); T1546.004 (Event Triggered Execution: Unix Shell Configuration Modification)
-- **Plataforma**: Linux
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **crontab** — creación de tareas periódicas para ejecutar backdoors

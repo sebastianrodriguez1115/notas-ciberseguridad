@@ -1,13 +1,19 @@
+---
+title: ARP Spoofing y Envenenamiento de Red
+slug: explotacion-arp-spoofing
+aliases: [ARP Spoofing y Envenenamiento de Red]
+fase: [Explotación]
+plataforma: Red
+dificultad: Intermedia
+mitre: [T1557.002]
+related: []
+learning_refs: []
+---
+
 # ARP Spoofing y Envenenamiento de Red
 
 ## Descripción
 El ARP Spoofing (Address Resolution Protocol Poisoning) es una técnica de ataque de capa 2 que consiste en enviar mensajes ARP falsificados a una red de área local (LAN). El objetivo es asociar la dirección MAC del atacante con la dirección IP de otro nodo (como la puerta de enlace predeterminada), provocando que todo el tráfico destinado a esa IP sea enviado al atacante. Esto facilita ataques de Hombre en el Medio (MITM), permitiendo la interceptación, modificación o denegación de tráfico.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1557.002 (Adversary-in-the-Middle: ARP Poisoning)
-- **Plataforma**: Red
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Bettercap** — framework moderno para ataques de red y MITM.

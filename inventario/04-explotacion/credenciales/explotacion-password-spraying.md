@@ -1,13 +1,19 @@
+---
+title: Password Spraying
+slug: explotacion-password-spraying
+aliases: [Password Spraying]
+fase: [Explotación]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1110.003]
+related: []
+learning_refs: []
+---
+
 # Password Spraying
 
 ## Descripción
 Técnica de ataque de fuerza bruta que consiste en probar una sola contraseña común (ej: Verano2024!) contra una lista masiva de usuarios. A diferencia de la fuerza bruta tradicional, el password spraying busca evadir las políticas de bloqueo de cuentas al realizar pocos intentos por cada usuario en un intervalo de tiempo.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1110.003 (Brute Force: Password Spraying)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **CrackMapExec** / **NetExec** (`--pass-pol`, `--continue-on-success`) — para automatizar el spraying contra protocolos como SMB, WINRM o MSSQL.

@@ -1,13 +1,19 @@
+---
+title: Crackeo de Hashes (Metodología)
+slug: explotacion-hash-cracking
+aliases: [Crackeo de Hashes (Metodología)]
+fase: [Explotación]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1110.002]
+related: []
+learning_refs: []
+---
+
 # Crackeo de Hashes (Metodología)
 
 ## Descripción
 Proceso de recuperación de contraseñas en texto plano a partir de sus representaciones hash. Esta técnica se realiza de forma offline una vez que los hashes han sido exfiltrados de una base de datos o de la memoria de un sistema, utilizando potencia de cálculo (CPU/GPU) para comparar millones de combinaciones por segundo.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1110.002 (Brute Force: Password Cracking)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **hashcat** (`-m`, `-a`) — el estándar de la industria para el crackeo de hashes mediante GPU.

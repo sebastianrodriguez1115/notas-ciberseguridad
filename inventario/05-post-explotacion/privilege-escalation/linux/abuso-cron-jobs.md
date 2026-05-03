@@ -1,13 +1,19 @@
+---
+title: Abuso de Cron Jobs
+slug: abuso-cron-jobs
+aliases: [Abuso de Cron Jobs]
+fase: [Post-Explotación]
+plataforma: Linux
+dificultad: Intermedia
+mitre: [T1053.003]
+related: []
+learning_refs: []
+---
+
 # Abuso de Cron Jobs
 
 ## Descripción
 Cron es el planificador de tareas de Linux que ejecuta comandos o scripts de forma periódica según las configuraciones definidas en crontabs. Cuando un cron job se ejecuta con privilegios elevados (típicamente root) y referencia scripts en directorios con permisos de escritura, utiliza wildcards sin sanitizar, o tiene dependencias modificables, un atacante puede inyectar código malicioso que se ejecutará con los privilegios del propietario del cron. Esta técnica es especialmente efectiva porque los cron jobs se ejecutan automáticamente sin intervención del usuario.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1053.003 (Scheduled Task/Job: Cron)
-- **Plataforma**: Linux
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **crontab** (`-l`) — listar cron jobs del usuario actual

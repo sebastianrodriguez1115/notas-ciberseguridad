@@ -1,13 +1,19 @@
+---
+title: Inyección NoSQL (NoSQLi)
+slug: explotacion-nosqli
+aliases: [Inyección NoSQL (NoSQLi)]
+fase: [Explotación]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Inyección NoSQL (NoSQLi)
 
 ## Descripción
 La inyección NoSQL (NoSQLi) es una vulnerabilidad que ocurre cuando una aplicación web incorpora datos del usuario en consultas a bases de datos NoSQL (como MongoDB, Cassandra o Redis) sin un saneamiento adecuado. A diferencia de SQLi tradicional, NoSQLi a menudo utiliza operadores de consulta específicos del motor (como `$gt`, `$ne` en MongoDB) para alterar la lógica de la consulta, permitiendo el bypass de autenticación, la extracción de datos o, en casos extremos, la ejecución de comandos.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **NoSQLMap** — herramienta automatizada para identificar y explotar inyecciones NoSQL.

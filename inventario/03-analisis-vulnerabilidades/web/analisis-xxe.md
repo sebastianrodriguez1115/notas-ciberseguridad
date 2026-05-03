@@ -1,13 +1,19 @@
+---
+title: Análisis de XXE (XML External Entity)
+slug: analisis-xxe
+aliases: [Análisis de XXE (XML External Entity)]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de XXE (XML External Entity)
 
 ## Descripción
 La inyección de entidades externas XML (XXE) ocurre cuando una aplicación procesa documentos XML que contienen referencias a entidades externas no validadas. Un atacante puede explotar un analizador XML débilmente configurado para leer archivos locales del servidor, realizar escaneos de puertos internos o incluso ejecutar ataques SSRF.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Burp Suite** (Repeater) — para manipular estructuras XML y probar la resolución de entidades.

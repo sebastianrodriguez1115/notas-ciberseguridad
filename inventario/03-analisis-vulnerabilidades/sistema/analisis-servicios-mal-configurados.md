@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades: Servicios Mal Configurados
+slug: analisis-servicios-mal-configurados
+aliases: ["Análisis de Vulnerabilidades: Servicios Mal Configurados"]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1078]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades: Servicios Mal Configurados
 
 ## Descripción
 Los servicios de red, a menudo instalados con configuraciones por defecto (Insecure Defaults), pueden exponer fallos de seguridad graves. El análisis se centra en identificar credenciales por defecto, protocolos inseguros (como FTP, Telnet o HTTP sin SSL), y funciones administrativas expuestas sin protección.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1078 (Valid Accounts)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **Nmap** (NSE) — Uso de scripts de enumeración para identificar servicios vulnerables y configuraciones débiles.

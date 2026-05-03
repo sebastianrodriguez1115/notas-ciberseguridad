@@ -1,13 +1,19 @@
+---
+title: Ejecución Remota en Windows
+slug: ejecucion-remota-windows
+aliases: [Ejecución Remota en Windows]
+fase: [Post-Explotación]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1021.002, T1021.006, T1021.001, T1047]
+related: []
+learning_refs: []
+---
+
 # Ejecución Remota en Windows
 
 ## Descripción
 La ejecución remota en Windows abarca las técnicas que permiten a un atacante ejecutar comandos o código en máquinas Windows remotas dentro de la red, utilizando protocolos y servicios nativos como SMB (PsExec), WinRM (Windows Remote Management), RDP (Remote Desktop Protocol), WMI (Windows Management Instrumentation) y servicios remotos (sc.exe). Estas técnicas son el mecanismo principal de movimiento lateral en entornos Windows y Active Directory, ya que aprovechan la infraestructura legítima de administración remota. Requieren credenciales válidas (contraseñas, hashes o tickets Kerberos) y generalmente privilegios de administrador local en el host destino.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1021.002 (Remote Services: SMB/Windows Admin Shares); T1021.006 (Remote Services: Windows Remote Management); T1021.001 (Remote Services: Remote Desktop Protocol); T1047 (Windows Management Instrumentation)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **psexec.py** (Impacket) — ejecución remota vía SMB (crea servicio temporal, obtiene SYSTEM)

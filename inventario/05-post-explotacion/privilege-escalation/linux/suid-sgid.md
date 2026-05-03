@@ -1,13 +1,19 @@
+---
+title: Explotación de Binarios SUID/SGID
+slug: suid-sgid
+aliases: [Explotación de Binarios SUID/SGID]
+fase: [Post-Explotación]
+plataforma: Linux
+dificultad: Básica
+mitre: [T1548.001]
+related: []
+learning_refs: []
+---
+
 # Explotación de Binarios SUID/SGID
 
 ## Descripción
 Los bits SUID (Set User ID) y SGID (Set Group ID) son permisos especiales en sistemas Unix/Linux que permiten ejecutar un binario con los privilegios del propietario (SUID) o del grupo (SGID) del archivo, en lugar de los del usuario que lo ejecuta. Cuando un binario con SUID pertenece a root, cualquier usuario que lo ejecute obtiene temporalmente privilegios de root. Un atacante puede abusar de binarios SUID/SGID mal configurados o vulnerables para escalar privilegios, ejecutar comandos como root o leer/escribir archivos protegidos. Esta técnica es una de las más comunes en la escalada de privilegios en Linux.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1548.001 (Abuse Elevation Control Mechanism: Setuid and Setgid)
-- **Plataforma**: Linux
-- **Dificultad**: Básica
 
 ## Herramientas
 - **find** — búsqueda de binarios con bits SUID/SGID en el sistema de archivos

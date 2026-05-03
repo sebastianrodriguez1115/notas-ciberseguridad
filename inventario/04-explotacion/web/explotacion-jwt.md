@@ -1,13 +1,19 @@
+---
+title: Explotación de JSON Web Tokens (JWT)
+slug: explotacion-jwt
+aliases: [Explotación de JSON Web Tokens (JWT)]
+fase: [Explotación]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Explotación de JSON Web Tokens (JWT)
 
 ## Descripción
 Técnica que busca vulnerar la integridad o autenticidad de los tokens JWT utilizados para la gestión de sesiones. Los ataques comunes incluyen el cambio del algoritmo a "none", el crackeo de claves secretas débiles o la confusión de clave pública/privada (HS256 vs RS256).
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **jwt_tool** (`-X`, `-C`) — herramienta de línea de comandos para automatizar ataques contra JWT.

@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades con Nessus
+slug: analisis-nessus
+aliases: [Análisis de Vulnerabilidades con Nessus]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1595.002]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades con Nessus
 
 ## Descripción
 Nessus es uno de los escáneres de vulnerabilidades más utilizados en la industria para identificar debilidades de seguridad en sistemas operativos, aplicaciones, bases de datos y dispositivos de red. Su metodología se basa en el escaneo activo de activos para detectar parches faltantes, configuraciones inseguras y vulnerabilidades conocidas (CVEs).
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **Nessus** (`Advanced Scan`, `Policy Compliance`) — plataforma principal para el escaneo y gestión de vulnerabilidades.

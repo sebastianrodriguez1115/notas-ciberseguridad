@@ -1,13 +1,19 @@
+---
+title: Análisis Forense: Artefactos de Windows
+slug: artefactos-windows-host
+aliases: ["Análisis Forense: Artefactos de Windows"]
+fase: [Forense y DFIR]
+plataforma: Windows
+dificultad: Intermedia
+mitre: []
+related: []
+learning_refs: []
+---
+
 # Análisis Forense: Artefactos de Windows
 
 ## Descripción
 El análisis forense en hosts Windows se basa en la identificación y examen de "artefactos", que son huellas digitales dejadas por el sistema operativo y las aplicaciones tras la actividad del usuario o un atacante. Estos artefactos permiten reconstruir una línea de tiempo (timeline) de los eventos, identificar qué programas se ejecutaron, qué archivos se abrieron y qué dispositivos se conectaron.
-
-## Clasificación
-- **Fase**: Forense y DFIR
-- **MITRE ATT&CK**: N/A (Análisis Post-Incidente)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Artefactos Críticos de Ejecución
 

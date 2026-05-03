@@ -1,13 +1,19 @@
+---
+title: Explotación de Deserialización Insegura
+slug: explotacion-deserialization
+aliases: [Explotación de Deserialización Insegura]
+fase: [Explotación]
+plataforma: Web
+dificultad: Avanzada
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Explotación de Deserialización Insegura
 
 ## Descripción
 La deserialización insegura ocurre cuando una aplicación confía ciegamente en datos serializados provenientes del usuario sin validarlos adecuadamente. Un atacante puede manipular estos datos para inyectar objetos maliciosos que, al ser reconstruidos (deserializados) por el servidor, ejecutan código arbitrario o provocan ataques de denegación de servicio. Esta vulnerabilidad es común en aplicaciones empresariales Java, PHP y .NET que utilizan protocolos de comunicación personalizados o estados de sesión serializados.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **ysoserial** — herramienta para generar payloads que explotan cadenas de gadgets en bibliotecas Java comunes.

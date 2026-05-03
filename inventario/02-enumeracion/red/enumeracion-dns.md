@@ -1,13 +1,19 @@
+---
+title: Enumeración DNS (Domain Name System)
+slug: enumeracion-dns
+aliases: [Enumeración DNS (Domain Name System)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1590.002]
+related: []
+learning_refs: []
+---
+
 # Enumeración DNS (Domain Name System)
 
 ## Descripción
 El DNS traduce nombres de dominio a direcciones IP y almacena registros de infraestructura (A, AAAA, MX, NS, TXT, CNAME, PTR). La enumeración DNS permite descubrir subdominios, servidores de correo, nameservers, transferencias de zona y la infraestructura interna de un objetivo. Una transferencia de zona DNS mal configurada (AXFR sin autenticación) puede revelar la topología completa de la red interna. Combina técnicas pasivas (sin interacción directa) y activas (consultas directas al DNS).
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1590.002 (Gather Victim Network Information: DNS)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **dnsrecon** — reconocimiento DNS automatizado (lookups, transferencia de zona, brute force, cache snooping)

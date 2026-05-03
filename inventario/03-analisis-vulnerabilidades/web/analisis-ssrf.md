@@ -1,13 +1,19 @@
+---
+title: Análisis de SSRF (Server-Side Request Forgery)
+slug: analisis-ssrf
+aliases: [Análisis de SSRF (Server-Side Request Forgery)]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Avanzada
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de SSRF (Server-Side Request Forgery)
 
 ## Descripción
 La vulnerabilidad SSRF (Server-Side Request Forgery) permite a un atacante inducir a una aplicación web a realizar peticiones HTTP (o de otros protocolos) hacia una infraestructura interna o externa arbitraria. Según *Web Hacking 101*, el SSRF es crítico porque permite al atacante utilizar el servidor vulnerable como un "pivote" para acceder a sistemas protegidos por firewalls que no son accesibles desde internet.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **Burp Suite (Collaborator)** — Indispensable para detectar Blind SSRF (interacciones fuera de banda).

@@ -1,13 +1,19 @@
+---
+title: Bypass de Autenticación en OAuth2 y OpenID
+slug: explotacion-auth-bypass-oauth
+aliases: [Bypass de Autenticación en OAuth2 y OpenID]
+fase: [Explotación]
+plataforma: Web
+dificultad: Avanzada
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Bypass de Autenticación en OAuth2 y OpenID
 
 ## Descripción
 La explotación de fallos en OAuth2 y OpenID Connect (OIDC) ocurre cuando hay errores en la implementación de estos protocolos de autorización y autenticación delegada. Los atacantes aprovechan configuraciones incorrectas como redireccionamientos abiertos (Open Redirect), validación deficiente del `redirect_uri`, o la falta de uso del parámetro `state`. Esto permite el robo de tokens de acceso (`access_token`) o códigos de autorización, resultando en la suplantación de identidad del usuario en aplicaciones de terceros.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **Burp Suite** (OAuth Analysis) — para interceptar y manipular los flujos de autorización entre el cliente y el proveedor de identidad (IdP).

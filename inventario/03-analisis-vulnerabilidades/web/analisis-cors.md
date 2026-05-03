@@ -1,13 +1,19 @@
+---
+title: Análisis de CORS (Cross-Origin Resource Sharing)
+slug: analisis-cors
+aliases: [Análisis de CORS (Cross-Origin Resource Sharing)]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de CORS (Cross-Origin Resource Sharing)
 
 ## Descripción
 El análisis de vulnerabilidades de CORS consiste en identificar configuraciones incorrectas en las cabeceras HTTP que permiten a un dominio externo acceder a recursos restringidos de otra aplicación. Un atacante puede explotar estas debilidades para realizar exfiltración de datos sensibles (como tokens de sesión o información personal) mediante el uso de JavaScript en un sitio malicioso controlado por él.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Burp Suite** (Proxy / Repeater) — permite interceptar y modificar cabeceras `Origin` para verificar reflexiones.

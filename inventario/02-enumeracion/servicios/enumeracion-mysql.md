@@ -1,13 +1,19 @@
+---
+title: Enumeración MySQL
+slug: enumeracion-mysql
+aliases: [Enumeración MySQL]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1046]
+related: []
+learning_refs: []
+---
+
 # Enumeración MySQL
 
 ## Descripción
 MySQL es un sistema de gestión de bases de datos relacional open source que opera en el puerto 3306/tcp. La enumeración MySQL incluye: identificar la versión del servidor, detectar cuentas con contraseña vacia (especialmente root), realizar auditoría de configuración CIS, extraer hashes de contraseñas de los usuarios de la base de datos y ejecutar ataques de fuerza bruta. Con acceso y el privilegio FILE, MySQL puede leer archivos arbitrarios del sistema operativo subyacente (como /etc/shadow), lo que representa un vector de escalada de privilegios.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **nmap** (`mysql-info`, `mysql-empty-password`, `mysql-audit`, `mysql-databases`, `mysql-users`) — enumeración vía NSE

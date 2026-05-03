@@ -1,13 +1,19 @@
+---
+title: BloodHound: Análisis de Rutas de Ataque en AD
+slug: bloodhound
+aliases: ["BloodHound: Análisis de Rutas de Ataque en AD"]
+fase: [Reconocimiento, Post-Explotación]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1087.002, T1087, T1484, T1069.002, T1069]
+related: []
+learning_refs: []
+---
+
 # BloodHound: Análisis de Rutas de Ataque en AD
 
 ## Descripción
 BloodHound es una herramienta de análisis de grafos que utiliza la teoría de grafos para identificar rutas de ataque complejas en entornos de Active Directory (AD) y Azure. Al recolectar datos sobre usuarios, grupos, computadoras y permisos, permite visualizar relaciones de confianza y privilegios que no son evidentes mediante la enumeración manual, facilitando la identificación de caminos hacia el control total del dominio (Domain Admin). El target de la herramienta es siempre Windows AD, pero la GUI (Neo4j) y el ingestor `BloodHound.py` corren en cualquier plataforma (Linux, macOS, Windows).
-
-## Clasificación
-- **Fase**: Reconocimiento, Post-Explotación
-- **MITRE ATT&CK**: [T1087.002](https://attack.mitre.org/techniques/T1087/002/) (Account Discovery: Domain Account); [T1484](https://attack.mitre.org/techniques/T1484/) (Domain Policy Modification); [T1069.002](https://attack.mitre.org/techniques/T1069/002/) (Permission Group Discovery: Domain Groups)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **BloodHound (GUI)** — La interfaz gráfica basada en Neo4j para visualizar y consultar el grafo.

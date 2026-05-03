@@ -1,13 +1,19 @@
+---
+title: Process Injection y Evasión
+slug: explotacion-process-injection
+aliases: [Process Injection y Evasión]
+fase: [Explotación]
+plataforma: Windows
+dificultad: Avanzada
+mitre: [T1055, T1055.012]
+related: []
+learning_refs: []
+---
+
 # Process Injection y Evasión
 
 ## Descripción
 La inyección de procesos es una técnica de ejecución de código que consiste en ejecutar código arbitrario en el espacio de direcciones de un proceso legítimo activo. Esto permite a los atacantes ocultar su actividad, evadir defensas basadas en host (como antivirus o EDR) y heredar los privilegios o el acceso a la red del proceso víctima. Técnicas comunes incluyen Process Hollowing (reemplazar la imagen de un proceso suspendido) y DLL Injection (forzar a un proceso a cargar una biblioteca maliciosa).
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1055 (Process Injection); T1055.012 (Process Hollowing)
-- **Plataforma**: Windows
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **Donut** — generador de shellcode posicionalmente independiente a partir de binarios .NET, DLLs o EXEs.

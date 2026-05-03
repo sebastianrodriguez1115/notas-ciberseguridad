@@ -1,13 +1,19 @@
+---
+title: Explotación de Kernel Linux
+slug: explotacion-kernel-linux
+aliases: [Explotación de Kernel Linux]
+fase: [Explotación]
+plataforma: Linux
+dificultad: Avanzada
+mitre: [T1068]
+related: []
+learning_refs: []
+---
+
 # Explotación de Kernel Linux
 
 ## Descripción
 La explotación del kernel de Linux implica aprovechar vulnerabilidades en el núcleo del sistema operativo para elevar privilegios desde un usuario con permisos limitados a root. Estas vulnerabilidades suelen residir en la gestión de memoria (como desbordamientos de búfer o race conditions) o en subsistemas específicos (como controladores de red o sistemas de archivos). Casos famosos como DirtyCow o DirtyPipe permiten la escritura arbitraria en archivos protegidos o la manipulación de la memoria del kernel para otorgar privilegios de administrador de forma inmediata.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1068 (Exploitation for Privilege Escalation)
-- **Plataforma**: Linux
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **searchsploit** — interfaz de línea de comandos para Exploit Database que permite buscar exploits locales por versión de kernel.

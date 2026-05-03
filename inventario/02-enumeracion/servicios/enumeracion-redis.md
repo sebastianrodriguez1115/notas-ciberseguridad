@@ -1,13 +1,19 @@
+---
+title: Enumeración Redis (Puerto 6379)
+slug: enumeracion-redis
+aliases: [Enumeración Redis (Puerto 6379)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1046]
+related: []
+learning_refs: []
+---
+
 # Enumeración Redis (Puerto 6379)
 
 ## Descripción
 Redis es un almacén de estructura de datos en memoria, utilizado como base de datos, caché y gestor de mensajes. Una de las vulnerabilidades más comunes es la falta de autenticación por defecto, lo que permite a un atacante interactuar directamente con la base de datos y, en ciertos casos, obtener ejecución de comandos en el servidor. La enumeración de Redis se centra en verificar el acceso sin credenciales y extraer información sensible sobre la configuración y los datos almacenados.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **redis-cli** — cliente interactivo oficial de Redis

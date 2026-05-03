@@ -1,13 +1,19 @@
+---
+title: Enumeración MongoDB (Puerto 27017)
+slug: enumeracion-mongodb
+aliases: [Enumeración MongoDB (Puerto 27017)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1046]
+related: []
+learning_refs: []
+---
+
 # Enumeración MongoDB (Puerto 27017)
 
 ## Descripción
 MongoDB es una base de datos NoSQL popular basada en documentos. Una vulnerabilidad crítica recurrente es la exposición de bases de datos sin autenticación, permitiendo el acceso total a los datos. La enumeración de MongoDB se enfoca en verificar si la autenticación está habilitada, extraer información sobre bases de datos, colecciones y registros, así como identificar la versión del servidor y posibles configuraciones inseguras.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **mongo** / **mongosh** — cliente interactivo oficial de MongoDB

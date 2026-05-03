@@ -1,13 +1,19 @@
+---
+title: Análisis de Open Redirect
+slug: analisis-open-redirect
+aliases: [Análisis de Open Redirect]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Básica
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de Open Redirect
 
 ## Descripción
 El redireccionamiento abierto ocurre cuando una aplicación web redirige al usuario a una URL externa especificada a través de un parámetro de entrada sin una validación adecuada. Aunque a menudo se considera de baja severidad, es una herramienta crítica en campañas de phishing y puede encadenarse con ataques de robo de tokens (OAuth) o SSRF.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1190 (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **Burp Suite** — para identificar parámetros de redirección (ej. `?next=`, `?url=`, `?redirect=`).

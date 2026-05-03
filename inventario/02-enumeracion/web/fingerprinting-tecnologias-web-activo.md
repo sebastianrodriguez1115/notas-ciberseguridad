@@ -1,15 +1,21 @@
+---
+title: Fingerprinting Activo de Tecnologías Web
+slug: fingerprinting-tecnologias-web-activo
+aliases: [Fingerprinting Activo de Tecnologías Web, Active Tech Fingerprinting, WhatWeb, httpx, Wappalyzer CLI]
+fase: [Enumeración]
+plataforma: Web
+dificultad: Básica
+mitre: [T1592.002, T1592]
+related: [fingerprinting-tecnologias-web, banner-grabbing-http, deteccion-waf]
+learning_refs: []
+---
+
 # Fingerprinting Activo de Tecnologías Web
 
 ## Descripción
 Identificación del stack tecnológico de una aplicación web (servidor HTTP, framework, CMS, lenguaje de programación y versiones) **enviando peticiones directas al objetivo**. Las herramientas analizan cabeceras HTTP, cookies, estructura del HTML, recursos cargados y respuestas a probes específicos para inferir las tecnologías subyacentes. Es esencial para priorizar vectores de ataque y buscar CVEs específicos para las versiones detectadas. La contrapartida del sigilo es la precisión: las versiones exactas suelen revelarse sólo con peticiones probing.
 
 > **Variante pasiva**: para fingerprinting sin enviar peticiones (BuiltWith, Wappalyzer cloud, Retire.js sobre JS local), ver [`01-reconocimiento/pasivo/fingerprinting-tecnologias-web.md`](../../01-reconocimiento/pasivo/fingerprinting-tecnologias-web.md).
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: [T1592.002](https://attack.mitre.org/techniques/T1592/002/) (Gather Victim Host Information: Software)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **WhatWeb** — fingerprinting activo desde CLI; detecta servidor, CMS, frameworks, versiones, plugins

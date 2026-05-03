@@ -1,13 +1,19 @@
+---
+title: Enumeración RDP (Remote Desktop Protocol)
+slug: enumeracion-rdp
+aliases: [Enumeración RDP (Remote Desktop Protocol)]
+fase: [Enumeración]
+plataforma: Windows
+dificultad: Básica
+mitre: [T1021.001]
+related: []
+learning_refs: []
+---
+
 # Enumeración RDP (Remote Desktop Protocol)
 
 ## Descripción
 RDP (Remote Desktop Protocol) es el protocolo propietario de Microsoft para acceso remoto gráfico a sistemas Windows. Opera en el puerto 3389/tcp por defecto, aunque administradores suelen moverlo a puertos no estándar como medida de seguridad por oscuridad. La enumeración RDP incluye: confirmar que un puerto habla el protocolo RDP, identificar la versión de Windows del objetivo y verificar si requiere NLA (Network Level Authentication). NLA restringe el acceso a usuarios autenticados antes de establecer la sesion completa, reduciendo la superficie de ataque.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1021.001 (Remote Services: Remote Desktop Protocol)
-- **Plataforma**: Windows
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** (`-A`) — escaneo agresivo para detectar RDP y caracteristicas del sistema

@@ -1,13 +1,19 @@
+---
+title: Credential Dumping (Volcado de Credenciales)
+slug: credential-dumping
+aliases: [Credential Dumping (Volcado de Credenciales)]
+fase: [Post-Explotación]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1003.001, T1003.002]
+related: []
+learning_refs: []
+---
+
 # Credential Dumping (Volcado de Credenciales)
 
 ## Descripción
 El volcado de credenciales (credential dumping) es la extracción de hashes de contraseñas, contraseñas en texto plano y tickets Kerberos desde la memoria del sistema, la base de datos SAM, el registro de Windows o el archivo NTDS.dit del controlador de dominio. Esta técnica es fundamental en post-explotación ya que las credenciales obtenidas permiten movimiento lateral (Pass-the-Hash, Pass-the-Ticket), acceso a recursos adicionales y escalada de privilegios en entornos Active Directory. Los hashes NTLM extraídos pueden ser crackeados offline o reutilizados directamente sin conocer la contraseña original.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1003.001 (OS Credential Dumping: LSASS Memory); T1003.002 (OS Credential Dumping: Security Account Manager)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Mimikatz** (`sekurlsa::logonpasswords`, `lsadump::sam`, `lsadump::dcsync`) — herramienta principal para extracción de credenciales en Windows

@@ -15,7 +15,7 @@ learning_refs: []
 ## Descripción
 Identificación del stack tecnológico de una aplicación web (servidor HTTP, framework, CMS, lenguaje, librerías) **sin enviar peticiones directas al objetivo**. Se apoya en servicios de terceros que ya han indexado al objetivo (BuiltWith, Wappalyzer cloud, Stackshare), historiales públicos (archive.org, certificate transparency), y análisis de artefactos JavaScript previamente descargados (Retire.js sobre archivos locales). El valor estratégico es el sigilo: el objetivo no detecta ningún tráfico relacionado con el reconocimiento.
 
-> **Variante activa**: para fingerprinting que envía peticiones al objetivo (WhatWeb, httpx, Wappalyzer CLI), ver [`02-enumeracion/web/fingerprinting-tecnologias-web.md`](../../02-enumeracion/web/fingerprinting-tecnologias-web.md).
+> **Variante activa**: para fingerprinting que envía peticiones al objetivo (WhatWeb, httpx, Wappalyzer CLI), ver [`02-enumeracion/web/fingerprinting-tecnologias-web-activo.md`](../../02-enumeracion/web/fingerprinting-tecnologias-web-activo.md).
 
 ## Herramientas
 - **BuiltWith** (`builtwith.com`) — Perfil tecnológico completo del objetivo basado en datos pre-recolectados; incluye historial de cambios de stack

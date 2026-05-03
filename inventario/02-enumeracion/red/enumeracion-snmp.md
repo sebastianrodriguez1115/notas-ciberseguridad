@@ -1,13 +1,19 @@
+---
+title: Enumeración SNMP (Simple Network Management Protocol)
+slug: enumeracion-snmp
+aliases: [Enumeración SNMP (Simple Network Management Protocol)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1046]
+related: []
+learning_refs: []
+---
+
 # Enumeración SNMP (Simple Network Management Protocol)
 
 ## Descripción
 SNMP (Simple Network Management Protocol) es un protocolo de gestión de red que permite monitorear y configurar dispositivos de red (routers, switches, servidores, impresoras). Opera en los puertos 161/UDP (agente) y 162/UDP (traps). Las versiones SNMPv1 y SNMPv2c transmiten las community strings en texto plano, lo que las hace vulnerables a sniffing y brute force. Con la community string correcta (tipicamente "public" para lectura), se puede extraer una gran cantidad de información del sistema: interfaces de red, procesos, software instalado, puertos abiertos, usuarios y configuración.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **onesixtyone** — fuerza bruta rapida de community strings SNMP

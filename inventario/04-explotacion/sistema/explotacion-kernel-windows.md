@@ -1,13 +1,19 @@
+---
+title: Explotación de Kernel Windows
+slug: explotacion-kernel-windows
+aliases: [Explotación de Kernel Windows]
+fase: [Explotación]
+plataforma: Windows
+dificultad: Avanzada
+mitre: [T1068, T1210]
+related: []
+learning_refs: []
+---
+
 # Explotación de Kernel Windows
 
 ## Descripción
 La explotación del kernel de Windows permite a un atacante elevar privilegios al nivel de SYSTEM o ejecutar código de forma remota (RCE) mediante la explotación de vulnerabilidades en el núcleo de Windows (ntoskrnl.exe) o en controladores de terceros (drivers). Vulnerabilidades críticas como BlueKeep (RDP) o PrintNightmare (Spooler) han demostrado la capacidad de comprometer sistemas enteros aprovechando debilidades en servicios que operan con privilegios elevados dentro del sistema operativo.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1068 (Exploitation for Privilege Escalation); T1210 (Exploitation of Remote Services)
-- **Plataforma**: Windows
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **Metasploit Framework** (`exploit/windows/rdp/cve_2019_0708_bluekeep_rce`) — incluye módulos robustos para explotar vulnerabilidades de kernel conocidas.

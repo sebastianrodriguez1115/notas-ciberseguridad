@@ -1,13 +1,19 @@
+---
+title: Enumeración MSSQL (Microsoft SQL Server)
+slug: enumeracion-mssql
+aliases: [Enumeración MSSQL (Microsoft SQL Server)]
+fase: [Enumeración]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1046]
+related: []
+learning_refs: []
+---
+
 # Enumeración MSSQL (Microsoft SQL Server)
 
 ## Descripción
 Microsoft SQL Server es un sistema de gestión de bases de datos relacional de Microsoft que opera en el puerto 1433/tcp (por defecto) y 1434/UDP (SQL Browser). La enumeración incluye: identificar la versión exacta, detectar cuentas con contraseña vacia (especialmente SA), realizar fuerza bruta de credenciales, y con acceso, enumerar configuración completa. El procedimiento almacenado `xp_cmdshell`, cuando esta habilitado, permite ejecutar comandos del sistema operativo directamente desde SQL Server, convirtiendo la enumeración en ejecución remota de código.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **nmap** (`ms-sql-info`, `ms-sql-brute`, `ms-sql-empty-password`, `ms-sql-xp-cmdshell`) — enumeración vía NSE

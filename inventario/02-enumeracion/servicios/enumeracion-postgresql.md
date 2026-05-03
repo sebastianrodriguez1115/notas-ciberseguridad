@@ -1,13 +1,19 @@
+---
+title: Enumeración PostgreSQL (Puerto 5432)
+slug: enumeracion-postgresql
+aliases: [Enumeración PostgreSQL (Puerto 5432)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1046]
+related: []
+learning_refs: []
+---
+
 # Enumeración PostgreSQL (Puerto 5432)
 
 ## Descripción
 PostgreSQL es un sistema de gestión de bases de datos relacionales (RDBMS) de código abierto y potente. La enumeración de PostgreSQL se centra en descubrir la versión del servidor, bases de datos existentes, usuarios, roles, y lo más importante, intentar el acceso mediante credenciales por defecto o ataques de fuerza bruta. Si se logra el acceso con privilegios de superusuario (postgres), es posible lograr la ejecución de comandos en el sistema operativo subyacente (RCE).
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **nmap** — escaneo de puertos y scripts NSE especializados (pgsql-brute, pgsql-info)

@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades: Gestión de Parches en Windows
+slug: analisis-parches-windows
+aliases: ["Análisis de Vulnerabilidades: Gestión de Parches en Windows"]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Windows
+dificultad: Básica
+mitre: [T1068]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades: Gestión de Parches en Windows
 
 ## Descripción
 El análisis de parches en Windows consiste en identificar actualizaciones de seguridad ausentes (KBs) que podrían ser explotadas por atacantes. Una gestión de parches ineficiente es una de las principales causas de ataques exitosos de Ransomware y escalada de privilegios en entornos corporativos.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1068 (Exploitation for Privilege Escalation)
-- **Plataforma**: Windows
-- **Dificultad**: Básica
 
 ## Herramientas
 - **systeminfo** — Herramienta nativa de Windows para mostrar información detallada de la configuración del sistema y parches.

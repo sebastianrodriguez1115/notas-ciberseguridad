@@ -1,13 +1,19 @@
+---
+title: Phishing Técnico (Evilginx2 & Gophish)
+slug: explotacion-phishing-tecnico
+aliases: ["Phishing Técnico (Evilginx2 & Gophish)"]
+fase: [Explotación]
+plataforma: Multi
+dificultad: Avanzada
+mitre: [T1566]
+related: []
+learning_refs: []
+---
+
 # Phishing Técnico (Evilginx2 & Gophish)
 
 ## Descripción
 Uso de herramientas avanzadas para realizar campañas de phishing que superan el segundo factor de autenticación (2FA) mediante el uso de proxies inversos (Adversary-in-the-Middle). Evilginx2 captura cookies de sesión en tiempo real, permitiendo el acceso directo sin necesidad de conocer la contraseña.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1566 (Phishing)
-- **Plataforma**: Multi
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **Evilginx2** (`phishlets`, `lures`) — proxy inverso capaz de capturar credenciales y tokens 2FA.

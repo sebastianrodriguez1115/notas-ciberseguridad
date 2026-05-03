@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades: SQL Injection (SQLi)
+slug: analisis-sqli
+aliases: ["Análisis de Vulnerabilidades: SQL Injection (SQLi)"]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Avanzada
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades: SQL Injection (SQLi)
 
 ## Descripción
 La inyección SQL (SQLi) ocurre cuando una aplicación web inserta datos de entrada no confiables directamente en una consulta SQL sin la debida sanitización o parametrización. Según *The Web Application Hacker's Handbook*, la explotación exitosa puede permitir la lectura de bases de datos completas, modificación de datos (U/I/D) y, en configuraciones débiles (ej. `xp_cmdshell` en MSSQL), la ejecución de comandos en el sistema operativo.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **SQLMap** — Estándar de la industria para automatizar la detección y explotación.

@@ -1,13 +1,19 @@
+---
+title: Fuzzing de LFI y Escaneo de Puertos vía SSRF
+slug: fuzzing-lfi-ssrf
+aliases: [Fuzzing de LFI y Escaneo de Puertos vía SSRF]
+fase: [Enumeración]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1595.002, T1046]
+related: []
+learning_refs: []
+---
+
 # Fuzzing de LFI y Escaneo de Puertos vía SSRF
 
 ## Descripción
 Dos técnicas de fuzzing especializado: (1) LFI fuzzing — usa listas de payloads de Local File Inclusion para descubrir parámetros vulnerables y rutas de archivos del sistema explotables; y (2) SSRF port scanning — cuando existe una vulnerabilidad SSRF (Server-Side Request Forgery), se usa ffuf para enumerar puertos y servicios internos del servidor que no son accesibles directamente. Ambas técnicas convierten vulnerabilidades de enumeración en vectores de escalada significativos.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning) — LFI fuzzing; T1046 (Network Service Discovery) — SSRF port scan
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **ffuf** — fuzzer web; soporte de cookies de sesion, filtros múltiples y wordlists especializadas

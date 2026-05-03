@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades: Insecure Direct Object Reference (IDOR)
+slug: analisis-idor
+aliases: ["Análisis de Vulnerabilidades: Insecure Direct Object Reference (IDOR)"]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Web
+dificultad: Básica
+mitre: [T1190]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades: Insecure Direct Object Reference (IDOR)
 
 ## Descripción
 La vulnerabilidad de Referencia Directa e Insegura a Objetos (IDOR) ocurre cuando una aplicación web utiliza un identificador (como un ID en la URL o un parámetro POST) para acceder directamente a un objeto de la base de datos sin verificar los permisos del usuario que realiza la solicitud. Esto permite a un atacante acceder a datos de otros usuarios simplemente cambiando el valor del identificador.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **Burp Suite** — Suite de herramientas para la interceptación y modificación de tráfico web, esencial para pruebas IDOR.

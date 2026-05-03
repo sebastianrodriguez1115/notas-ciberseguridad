@@ -1,13 +1,19 @@
+---
+title: Enumeración VNC (Virtual Network Computing) (Puerto 5900+)
+slug: enumeracion-vnc
+aliases: [Enumeración VNC (Virtual Network Computing) (Puerto 5900+)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1021.005]
+related: []
+learning_refs: []
+---
+
 # Enumeración VNC (Virtual Network Computing) (Puerto 5900+)
 
 ## Descripción
 VNC es un sistema de compartición de escritorio remoto que utiliza el protocolo RFB (Remote Frame Buffer). La enumeración de VNC se centra en identificar la versión del servidor, los métodos de autenticación soportados y buscar contraseñas débiles o por defecto. A diferencia de RDP, muchas implementaciones de VNC permiten el acceso compartido y, a veces, operan sin cifrado robusto.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1021.005 (Remote Services: VNC)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** — scripts NSE especializados (vnc-info, vnc-brute)

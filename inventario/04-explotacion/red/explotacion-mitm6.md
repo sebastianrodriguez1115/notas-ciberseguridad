@@ -1,13 +1,19 @@
+---
+title: IPv6 DNS Takeover con mitm6
+slug: explotacion-mitm6
+aliases: [IPv6 DNS Takeover con mitm6]
+fase: [Explotación]
+plataforma: Red
+dificultad: Avanzada
+mitre: [T1557.001]
+related: []
+learning_refs: []
+---
+
 # IPv6 DNS Takeover con mitm6
 
 ## Descripción
 Técnica de ataque que aprovecha la configuración por defecto de Windows que prioriza IPv6 sobre IPv4. El atacante actúa como un servidor DHCPv6 malicioso, asignando direcciones IPv6 a las víctimas y configurándose a sí mismo como el servidor DNS primario, permitiendo interceptar y redirigir el tráfico hacia servidores de relay.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1557.001 (Adversary-in-the-Middle)
-- **Plataforma**: Red
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **mitm6** (`-d`, `-i`) — herramienta que automatiza el envenenamiento de DHCPv6.

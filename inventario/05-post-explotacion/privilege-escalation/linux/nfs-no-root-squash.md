@@ -1,13 +1,19 @@
+---
+title: Escalada de Privilegios vía NFS no_root_squash
+slug: nfs-no-root-squash
+aliases: [Escalada de Privilegios vía NFS no_root_squash]
+fase: [Post-Explotación]
+plataforma: Linux
+dificultad: Intermedia
+mitre: [T1548.001]
+related: []
+learning_refs: []
+---
+
 # Escalada de Privilegios vía NFS no_root_squash
 
 ## Descripción
 Network File System (NFS) es un protocolo que permite compartir directorios a través de la red. Cuando un export NFS está configurado con la opción `no_root_squash`, el servidor no aplica "root squashing" — es decir, no remapea las solicitudes del usuario root remoto a un usuario sin privilegios (nobody). Esto significa que un atacante con acceso root en su propia máquina puede montar el export NFS, crear binarios SUID propiedad de root en el recurso compartido, y luego ejecutarlos en el servidor víctima para obtener shell como root. Esta misconfiguration es relativamente común en entornos internos.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1548.001 (Abuse Elevation Control Mechanism: Setuid and Setgid)
-- **Plataforma**: Linux
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **showmount** (`-e`) — enumerar exports NFS disponibles

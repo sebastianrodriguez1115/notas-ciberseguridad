@@ -1,13 +1,19 @@
+---
+title: Abuso de ADCS y Ataques de Relay
+slug: explotacion-adcs-relay
+aliases: [Abuso de ADCS y Ataques de Relay]
+fase: [Explotación]
+plataforma: Red
+dificultad: Avanzada
+mitre: [T1557.001, T1187]
+related: []
+learning_refs: []
+---
+
 # Abuso de ADCS y Ataques de Relay
 
 ## Descripción
 Los Active Directory Certificate Services (ADCS) proporcionan la infraestructura de clave pública (PKI) nativa para entornos Windows. Los ataques de relay contra ADCS aprovechan protocolos de autenticación antiguos (NTLM) para redirigir credenciales robadas hacia interfaces HTTP de ADCS (como la inscripción web). Esto permite a un atacante obtener certificados de usuario o computadora sin conocer su contraseña, lo que a menudo resulta en la toma total del dominio si se obtienen certificados de administradores o controladores de dominio.
-
-## Clasificación
-- **Fase**: Explotación
-- **MITRE ATT&CK**: T1557.001 (Adversary-in-the-Middle: LLMNR/NBT-NS Poisoning and SMB Relay); T1187 (Forced Authentication)
-- **Plataforma**: Red
-- **Dificultad**: Avanzada
 
 ## Herramientas
 - **Certipy** — herramienta integral para enumerar y explotar vulnerabilidades en ADCS (ESC1-ESC13).

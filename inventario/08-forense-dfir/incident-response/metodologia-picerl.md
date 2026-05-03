@@ -1,13 +1,19 @@
+---
+title: Incident Response: Metodología PICERL
+slug: metodologia-picerl
+aliases: ["Incident Response: Metodología PICERL"]
+fase: [Forense y DFIR]
+plataforma: Multi
+dificultad: Intermedia
+mitre: []
+related: []
+learning_refs: []
+---
+
 # Incident Response: Metodología PICERL
 
 ## Descripción
 El Respuesta a Incidentes (Incident Response, IR) es el proceso organizado para manejar las consecuencias de un ataque cibernético o brecha de seguridad. La metodología PICERL (desarrollada por SANS) proporciona un marco estructurado para contener y mitigar ataques, minimizando el impacto en el negocio y asegurando la recuperación efectiva de los sistemas afectados.
-
-## Clasificación
-- **Fase**: Forense y DFIR
-- **MITRE ATT&CK**: N/A (Metodología de Gestión)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Fases del Ciclo PICERL
 

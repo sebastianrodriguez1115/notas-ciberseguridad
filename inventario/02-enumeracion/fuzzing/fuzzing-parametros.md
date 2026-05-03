@@ -1,13 +1,19 @@
+---
+title: Fuzzing de Parámetros HTTP
+slug: fuzzing-parametros
+aliases: [Fuzzing de Parámetros HTTP]
+fase: [Enumeración]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1595.002]
+related: []
+learning_refs: []
+---
+
 # Fuzzing de Parámetros HTTP
 
 ## Descripción
 Técnica de descubrimiento de parámetros HTTP ocultos en endpoints web, tanto en peticiones GET (query string) como POST (body). Los parámetros no documentados pueden revelar funcionalidad oculta, configuraciones de debug, vectores de inyección o controles de acceso adicionales. La técnica requiere primero identificar el tamaño de respuesta base (sin parámetro valido) para poder filtrar los falsos positivos. Una variante avanzada es el modo pitchfork de ffuf, que permite rotar IPs para evadir controles de rate-limiting.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **ffuf** — fuzzer web; soporta GET, POST, cookies y múltiples wordlists en modo pitchfork

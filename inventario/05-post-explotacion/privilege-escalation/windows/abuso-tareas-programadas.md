@@ -1,13 +1,19 @@
+---
+title: Abuso de Tareas Programadas (Scheduled Tasks)
+slug: abuso-tareas-programadas
+aliases: [Abuso de Tareas Programadas (Scheduled Tasks)]
+fase: [Post-Explotación]
+plataforma: Windows
+dificultad: Intermedia
+mitre: [T1053.005]
+related: []
+learning_refs: []
+---
+
 # Abuso de Tareas Programadas (Scheduled Tasks)
 
 ## Descripción
 Las tareas programadas de Windows (Scheduled Tasks) permiten ejecutar programas o scripts de forma automática en momentos específicos o en respuesta a eventos del sistema. Cuando una tarea programada se ejecuta con privilegios elevados (SYSTEM o un usuario administrador) y referencia un script o ejecutable que puede ser modificado por un usuario sin privilegios, un atacante puede reemplazar o modificar ese recurso para ejecutar código arbitrario con los privilegios de la tarea. Además, un atacante con privilegios suficientes puede crear nuevas tareas programadas como mecanismo de escalada de privilegios o persistencia.
-
-## Clasificación
-- **Fase**: Post-Explotación
-- **MITRE ATT&CK**: T1053.005 (Scheduled Task/Job: Scheduled Task)
-- **Plataforma**: Windows
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **schtasks.exe** (`/query`, `/create`, `/run`, `/delete`) — gestión nativa de tareas programadas en Windows

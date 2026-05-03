@@ -1,13 +1,19 @@
+---
+title: Enumeración SSH (Secure Shell)
+slug: enumeracion-ssh
+aliases: [Enumeración SSH (Secure Shell)]
+fase: [Enumeración]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1046, T1110.001]
+related: []
+learning_refs: []
+---
+
 # Enumeración SSH (Secure Shell)
 
 ## Descripción
 SSH (Secure Shell) es un protocolo criptográfico para acceso remoto seguro a sistemas (puerto 22/tcp). La enumeración de SSH incluye: identificar la versión del servidor y sus algoritmos criptograficos soportados, determinar que métodos de autenticación acepta para usuarios especificos, y realizar ataques de fuerza bruta cuando se detecta autenticación por password. Algoritmos debiles (diffie-hellman-group1-sha1, ssh-dss) pueden indicar versiones vulnerables o configuración insegura.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1046 (Network Service Discovery) — enumeración del servicio; T1110.001 (Brute Force: Password Guessing) — fuerza bruta de credenciales
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** (`ssh2-enum-algos`, `ssh-hostkey`, `ssh-auth-methods`) — enumeración pasiva del servicio

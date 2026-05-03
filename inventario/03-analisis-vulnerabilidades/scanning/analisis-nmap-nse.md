@@ -1,13 +1,19 @@
+---
+title: Análisis de Vulnerabilidades con Nmap Scripting Engine (NSE)
+slug: analisis-nmap-nse
+aliases: [Análisis de Vulnerabilidades con Nmap Scripting Engine (NSE)]
+fase: [Análisis de Vulnerabilidades]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1595.002]
+related: []
+learning_refs: []
+---
+
 # Análisis de Vulnerabilidades con Nmap Scripting Engine (NSE)
 
 ## Descripción
 El Nmap Scripting Engine (NSE) es una de las características más potentes de Nmap, permitiendo a los usuarios escribir y compartir scripts para automatizar una amplia variedad de tareas de red. En el contexto del análisis de vulnerabilidades, NSE permite la detección proactiva de fallos de seguridad conocidos, configuraciones incorrectas y servicios vulnerables durante la fase de escaneo.
-
-## Clasificación
-- **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **Nmap** — Escáner de red versátil utilizado para descubrimiento de hosts y servicios.

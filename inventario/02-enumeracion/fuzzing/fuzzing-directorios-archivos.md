@@ -1,13 +1,19 @@
+---
+title: Fuzzing de Directorios y Archivos Web
+slug: fuzzing-directorios-archivos
+aliases: [Fuzzing de Directorios y Archivos Web]
+fase: [Enumeración]
+plataforma: Web
+dificultad: Básica
+mitre: [T1595.002]
+related: []
+learning_refs: []
+---
+
 # Fuzzing de Directorios y Archivos Web
 
 ## Descripción
 Técnica de descubrimiento de directorios, archivos y rutas ocultas en servidores web mediante el envío sistemático de peticiones HTTP usando una wordlist. Permite encontrar recursos no enlazados públicamente: paneles de administración, archivos de configuración, backups, scripts expuestos y cualquier ruta accesible que no este referenciada en el sitio. Es una de las técnicas mas productivas en la fase de enumeración web.
-
-## Clasificación
-- **Fase**: Enumeración
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **ffuf** — fuzzer web rápido y flexible; el marcador `FUZZ` puede ir en cualquier posición de la URL
