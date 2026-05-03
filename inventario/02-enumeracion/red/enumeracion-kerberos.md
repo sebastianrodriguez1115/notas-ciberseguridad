@@ -4,7 +4,7 @@
 Kerberos es el protocolo de autenticación por defecto en entornos de Active Directory (AD). Funciona mediante el intercambio de "tickets" emitidos por el Key Distribution Center (KDC). La enumeración de Kerberos permite identificar usuarios válidos del dominio sin causar bloqueos de cuenta (pre-authentication), descubrir servicios mediante sus SPN (Service Principal Names) para ataques de Kerberoasting, y extraer hashes de usuarios que no requieren pre-autenticación (AS-REP Roasting).
 
 ## Clasificación
-- **Fase**: Enumeración / Post-explotación
+- **Fase**: Enumeración, Post-Explotación
 - **MITRE ATT&CK**: 
     - T1558 (Steal or Forge Kerberos Tickets)
     - T1558.003 (Steal or Forge Kerberos Tickets: Kerberoasting)

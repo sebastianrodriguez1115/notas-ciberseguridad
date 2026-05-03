@@ -1,13 +1,13 @@
 # Google Dorking
 
-## Descripcion
-Tecnica de reconocimiento pasivo que utiliza operadores avanzados de busqueda de Google para localizar informacion expuesta. Segun *The Hacker Playbook 3*, el dorking moderno es fundamental para descubrir **activos en la nube** (S3 Buckets) y **entornos de desarrollo** (Jenkins, Gitlab) que han sido mal configurados por equipos de DevOps y expuestos a internet.
+## Descripción
+Técnica de reconocimiento pasivo que utiliza operadores avanzados de búsqueda de Google para localizar información expuesta. Según *The Hacker Playbook 3*, el dorking moderno es fundamental para descubrir **activos en la nube** (S3 Buckets) y **entornos de desarrollo** (Jenkins, Gitlab) que han sido mal configurados por equipos de DevOps y expuestos a internet.
 
-## Clasificacion
+## Clasificación
 - **Fase**: Reconocimiento
 - **MITRE ATT&CK**: T1593 (Search Open Websites/Domains)
 - **Plataforma**: Web
-- **Dificultad**: Basica
+- **Dificultad**: Básica
 
 ## Herramientas
 - **Google Search Operators** — site, inurl, intitle, filetype, cache, intext
@@ -22,7 +22,7 @@ site:blob.core.windows.net "target.com"
 site:*.googleapis.com "target.com"
 ```
 
-### Busqueda de Paneles DevOps y Orquestacion (The Hacker Playbook 3)
+### Búsqueda de Paneles DevOps y Orquestación (The Hacker Playbook 3)
 ```
 intitle:"Dashboard [Kubernetes]"
 intitle:"Jenkins [Jenkins]"
@@ -30,7 +30,7 @@ inurl:jenkins/login
 "GitHub" intitle:"index of" "target.com"
 ```
 
-### Localizacion de Secretos y Configuraciones
+### Localización de Secretos y Configuraciones
 ```
 filetype:env DB_PASSWORD | DB_USERNAME
 filetype:xml site:target.com "web.config"
@@ -45,9 +45,9 @@ intitle:"index of" inurl:auth site:target.com
 ```
 
 ## Contramedidas
-- **Google Search Console**: Solicitar la eliminacion de informacion sensible ya indexada.
+- **Google Search Console**: Solicitar la eliminación de información sensible ya indexada.
 - **Configurar robots.txt**: Aunque no es una medida de seguridad, evita que bots bien comportados indexen rutas conocidas.
-- **Implementar Autenticacion Robusta**: Ningun panel de administracion o bucket debe ser accesible sin autenticacion, independientemente de si la URL es "secreta".
+- **Implementar Autenticación Robusta**: Ningun panel de administración o bucket debe ser accesible sin autenticación, independientemente de si la URL es "secreta".
 - **Limpiar el Servidor**: Eliminar archivos de backup (.bak, .old) y logs del directorio raiz del servidor web.
 
 ## Referencias

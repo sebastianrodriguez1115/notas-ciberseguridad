@@ -58,6 +58,7 @@ vol.py -f memory_dump.raw --profile=Win7SP1x64 hashdump
 5.  **Extracción**: Volcar los ejecutables sospechosos para realizar un análisis de malware más profundo.
 
 ## Referencias
+- Johansen, G. (2017). *Digital Forensics and Incident Response*. Packt Publishing.
 - Ligh, M. H., Case, A., Levy, J., & Walters, B. (2014). *The Art of Memory Forensics*. John Wiley & Sons.
 - Volatility Foundation. (s.f.). *Volatility Framework* [Software]. https://www.volatilityfoundation.org/
 - MITRE Corporation. (2024). ATT&CK Technique T1055: Process Injection. https://attack.mitre.org/techniques/T1055/

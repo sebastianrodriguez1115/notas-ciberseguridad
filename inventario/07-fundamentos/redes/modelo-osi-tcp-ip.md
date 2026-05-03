@@ -67,5 +67,6 @@ netstat -ano   # Windows
 ```
 
 ## Referencias
+- Casad, J. (2012). *Sams Teach Yourself TCP/IP in 24 Hours* (5th ed.). Sams Publishing.
 - Lammle, T. (2016). *CompTIA Network+ Study Guide*. Sybex.
 - Odom, W. (2020). *CCNA 200-301 Official Cert Guide*. Cisco Press.

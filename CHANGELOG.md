@@ -2,7 +2,103 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
-## [2026-04-29] — Sesión 13 (Lab PortSwigger XML encoding bypass + WAF bypass en inventario)
+## [2026-05-03] — Sesión 18 (Mantenimiento de consistencia tras review crítico)
+
+Sesión de mantenimiento estructural disparada por review crítico de un agente externo. Se auditó cada hallazgo contra el repo, se calibraron severidades, se discutió y aprobó la decisión arquitectónica de **secciones opcionales en TEMPLATE** en lugar de un template alterno para contenido conceptual, y se aplicaron todos los fixes derivados.
+
+### Cambios estructurales en TEMPLATE.md
+- **Secciones opcionales**: Herramientas, Comandos / Ejemplos y Contramedidas pasan a opcionales para contenido conceptual o metodológico (modelos teóricos, ciclos, marcos). Las técnicas y herramientas concretas las siguen requiriendo. Documentado en nota 9 del comentario.
+- **Valores compuestos en Fase**: separador estandarizado a coma+espacio. Permitidos para herramientas/técnicas que genuinamente cruzan fases. Plataforma sigue estricta. Documentado en notas 7 y 8.
+- **Nota sobre MITRE ATT&CK**: ampliada para reconocer la limitación conocida de ATT&CK en el dominio de seguridad de aplicaciones (CSRF, IDOR, race conditions sin mapping limpio). Se establece T1190 como ID por defecto defensible.
+
+### Fixes aplicados al inventario
+- **MITRE incorrectos corregidos** (T1190 con link al ATT&CK):
+  - `analisis-csrf.md`: T1185 (Browser Session Hijacking, no aplica a CSRF) → T1190.
+  - `analisis-idor.md`: T1213 (Data from Information Repositories, no aplica a IDOR) → T1190.
+- **Valores compuestos migrados a sintaxis de coma+espacio**:
+  - `enumeracion-kerberos.md`: `Enumeración / Post-explotación` → `Enumeración, Post-Explotación`.
+  - `bloodhound.md`: `Reconocimiento | Post-Explotación` → `Reconocimiento, Post-Explotación`. `Plataforma: Windows | Linux (interfaz)` → `Plataforma: Windows` (la nota cross-plataforma sobre GUI/agentes movida a Descripción, que es donde corresponde según TEMPLATE nota 7).
+- **Acentos corregidos en 14 archivos de `01-reconocimiento/`** (toda la fase 1, escrita en algún momento sin acentos y nunca normalizada). Headers (`Descripción`, `Clasificación`) y cuerpo entero. Aplicado vía sed con script de patrones de alta confianza (palabras técnicas en español que casi siempre llevan acento). Tres pasadas, residuales finales (`deteccion`, `enumeracion`, `recoleccion`) son nombres de archivo en INDEX.md y son correctos así.
+- **Referencias de libros del directorio `referencias/` añadidas a 5 archivos** que sólo citaban libros externos:
+  - `modelo-osi-tcp-ip.md`: + Casad (TCP/IP in 24 Hours).
+  - `volatility-memoria.md`, `picerl.md`, `artefactos-windows-host.md`: + Johansen (Digital Forensics and Incident Response).
+  - `analisis-estatico-dinamico.md`: + Harper et al. (Gray Hat Hacking) por sus capítulos de análisis de malware.
+
+### Consolidación de duplicados
+- **DNS**: `01-reconocimiento/activo/enumeracion-dns.md` borrado. Su contenido único (NSEC walking, DNS cache snooping, amass active mode, ldns-walk como herramienta) se mergeó dentro de `02-enumeracion/red/enumeracion-dns.md` en una nueva subsección "Técnicas avanzadas". Las contramedidas correspondientes (NSEC3, limitar recursión, rate limiting) añadidas al bloque de defensas. INDEX.md de reconocimiento activo actualizado con nota redirigiendo al archivo canónico de enumeración. Razón estructural: la enumeración DNS activa (consultas directas al DNS del objetivo) es operacionalmente fase 2 (Enumeración), no fase 1 (Reconocimiento). El reconocimiento DNS pasivo (sin tocar al objetivo) sigue en `01-reconocimiento/pasivo/dns-pasivo.md`.
+- **Fingerprinting**: ambos archivos (`01-reconocimiento/pasivo/` y `02-enumeracion/web/`) **reescritos completos** para delinear claramente pasivo vs activo. La versión pasiva enfoca BuiltWith, Wappalyzer extensión, Stackshare, Retire.js sobre JS local descargado, OSINT vía shodan/censys. La versión activa enfoca WhatWeb, httpx, Wappalyzer CLI, nmap NSE, curl probing, detección activa de Kubernetes/Docker/Envoy. Cross-references explícitas en ambos. Acentos arreglados en la versión activa.
+
+### Documentación
+- **AGENTS.md**: párrafo de descripción del inventario actualizado para reflejar las dos modalidades de uso del TEMPLATE (técnica concreta vs contenido conceptual) y la sintaxis de valores compuestos en Fase. Conteo (165) sigue siendo correcto: borrar el DNS duplicado y no añadir nada nuevo deja el conteo en 165 (124 técnicas + 40 INDEX + 1 TEMPLATE), igual que lo declarado.
+
+### Hallazgos adicionales descubiertos durante la auditoría (no flageados por el review)
+- **MITRE incorrecto en `inventario/03-analisis-vulnerabilidades/web/INDEX.md`**: el INDEX seguía mostrando T1185 para CSRF y T1213 para IDOR aunque los archivos de detalle ya estaban corregidos. Síntoma del review original que se quedó en archivos individuales sin auditar índices. Corregido a T1190 en ambos.
+- **4 archivos más con compound values en Fase usando separadores antiguos** que el review no flagueó (sólo había revisado 2 archivos):
+  - `02-enumeracion/servicios/enumeracion-docker.md`: `Enumeración / Explotación` → `Enumeración, Explotación`.
+  - `02-enumeracion/servicios/enumeracion-kubernetes.md`: ídem.
+  - `06-frameworks-herramientas/burp-suite/configuracion-uso-avanzado.md`: `Análisis de Vulnerabilidades | Explotación` → coma.
+  - `06-frameworks-herramientas/metasploit/metasploit-avanzado.md`: 3 fases listadas con `|` → coma.
+- **1 archivo con paréntesis explicativos en Plataforma** que el review no flagueó:
+  - `02-enumeracion/servicios/enumeracion-ldap.md`: `Multi (principalmente Windows/Active Directory)` → `Multi`. La explicación de uso primario en Windows movida a Descripción.
+
+### Patrón observado en el review
+El review externo identificó correctamente 6 categorías de inconsistencia. Tras auditar contra el repo: 5 fixes factuales correctos, 1 caso (compound values en Fase/Plataforma) donde la "violación del template" era en realidad un síntoma de que el template no soportaba la realidad. Lección operacional: **antes de normalizar la realidad al template, comprobar si el template captura correctamente los casos legítimos**. La iteración debe ser bidireccional.
+
+Adicionalmente, **el review tuvo coverage parcial**: encontró 2/6 archivos con compound values pero se le escaparon 4 más, y no auditó los INDEX.md (donde quedaron 2 MITRE incorrectos). Lección de meta-review: cuando un agente flaguea casos representativos de un patrón, validar que los flageados son exhaustivos antes de cerrar la auditoría. La auditoría de mi propio review encontró el doble de instancias del mismo patrón.
+
+### Segunda iteración de review residual
+Tras los fixes anteriores, segundo review crítico identificó tres hallazgos residuales:
+- **TEMPLATE.md no listaba `Fundamentos` ni `Forense y DFIR` como valores válidos de Fase**, aunque archivos legítimos los usan (07-fundamentos, 08-forense-dfir). Solución: ampliar la lista en línea 7 y la nota 8 del comentario para reconocer las dos categorías de soporte como valores de Fase legítimos. Documentado con ejemplos.
+- **AGENTS.md tenía un ejemplo de formato sin acentos** (`Tecnica`, `Descripcion`, `Clasificacion`, `Basica`) violando la propia regla de ortografía declarada dos líneas antes. El ejemplo además usaba `|` para compound Fase, sintaxis ya prohibida por el template. Reescrito completo con acentos correctos y nota explícita sobre compound con coma + perfil "contenido conceptual" con secciones reducidas.
+- **Instrucciones del agente `revisor` y `redactor` decían "7 secciones del formato"** sin reconocer que el TEMPLATE ahora permite secciones reducidas para contenido conceptual. Reescrito para diferenciar perfiles ("técnicas concretas: 7 secciones; conceptual: 4 obligatorias + custom") y añadir 2 reglas de revisión nuevas (Fase con compound legal, ortografía del cuerpo).
+
+Hallazgo extra de mi auditoría del review residual (no flageado por el agente): **AGENTS.md tenía 23+ palabras sin acentos repartidas por todo el archivo**, no sólo en el ejemplo de la línea 189. El review se quedó en el caso más visible. Aplicado el script sed completo, además de fixes manuales en `Edicion`, `Estandar`, `Tactica`, `taxonomia`, `precision`, `sintacticamente`, `publicacion`, `logicas`. AGENTS.md ahora 100% en español con ortografía correcta.
+
+Patrón confirmado de la sesión: cada review identifica menos del 100% de instancias del patrón que detecta. **La auditoría tras un review siempre debe extender el patrón flageado a archivos no mencionados.**
+
+## [2026-05-03] — Sesión 17 (Lab PortSwigger XSS stored en onclick con bypass via HTML entity)
+
+Cuarto lab de la serie XSS Contexts y primer **stored** del path. Cambio de tipo (reflected → stored) y de contexto (literal JS dentro de `<script>` → atributo HTML event handler `onclick`). Las protecciones declaradas son las mismas que el lab "sq + backslash escaped" reflected (`<>"` HTML-encoded, `'` escapado, `\` escapado), pero el contexto destino abre una asimetría nueva: el atributo HTML pasa por **HTML decoding antes de pasar al motor JS**, así que entidades como `&apos;` aterrizan en el filtro como texto inocuo (seis chars sin `'` literal) y el navegador las decodifica a `'` viva justo antes de ejecutar. El bypass es estructuralmente idéntico al de SQLi WAF via XML hex entities (sesión 13). Solved al primer intento del payload `http://foo?&apos;-alert(1)-&apos;`.
+
+### Añadido
+- **`learning/portswigger/stored-xss-onclick-html-entity-bypass/`** — décimo writeup de `learning/portswigger/`, cuarto de XSS:
+    - `writeup.md` (8 secciones): contexto exacto del reflejo (Website URL del comentario aterriza dentro de `tracker.track('...')` en `onclick` de un `<a id="author">`), explicación de la asimetría doble-decoding (HTML attribute decoding precede al parser JS, filtro server-side opera sobre input crudo), sondeo único confirmando que `&apos;` pasa intacto el filtro y aparece como `'` literal en el DOM, payload completo con trace paso a paso (filtro, HTML emitido, HTML decoding, parsing JS), explicación del operador `-` como elección minimalista para evaluar `alert` como subexpresión sin SyntaxError (vs alternativas `||`/`,`/backticks), contramedidas con énfasis en el patrón estructural correcto (atributo `data-*` + `addEventListener`, NO event handler inline), orden correcto de escape (HTML-decode antes de escape JS para cerrar la asimetría), validación de URL como tipo, CSP sin `'unsafe-inline'`, allow-list vs deny-list. Cross-link al writeup hermano del SQLi WAF bypass que usa el mismo principio.
+    - `solved.png`: confirmación visual del lab solved.
+
+### Patrón transversal observado
+- **Asimetría parser/encoding** se confirma como vector recurrente de bypass cross-vulnerabilidad: SQLi via XML hex entities (sesión 13), XSS via HTML entities en event handler (este lab). El principio: el filtro inspecciona un formato, un parser intermedio lo decodifica antes de llegar al ejecutor, y el filtro nunca ve los meta-caracteres en su forma activa. Defensa común: normalizar el input al formato del ejecutor antes de aplicar reglas de filtrado.
+
+## [2026-05-02] — Sesión 16 (Lab PortSwigger XSS JS string con angle/double-quotes encoded y single-quotes escaped)
+
+Tercer lab de la serie XSS Contexts y complemento exacto del anterior. Mismo contexto JS-en-HTML (`var searchTerms = '...'` dentro de un `<script>` inline), pero con set de escapes invertido: `<>"` HTML-encoded (cierra la salida vía `</script>`), `'` escapado (cierra la salida directa), pero **`\` no escapado** (abre la ruta del bypass de backslash que el lab anterior cerraba). Solved al primer intento del payload. Los dos labs juntos demuestran el principio "escape consciente del contexto que cubre todos los meta-caracteres".
+
+### Añadido
+- **`learning/portswigger/reflected-xss-js-string-angle-quotes-encoded/`** — noveno writeup de `learning/portswigger/`, tercero de la categoría XSS:
+    - `writeup.md` (8 secciones): tabla comparativa con el lab "sq + backslash escaped" mostrando cómo cada lab cierra justo la salida que el otro abre, los tres sondeos atómicos (`<` HTML-encoded, `'` escapado a `\'`, `\` literal sin duplicar), explicación detallada del bypass de "escape de escape" (atacante prepende `\` antes de su `'`, el filtro mete su propio `\` de escape, los dos backslashes se neutralizan entre sí en el parser JS dejando libre la `'` siguiente para cerrar el string), trace token a token del parser JS sobre `'\\';alert(1)//'`, variante oficial de PortSwigger con operador `-` en vez de `;` y por qué ambas funcionan, contramedidas con énfasis en el orden correcto de escape (primero `\`, después `'`/`"`) y el patrón idiomático `JSON.parse(json_encode(input))`, anti-patrón observado en el lab (escapar `'` sin escapar primero `\`).
+    - `solved.png`: confirmación visual del lab solved.
+
+## [2026-05-02] — Sesión 15 (Lab PortSwigger XSS en JS string con ' y \\ escapados)
+
+Segundo lab de la serie XSS Contexts: reflejo dentro de `var searchTerms = '...'` en un bloque `<script>` inline, con escape activo de `'` y `\`. Solved al primer intento del payload. Valor pedagógico: la idea de **dos parsers en serie** (HTML + JS) que se atacan en capas distintas. El filtro escapa la sintaxis del parser interno (JS string) pero deja intacta la del externo (HTML script data state), lo que permite romper el bloque `<script>` con `</script>` literal antes de que el motor JS vea siquiera el contenido. Primer writeup del repo escrito **sin em-dashes** por preferencia explícita del usuario.
+
+### Añadido
+- **`learning/portswigger/reflected-xss-js-string-sq-backslash-escaped/`** — octavo writeup en `learning/portswigger/`, segundo de la categoría XSS:
+    - `writeup.md` (8 secciones): contexto exacto del reflejo (`<script>` inline con `var searchTerms = '...'` + `document.write` que renderiza un `tracker.gif`), sondeos atómicos confirmando los dos escapes (`'` a `\'`, `\` a `\\`), tabla de payloads "desde dentro" demostrando por qué el doble escape cierra todas las salidas internas (incluido el bypass clásico `\';...//` que neutraliza el escape de comilla con un backslash propio cuando sólo hay protección de `'`), explicación detallada del modelo "dos parsers en serie" (HTML "script data state" del WHATWG vs motor JS) y la asimetría que se explota (filtro server-side escapa lo que parece sintaxis JS, deja intacto lo que es sintaxis HTML del bloque contenedor), trace paso a paso del parser HTML procesando `</script><script>alert(1)</script>` (cierra primer script, motor JS recibe string sin cerrar y lanza SyntaxError silencioso, segundo script ejecuta alert), visualización ASCII del corte HTML/JS, contramedidas con foco en patrones idiomáticos (data-* attributes + dataset, JSON.parse con json_encode, escape combinado JS+HTML escapando `<` y `>` además de `'` y `\`) más nota sobre el anti-patrón de elegir una capa de escape en vez de combinar las dos.
+    - `solved.png`: confirmación visual del lab solved.
+
+### Cambio de estilo
+- Primer writeup que evita em-dashes (`—`) por preferencia del usuario, documentada en su `CLAUDE.md` global. Los seis writeups previos los siguen usando, no se tocaron retroactivamente.
+
+## [2026-05-02] — Sesión 14 (Lab PortSwigger XSS canonical link tag — primer lab de XSS)
+
+Cambio de familia: de SQLi a **XSS reflejado en contexto de atributo HTML**. Primer lab de la serie XSS Contexts. Solved al primer intento del payload, pero el valor pedagógico estuvo en el diagnóstico previo: **una rareza del Elements panel de Chrome** ocultó que el `href` del `<link rel="canonical">` se delimitaba con apóstrofos en el HTML crudo del servidor. La interpretación correcta sólo aparece con View Source / Network Response.
+
+### Añadido
+- **`learning/portswigger/reflected-xss-canonical-link-tag/`** — séptimo writeup en `learning/portswigger/`, primero de la categoría XSS:
+    - `writeup.md` (8 secciones): objetivo y restricciones del contexto (`<link>` en `<head>`, filtro escapa `<>` pero no `'`), reconocimiento con foco en la **trampa del Elements panel de Chrome** (renormaliza atributos a `"..."` y oculta el delimitador real de `'...'` del servidor), recomendación de View Source/Network Response como ground-truth para XSS de atributo, diseño del payload alrededor de **`accesskey` + `onclick`** como par para activar elementos no visibles vía atajo de teclado (tabla de combinaciones por OS/navegador), explicación detallada del parsing apóstrofo a apóstrofo del HTML crudo (cada `'` como toggle abrir/cerrar atributo, 6 apóstrofos → 3 atributos legítimos en el DOM final), payload `'accesskey='x'onclick='alert(1)`, contramedidas con foco en output encoding context-aware (no basta `<>`, hay que escapar el delimitador del atributo) + CSP estricta + no reflejar query string en canonical URLs.
+    - `solved.png`: confirmación visual del lab solved.
+
+
 
 Sesión continuando la serie SQLi de PortSwigger: cambio de tipo de lab de blind a **UNION-based con WAF + bypass via XML hex entities**. Solved al primer intento. Aprovechamos para añadir al inventario dos huecos nuevos: la distinción numeric/string SQLi y la categoría completa de WAF bypass (encoding asimétrico + bypasses a nivel SQL).
 

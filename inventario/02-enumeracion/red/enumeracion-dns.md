@@ -10,19 +10,20 @@ El DNS traduce nombres de dominio a direcciones IP y almacena registros de infra
 - **Dificultad**: Básica
 
 ## Herramientas
-- **dnsrecon** — reconocimiento DNS automatizado (lookups, transferencia de zona, brute force)
+- **dnsrecon** — reconocimiento DNS automatizado (lookups, transferencia de zona, brute force, cache snooping)
 - **nslookup** — consulta DNS básica interactiva y en batch
 - **dig** — consultas DNS avanzadas con salida detallada
 - **gobuster** (modo dns) — fuerza bruta de subdominios
-- **amass** — enumeración exhaustiva de subdominios con múltiples fuentes
-- **subfinder** — enumeración rapida de subdominios vía APIs pasivas
+- **amass** — enumeración exhaustiva de subdominios con múltiples fuentes y modo `-active`
+- **subfinder** — enumeración rápida de subdominios vía APIs pasivas
+- **ldns-walk** — herramienta especializada en NSEC walking (zonas DNSSEC mal configuradas)
 - **dnsdumpster.com** — enumeración pasiva vía servicio web
 
 ## Comandos / Ejemplos
 
-### Consultas DNS basicas
+### Consultas DNS básicas
 ```bash
-# nslookup - resolucion directa
+# nslookup - resolución directa
 nslookup facebook.com
 nslookup -type=MX target.com    # registros de correo
 nslookup -type=NS target.com    # nameservers
@@ -32,7 +33,7 @@ dig target.com
 dig target.com MX               # registros MX
 dig target.com NS               # nameservers
 dig +short target.com           # solo la IP
-dig @ns1.target.com target.com  # consulta a nameserver especifico
+dig @ns1.target.com target.com  # consulta a nameserver específico
 ```
 
 ### Transferencia de zona (AXFR)
@@ -53,7 +54,7 @@ host -l target.com ns1.target.com
 dnsrecon -r 127.0.0.0/24 -n 192.168.138.130 -d blah
 # -r: rango IP, -n: servidor DNS, -d: dominio
 
-# Enumeracion estandar del dominio
+# Enumeración estándar del dominio
 dnsrecon -d target.com
 
 # Brute force de subdominios
@@ -65,15 +66,35 @@ dnsrecon -d target.com -D /usr/share/wordlists/dnsmap.txt -t brt
 # gobuster - DNS bruteforce
 gobuster dns -d target.com -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-5000.txt
 
-# amass - enumeracion exhaustiva (multiples fuentes + brute force)
+# amass - enumeración exhaustiva (múltiples fuentes + brute force)
 amass enum -d tesla.com -v
 amass enum -d target.com -brute -w wordlist.txt
 
-# subfinder - enumeracion rapida via APIs pasivas
+# subfinder - enumeración rápida vía APIs pasivas
 subfinder -d tesla.com
 # Pipeline con httpx para verificar activos vivos:
 cat subfinder.txt | httpx | sort -u > activos_vivos.txt
 ```
+
+### Técnicas avanzadas
+
+#### NSEC Walking (zonas DNSSEC mal configuradas)
+```bash
+ldns-walk @ns1.target.com target.com
+```
+Si DNSSEC está activo pero usa registros NSEC en lugar de NSEC3, los registros encadenan los nombres existentes en orden alfabético, permitiendo "caminar" la zona y descubrir todos los registros existentes. NSEC3 mitiga esto usando hashes.
+
+#### DNS Cache Snooping
+```bash
+dnsrecon -t snoop -n 8.8.8.8 -D subdomains.txt
+```
+Verifica si el servidor DNS objetivo (aquí `8.8.8.8`) tiene en caché los dominios de la lista. Un hit indica que el dominio ha sido resuelto recientemente por usuarios de ese servidor DNS, revelando información sobre qué dominios visitan los usuarios de la organización. Útil contra DNS resolvers internos accesibles externamente.
+
+#### Amass en modo activo
+```bash
+amass enum -active -d target.com -ip -src
+```
+La opción `-active` añade a la enumeración pasiva: brute force de subdominios, extracción de SAN de certificados TLS de los servicios encontrados, intentos de transferencia de zona. Es la enumeración DNS más completa disponible en una sola herramienta.
 
 ### Herramientas online (pasivas)
 - `https://dnsdumpster.com/` — mapa DNS del dominio sin interacción directa
@@ -98,6 +119,9 @@ cat subfinder.txt | httpx | sort -u > activos_vivos.txt
 - Separar DNS interno (intranet) de DNS externo (no exponer registros internos)
 - Monitorear consultas DNS anormales (alto volumen de NXDOMAIN puede indicar brute force)
 - Implementar RPZ (Response Policy Zones) para bloquear dominios maliciosos
+- **NSEC3 en lugar de NSEC** para zonas DNSSEC, mitigando el walking mediante hashes de los nombres
+- **Limitar recursión** en el servidor DNS para no permitir consultas recursivas desde el exterior (mitiga Cache Snooping)
+- **Rate limiting** por IP origen para mitigar fuerza bruta de subdominios
 
 ## Referencias
 - Allen, M. (2022). *Mastering Kali Linux for Advanced Penetration Testing* (4th ed.). Packt Publishing.

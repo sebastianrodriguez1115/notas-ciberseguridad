@@ -5,7 +5,7 @@ El Cross-Site Request Forgery (CSRF) es una vulnerabilidad que obliga a un usuar
 
 ## Clasificación
 - **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1185 (Browser Session Hijacking)
+- **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
 - **Plataforma**: Web
 - **Dificultad**: Intermedia
 

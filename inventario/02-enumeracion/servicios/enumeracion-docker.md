@@ -4,7 +4,7 @@
 Docker es una plataforma de contenedores líder. Cuando el Docker Daemon (dockerd) se configura para aceptar conexiones remotas (por defecto en el puerto 2375 para HTTP y 2376 para HTTPS), se convierte en un vector crítico si no está protegido con TLS. La enumeración de Docker se enfoca en verificar si la API está expuesta sin autenticación, lo que permitiría a un atacante listar contenedores, imágenes, volúmenes e incluso ejecutar comandos con privilegios de root en el host (Privilege Escalation).
 
 ## Clasificación
-- **Fase**: Enumeración / Explotación
+- **Fase**: Enumeración, Explotación
 - **MITRE ATT&CK**: 
     - T1046 (Network Service Discovery)
     - T1613 (Container Administration Command)

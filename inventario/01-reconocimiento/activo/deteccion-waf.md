@@ -1,37 +1,37 @@
-# Deteccion de WAF (Web Application Firewall)
+# Detección de WAF (Web Application Firewall)
 
-## Descripcion
-Identificacion de Web Application Firewalls que protegen las aplicaciones web del objetivo. Segun *Gray Hat Hacking*, la deteccion no solo sirve para identificar el producto, sino para determinar el **umbral de bloqueo** y los metodos de evasion (bypass). Tecnicas avanzadas incluyen el uso de **encodings no convencionales** (ej: IBM037) y la manipulacion del campo `Transfer-Encoding: chunked` para confundir al WAF.
+## Descripción
+Identificación de Web Application Firewalls que protegen las aplicaciones web del objetivo. Según *Gray Hat Hacking*, la detección no solo sirve para identificar el producto, sino para determinar el **umbral de bloqueo** y los métodos de evasión (bypass). Técnicas avanzadas incluyen el uso de **encodings no convencionales** (ej: IBM037) y la manipulación del campo `Transfer-Encoding: chunked` para confundir al WAF.
 
-## Clasificacion
+## Clasificación
 - **Fase**: Reconocimiento
 - **MITRE ATT&CK**: T1595 (Active Scanning)
 - **Plataforma**: Web
 - **Dificultad**: Intermedia
 
 ## Herramientas
-- **wafw00f** — Herramienta lider en deteccion e identificacion por huellas dactilares (cookies, headers, respuestas)
-- **whatwaf** — Deteccion de WAF que propone payloads de bypass especificos
-- **nmap (script http-waf-detect)** — Deteccion de WAF mediante NSE scripts
+- **wafw00f** — Herramienta lider en detección e identificación por huellas dactilares (cookies, headers, respuestas)
+- **whatwaf** — Detección de WAF que propone payloads de bypass específicos
+- **nmap (script http-waf-detect)** — Detección de WAF mediante NSE scripts
 
 ## Comandos / Ejemplos
 
-### Deteccion Basica de WAF con wafw00f
+### Detección Básica de WAF con wafw00f
 ```bash
 wafw00f https://target.com
 ```
 
-### Deteccion Manual por Cookies y Headers (Libros de referencia)
+### Detección Manual por Cookies y Headers (Libros de referencia)
 - **Cloudflare**: Presencia del header `CF-RAY`, header `server: cloudflare` y paginas de challenge JavaScript.
 - **Akamai**: Headers que comienzan con `X-Akamai-`.
 - **Sucuri**: Headers como `X-Sucuri-ID` o `X-Sucuri-Cache`.
 
-### Deteccion via Timing Attack (Silenciosa)
+### Detección via Timing Attack (Silenciosa)
 Observar aumentos en el tiempo de respuesta al enviar payloads que requieren procesamiento intensivo en el WAF (ej: payloads complejos de Regex), incluso si la respuesta final es un 403.
 
-### Intento de Evasion via Chunked Transfer
+### Intento de Evasión via Chunked Transfer
 ```bash
-# Ejemplo de peticion HTTP manual
+# Ejemplo de petición HTTP manual
 POST /search HTTP/1.1
 Host: target.com
 Transfer-Encoding: chunked
@@ -42,11 +42,11 @@ A
 B
 0
 ```
-Esta tecnica puede evadir WAFs que no reconstruyen el cuerpo de la peticion antes de realizar la inspeccion.
+Esta técnica puede evadir WAFs que no reconstruyen el cuerpo de la petición antes de realizar la inspección.
 
 ## Contramedidas
-- **Desactivar Headers de Identificacion**: Configurar el WAF para no añadir sus propios headers a la respuesta.
-- **Normalizar Respuestas de Bloqueo**: Utilizar paginas de error 403 genericas.
+- **Desactivar Headers de Identificación**: Configurar el WAF para no añadir sus propios headers a la respuesta.
+- **Normalizar Respuestas de Bloqueo**: Utilizar paginas de error 403 genéricas.
 - **Limitar Rate de Peticiones**: Para evitar que atacantes mapeen las reglas de bloqueo mediante ataques de fuerza bruta.
 
 ## Referencias

@@ -58,6 +58,7 @@ Disable-ADAccount -Identity "usuario_comprometido"
 ```
 
 ## Referencias
+- Johansen, G. (2017). *Digital Forensics and Incident Response*. Packt Publishing.
 - SANS Institute. (s.f.). *Incident Management and Response*. https://www.sans.org/incident-response/
 - Luttgens, J., Pepe, M., & Hollebeek, K. (2014). *Incident Response & Computer Forensics* (3rd ed.). McGraw-Hill Education.
 - MITRE Corporation. (2024). *Incident Response Plan*. https://attack.mitre.org/resources/incident-response-plan/

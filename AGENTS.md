@@ -1,4 +1,4 @@
-# Inventario de Tecnicas de Ciberseguridad - AGENTS.md
+# Inventario de Técnicas de Ciberseguridad - AGENTS.md
 
 ## Protocolo de Interacción (Uso del Agente)
 
@@ -12,13 +12,19 @@ Para cualquier consulta o tarea solicitada por el usuario, el agente debe seguir
 
 ## Objetivo
 
-Construir un inventario estructurado y completo de tecnicas de ciberseguridad, organizado por fases del ciclo de penetration testing, cubriendo desde reconocimiento hasta post-explotacion.
+Construir un inventario estructurado y completo de técnicas de ciberseguridad, organizado por fases del ciclo de penetration testing, cubriendo desde reconocimiento hasta post-explotación.
 
-## Fuentes de Informacion
+## Fuentes de Información
 
 ### 1. `inventario/` — Conocimiento estructurado del proyecto (fuente canónica)
 
-Taxonomía de **165 archivos Markdown** organizados por fases de pentest (`01-reconocimiento` → `08-forense-dfir`, más `06-frameworks-herramientas` y `07-fundamentos` como soportes). Cada archivo sigue `inventario/TEMPLATE.md` (Descripción → Clasificación → Herramientas → Comandos → Contramedidas → Referencias) y se navega vía la red jerárquica de `INDEX.md`:
+Taxonomía de **165 archivos Markdown** (124 técnicas + 40 INDEX + 1 TEMPLATE) organizados por fases de pentest (`01-reconocimiento` → `08-forense-dfir`, más `06-frameworks-herramientas` y `07-fundamentos` como soportes). Cada archivo sigue `inventario/TEMPLATE.md` con dos perfiles de uso:
+
+- **Técnicas y herramientas concretas**: usan las 6 secciones obligatorias (Descripción → Clasificación → Herramientas → Comandos / Ejemplos → Contramedidas → Referencias).
+- **Contenido conceptual o metodológico** (modelos teóricos como OSI/TCP-IP, ciclos como PICERL, marcos teóricos): secciones obligatorias reducidas (Título → Descripción → Clasificación → Referencias). Las secciones Herramientas, Comandos / Ejemplos y Contramedidas son opcionales y pueden sustituirse por secciones propias relevantes al tema.
+- **Valores compuestos en Fase**: las técnicas o herramientas que genuinamente cruzan fases (BloodHound, enumeración Kerberos) pueden listar varios valores separados por coma+espacio (ej. `Reconocimiento, Post-Explotación`). Plataforma sigue siendo estricta: un valor o `Multi`.
+
+La navegación se hace vía la red jerárquica de `INDEX.md`:
 
 - **Tier 1 (root)** — `inventario/INDEX.md`: TOC maestro de las 8 fases.
 - **Tier 2 (fase)** — `inventario/0X-fase/INDEX.md`: descripción de la fase + lista de subcategorías + backlink al maestro.
@@ -26,7 +32,7 @@ Taxonomía de **165 archivos Markdown** organizados por fases de pentest (`01-re
 
 Esta es la fuente de verdad del proyecto y debe consultarse **antes** que cualquier fuente externa.
 
-> **Nota histórica**: el inventario fue bootstrapeado en 2025 a partir de `notas-md/` (export de Notion con ~222 archivos: INE Courses, HNotes, Burp Suite Labs, TryHackMe). Ese export ya no se mantiene en el repo — el contenido relevante fue absorbido al inventario y las referencias originales en los archivos `analisis-*.md`/etc. apuntando a `notas-md/...` se eliminaron en una pasada de consistencia el 2026-04-28. Al investigar coverage de un tema, partir del inventario actual.
+> **Nota histórica**: el inventario fue bootstrapeado en 2025 a partir de `notas-md/` (export de Notion con ~222 archivos: INE Courses, HNotes, Burp Suite Labs, TryHackMe). Ese export ya no se mantiene en el repo — el contenido relevante fue absorbido al inventario y las referencias originales en los archivos `análisis-*.md`/etc. apuntando a `notas-md/...` se eliminaron en una pasada de consistencia el 2026-04-28. Al investigar coverage de un tema, partir del inventario actual.
 
 ### 2. `referencias/` — Libros de referencia (34 PDFs)
 
@@ -71,57 +77,57 @@ Esta es la fuente de verdad del proyecto y debe consultarse **antes** que cualqu
 
 #### Frameworks y Taxonomias de Ataques
 
-| Recurso | URL | Descripcion |
+| Recurso | URL | Descripción |
 |---------|-----|-------------|
-| **MITRE ATT&CK** | https://attack.mitre.org/ | Base de conocimiento de tacticas y tecnicas adversarias basada en observaciones reales. Estructura matriz por fases (Initial Access → Impact). Referencia principal para mapear tecnicas. |
-| **MITRE ATLAS** | https://atlas.mitre.org/ | Extension de ATT&CK para ataques contra sistemas de IA/ML. |
+| **MITRE ATT&CK** | https://attack.mitre.org/ | Base de conocimiento de tácticas y técnicas adversarias basada en observaciones reales. Estructura matriz por fases (Initial Access → Impact). Referencia principal para mapear técnicas. |
+| **MITRE ATLAS** | https://atlas.mitre.org/ | Extensión de ATT&CK para ataques contra sistemas de IA/ML. |
 | **CAPEC** | https://capec.mitre.org/ | Common Attack Pattern Enumeration and Classification. Catalogo de patrones de ataque con enfoque en aplicaciones. Complementa ATT&CK a nivel de implementacion. |
 | **CWE** | https://cwe.mitre.org/ | Common Weakness Enumeration. Lista de debilidades de software/hardware que pueden ser explotadas. |
 | **Cyber Kill Chain** | https://www.lockheedmartin.com/en-us/capabilities/cyber/cyber-kill-chain.html | Modelo lineal de 7 fases de un ciberataque (Lockheed Martin). |
 
-#### Estandares de Seguridad Web
+#### Estándares de Seguridad Web
 
-| Recurso | URL | Descripcion |
+| Recurso | URL | Descripción |
 |---------|-----|-------------|
-| **OWASP Top 10** | https://owasp.org/www-project-top-ten/ | Las 10 vulnerabilidades web mas criticas. Referencia fundamental para seguridad de aplicaciones. |
-| **OWASP Web Security Testing Guide (WSTG)** | https://owasp.org/www-project-web-security-testing-guide/ | Guia completa de testing de seguridad web con metodologia paso a paso. |
+| **OWASP Top 10** | https://owasp.org/www-project-top-ten/ | Las 10 vulnerabilidades web mas críticas. Referencia fundamental para seguridad de aplicaciones. |
+| **OWASP Web Security Testing Guide (WSTG)** | https://owasp.org/www-project-web-security-testing-guide/ | Guía completa de testing de seguridad web con metodología paso a paso. |
 | **OWASP API Security Top 10** | https://owasp.org/API-Security/ | Top 10 riesgos de seguridad en APIs. |
 | **OWASP Mobile Top 10** | https://owasp.org/www-project-mobile-top-10/ | Top 10 riesgos de seguridad en aplicaciones moviles. |
 | **OWASP Cheat Sheet Series** | https://cheatsheetseries.owasp.org/ | Cheat sheets de contramedidas para desarrolladores. |
 
 #### Bases de Datos de Vulnerabilidades y Exploits
 
-| Recurso | URL | Descripcion |
+| Recurso | URL | Descripción |
 |---------|-----|-------------|
 | **NVD (National Vulnerability Database)** | https://nvd.nist.gov/ | Repositorio gubernamental de EE.UU. con datos de vulnerabilidades (SCAP). Incluye scoring CVSS. |
-| **CVE Program** | https://www.cve.org/ | Identificadores estandar para vulnerabilidades conocidas. |
-| **CVE Details** | https://www.cvedetails.com/ | Agregador de CVEs con busqueda avanzada, estadisticas y feeds. |
+| **CVE Program** | https://www.cve.org/ | Identificadores estándar para vulnerabilidades conocidas. |
+| **CVE Details** | https://www.cvedetails.com/ | Agregador de CVEs con busqueda avanzada, estadísticas y feeds. |
 | **Exploit-DB** | https://www.exploit-db.com/ | Base de datos de exploits, shellcode y papers de seguridad. Mantenida por OffSec. |
 | **CISA KEV** | https://www.cisa.gov/known-exploited-vulnerabilities-catalog | Catalogo de vulnerabilidades activamente explotadas (Known Exploited Vulnerabilities). |
 
 #### Knowledge Bases y Cheatsheets Ofensivos
 
-| Recurso | URL | Descripcion |
+| Recurso | URL | Descripción |
 |---------|-----|-------------|
-| **HackTricks** | https://hacktricks.wiki/ | Wiki extensiva de tecnicas de hacking, CTFs, privilege escalation, AD attacks. Recurso central para pentesting. |
+| **HackTricks** | https://hacktricks.wiki/ | Wiki extensiva de técnicas de hacking, CTFs, privilege escalation, AD attacks. Recurso central para pentesting. |
 | **PayloadsAllTheThings** | https://github.com/swisskyrepo/PayloadsAllTheThings | Repositorio de payloads y bypasses para seguridad web y pentesting. Organizado por tipo de vulnerabilidad. |
 | **GTFOBins** | https://gtfobins.github.io/ | Binarios Unix que permiten bypass de restricciones locales (sudo, SUID, capabilities). Esencial para privesc Linux. |
 | **LOLBAS** | https://lolbas-project.github.io/ | Living Off The Land Binaries, Scripts and Libraries para Windows. Equivalente de GTFOBins para Windows. |
-| **LOLAD** | https://lolad-project.github.io/ | Living Off The Land in Active Directory. Tecnicas de explotacion de AD con herramientas nativas. |
-| **RevShells** | https://www.revshells.com/ | Generador de reverse shells en multiples lenguajes. |
-| **CyberChef** | https://gchq.github.io/CyberChef/ | Herramienta web para encoding/decoding, crypto, analisis de datos. |
+| **LOLAD** | https://lolad-project.github.io/ | Living Off The Land in Active Directory. Técnicas de explotación de AD con herramientas nativas. |
+| **RevShells** | https://www.revshells.com/ | Generador de reverse shells en múltiples lenguajes. |
+| **CyberChef** | https://gchq.github.io/CyberChef/ | Herramienta web para encoding/decoding, crypto, análisis de datos. |
 
 #### Metodologias de Pentesting
 
-| Recurso | URL | Descripcion |
+| Recurso | URL | Descripción |
 |---------|-----|-------------|
 | **PTES** | http://www.pentest-standard.org/ | Penetration Testing Execution Standard. Define el ciclo completo de un pentest. |
-| **OSSTMM** | https://www.isecom.org/OSSTMM.3.pdf | Open Source Security Testing Methodology Manual. Metodologia peer-reviewed para security testing. |
-| **NIST SP 800-115** | https://csrc.nist.gov/publications/detail/sp/800-115/final | Guia tecnica de NIST para pruebas de seguridad. Estandar para entornos regulados. |
+| **OSSTMM** | https://www.isecom.org/OSSTMM.3.pdf | Open Source Security Testing Methodology Manual. Metodología peer-reviewed para security testing. |
+| **NIST SP 800-115** | https://csrc.nist.gov/publications/detail/sp/800-115/final | Guía técnica de NIST para pruebas de seguridad. Estándar para entornos regulados. |
 
 #### Compliance y Defensive Frameworks
 
-| Recurso | URL | Descripcion |
+| Recurso | URL | Descripción |
 |---------|-----|-------------|
 | **NIST CSF** | https://www.nist.gov/cyberframework | Cybersecurity Framework (Identify, Protect, Detect, Respond, Recover). |
 | **MITRE D3FEND** | https://d3fend.mitre.org/ | Base de conocimiento de contramedidas defensivas. Complemento defensivo de ATT&CK. |
@@ -138,22 +144,22 @@ inventario/
 ├── 01-reconocimiento/
 │   ├── pasivo/              # OSINT, Shodan, Censys, Google Dorking, certificados
 │   └── activo/              # nmap, dnsrecon, port scanning, service detection
-├── 02-enumeracion/
-│   ├── web/                 # HTTP, directorios, tecnologias, CMS
+├── 02-enumeración/
+│   ├── web/                 # HTTP, directorios, tecnologías, CMS
 │   ├── red/                 # SMB, SNMP, NFS, DNS
 │   ├── servicios/           # SSH, FTP, MySQL, MSSQL, RDP, WinRM
 │   └── fuzzing/             # ffuf, gobuster, wordlists
-├── 03-analisis-vulnerabilidades/
+├── 03-análisis-vulnerabilidades/
 │   ├── scanning/            # Nessus, OpenVAS, nmap scripts
 │   ├── web/                 # SQLi, XSS, CSRF, CORS, SSRF, File Inclusion
 │   └── sistema/             # CVEs conocidos, misconfigurations
-├── 04-explotacion/
+├── 04-explotación/
 │   ├── web/                 # inyecciones, auth bypass, deserialization
 │   ├── red/                 # MITM, relay attacks, protocol abuse
 │   ├── sistema/             # buffer overflow, kernel exploits, shellshock, eternalblue
 │   ├── client-side/         # payloads, msfvenom, PE injection, phishing
 │   └── credenciales/        # brute force, hash cracking, password spraying
-├── 05-post-explotacion/
+├── 05-post-explotación/
 │   ├── privilege-escalation/
 │   │   ├── linux/           # SUID, cron, capabilities, kernel exploits
 │   │   └── windows/         # token manipulation, UAC bypass, services
@@ -166,12 +172,12 @@ inventario/
 │   ├── powershell-empire/   # agents, stagers, modules
 │   └── otros/               # netcat, searchsploit, CyberChef, pspy
 ├── 07-fundamentos/
-│   ├── criptografia/        # hashing, encryption, PKI, JWT
+│   ├── criptografía/        # hashing, encryption, PKI, JWT
 │   ├── redes/               # OSI, TCP/IP, subnetting, firewalls
 │   ├── sistemas/            # Linux commands, Windows commands, AD
 │   └── compliance/          # CVSS, GRC frameworks
 └── 08-forense-dfir/
-    ├── analisis-forense/    # disk, memory, mobile, network forensics
+    ├── análisis-forense/    # disk, memory, mobile, network forensics
     ├── incident-response/   # containment, eradication, recovery
     └── malware-analysis/    # static, dynamic, yara rules
 ```
@@ -180,39 +186,45 @@ inventario/
 
 Todo el contenido del inventario debe estar escrito en español con ortografía correcta, incluyendo acentos (á, é, í, ó, ú), eñes (ñ) y signos de puntuación invertidos (¿, ¡) donde corresponda. Ejemplos: "Descripción", "Clasificación", "Técnica", "contraseña", "enumeración", "gestión", "configuración", "básica", etc.
 
-## Formato de cada Tecnica
+## Formato de cada Técnica
 
-Cada tecnica del inventario se documenta como un archivo Markdown siguiendo el template de referencia en **`inventario/TEMPLATE.md`**. Ese archivo contiene la estructura exacta, ejemplos de formato para cada campo y notas detalladas para el redactor en un bloque de comentario HTML al final. **Antes de crear o editar cualquier archivo del inventario, leer el template completo.**
+Cada técnica del inventario se documenta como un archivo Markdown siguiendo el template de referencia en **`inventario/TEMPLATE.md`**. Ese archivo contiene la estructura exacta, ejemplos de formato para cada campo y notas detalladas para el redactor en un bloque de comentario HTML al final. **Antes de crear o editar cualquier archivo del inventario, leer el template completo.**
 
-La estructura resumida es:
+La estructura resumida (perfil "técnica concreta") es:
 
 ```markdown
-# Nombre de la Tecnica
+# Nombre de la Técnica
 
-## Descripcion
-Que es y para que se usa.
+## Descripción
+Qué es y para qué se usa.
 
-## Clasificacion
-- **Fase**: Reconocimiento | Enumeracion | Explotacion | Post-Explotacion | ...
-- **MITRE ATT&CK**: ID de la tecnica si aplica (ej. T1595)
+## Clasificación
+- **Fase**: Reconocimiento | Enumeración | Análisis de Vulnerabilidades | Explotación | Post-Explotación | Fundamentos | Forense y DFIR
+- **MITRE ATT&CK**: ID de la técnica si aplica (ej. T1595). Para vulnerabilidades web sin mapping limpio (CSRF, IDOR), usar T1190 por defecto.
 - **Plataforma**: Linux | Windows | Web | Red | Multi
-- **Dificultad**: Basica | Intermedia | Avanzada
+- **Dificultad**: Básica | Intermedia | Avanzada
 
 ## Herramientas
-- Herramienta 1 — uso basico
-- Herramienta 2 — uso basico
+- Herramienta 1 — uso básico
+- Herramienta 2 — uso básico
 
 ## Comandos / Ejemplos
-Ejemplos practicos con comandos reales.
+Ejemplos prácticos con comandos reales.
 
 ## Contramedidas
-Como defenderse de esta tecnica.
+Cómo defenderse de esta técnica.
 
 ## Referencias
-- Referencias en formato APA 7ma edicion (ver guia de formato abajo).
+- Referencias en formato APA 7ma edición (ver guía de formato abajo).
 ```
 
-### Formato de Referencias (APA 7ma Edicion)
+### Variantes válidas
+
+- **Compound Fase** (técnica/herramienta que cruza fases genuinamente, ej. BloodHound, Metasploit): listar valores separados por coma+espacio. Ejemplo: `**Fase**: Reconocimiento, Post-Explotación`. No usar `/` ni `|`.
+- **Contenido conceptual o metodológico** (modelos teóricos como OSI, ciclos como PICERL, marcos como NIST CSF): las secciones Herramientas, Comandos / Ejemplos y Contramedidas son **opcionales**. Pueden sustituirse por secciones propias relevantes al tema (ej. "Capas del Modelo OSI", "Fases del Ciclo PICERL"). Las secciones obligatorias en este perfil son sólo: Título, Descripción, Clasificación, Referencias.
+- **Plataforma** se mantiene siempre estricta (un valor de la lista o `Multi`). Sin paréntesis explicativos. El contexto cross-plataforma (ej. "tool corre en Linux pero target es Windows") va en Descripción.
+
+### Formato de Referencias (APA 7ma Edición)
 
 Todas las referencias deben seguir el estilo APA. Ejemplos por tipo de fuente:
 
@@ -234,7 +246,7 @@ EnableSecurity. (s.f.). *wafw00f* [Software]. GitHub. https://github.com/EnableS
 swisskyrepo. (s.f.). *PayloadsAllTheThings* [Repositorio]. GitHub. https://github.com/swisskyrepo/PayloadsAllTheThings
 ```
 
-> **Nota**: Para libros de `referencias/`, usar los datos reales del PDF (autor, año, editorial). Usar `(s.f.)` (sin fecha) cuando no se conozca el año de publicacion.
+> **Nota**: Para libros de `referencias/`, usar los datos reales del PDF (autor, año, editorial). Usar `(s.f.)` (sin fecha) cuando no se conozca el año de publicación.
 
 ## Heurísticas de Prioridad
 
@@ -252,66 +264,70 @@ Para garantizar la precisión y actualidad del inventario, los agentes deben seg
 ## Agentes
 
 ### `investigador`
-- **Rol**: Extrae tecnicas de las fuentes existentes (`inventario/`, `referencias/`, internet)
+- **Rol**: Extrae técnicas de las fuentes existentes (`inventario/`, `referencias/`, internet)
 - **Input**: Un tema o fase del inventario
-- **Output**: Lista de tecnicas encontradas con nombre, descripcion, comandos y ruta del archivo fuente
+- **Output**: Lista de técnicas encontradas con nombre, descripción, comandos y ruta del archivo fuente
 - **Herramientas**: Read, Grep, Glob, WebSearch, WebFetch
 - **Instrucciones**:
   1. Explorar el propio `inventario/` (Glob y Grep) para detectar coverage existente del tema antes de añadir contenido nuevo
   2. Si hay coverage existente, evaluar si actualizar o si el tema requiere un archivo nuevo
   3. Para temas no cubiertos, consultar `referencias/` (vía RAG) y fuentes web según `Heurísticas de Prioridad`
-  4. Agrupar herramientas individuales en tecnicas logicas cuando sirven al mismo proposito
-  5. Si el tema tiene subtemas independientes, se pueden lanzar multiples instancias en paralelo
+  4. Agrupar herramientas individuales en técnicas lógicas cuando sirven al mismo propósito
+  5. Si el tema tiene subtemas independientes, se pueden lanzar múltiples instancias en paralelo
 
 ### `redactor`
-- **Rol**: Escribe y estructura cada tecnica siguiendo el formato estandar
-- **Input**: Informacion en bruto sobre una tecnica (del `investigador`)
+- **Rol**: Escribe y estructura cada técnica siguiendo el formato estándar
+- **Input**: Información en bruto sobre una técnica (del `investigador`)
 - **Output**: Archivo Markdown formateado y guardado en la ruta correcta del inventario
 - **Herramientas**: Read, Write, Edit
 - **Instrucciones**:
-  1. Aplicar el formato de 7 secciones definido en este archivo
-  2. Verificar el ID de MITRE ATT&CK antes de incluirlo — usar el sub-tecnica correcto, no solo el padre
+  1. Aplicar el formato de TEMPLATE.md según el perfil del contenido: técnicas concretas usan las 7 secciones (Título + 6 H2); contenido conceptual/metodológico puede omitir Herramientas, Comandos / Ejemplos y Contramedidas y sustituirlas por secciones propias relevantes
+  2. Verificar el ID de MITRE ATT&CK antes de incluirlo — usar el sub-técnica correcto, no sólo el padre. Para CSRF/IDOR/race conditions y similares vulnerabilidades de aplicación sin mapping limpio, usar T1190 por defecto
   3. Incluir referencias a libros de `referencias/` cuando sean relevantes
-  4. Usar formato APA 7ma edicion para todas las referencias (ver guia de formato arriba)
-  5. Se pueden lanzar multiples instancias en paralelo cuando hay subtemas independientes
+  4. Usar formato APA 7ma edición para todas las referencias (ver guía de formato arriba)
+  5. Se pueden lanzar múltiples instancias en paralelo cuando hay subtemas independientes
 
 ### `revisor`
-- **Rol**: Valida la calidad, completitud y precision tecnica del inventario
+- **Rol**: Valida la calidad, completitud y precisión técnica del inventario
 - **Input**: Archivos del inventario generados (por fase o directorio)
 - **Output**: Reporte con issues por archivo y resumen de problemas transversales
 - **Herramientas**: Read, Glob, Grep
 - **Instrucciones**: Verificar en cada archivo:
-  1. Las 7 secciones del formato estan presentes
-  2. El ID de MITRE ATT&CK es correcto y el sub-tecnica aplica
-  3. El archivo esta en la carpeta correcta segun la taxonomia
-  4. Los comandos son sintacticamente correctos y no usan herramientas desactualizadas
-  5. Las referencias siguen formato APA y los libros citados existen en `referencias/`
-  6. El campo `Plataforma` es consistente con el contenido
+  1. Las secciones obligatorias están presentes según perfil del contenido:
+     - Técnicas/herramientas concretas: 7 secciones (Título, Descripción, Clasificación, Herramientas, Comandos / Ejemplos, Contramedidas, Referencias)
+     - Contenido conceptual/metodológico (07-fundamentos, 08-forense-dfir/incident-response, modelos teóricos): 4 secciones obligatorias (Título, Descripción, Clasificación, Referencias) más las secciones propias relevantes
+  2. El ID de MITRE ATT&CK es correcto y la sub-técnica aplica. T1190 es el ID por defecto defensible para vulnerabilidades de aplicación sin mapping limpio (CSRF, IDOR, race conditions)
+  3. El archivo está en la carpeta correcta según la taxonomía
+  4. Los comandos son sintácticamente correctos y no usan herramientas desactualizadas
+  5. Las referencias siguen formato APA y al menos una corresponde a un libro de `referencias/`
+  6. El campo `Plataforma` es consistente con el contenido y usa un valor único de la lista (sin compound, sin paréntesis)
+  7. El campo `Fase` usa un valor de la lista permitida o, si compone fases, el separador es coma+espacio (no `/` ni `|`)
+  8. Acentos y ortografía españolas correctas en todo el cuerpo del archivo
 
 ## Workflow Probado
 
 El siguiente flujo fue validado al construir `01-reconocimiento/`. Usarlo como base para las fases siguientes.
 
 ### Paso 1 — Investigacion
-Lanzar uno o mas agentes `investigador` segun la complejidad de la fase. Si hay subtemas claramente independientes (ej: distintas carpetas dentro de la fase), lanzarlos en paralelo para acelerar. Cada agente consulta el `inventario/` actual, las fuentes en `referencias/` (vía RAG) y la web según prioridad, devolviendo lista de tecnicas con comandos y rutas fuente.
+Lanzar uno o mas agentes `investigador` según la complejidad de la fase. Si hay subtemas claramente independientes (ej: distintas carpetas dentro de la fase), lanzarlos en paralelo para acelerar. Cada agente consulta el `inventario/` actual, las fuentes en `referencias/` (vía RAG) y la web según prioridad, devolviendo lista de técnicas con comandos y rutas fuente.
 
 ### Paso 2 — Redaccion
-Con la informacion del paso anterior, lanzar agentes `redactor`. Se pueden lanzar en paralelo por subtema. Los agentes crean los archivos directamente en `inventario/0X-fase/`.
+Con la información del paso anterior, lanzar agentes `redactor`. Se pueden lanzar en paralelo por subtema. Los agentes crean los archivos directamente en `inventario/0X-fase/`.
 
 ### Paso 3 — Review
 Lanzar un agente `revisor` sobre todos los archivos creados en la fase. El revisor lee cada archivo completo y genera un reporte estructurado con issues por archivo y problemas transversales.
 
 ### Paso 4 — Correccion
 Aplicar las correcciones del reporte. Issues recurrentes encontrados en Fase 01 (a vigilar en fases futuras):
-- **MITRE IDs incorrectos**: Verificar siempre el sub-tecnica, no solo el padre
-- **Archivo en carpeta incorrecta**: Evaluar si la tecnica es realmente del subtema asignado
+- **MITRE IDs incorrectos**: Verificar siempre el sub-técnica, no solo el padre
+- **Archivo en carpeta incorrecta**: Evaluar si la técnica es realmente del subtema asignado
 - **Herramientas desactualizadas**: Verificar si la herramienta sigue mantenida activamente
-- **Plataforma demasiado restrictiva**: Tecnicas de red/sistema suelen ser "Multi", no "Web"
+- **Plataforma demasiado restrictiva**: Técnicas de red/sistema suelen ser "Multi", no "Web"
 - **Falta de referencias a libros**: Todos los archivos deben citar al menos un libro de `referencias/`
 
 ### Paso 5 — Actualizacion del CHANGELOG
 Registrar en `CHANGELOG.md` bajo la fecha actual:
-- Tecnicas añadidas (lista con nombres de archivo)
+- Técnicas añadidas (lista con nombres de archivo)
 - Correcciones aplicadas
 - Cambios a `AGENTS.md` o formato
 
@@ -321,7 +337,7 @@ Configuración para el motor de búsqueda semántica local sobre los libros de `
 
 | Parámetro | Valor |
 |-----------|-------|
-| `--source-dir` | `/home/sebastian/Documentos/inventario-tecnicas-ciberseguridad/referencias/` |
+| `--source-dir` | `/home/sebastian/Documentos/inventario-técnicas-ciberseguridad/referencias/` |
 | `--db-path` | `/home/sebastian/Documentos/rag/chroma_db/` |
 | `--collection-name` | `ciberseguridad-referencias` |
 | `--n-results` | `5` |

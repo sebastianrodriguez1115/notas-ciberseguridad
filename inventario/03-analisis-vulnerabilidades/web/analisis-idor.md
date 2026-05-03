@@ -5,7 +5,7 @@ La vulnerabilidad de Referencia Directa e Insegura a Objetos (IDOR) ocurre cuand
 
 ## Clasificación
 - **Fase**: Análisis de Vulnerabilidades
-- **MITRE ATT&CK**: T1213 (Data from Information Repositories)
+- **MITRE ATT&CK**: [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application)
 - **Plataforma**: Web
 - **Dificultad**: Básica
 
