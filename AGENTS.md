@@ -372,11 +372,9 @@ grep -l "Allen, L." inventario/**/*.md
 
 **Es linkeable** un directorio que cumple ambas condiciones:
 1. Vive en `learning/<plataforma>/<lab-slug>/`.
-2. Contiene un archivo `writeup.md` (o equivalente Markdown estructurado) con descripción del problema, solución y referencias.
+2. Contiene un archivo llamado **exactamente `writeup.md`** con descripción del problema, solución y referencias. Si el material es un curso multi-capítulo (ej. `tryhackme/abusingwindowsinternals/` con varios `<n>_<tema>.md`), debe consolidarse en un `writeup.md` que orqueste/linkee los capítulos.
 
-**No son linkeables**: directorios con sólo scripts (`.py`, `.sh`, `.rb`), wordlists, archivos sueltos al nivel raíz de `learning/<plataforma>/`, ni material de curso fragmentado sin un writeup consolidado.
-
-Cuando se añada `learning_refs:` a archivos del inventario (Sprint 1 del plan de discoverabilidad), sólo apuntar a directorios de la lista linkeable.
+**No son linkeables**: directorios con sólo scripts (`.py`, `.sh`, `.rb`), wordlists, archivos sueltos al nivel raíz de `learning/<plataforma>/`, material de curso fragmentado sin `writeup.md` consolidado, ni directorios donde el archivo Markdown se llame distinto (`notes.md`, `solution.md`, etc.). El validador `scripts/validate.py` rechaza cualquier `learning_refs:` que apunte a un directorio sin `writeup.md`.
 
 ## Heurísticas de Prioridad
 
@@ -461,7 +459,16 @@ Aplicar las correcciones del reporte. Issues recurrentes encontrados en Fase 01 
 - **Plataforma demasiado restrictiva**: Técnicas de red/sistema suelen ser "Multi", no "Web"
 - **Falta de referencias a libros**: Todos los archivos deben citar al menos un libro de `referencias/`
 
-### Paso 5 — Actualizacion del CHANGELOG
+### Paso 5 — Verificación pre-commit
+Antes de commitear, correr el ritual de verificación que ejecuta los 3 gates en orden y falla en el primero:
+
+```bash
+bash scripts/check.sh
+```
+
+Cubre: tests unitarios (`pytest scripts/tests/`), validación de frontmatter (`validate.py`), e idempotencia de índices auto-generados (`build_indexes.py --check`). Si cualquiera falla, no commitear hasta resolver. Si `build_indexes --check` reporta "out of date", correr `python3 scripts/build_indexes.py` (sin `--check`) para regenerar y volver a verificar.
+
+### Paso 6 — Actualización del CHANGELOG
 Registrar en `CHANGELOG.md` bajo la fecha actual:
 - Técnicas añadidas (lista con nombres de archivo)
 - Correcciones aplicadas

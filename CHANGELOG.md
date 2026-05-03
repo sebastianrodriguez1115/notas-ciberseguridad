@@ -2,6 +2,35 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19h (Review crítico ronda 2)
+
+Cuatro hallazgos del review ronda 2 sobre la sesión 19g. Los cuatro válidos. Aplicados con tests adicionales y un script de ritual para evitar el proceso fallado que disparó el primer hallazgo.
+
+### Hallazgo 1 (Alta) — `build_indexes --check` estaba stale
+- `inventario/meta/by-mitre.md` todavía listaba `fingerprinting-tecnologias-web-activo` bajo `T1592` aunque la data ya había sido fixeada a `mitre: [T1592.002]` en la sesión 19g.
+- Causa raíz (proceso): tras fixear la data, no se re-corrió `build_indexes`. El CHANGELOG decía "up to date" pero no lo estaba.
+- **Fix data**: regenerado `inventario/meta/by-mitre.md`.
+- **Fix proceso**: nuevo script `scripts/check.sh` ejecuta `pytest + validate + build_indexes --check` en orden, falla en el primero. AGENTS.md workflow añade un nuevo "Paso 5 — Verificación pre-commit" que invoca este ritual; el actual paso 5 (CHANGELOG) pasa a ser paso 6.
+
+### Hallazgo 2 (Media) — validate.py no enforzaba slug == filename
+- La nueva convención "slug = filename sin extensión" estaba documentada en TEMPLATE.md y AGENTS.md, pero el validador sólo verificaba tipo y unicidad. Un archivo `analisis-sqli.md` con `slug: sqli` pasaría aunque contradice la convención.
+- **Fix**: validator ahora exige `slug == path.stem` Y formato kebab-case via regex `^[a-z0-9]+(-[a-z0-9]+)*$`. 4 tests nuevos (`test_slug_must_equal_filename`, `test_slug_kebab_case_rejected_uppercase`, `test_slug_kebab_case_rejected_underscore`, `test_slug_kebab_case_passes_simple`).
+- **Verificación**: 124/124 archivos siguen pasando (todos ya cumplen la convención porque la migración derivó slug de filename desde el inicio).
+
+### Hallazgo 3 (Media) — cross_validate exception silenciaba errores globales
+- El try/except defensivo capturaba el crash de `cross_validate`, imprimía "FATAL" pero el script seguía corriendo y exit code podía quedar 0 si no había errores per-file. CI no lo notaría.
+- **Fix**: nueva flag `cross_failed` se setea en el except; si está, se imprime mensaje "marcando como failure" y sale con código 1. Test nuevo `test_main_exits_nonzero_when_cross_validate_crashes` inyecta un `cross_validate` roto y verifica `SystemExit.code == 1`.
+
+### Hallazgo 4 (Baja) — Doc drift sobre learning_refs
+- Docstring de `validate.py` decía "writeup.md o algún .md", AGENTS.md decía "o equivalente Markdown estructurado", aunque el código (post-ronda 1) ya exigía `writeup.md` exacto.
+- **Fix**: docstring de `validate.py` actualizado a "estricto, ver Política learning_refs en AGENTS.md". AGENTS.md sección "Política learning_refs" reescrita: exige nombre exacto `writeup.md`, menciona explícitamente que material multi-capítulo (ej. tryhackme/abusingwindowsinternals/) debe consolidarse en un `writeup.md` que orqueste/linkee los chapters, y que el validador rechaza directorios sin él.
+
+### Estado tras ronda 2
+- `bash scripts/check.sh` → all green.
+- 62 tests passing (4 nuevos: slug validation x3, cross_validate failure x1).
+- 124/124 validate OK.
+- `build_indexes --check` up to date.
+
 ## [2026-05-03] — Sesión 19g (Tests + bug encontrado por test)
 
 Tras aplicar los fixes del review crítico, se construyó una suite de tests con pytest para los 3 scripts de tooling. Cubre: type-check defensivo, casos felices, regresiones específicas del review (plataforma como lista, title como int, related con int, learning_refs sin writeup.md, --check no toca filesystem).

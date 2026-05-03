@@ -15,13 +15,14 @@ Reglas:
 5. Enums válidos: plataforma ∈ {Linux, Windows, Web, Red, Multi},
    dificultad ∈ {Básica, Intermedia, Avanzada}, fase ∈ las 7 fases.
 6. Slugs únicos globalmente.
-7. title del frontmatter coincide con el primer H1 del body.
-8. mitre con formato T\\d{4}(\\.\\d{3})?. Permitido vacío sólo si fase
+7. slug == nombre del archivo sin extensión (kebab-case derivado).
+8. title del frontmatter coincide con el primer H1 del body.
+9. mitre con formato T\\d{4}(\\.\\d{3})?. Permitido vacío sólo si fase
    incluye Fundamentos o Forense y DFIR.
-9. related: cada slug existe en otro archivo del inventario.
-10. learning_refs: cada path apunta a un directorio que existe en learning/
-    y contiene un writeup.md o algún .md.
-11. Body NO contiene `## Clasificación`.
+10. related: cada slug existe en otro archivo del inventario.
+11. learning_refs: cada path apunta a un directorio que existe en learning/
+    y contiene `writeup.md` (estricto, ver "Política learning_refs" en AGENTS.md).
+12. Body NO contiene `## Clasificación`.
 """
 from __future__ import annotations
 
@@ -54,6 +55,7 @@ FASE_VALID = {
 REQUIRED = ["title", "slug", "aliases", "fase", "plataforma", "dificultad", "mitre"]
 OPTIONAL = ["related", "learning_refs"]
 MITRE_RE = re.compile(r"^T\d{4}(\.\d{3})?$")
+SLUG_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n(.*)", re.DOTALL)
 H1_RE = re.compile(r"^# (.+)$", re.MULTILINE)
 
@@ -91,12 +93,21 @@ def validate_file(path: Path, all_slugs: dict[str, Path]) -> list[str]:
         if field not in fm:
             errors.append(f"missing required field: {field}")
 
-    # Slug uniqueness check (deferred to caller via all_slugs)
+    # Slug: tipo, formato kebab-case, igual a filename, único globalmente
     slug = fm.get("slug")
-    if slug:
+    if slug is not None:
         if not isinstance(slug, str):
             errors.append(f"slug must be string, got {type(slug).__name__}")
         else:
+            if not SLUG_RE.match(slug):
+                errors.append(
+                    f"slug {slug!r} not in kebab-case (regex: {SLUG_RE.pattern})"
+                )
+            if slug != path.stem:
+                errors.append(
+                    f"slug {slug!r} must equal filename without extension "
+                    f"({path.stem!r}); ver convención de naming en AGENTS.md"
+                )
             if slug in all_slugs and all_slugs[slug] != path:
                 errors.append(
                     f"duplicate slug {slug!r} (also in {all_slugs[slug].relative_to(REPO_ROOT)})"
@@ -260,11 +271,13 @@ def main():
         if errors:
             per_file_errors[f] = errors
 
+    cross_failed = False
     try:
         cross = cross_validate(files_data, all_slugs)
     except Exception as e:
         print(f"FATAL cross-validation crashed: {type(e).__name__}: {e}", file=sys.stderr)
         cross = {}
+        cross_failed = True
     for path, errs in cross.items():
         per_file_errors.setdefault(path, []).extend(errs)
 
@@ -280,6 +293,11 @@ def main():
             print(f"ERR {rel}: {err}")
 
     print()
+    if cross_failed:
+        print(
+            "summary: cross-validation crashed (see FATAL above); marcando como failure"
+        )
+        sys.exit(1)
     print(f"summary: {n_ok}/{n_total} OK, {n_with_errors} files with errors")
     sys.exit(1 if n_with_errors else 0)
 

@@ -371,10 +371,6 @@ archivos por valor de `by-mitre`.
 - [`dns-pasivo`](../01-reconocimiento/pasivo/dns-pasivo.md) — DNS Pasivo
 - [`enumeracion-dns`](../02-enumeracion/red/enumeracion-dns.md) — Enumeración DNS (Domain Name System)
 
-## T1592 (1)
-
-- [`fingerprinting-tecnologias-web-activo`](../02-enumeracion/web/fingerprinting-tecnologias-web-activo.md) — Fingerprinting Activo de Tecnologías Web
-
 ## T1592.002 (3)
 
 - [`fingerprinting-os-servicios`](../01-reconocimiento/activo/fingerprinting-os-servicios.md) — Fingerprinting de OS y Servicios
