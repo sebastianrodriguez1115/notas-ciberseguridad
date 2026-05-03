@@ -1,12 +1,12 @@
 ---
 title: Explotación de Zerologon (CVE-2020-1472)
 slug: explotacion-zerologon
-aliases: [Explotación de Zerologon (CVE-2020-1472)]
+aliases: [Zerologon, CVE-2020-1472, Netlogon RCE]
 fase: [Explotación]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1210]
-related: []
+related: [enumeracion-kerberos, credential-dumping]
 learning_refs: []
 ---
 

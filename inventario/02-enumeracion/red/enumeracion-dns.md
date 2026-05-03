@@ -1,12 +1,12 @@
 ---
 title: Enumeración DNS (Domain Name System)
 slug: enumeracion-dns
-aliases: [Enumeración DNS (Domain Name System)]
+aliases: [DNS Enumeration, Zone Transfer, AXFR, NSEC walking, dnsrecon, DNS cache snooping]
 fase: [Enumeración]
 plataforma: Multi
 dificultad: Básica
 mitre: [T1590.002]
-related: []
+related: [dns-pasivo, fuzzing-subdominios-vhosts]
 learning_refs: []
 ---
 

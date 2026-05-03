@@ -1,7 +1,7 @@
 ---
 title: Enumeración SNMP (Simple Network Management Protocol)
 slug: enumeracion-snmp
-aliases: [Enumeración SNMP (Simple Network Management Protocol)]
+aliases: [SNMP, Simple Network Management Protocol, snmpwalk, onesixtyone]
 fase: [Enumeración]
 plataforma: Multi
 dificultad: Básica

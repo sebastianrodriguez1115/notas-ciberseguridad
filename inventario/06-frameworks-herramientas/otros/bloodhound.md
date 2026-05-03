@@ -1,12 +1,12 @@
 ---
 title: "BloodHound: Análisis de Rutas de Ataque en AD"
 slug: bloodhound
-aliases: ["BloodHound: Análisis de Rutas de Ataque en AD"]
+aliases: [BloodHound, AD attack paths, Active Directory analysis, SharpHound, AzureHound]
 fase: [Reconocimiento, Post-Explotación]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1087.002, T1087, T1484, T1069.002, T1069]
-related: []
+related: [enumeracion-ldap, enumeracion-kerberos, enumeracion-smb]
 learning_refs: []
 ---
 

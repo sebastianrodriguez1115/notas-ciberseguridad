@@ -1,12 +1,12 @@
 ---
 title: EternalBlue (MS17-010)
 slug: explotacion-eternalblue
-aliases: [EternalBlue (MS17-010)]
+aliases: [EternalBlue, MS17-010, WannaCry SMB exploit]
 fase: [Explotación]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1210]
-related: []
+related: [enumeracion-smb]
 learning_refs: []
 ---
 

@@ -1,12 +1,12 @@
 ---
 title: File Upload Exploitation
 slug: explotacion-fileupload
-aliases: [File Upload Exploitation]
+aliases: [File Upload Vulnerability, Unrestricted File Upload, Webshell upload]
 fase: [Explotación]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
-related: []
+related: [web-shells, analisis-lfi-rfi]
 learning_refs: []
 ---
 

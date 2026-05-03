@@ -39,19 +39,23 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-cors.md`](./03-analisis-vulnerabilidades/web/analisis-cors.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Análisis de CORS (Cross-Origin Resource Sharing)
+- **Aliases**: CORS, Cross-Origin Resource Sharing, CORS misconfiguration
+- **Related**: `analisis-csrf`, `analisis-seguridad-cabeceras`
 
 ## `analisis-csrf` — Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-csrf.md`](./03-analisis-vulnerabilidades/web/analisis-csrf.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)
+- **Aliases**: CSRF, Cross-Site Request Forgery, XSRF, SameSite bypass
+- **Related**: `analisis-xss`, `analisis-cors`, `analisis-seguridad-cabeceras`
+- **Learning**: [`portswigger/samesite-lax-bypass-via-cookie-refresh`](../learning/portswigger/samesite-lax-bypass-via-cookie-refresh/)
 
 ## `analisis-deserialization` — Análisis de Insecure Deserialization
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-deserialization.md`](./03-analisis-vulnerabilidades/web/analisis-deserialization.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Avanzada
-- **Aliases**: Análisis de Insecure Deserialization
+- **Aliases**: Insecure Deserialization, Object Injection, Deserialization Attack
+- **Related**: `explotacion-deserialization`, `analisis-ssti`
 
 ## `analisis-estatico-dinamico` — Análisis de Malware: Estático y Dinámico
 
@@ -63,13 +67,15 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-idor.md`](./03-analisis-vulnerabilidades/web/analisis-idor.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Básica
-- **Aliases**: Análisis de Vulnerabilidades: Insecure Direct Object Reference (IDOR)
+- **Aliases**: IDOR, Insecure Direct Object Reference, BOLA, Broken Object Level Authorization
+- **Related**: `analisis-csrf`
 
 ## `analisis-lfi-rfi` — Análisis de Vulnerabilidades: LFI y RFI
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md`](./03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Análisis de Vulnerabilidades: LFI y RFI
+- **Aliases**: LFI, RFI, Local File Inclusion, Remote File Inclusion, Path Traversal, Directory Traversal
+- **Related**: `fuzzing-lfi-ssrf`, `analisis-ssrf`
 
 ## `analisis-nessus` — Análisis de Vulnerabilidades con Nessus
 
@@ -123,31 +129,38 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-sqli.md`](./03-analisis-vulnerabilidades/web/analisis-sqli.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Avanzada
-- **Aliases**: Análisis de Vulnerabilidades: SQL Injection (SQLi)
+- **Aliases**: SQLi, SQL Injection, Inyección SQL, Blind SQLi, Time-based SQLi, Union-based SQLi, Out-of-Band SQLi
+- **Related**: `explotacion-sqli`, `explotacion-nosqli`, `analisis-ssti`, `analisis-xxe`
+- **Learning**: [`portswigger/visible-error-based-sql-injection`](../learning/portswigger/visible-error-based-sql-injection/), [`portswigger/blind-sqli-time-delays`](../learning/portswigger/blind-sqli-time-delays/), [`portswigger/blind-sqli-time-delays-info-retrieval`](../learning/portswigger/blind-sqli-time-delays-info-retrieval/), [`portswigger/blind-sqli-out-of-band`](../learning/portswigger/blind-sqli-out-of-band/), [`portswigger/sqli-filter-bypass-xml-encoding`](../learning/portswigger/sqli-filter-bypass-xml-encoding/)
 
 ## `analisis-ssrf` — Análisis de SSRF (Server-Side Request Forgery)
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-ssrf.md`](./03-analisis-vulnerabilidades/web/analisis-ssrf.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Avanzada
-- **Aliases**: Análisis de SSRF (Server-Side Request Forgery)
+- **Aliases**: SSRF, Server-Side Request Forgery
+- **Related**: `fuzzing-lfi-ssrf`, `analisis-xxe`
 
 ## `analisis-ssti` — Análisis de SSTI (Server-Side Template Injection)
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-ssti.md`](./03-analisis-vulnerabilidades/web/analisis-ssti.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Análisis de SSTI (Server-Side Template Injection)
+- **Aliases**: SSTI, Server-Side Template Injection, Jinja2 SSTI, Twig SSTI
+- **Related**: `analisis-sqli`, `analisis-deserialization`
 
 ## `analisis-xss` — Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-xss.md`](./03-analisis-vulnerabilidades/web/analisis-xss.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)
+- **Aliases**: XSS, Cross-Site Scripting, Reflected XSS, Stored XSS, DOM XSS
+- **Related**: `analisis-csrf`, `analisis-seguridad-cabeceras`
+- **Learning**: [`portswigger/reflected-xss-canonical-link-tag`](../learning/portswigger/reflected-xss-canonical-link-tag/), [`portswigger/reflected-xss-js-string-angle-quotes-encoded`](../learning/portswigger/reflected-xss-js-string-angle-quotes-encoded/), [`portswigger/reflected-xss-js-string-sq-backslash-escaped`](../learning/portswigger/reflected-xss-js-string-sq-backslash-escaped/), [`portswigger/stored-xss-onclick-html-entity-bypass`](../learning/portswigger/stored-xss-onclick-html-entity-bypass/)
 
 ## `analisis-xxe` — Análisis de XXE (XML External Entity)
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-xxe.md`](./03-analisis-vulnerabilidades/web/analisis-xxe.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Análisis de XXE (XML External Entity)
+- **Aliases**: XXE, XML External Entity, XML Injection
+- **Related**: `analisis-ssrf`, `analisis-deserialization`, `analisis-sqli`
 
 ## `artefactos-windows-host` — Análisis Forense: Artefactos de Windows
 
@@ -165,7 +178,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/06-frameworks-herramientas/otros/bloodhound.md`](./06-frameworks-herramientas/otros/bloodhound.md)
 - **Fase**: Reconocimiento, Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
-- **Aliases**: BloodHound: Análisis de Rutas de Ataque en AD
+- **Aliases**: BloodHound, AD attack paths, Active Directory analysis, SharpHound, AzureHound
+- **Related**: `enumeracion-ldap`, `enumeracion-kerberos`, `enumeracion-smb`
 
 ## `canales-encubiertos` — Exfiltración por Canales Encubiertos
 
@@ -183,13 +197,14 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/06-frameworks-herramientas/burp-suite/configuracion-uso-avanzado.md`](./06-frameworks-herramientas/burp-suite/configuracion-uso-avanzado.md)
 - **Fase**: Análisis de Vulnerabilidades, Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Burp Suite: Configuración y Uso Avanzado
+- **Aliases**: Burp Suite, Burp Proxy, Burp Repeater, Burp Intruder
 
 ## `credential-dumping` — Credential Dumping (Volcado de Credenciales)
 
 - **Archivo**: [`inventario/05-post-explotacion/privilege-escalation/windows/credential-dumping.md`](./05-post-explotacion/privilege-escalation/windows/credential-dumping.md)
 - **Fase**: Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
-- **Aliases**: Credential Dumping (Volcado de Credenciales)
+- **Aliases**: Credential Dump, mimikatz, LSASS dump, DCSync, DPAPI
+- **Related**: `pass-the-hash`, `enumeracion-kerberos`
 
 ## `descubrimiento-hosts` — Descubrimiento de Hosts
 
@@ -216,19 +231,21 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/05-post-explotacion/lateral-movement/ejecucion-remota-windows.md`](./05-post-explotacion/lateral-movement/ejecucion-remota-windows.md)
 - **Fase**: Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
-- **Aliases**: Ejecución Remota en Windows
+- **Aliases**: Remote Execution Windows, psexec, wmiexec, smbexec, atexec
+- **Related**: `pass-the-hash`, `enumeracion-winrm`, `enumeracion-rdp`
 
 ## `empire-framework` — PowerShell Empire: Post-Explotación y C2
 
 - **Archivo**: [`inventario/06-frameworks-herramientas/powershell-empire/empire-framework.md`](./06-frameworks-herramientas/powershell-empire/empire-framework.md)
 - **Fase**: Post-Explotación · **Plataforma**: Multi · **Dificultad**: Intermedia
-- **Aliases**: PowerShell Empire: Post-Explotación y C2
+- **Aliases**: PowerShell Empire, Empire, C2 framework, Starkiller
 
 ## `enumeracion-dns` — Enumeración DNS (Domain Name System)
 
 - **Archivo**: [`inventario/02-enumeracion/red/enumeracion-dns.md`](./02-enumeracion/red/enumeracion-dns.md)
 - **Fase**: Enumeración · **Plataforma**: Multi · **Dificultad**: Básica
-- **Aliases**: Enumeración DNS (Domain Name System)
+- **Aliases**: DNS Enumeration, Zone Transfer, AXFR, NSEC walking, dnsrecon, DNS cache snooping
+- **Related**: `dns-pasivo`, `fuzzing-subdominios-vhosts`
 
 ## `enumeracion-docker` — Enumeración Docker (Puerto 2375/2376)
 
@@ -264,7 +281,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/02-enumeracion/red/enumeracion-kerberos.md`](./02-enumeracion/red/enumeracion-kerberos.md)
 - **Fase**: Enumeración, Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
-- **Aliases**: Enumeración Kerberos (Puerto 88)
+- **Aliases**: Kerberos, Kerberos Enumeration, Kerberoasting, AS-REP Roasting, ASREPRoast, GetUserSPNs, GetNPUsers
+- **Related**: `enumeracion-ldap`, `enumeracion-smb`, `bloodhound`
 
 ## `enumeracion-kubernetes` — Enumeración Kubernetes (K8s) (Puerto 6443 / 443 / 10250)
 
@@ -276,7 +294,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/02-enumeracion/servicios/enumeracion-ldap.md`](./02-enumeracion/servicios/enumeracion-ldap.md)
 - **Fase**: Enumeración · **Plataforma**: Multi · **Dificultad**: Intermedia
-- **Aliases**: Enumeración LDAP (Lightweight Directory Access Protocol)
+- **Aliases**: LDAP, LDAP Enumeration, Active Directory enumeration, ldapsearch, AD enum
+- **Related**: `enumeracion-kerberos`, `enumeracion-smb`, `bloodhound`
 
 ## `enumeracion-memcached` — Enumeración Memcached (Puerto 11211)
 
@@ -288,25 +307,29 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/02-enumeracion/servicios/enumeracion-mongodb.md`](./02-enumeracion/servicios/enumeracion-mongodb.md)
 - **Fase**: Enumeración · **Plataforma**: Multi · **Dificultad**: Básica
-- **Aliases**: Enumeración MongoDB (Puerto 27017)
+- **Aliases**: MongoDB Enumeration, NoSQL DB
+- **Related**: `explotacion-nosqli`
 
 ## `enumeracion-mssql` — Enumeración MSSQL (Microsoft SQL Server)
 
 - **Archivo**: [`inventario/02-enumeracion/servicios/enumeracion-mssql.md`](./02-enumeracion/servicios/enumeracion-mssql.md)
 - **Fase**: Enumeración · **Plataforma**: Windows · **Dificultad**: Intermedia
-- **Aliases**: Enumeración MSSQL (Microsoft SQL Server)
+- **Aliases**: Microsoft SQL Server, MS-SQL, mssqlclient, xp_cmdshell
+- **Related**: `enumeracion-mysql`, `enumeracion-oracle`, `enumeracion-postgresql`, `analisis-sqli`
 
 ## `enumeracion-mysql` — Enumeración MySQL
 
 - **Archivo**: [`inventario/02-enumeracion/servicios/enumeracion-mysql.md`](./02-enumeracion/servicios/enumeracion-mysql.md)
 - **Fase**: Enumeración · **Plataforma**: Multi · **Dificultad**: Intermedia
-- **Aliases**: Enumeración MySQL
+- **Aliases**: MySQL Enumeration, MariaDB
+- **Related**: `enumeracion-mssql`, `enumeracion-oracle`, `enumeracion-postgresql`, `analisis-sqli`
 
 ## `enumeracion-nfs` — Enumeración NFS (Network File System)
 
 - **Archivo**: [`inventario/02-enumeracion/red/enumeracion-nfs.md`](./02-enumeracion/red/enumeracion-nfs.md)
 - **Fase**: Enumeración · **Plataforma**: Multi · **Dificultad**: Básica
-- **Aliases**: Enumeración NFS (Network File System)
+- **Aliases**: NFS, Network File System, no_root_squash, showmount
+- **Related**: `enumeracion-smb`, `nfs-no-root-squash`
 
 ## `enumeracion-oracle` — Enumeración Oracle Database
 
@@ -354,7 +377,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/02-enumeracion/red/enumeracion-smb.md`](./02-enumeracion/red/enumeracion-smb.md)
 - **Fase**: Enumeración · **Plataforma**: Multi · **Dificultad**: Básica
-- **Aliases**: Enumeración SMB (Server Message Block)
+- **Aliases**: SMB, SMB Enumeration, Server Message Block, smbclient, enum4linux, CIFS
+- **Related**: `enumeracion-nfs`, `enumeracion-ldap`, `enumeracion-kerberos`
 
 ## `enumeracion-smtp` — Enumeración SMTP (Simple Mail Transfer Protocol)
 
@@ -366,7 +390,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/02-enumeracion/red/enumeracion-snmp.md`](./02-enumeracion/red/enumeracion-snmp.md)
 - **Fase**: Enumeración · **Plataforma**: Multi · **Dificultad**: Básica
-- **Aliases**: Enumeración SNMP (Simple Network Management Protocol)
+- **Aliases**: SNMP, Simple Network Management Protocol, snmpwalk, onesixtyone
 
 ## `enumeracion-ssh` — Enumeración SSH (Secure Shell)
 
@@ -434,7 +458,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/web/explotacion-auth-bypass-oauth.md`](./04-explotacion/web/explotacion-auth-bypass-oauth.md)
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Avanzada
-- **Aliases**: Bypass de Autenticación en OAuth2 y OpenID
+- **Aliases**: OAuth bypass, OpenID Connect bypass, OIDC bypass, OAuth2
+- **Related**: `explotacion-jwt`
 
 ## `explotacion-brute-force-advanced` — Ataques de Fuerza Bruta Avanzados
 
@@ -458,19 +483,22 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/web/explotacion-deserialization.md`](./04-explotacion/web/explotacion-deserialization.md)
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Avanzada
-- **Aliases**: Explotación de Deserialización Insegura
+- **Aliases**: Insecure Deserialization, Object Injection RCE, ysoserial
+- **Related**: `analisis-deserialization`
 
 ## `explotacion-eternalblue` — EternalBlue (MS17-010)
 
 - **Archivo**: [`inventario/04-explotacion/sistema/explotacion-eternalblue.md`](./04-explotacion/sistema/explotacion-eternalblue.md)
 - **Fase**: Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
-- **Aliases**: EternalBlue (MS17-010)
+- **Aliases**: EternalBlue, MS17-010, WannaCry SMB exploit
+- **Related**: `enumeracion-smb`
 
 ## `explotacion-fileupload` — File Upload Exploitation
 
 - **Archivo**: [`inventario/04-explotacion/web/explotacion-fileupload.md`](./04-explotacion/web/explotacion-fileupload.md)
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: File Upload Exploitation
+- **Aliases**: File Upload Vulnerability, Unrestricted File Upload, Webshell upload
+- **Related**: `web-shells`, `analisis-lfi-rfi`
 
 ## `explotacion-hash-cracking` — Crackeo de Hashes (Metodología)
 
@@ -482,7 +510,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/web/explotacion-jwt.md`](./04-explotacion/web/explotacion-jwt.md)
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Explotación de JSON Web Tokens (JWT)
+- **Aliases**: JWT, JSON Web Token, jwt_tool, JWT Token Forgery
+- **Related**: `explotacion-auth-bypass-oauth`, `hashing-codificacion`
 
 ## `explotacion-kernel-linux` — Explotación de Kernel Linux
 
@@ -518,7 +547,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/web/explotacion-nosqli.md`](./04-explotacion/web/explotacion-nosqli.md)
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Inyección NoSQL (NoSQLi)
+- **Aliases**: NoSQLi, NoSQL Injection, MongoDB Injection
+- **Related**: `analisis-sqli`, `explotacion-sqli`, `enumeracion-mongodb`
 
 ## `explotacion-password-spraying` — Password Spraying
 
@@ -542,7 +572,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/sistema/explotacion-shellshock.md`](./04-explotacion/sistema/explotacion-shellshock.md)
 - **Fase**: Explotación · **Plataforma**: Linux · **Dificultad**: Intermedia
-- **Aliases**: Shellshock (CVE-2014-6271)
+- **Aliases**: Shellshock, CVE-2014-6271, bash CGI vulnerability
 
 ## `explotacion-smb-relay` — SMB Relay Attack
 
@@ -554,13 +584,16 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/web/explotacion-sqli.md`](./04-explotacion/web/explotacion-sqli.md)
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Inyección SQL (SQLi)
+- **Aliases**: SQLi, SQL Injection, Inyección SQL, sqlmap
+- **Related**: `analisis-sqli`, `explotacion-nosqli`
+- **Learning**: [`portswigger/visible-error-based-sql-injection`](../learning/portswigger/visible-error-based-sql-injection/), [`portswigger/blind-sqli-time-delays`](../learning/portswigger/blind-sqli-time-delays/), [`portswigger/blind-sqli-time-delays-info-retrieval`](../learning/portswigger/blind-sqli-time-delays-info-retrieval/), [`portswigger/blind-sqli-out-of-band`](../learning/portswigger/blind-sqli-out-of-band/), [`portswigger/sqli-filter-bypass-xml-encoding`](../learning/portswigger/sqli-filter-bypass-xml-encoding/)
 
 ## `explotacion-zerologon` — Explotación de Zerologon (CVE-2020-1472)
 
 - **Archivo**: [`inventario/04-explotacion/sistema/explotacion-zerologon.md`](./04-explotacion/sistema/explotacion-zerologon.md)
 - **Fase**: Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
-- **Aliases**: Explotación de Zerologon (CVE-2020-1472)
+- **Aliases**: Zerologon, CVE-2020-1472, Netlogon RCE
+- **Related**: `enumeracion-kerberos`, `credential-dumping`
 
 ## `fingerprinting-os-servicios` — Fingerprinting de OS y Servicios
 
@@ -587,25 +620,29 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/02-enumeracion/fuzzing/fuzzing-directorios-archivos.md`](./02-enumeracion/fuzzing/fuzzing-directorios-archivos.md)
 - **Fase**: Enumeración · **Plataforma**: Web · **Dificultad**: Básica
-- **Aliases**: Fuzzing de Directorios y Archivos Web
+- **Aliases**: Directory Fuzzing, Content Discovery, gobuster, ffuf, dirb, dirsearch
+- **Related**: `fuzzing-subdominios-vhosts`, `fuzzing-parametros`
 
 ## `fuzzing-lfi-ssrf` — Fuzzing de LFI y Escaneo de Puertos vía SSRF
 
 - **Archivo**: [`inventario/02-enumeracion/fuzzing/fuzzing-lfi-ssrf.md`](./02-enumeracion/fuzzing/fuzzing-lfi-ssrf.md)
 - **Fase**: Enumeración · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Fuzzing de LFI y Escaneo de Puertos vía SSRF
+- **Aliases**: LFI Fuzzing, SSRF Port Scan, LFI Discovery
+- **Related**: `fuzzing-parametros`, `analisis-lfi-rfi`, `analisis-ssrf`
 
 ## `fuzzing-parametros` — Fuzzing de Parámetros HTTP
 
 - **Archivo**: [`inventario/02-enumeracion/fuzzing/fuzzing-parametros.md`](./02-enumeracion/fuzzing/fuzzing-parametros.md)
 - **Fase**: Enumeración · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: Fuzzing de Parámetros HTTP
+- **Aliases**: Parameter Fuzzing, Hidden Parameter Discovery, Arjun, ParamMiner
+- **Related**: `fuzzing-directorios-archivos`, `fuzzing-lfi-ssrf`
 
 ## `fuzzing-subdominios-vhosts` — Fuzzing de Subdominios y Virtual Hosts
 
 - **Archivo**: [`inventario/02-enumeracion/fuzzing/fuzzing-subdominios-vhosts.md`](./02-enumeracion/fuzzing/fuzzing-subdominios-vhosts.md)
 - **Fase**: Enumeración · **Plataforma**: Web · **Dificultad**: Básica
-- **Aliases**: Fuzzing de Subdominios y Virtual Hosts
+- **Aliases**: Subdomain Fuzzing, Virtual Host Discovery, vhost enum, ffuf vhost
+- **Related**: `fuzzing-directorios-archivos`, `dns-pasivo`, `transparencia-certificados`
 
 ## `google-dorking` — Google Dorking
 
@@ -636,7 +673,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/06-frameworks-herramientas/metasploit/metasploit-avanzado.md`](./06-frameworks-herramientas/metasploit/metasploit-avanzado.md)
 - **Fase**: Análisis de Vulnerabilidades, Explotación, Post-Explotación · **Plataforma**: Multi · **Dificultad**: Intermedia
-- **Aliases**: Metasploit Framework: Uso Avanzado y Automatización
+- **Aliases**: Metasploit, msfconsole, msfvenom, Metasploit Framework
 
 ## `metodologia-picerl` — Incident Response: Metodología PICERL
 
@@ -666,7 +703,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/05-post-explotacion/lateral-movement/pass-the-hash.md`](./05-post-explotacion/lateral-movement/pass-the-hash.md)
 - **Fase**: Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
-- **Aliases**: Pass-the-Hash (PtH)
+- **Aliases**: PtH, NTLM hash relay, psexec hash
+- **Related**: `credential-dumping`, `ejecucion-remota-windows`, `explotacion-smb-relay`
 
 ## `persistencia-linux` — Persistencia en Linux
 

@@ -1,12 +1,12 @@
 ---
 title: Enumeración MSSQL (Microsoft SQL Server)
 slug: enumeracion-mssql
-aliases: [Enumeración MSSQL (Microsoft SQL Server)]
+aliases: [Microsoft SQL Server, MS-SQL, mssqlclient, xp_cmdshell]
 fase: [Enumeración]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1046]
-related: []
+related: [enumeracion-mysql, enumeracion-oracle, enumeracion-postgresql, analisis-sqli]
 learning_refs: []
 ---
 

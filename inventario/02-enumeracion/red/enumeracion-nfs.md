@@ -1,12 +1,12 @@
 ---
 title: Enumeración NFS (Network File System)
 slug: enumeracion-nfs
-aliases: [Enumeración NFS (Network File System)]
+aliases: [NFS, Network File System, no_root_squash, showmount]
 fase: [Enumeración]
 plataforma: Multi
 dificultad: Básica
 mitre: [T1135, T1548.001]
-related: []
+related: [enumeracion-smb, nfs-no-root-squash]
 learning_refs: []
 ---
 

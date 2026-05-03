@@ -1,12 +1,12 @@
 ---
 title: Enumeración MySQL
 slug: enumeracion-mysql
-aliases: [Enumeración MySQL]
+aliases: [MySQL Enumeration, MariaDB]
 fase: [Enumeración]
 plataforma: Multi
 dificultad: Intermedia
 mitre: [T1046]
-related: []
+related: [enumeracion-mssql, enumeracion-oracle, enumeracion-postgresql, analisis-sqli]
 learning_refs: []
 ---
 

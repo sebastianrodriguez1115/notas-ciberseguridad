@@ -1,13 +1,13 @@
 ---
 title: "Análisis de Vulnerabilidades: SQL Injection (SQLi)"
 slug: analisis-sqli
-aliases: ["Análisis de Vulnerabilidades: SQL Injection (SQLi)"]
+aliases: [SQLi, SQL Injection, Inyección SQL, Blind SQLi, Time-based SQLi, Union-based SQLi, Out-of-Band SQLi]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Avanzada
 mitre: [T1190]
-related: []
-learning_refs: []
+related: [explotacion-sqli, explotacion-nosqli, analisis-ssti, analisis-xxe]
+learning_refs: [portswigger/visible-error-based-sql-injection, portswigger/blind-sqli-time-delays, portswigger/blind-sqli-time-delays-info-retrieval, portswigger/blind-sqli-out-of-band, portswigger/sqli-filter-bypass-xml-encoding]
 ---
 
 # Análisis de Vulnerabilidades: SQL Injection (SQLi)

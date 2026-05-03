@@ -1,12 +1,12 @@
 ---
 title: Fuzzing de LFI y Escaneo de Puertos vía SSRF
 slug: fuzzing-lfi-ssrf
-aliases: [Fuzzing de LFI y Escaneo de Puertos vía SSRF]
+aliases: [LFI Fuzzing, SSRF Port Scan, LFI Discovery]
 fase: [Enumeración]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1595.002, T1046]
-related: []
+related: [fuzzing-parametros, analisis-lfi-rfi, analisis-ssrf]
 learning_refs: []
 ---
 

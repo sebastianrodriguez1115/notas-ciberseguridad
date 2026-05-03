@@ -1,13 +1,13 @@
 ---
 title: "Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)"
 slug: analisis-csrf
-aliases: ["Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)"]
+aliases: [CSRF, Cross-Site Request Forgery, XSRF, SameSite bypass]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
-related: []
-learning_refs: []
+related: [analisis-xss, analisis-cors, analisis-seguridad-cabeceras]
+learning_refs: [portswigger/samesite-lax-bypass-via-cookie-refresh]
 ---
 
 # Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)

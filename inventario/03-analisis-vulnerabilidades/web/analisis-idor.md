@@ -1,12 +1,12 @@
 ---
 title: "Análisis de Vulnerabilidades: Insecure Direct Object Reference (IDOR)"
 slug: analisis-idor
-aliases: ["Análisis de Vulnerabilidades: Insecure Direct Object Reference (IDOR)"]
+aliases: [IDOR, Insecure Direct Object Reference, BOLA, Broken Object Level Authorization]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Básica
 mitre: [T1190]
-related: []
+related: [analisis-csrf]
 learning_refs: []
 ---
 

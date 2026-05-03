@@ -1,12 +1,12 @@
 ---
 title: Análisis de CORS (Cross-Origin Resource Sharing)
 slug: analisis-cors
-aliases: [Análisis de CORS (Cross-Origin Resource Sharing)]
+aliases: [CORS, Cross-Origin Resource Sharing, CORS misconfiguration]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
-related: []
+related: [analisis-csrf, analisis-seguridad-cabeceras]
 learning_refs: []
 ---
 

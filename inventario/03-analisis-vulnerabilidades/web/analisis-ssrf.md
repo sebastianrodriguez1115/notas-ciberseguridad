@@ -1,12 +1,12 @@
 ---
 title: Análisis de SSRF (Server-Side Request Forgery)
 slug: analisis-ssrf
-aliases: [Análisis de SSRF (Server-Side Request Forgery)]
+aliases: [SSRF, Server-Side Request Forgery]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Avanzada
 mitre: [T1190]
-related: []
+related: [fuzzing-lfi-ssrf, analisis-xxe]
 learning_refs: []
 ---
 

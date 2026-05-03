@@ -1,12 +1,12 @@
 ---
 title: Enumeración Kerberos (Puerto 88)
 slug: enumeracion-kerberos
-aliases: [Enumeración Kerberos (Puerto 88)]
+aliases: [Kerberos, Kerberos Enumeration, Kerberoasting, AS-REP Roasting, ASREPRoast, GetUserSPNs, GetNPUsers]
 fase: [Enumeración, Post-Explotación]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1558, T1558.003, T1558.004]
-related: []
+related: [enumeracion-ldap, enumeracion-smb, bloodhound]
 learning_refs: []
 ---
 

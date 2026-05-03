@@ -1,12 +1,12 @@
 ---
 title: Fuzzing de Parámetros HTTP
 slug: fuzzing-parametros
-aliases: [Fuzzing de Parámetros HTTP]
+aliases: [Parameter Fuzzing, Hidden Parameter Discovery, Arjun, ParamMiner]
 fase: [Enumeración]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1595.002]
-related: []
+related: [fuzzing-directorios-archivos, fuzzing-lfi-ssrf]
 learning_refs: []
 ---
 

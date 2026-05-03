@@ -1,12 +1,12 @@
 ---
 title: Enumeración MongoDB (Puerto 27017)
 slug: enumeracion-mongodb
-aliases: [Enumeración MongoDB (Puerto 27017)]
+aliases: [MongoDB Enumeration, NoSQL DB]
 fase: [Enumeración]
 plataforma: Multi
 dificultad: Básica
 mitre: [T1046]
-related: []
+related: [explotacion-nosqli]
 learning_refs: []
 ---
 

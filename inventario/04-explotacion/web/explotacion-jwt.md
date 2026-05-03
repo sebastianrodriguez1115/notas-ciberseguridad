@@ -1,12 +1,12 @@
 ---
 title: Explotación de JSON Web Tokens (JWT)
 slug: explotacion-jwt
-aliases: [Explotación de JSON Web Tokens (JWT)]
+aliases: [JWT, JSON Web Token, jwt_tool, JWT Token Forgery]
 fase: [Explotación]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
-related: []
+related: [explotacion-auth-bypass-oauth, hashing-codificacion]
 learning_refs: []
 ---
 

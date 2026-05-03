@@ -1,12 +1,12 @@
 ---
 title: Ejecución Remota en Windows
 slug: ejecucion-remota-windows
-aliases: [Ejecución Remota en Windows]
+aliases: [Remote Execution Windows, psexec, wmiexec, smbexec, atexec]
 fase: [Post-Explotación]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1021.002, T1021.006, T1021.001, T1047]
-related: []
+related: [pass-the-hash, enumeracion-winrm, enumeracion-rdp]
 learning_refs: []
 ---
 

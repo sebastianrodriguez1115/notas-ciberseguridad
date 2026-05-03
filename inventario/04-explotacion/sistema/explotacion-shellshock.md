@@ -1,7 +1,7 @@
 ---
 title: Shellshock (CVE-2014-6271)
 slug: explotacion-shellshock
-aliases: [Shellshock (CVE-2014-6271)]
+aliases: [Shellshock, CVE-2014-6271, bash CGI vulnerability]
 fase: [Explotación]
 plataforma: Linux
 dificultad: Intermedia

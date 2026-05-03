@@ -1,12 +1,12 @@
 ---
 title: Análisis de SSTI (Server-Side Template Injection)
 slug: analisis-ssti
-aliases: [Análisis de SSTI (Server-Side Template Injection)]
+aliases: [SSTI, Server-Side Template Injection, Jinja2 SSTI, Twig SSTI]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
-related: []
+related: [analisis-sqli, analisis-deserialization]
 learning_refs: []
 ---
 

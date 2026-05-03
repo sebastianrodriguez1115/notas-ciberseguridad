@@ -1,12 +1,12 @@
 ---
 title: Fuzzing de Directorios y Archivos Web
 slug: fuzzing-directorios-archivos
-aliases: [Fuzzing de Directorios y Archivos Web]
+aliases: [Directory Fuzzing, Content Discovery, gobuster, ffuf, dirb, dirsearch]
 fase: [Enumeración]
 plataforma: Web
 dificultad: Básica
 mitre: [T1595.002]
-related: []
+related: [fuzzing-subdominios-vhosts, fuzzing-parametros]
 learning_refs: []
 ---
 

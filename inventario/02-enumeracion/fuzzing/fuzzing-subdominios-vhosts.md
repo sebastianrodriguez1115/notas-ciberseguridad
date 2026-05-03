@@ -1,12 +1,12 @@
 ---
 title: Fuzzing de Subdominios y Virtual Hosts
 slug: fuzzing-subdominios-vhosts
-aliases: [Fuzzing de Subdominios y Virtual Hosts]
+aliases: [Subdomain Fuzzing, Virtual Host Discovery, vhost enum, ffuf vhost]
 fase: [Enumeración]
 plataforma: Web
 dificultad: Básica
 mitre: [T1595.002]
-related: []
+related: [fuzzing-directorios-archivos, dns-pasivo, transparencia-certificados]
 learning_refs: []
 ---
 

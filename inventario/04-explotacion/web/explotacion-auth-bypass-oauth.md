@@ -1,12 +1,12 @@
 ---
 title: Bypass de Autenticación en OAuth2 y OpenID
 slug: explotacion-auth-bypass-oauth
-aliases: [Bypass de Autenticación en OAuth2 y OpenID]
+aliases: [OAuth bypass, OpenID Connect bypass, OIDC bypass, OAuth2]
 fase: [Explotación]
 plataforma: Web
 dificultad: Avanzada
 mitre: [T1190]
-related: []
+related: [explotacion-jwt]
 learning_refs: []
 ---
 

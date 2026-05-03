@@ -1,7 +1,7 @@
 ---
 title: "Metasploit Framework: Uso Avanzado y Automatización"
 slug: metasploit-avanzado
-aliases: ["Metasploit Framework: Uso Avanzado y Automatización"]
+aliases: [Metasploit, msfconsole, msfvenom, Metasploit Framework]
 fase: [Análisis de Vulnerabilidades, Explotación, Post-Explotación]
 plataforma: Multi
 dificultad: Intermedia

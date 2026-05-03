@@ -1,12 +1,12 @@
 ---
 title: Inyección NoSQL (NoSQLi)
 slug: explotacion-nosqli
-aliases: [Inyección NoSQL (NoSQLi)]
+aliases: [NoSQLi, NoSQL Injection, MongoDB Injection]
 fase: [Explotación]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
-related: []
+related: [analisis-sqli, explotacion-sqli, enumeracion-mongodb]
 learning_refs: []
 ---
 

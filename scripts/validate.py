@@ -193,7 +193,13 @@ def cross_validate(
 
 def collect_files() -> list[Path]:
     files = sorted(INVENTORY.rglob("*.md"))
-    return [f for f in files if f.name not in {"INDEX.md", "TEMPLATE.md"}]
+    meta_dir = INVENTORY / "meta"
+    return [
+        f
+        for f in files
+        if f.name not in {"INDEX.md", "TEMPLATE.md", "TOPICS.md"}
+        and meta_dir not in f.parents
+    ]
 
 
 def main():

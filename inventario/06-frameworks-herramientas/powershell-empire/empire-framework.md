@@ -1,7 +1,7 @@
 ---
 title: "PowerShell Empire: Post-Explotación y C2"
 slug: empire-framework
-aliases: ["PowerShell Empire: Post-Explotación y C2"]
+aliases: [PowerShell Empire, Empire, C2 framework, Starkiller]
 fase: [Post-Explotación]
 plataforma: Multi
 dificultad: Intermedia

@@ -1,12 +1,12 @@
 ---
 title: Enumeración SMB (Server Message Block)
 slug: enumeracion-smb
-aliases: [Enumeración SMB (Server Message Block)]
+aliases: [SMB, SMB Enumeration, Server Message Block, smbclient, enum4linux, CIFS]
 fase: [Enumeración]
 plataforma: Multi
 dificultad: Básica
 mitre: [T1135, T1087, T1069, T1007, T1110]
-related: []
+related: [enumeracion-nfs, enumeracion-ldap, enumeracion-kerberos]
 learning_refs: []
 ---
 

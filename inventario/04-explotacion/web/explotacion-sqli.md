@@ -1,13 +1,13 @@
 ---
 title: Inyección SQL (SQLi)
 slug: explotacion-sqli
-aliases: [Inyección SQL (SQLi)]
+aliases: [SQLi, SQL Injection, Inyección SQL, sqlmap]
 fase: [Explotación]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
-related: []
-learning_refs: []
+related: [analisis-sqli, explotacion-nosqli]
+learning_refs: [portswigger/visible-error-based-sql-injection, portswigger/blind-sqli-time-delays, portswigger/blind-sqli-time-delays-info-retrieval, portswigger/blind-sqli-out-of-band, portswigger/sqli-filter-bypass-xml-encoding]
 ---
 
 # Inyección SQL (SQLi)

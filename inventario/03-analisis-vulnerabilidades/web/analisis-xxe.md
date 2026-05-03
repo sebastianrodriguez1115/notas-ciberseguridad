@@ -1,12 +1,12 @@
 ---
 title: Análisis de XXE (XML External Entity)
 slug: analisis-xxe
-aliases: [Análisis de XXE (XML External Entity)]
+aliases: [XXE, XML External Entity, XML Injection]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
-related: []
+related: [analisis-ssrf, analisis-deserialization, analisis-sqli]
 learning_refs: []
 ---
 

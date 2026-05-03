@@ -1,12 +1,12 @@
 ---
 title: Enumeración LDAP (Lightweight Directory Access Protocol)
 slug: enumeracion-ldap
-aliases: [Enumeración LDAP (Lightweight Directory Access Protocol)]
+aliases: [LDAP, LDAP Enumeration, Active Directory enumeration, ldapsearch, AD enum]
 fase: [Enumeración]
 plataforma: Multi
 dificultad: Intermedia
 mitre: [T1087.002, T1069.002, T1018]
-related: []
+related: [enumeracion-kerberos, enumeracion-smb, bloodhound]
 learning_refs: []
 ---
 

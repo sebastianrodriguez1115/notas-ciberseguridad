@@ -1,7 +1,7 @@
 ---
 title: "Burp Suite: Configuración y Uso Avanzado"
 slug: configuracion-uso-avanzado
-aliases: ["Burp Suite: Configuración y Uso Avanzado"]
+aliases: [Burp Suite, Burp Proxy, Burp Repeater, Burp Intruder]
 fase: [Análisis de Vulnerabilidades, Explotación]
 plataforma: Web
 dificultad: Intermedia

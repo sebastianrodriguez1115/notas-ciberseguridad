@@ -1,12 +1,12 @@
 ---
 title: Explotación de Deserialización Insegura
 slug: explotacion-deserialization
-aliases: [Explotación de Deserialización Insegura]
+aliases: [Insecure Deserialization, Object Injection RCE, ysoserial]
 fase: [Explotación]
 plataforma: Web
 dificultad: Avanzada
 mitre: [T1190]
-related: []
+related: [analisis-deserialization]
 learning_refs: []
 ---
 

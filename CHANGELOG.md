@@ -2,6 +2,38 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19e (Enriquecimiento de aliases + related + learning_refs)
+
+Pasada de enriquecimiento sobre 39 topics frecuentes para que las búsquedas por sinónimo y la cross-referencia entre fases funcionen. Aplicado vía script one-shot inline.
+
+### Topics enriquecidos (39 archivos)
+- **Web**: analisis-sqli ↔ explotacion-sqli, analisis-xss, analisis-csrf, analisis-cors, analisis-idor, analisis-ssrf, analisis-xxe, analisis-ssti, analisis-lfi-rfi, analisis-deserialization ↔ explotacion-deserialization, explotacion-nosqli, explotacion-jwt, explotacion-auth-bypass-oauth, explotacion-fileupload.
+- **Red/AD**: enumeracion-kerberos (Kerberoasting, AS-REP Roasting, GetUserSPNs, GetNPUsers), enumeracion-ldap, enumeracion-smb (enum4linux, smbclient, CIFS), enumeracion-nfs, enumeracion-snmp, enumeracion-dns.
+- **Fuzzing**: fuzzing-directorios-archivos (gobuster, ffuf, dirsearch), fuzzing-subdominios-vhosts, fuzzing-parametros (Arjun, ParamMiner), fuzzing-lfi-ssrf.
+- **Post-Explotación**: pass-the-hash (PtH), credential-dumping (mimikatz, LSASS dump, DCSync, DPAPI), bloodhound (SharpHound, AD attack paths), ejecucion-remota-windows (psexec, wmiexec, atexec).
+- **DBs**: enumeracion-mssql (xp_cmdshell), enumeracion-mysql (MariaDB), enumeracion-mongodb.
+- **Frameworks**: metasploit-avanzado (msfconsole, msfvenom), configuracion-uso-avanzado (Burp Proxy/Repeater/Intruder), empire-framework (Starkiller).
+- **Sistema**: explotacion-eternalblue (MS17-010), explotacion-zerologon (CVE-2020-1472), explotacion-shellshock.
+
+### Cross-references añadidas
+- `related:` en cada par cross-fase listado mutuamente (analisis-sqli ↔ explotacion-sqli, etc.).
+- `related:` cross-categoría en topics que cruzan disciplinas (kerberos ↔ ldap ↔ smb ↔ bloodhound; jwt ↔ oauth-bypass; fuzzing ↔ topics web).
+
+### `learning_refs:` añadidos
+- 6 archivos del inventario referencian writeups de `learning/portswigger/`:
+  - **SQLi (analisis + explotacion)**: 5 labs (visible-error-based, blind-time-delays, blind-time-delays-info-retrieval, blind-out-of-band, sqli-filter-bypass-xml-encoding).
+  - **XSS (analisis)**: 4 labs (reflected-xss-canonical-link-tag, reflected-xss-js-string-angle-quotes-encoded, reflected-xss-js-string-sq-backslash-escaped, stored-xss-onclick-html-entity-bypass).
+  - **CSRF (analisis)**: 1 lab (samesite-lax-bypass-via-cookie-refresh).
+
+### Fix derivado
+- `scripts/validate.py` ahora excluye `inventario/meta/` y `inventario/TOPICS.md` (auto-generados sin frontmatter).
+
+### Estado tras enriquecimiento
+- `python3 scripts/validate.py` → 124/124 OK con cross-references resueltas.
+- `python3 scripts/build_indexes.py --check` → up to date (TOPICS.md regenerado para reflejar nuevas aliases/related/learning_refs).
+- Discoverabilidad por sinónimo funciona: `grep -lE "^aliases:.*Kerberoasting"` encuentra `enumeracion-kerberos.md`, `grep -lE "^aliases:.*\bPtH\b"` encuentra `pass-the-hash.md`, etc.
+- Pares cross-fase siempre se encuentran mutuamente vía `related:` (ej. desde explotacion-sqli puedes saltar a analisis-sqli y a los 5 writeups PortSwigger).
+
 ## [2026-05-03] — Sesión 19d (Sprint 2: validate.py + build_indexes.py)
 
 Sprint 2 del plan de discoverabilidad. Tooling para validar la integridad del frontmatter y regenerar índices automáticamente.

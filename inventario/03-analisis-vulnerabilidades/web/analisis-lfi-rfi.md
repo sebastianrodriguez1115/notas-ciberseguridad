@@ -1,12 +1,12 @@
 ---
 title: "Análisis de Vulnerabilidades: LFI y RFI"
 slug: analisis-lfi-rfi
-aliases: ["Análisis de Vulnerabilidades: LFI y RFI"]
+aliases: [LFI, RFI, Local File Inclusion, Remote File Inclusion, Path Traversal, Directory Traversal]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
-related: []
+related: [fuzzing-lfi-ssrf, analisis-ssrf]
 learning_refs: []
 ---
 

@@ -1,12 +1,12 @@
 ---
 title: Análisis de Insecure Deserialization
 slug: analisis-deserialization
-aliases: [Análisis de Insecure Deserialization]
+aliases: [Insecure Deserialization, Object Injection, Deserialization Attack]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Avanzada
 mitre: [T1190]
-related: []
+related: [explotacion-deserialization, analisis-ssti]
 learning_refs: []
 ---
 
