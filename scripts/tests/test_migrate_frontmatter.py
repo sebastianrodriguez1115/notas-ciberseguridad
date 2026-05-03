@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 import migrate_frontmatter as mf
 
 
@@ -80,6 +82,110 @@ def test_yaml_array_with_aliases_derived_from_titled_quote():
     parsed = _yaml.safe_load(fm.split("---\n")[1])
     assert parsed["title"] == 'Foo: "Bar"'
     assert parsed["aliases"] == ['Foo: "Bar"']
+
+
+# ---------- yaml_scalar: reserved scalars (Finding ronda 4) ----------
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        "No",  # bool en YAML 1.1
+        "no",
+        "NO",
+        "Yes",
+        "yes",
+        "true",
+        "True",
+        "TRUE",
+        "false",
+        "On",
+        "off",
+        "Y",
+        "n",
+        "null",
+        "None",
+        "~",
+    ],
+)
+def test_yaml_scalar_quotes_reserved_yaml_scalars(value):
+    """Regression ronda 4: scalars como No/Yes/true/null PyYAML los resuelve a
+    bool/null si no se quotan. yaml_scalar debe quotarlos."""
+    out = mf.yaml_scalar(value)
+    assert out.startswith('"') and out.endswith('"'), (
+        f"yaml_scalar({value!r}) = {out!r}, debería estar quoted"
+    )
+
+
+@pytest.mark.parametrize(
+    "value",
+    ["123", "0", "-7", "1.5", ".5", "1e10", "0xFF", "0o777", "0b101"],
+)
+def test_yaml_scalar_quotes_numbers(value):
+    """Strings que parecen números enteros, floats, o números en otras bases
+    deben quotarse para que PyYAML no los resuelva a int/float."""
+    out = mf.yaml_scalar(value)
+    assert out.startswith('"') and out.endswith('"'), (
+        f"yaml_scalar({value!r}) = {out!r}, debería estar quoted"
+    )
+
+
+def test_yaml_scalar_plain_strings_unquoted():
+    """Strings normales no necesitan quoting."""
+    assert mf.yaml_scalar("plain") == "plain"
+    assert mf.yaml_scalar("Hello World") == "Hello World"
+    assert mf.yaml_scalar("Foo (Bar)") == "Foo (Bar)"
+
+
+def test_yaml_scalar_empty_string_is_quoted():
+    """String vacío debe quotarse para no producir scalar implícito null."""
+    assert mf.yaml_scalar("") == '""'
+
+
+def test_yaml_scalar_rejects_non_string():
+    with pytest.raises(TypeError):
+        mf.yaml_scalar(123)
+
+
+# ---------- end-to-end: round-trip via PyYAML ----------
+
+
+@pytest.mark.parametrize(
+    "title",
+    [
+        "No",  # legacy `# No` debería migrar y round-trip a string "No"
+        "Yes",
+        "True",
+        "null",
+        "123",
+        "1.5",
+        'Foo: "Bar"',
+        "Plain Title",
+        "Análisis de Vulnerabilidades: SQL Injection (SQLi)",
+    ],
+)
+def test_build_frontmatter_round_trip(title):
+    """El frontmatter generado debe parsearse de vuelta al string original
+    (no a bool/null/int). Esto cubre todos los casos del Finding ronda 4."""
+    parsed_classification = {
+        "fase": ["Reconocimiento"],
+        "plataforma": "Web",
+        "dificultad": "Avanzada",
+        "mitre": ["T1190"],
+    }
+    fm_block = mf.build_frontmatter(title, "test", parsed_classification)
+
+    import yaml as _yaml
+    inner = fm_block.split("---\n", 2)[1]
+    parsed = _yaml.safe_load(inner)
+    assert parsed["title"] == title, (
+        f"round-trip falló: title={title!r} -> emitted -> safe_load -> {parsed['title']!r}"
+    )
+    assert parsed["aliases"] == [title]
+    # Sanity: tipos correctos
+    assert isinstance(parsed["title"], str)
+    assert isinstance(parsed["slug"], str)
+    assert all(isinstance(a, str) for a in parsed["aliases"])
 
 
 # ---------- extract_h1 / extract_clasificacion_block ----------

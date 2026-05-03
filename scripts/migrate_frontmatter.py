@@ -102,26 +102,57 @@ def extract_clasificacion_block(text: str) -> tuple[str, dict] | None:
     return block, parsed
 
 
-def yaml_array(values: list[str]) -> str:
-    """Render a list as inline YAML array. Quote strings with special chars
-    y escape comillas internas para evitar producir YAML inválido cuando un
-    valor contiene `"` (ej. title legacy `Foo: "Bar"` derivando a aliases)."""
-    parts = []
-    for v in values:
-        if any(c in v for c in [":", ",", "[", "]", "&", "*", "#"]):
-            escaped = v.replace('"', '\\"')
-            parts.append(f'"{escaped}"')
-        else:
-            parts.append(v)
-    return "[" + ", ".join(parts) + "]"
+# Scalars que YAML 1.1 (PyYAML safe_load default) resuelve a bool/null/Y/N.
+# Todas las case-variantes (TRUE, true, True) caen aquí.
+_YAML_RESERVED_SCALARS = re.compile(
+    r"^(true|false|yes|no|on|off|y|n|null|None|~)$",
+    re.IGNORECASE,
+)
+# Números enteros, flotantes, notación científica.
+_YAML_NUMBER = re.compile(r"^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$")
+# Otras bases reconocidas: 0x, 0o, 0b, octal con prefijo 0.
+_YAML_NUMBER_RADIX = re.compile(r"^[+-]?0([xX][0-9a-fA-F]+|[oO][0-7]+|[bB][01]+|[0-7]+)$")
+# Caracteres que requieren quoting en flow-context (donde emitimos arrays inline).
+# Incluye los que YAML interpreta especiales en cualquier lado más los de flow.
+_YAML_FLOW_SPECIAL = set(":#&*!|>%@`'\"" + ",[]{}")
+# Si el primer char es uno de estos, también requiere quoting (puede iniciar
+# sintaxis YAML: anchor, alias, tag, list item, mapping, etc.).
+_YAML_RESERVED_PREFIXES = ("-", "?", ":", " ", "\t")
+
+
+def _needs_quoting(s: str) -> bool:
+    """¿Hay que quotar este scalar para garantizar que PyYAML lo lea como string?"""
+    if s == "":
+        return True
+    if _YAML_RESERVED_SCALARS.match(s):
+        return True
+    if _YAML_NUMBER.match(s) or _YAML_NUMBER_RADIX.match(s):
+        return True
+    if any(c in s for c in _YAML_FLOW_SPECIAL):
+        return True
+    if s.startswith(_YAML_RESERVED_PREFIXES):
+        return True
+    if s.endswith((" ", "\t")):
+        return True
+    return False
 
 
 def yaml_scalar(s: str) -> str:
-    """Quote a scalar if it contains YAML-special chars (`:`, `#`, etc.)."""
-    if any(c in s for c in [":", "#", "&", "*", "!", "|", ">", "%", "@", "`"]):
-        escaped = s.replace('"', '\\"')
-        return f'"{escaped}"'
-    return s
+    """Emite un string como scalar YAML. Quota cuando es necesario para que
+    PyYAML safe_load lo reconstruya como string y no como bool/null/number.
+    Escapa `\\` y `"` internas cuando quota."""
+    if not isinstance(s, str):
+        raise TypeError(f"yaml_scalar expects str, got {type(s).__name__}")
+    if not _needs_quoting(s):
+        return s
+    escaped = s.replace("\\", "\\\\").replace('"', '\\"')
+    return f'"{escaped}"'
+
+
+def yaml_array(values: list[str]) -> str:
+    """Render una lista como YAML array inline. Cada item pasa por yaml_scalar
+    para que strings ambiguos (No, true, 123, etc.) se quoten correctamente."""
+    return "[" + ", ".join(yaml_scalar(v) for v in values) + "]"
 
 
 def build_frontmatter(title: str, slug: str, parsed: dict) -> str:

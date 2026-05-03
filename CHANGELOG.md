@@ -2,6 +2,43 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19j (Review crítico ronda 4: YAML implicit type resolution)
+
+Un hallazgo (Media) en `migrate_frontmatter.py` sobre resolución implícita de tipos YAML 1.1. Bug profundo y futuro-proof. Aplicado con cobertura paramétrica.
+
+### Hallazgo (Media)
+PyYAML safe_load resuelve scalars no-quoted como `No`, `Yes`, `True`, `Off`, `null`, `~` a bool/null por la spec YAML 1.1. Lo mismo con strings que parecen números (`123`, `1.5`, `0xFF`, `1e10`). El emitter manual de migrate_frontmatter sólo chequeaba caracteres especiales (`:`, `,`, `[`, etc.) e ignoraba estas categorías reservadas. Reproduce: un legacy `# No` migra a:
+
+```yaml
+title: No
+slug: no
+aliases: [No]
+```
+
+Que PyYAML parsea como `{title: False, slug: False, aliases: [False]}`. Después validate.py reporta `title must be string, got bool`. El frontmatter es objetivamente inválido.
+
+### Decisión: ampliar quoting manual en lugar de yaml.safe_dump
+Evalué la sugerencia del reviewer de usar `yaml.safe_dump`. Rechazado: el default rompe la convención inline para arrays (`fase:\n- Reconocimiento` en lugar de `fase: [Reconocimiento]`). Forzar `default_flow_style=True` global produce mappings en flow `{title: ..., slug: ..., ...}` que es peor. No vale el rework de los 124 archivos por un fix que se puede hacer en 30 líneas con regex bien diseñadas.
+
+### Fix
+- Nuevo `_needs_quoting()` consulta tres regex: `_YAML_RESERVED_SCALARS` (true/false/yes/no/on/off/y/n/null/None/~ case-insensitive), `_YAML_NUMBER` (int/float/exp), `_YAML_NUMBER_RADIX` (0x/0o/0b/octal). También cubre flow-context special chars, prefijos reservados y trailing whitespace.
+- `yaml_scalar()` reescrito para usar `_needs_quoting()` y escapar `\` y `"` cuando quota.
+- `yaml_array()` ahora delega cada item a `yaml_scalar()` para uniformar la lógica.
+
+### Tests nuevos (37 casos via parametrize)
+- `test_yaml_scalar_quotes_reserved_yaml_scalars` (16 casos paramétricos): No/no/NO, Yes/yes, true/True/TRUE, false, On/off, Y/n, null, None, ~. Cada uno verifica que el output empieza con `"`.
+- `test_yaml_scalar_quotes_numbers` (9 casos): 123, 0, -7, 1.5, .5, 1e10, 0xFF, 0o777, 0b101.
+- `test_yaml_scalar_plain_strings_unquoted`: "plain", "Hello World", "Foo (Bar)" no requieren quote.
+- `test_yaml_scalar_empty_string_is_quoted`: `""` quotado para evitar resolución implícita a null.
+- `test_yaml_scalar_rejects_non_string`: TypeError si recibe int.
+- `test_build_frontmatter_round_trip` (9 casos paramétricos): emite frontmatter con title `No`, `Yes`, `True`, `null`, `123`, `1.5`, `Foo: "Bar"`, plain, complejo, parsea con yaml.safe_load, asserts que `title == original`. Esto cubre el escenario completo end-to-end.
+
+### Estado tras ronda 4
+- `bash scripts/check.sh` → all green.
+- 103 tests passing (37 nuevos respecto a sesión 19i, mayormente paramétricos).
+- 124/124 validate OK (no afecta data ya migrada porque ningún title existente caía en los casos reservados).
+- `build_indexes --check` up to date.
+
 ## [2026-05-03] — Sesión 19i (Review crítico ronda 3)
 
 Cuatro hallazgos del review ronda 3 sobre la sesión 19h. Los cuatro válidos. Aplicados con tests nuevos para cada bug de código.
