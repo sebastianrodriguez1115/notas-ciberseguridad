@@ -153,7 +153,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
 - **Aliases**: XSS, Cross-Site Scripting, Reflected XSS, Stored XSS, DOM XSS
 - **Related**: `analisis-csrf`, `analisis-seguridad-cabeceras`
-- **Learning**: [`portswigger/reflected-xss-canonical-link-tag`](../learning/portswigger/reflected-xss-canonical-link-tag/), [`portswigger/reflected-xss-js-string-angle-quotes-encoded`](../learning/portswigger/reflected-xss-js-string-angle-quotes-encoded/), [`portswigger/reflected-xss-js-string-sq-backslash-escaped`](../learning/portswigger/reflected-xss-js-string-sq-backslash-escaped/), [`portswigger/stored-xss-onclick-html-entity-bypass`](../learning/portswigger/stored-xss-onclick-html-entity-bypass/)
+- **Learning**: [`portswigger/reflected-xss-canonical-link-tag`](../learning/portswigger/reflected-xss-canonical-link-tag/), [`portswigger/reflected-xss-js-string-angle-quotes-encoded`](../learning/portswigger/reflected-xss-js-string-angle-quotes-encoded/), [`portswigger/reflected-xss-js-string-sq-backslash-escaped`](../learning/portswigger/reflected-xss-js-string-sq-backslash-escaped/), [`portswigger/reflected-xss-js-template-literal-escapes`](../learning/portswigger/reflected-xss-js-template-literal-escapes/), [`portswigger/stored-xss-onclick-html-entity-bypass`](../learning/portswigger/stored-xss-onclick-html-entity-bypass/)
 
 ## `analisis-xxe` — Análisis de XXE (XML External Entity)
 

@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
 related: [analisis-csrf, analisis-seguridad-cabeceras]
-learning_refs: [portswigger/reflected-xss-canonical-link-tag, portswigger/reflected-xss-js-string-angle-quotes-encoded, portswigger/reflected-xss-js-string-sq-backslash-escaped, portswigger/stored-xss-onclick-html-entity-bypass]
+learning_refs: [portswigger/reflected-xss-canonical-link-tag, portswigger/reflected-xss-js-string-angle-quotes-encoded, portswigger/reflected-xss-js-string-sq-backslash-escaped, portswigger/reflected-xss-js-template-literal-escapes, portswigger/stored-xss-onclick-html-entity-bypass]
 ---
 
 # Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)

@@ -2,6 +2,21 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19n (writeup PortSwigger XSS template literal)
+
+Quinto writeup de la serie PortSwigger XSS-en-JS-string. Lab: "Reflected XSS into a JavaScript string with angle brackets, single, double quotes, backslash and backticks Unicode-escaped". El reto filtra `<>`, `'`, `"`, `` ` `` y `\` (todos escapados). El payload ganador es `${alert(1)}` aprovechando que la entrada se refleja dentro de un **template literal** y la interpolación `${...}` es sintaxis de lenguaje, no caracteres tipográficos.
+
+### Archivo nuevo
+- **`learning/portswigger/reflected-xss-js-template-literal-escapes/writeup.md`**: 9 secciones. Recon atómico de cada filtro, explicación de por qué `'string'` ≠ `` `template` `` a nivel de parser (template literals interpretan `${expr}` mientras que strings tradicionales no), payload `${alert(1)}` y URL final, mermaid del flujo, contramedidas (escape de `${`, JSON.stringify, evitar reflexión en JS server-side), y taxonomía resumen de contextos JS de XSS. Cross-link al lab anterior (`reflected-xss-js-string-sq-backslash-escaped`) y a `analisis-xss.md`.
+
+### Conexión inventario
+- `inventario/03-analisis-vulnerabilidades/web/analisis-xss.md`: +1 entrada en `learning_refs:` (`portswigger/reflected-xss-js-template-literal-escapes`). Total 5 labs PortSwigger XSS conectados al archivo principal.
+
+### Verificación
+- `bash scripts/check.sh` → all green.
+- 128/128 validate OK.
+- `build_indexes --check` up to date tras regeneración (TOPICS.md actualizado para reflejar el nuevo learning_ref).
+
 ## [2026-05-03] — Sesión 19m (Sprint B: cobertura AD ticket-forging)
 
 Hueco de coverage real identificado por el agente 2 del stress-test: T1558.001 Golden Ticket, T1558.002 Silver Ticket, T1550.003 Pass-the-Ticket no tenían archivos dedicados, y Kerberoasting estaba sepultado dentro de `enumeracion-kerberos.md` (mezclando enumeración + extracción de credenciales). Sprint B añade 4 archivos nuevos al cluster AD y reconecta el grafo `related:`.
