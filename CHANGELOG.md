@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19i (Review crítico ronda 3)
+
+Cuatro hallazgos del review ronda 3 sobre la sesión 19h. Los cuatro válidos. Aplicados con tests nuevos para cada bug de código.
+
+### Hallazgo 1 (Media) — yaml_array generaba YAML inválido con comillas internas
+- `migrate_frontmatter.py:yaml_array()` quotaba valores con caracteres YAML especiales pero NO escapaba comillas internas. Un title legacy `Foo: "Bar"` derivado a `aliases: ["Foo: "Bar""]` produce un YAML que PyYAML no parsea (token mismatch: el cierre `"` se interpreta antes de tiempo).
+- **Fix**: `yaml_array()` ahora hace `v.replace('"', '\\"')` antes de quotar, consistente con `yaml_scalar()` que ya lo hacía. 2 tests nuevos: `test_yaml_array_escapes_internal_quotes` (verifica el escape literal y que PyYAML pueda parsear el output) y `test_yaml_array_with_aliases_derived_from_titled_quote` (caso end-to-end via build_frontmatter).
+- En el inventario actual no había títulos con `"` interno, así que no afectaba data ya migrada. Es protección para futuras migraciones.
+
+### Hallazgo 2 (Baja) — cross_validate iteraba string carácter por carácter
+- Si el YAML traía `related: foo` (string) en lugar de `related: [foo]`, `validate_file` reportaba correctamente `related must be array`, pero `cross_validate` hacía `for slug in fm.get("related") or []:` lo cual itera la string como secuencia de caracteres `'f', 'o', 'o'` y reportaba 3 errores falsos. No rompía el exit code (ya había errors de tipo) pero ensuciaba el diagnóstico.
+- **Fix**: `cross_validate` ahora hace `if not isinstance(related_val, list): related_val = []` antes de iterar. Mismo guard para `learning_refs`. 2 tests nuevos: `test_cross_validate_skips_non_list_related` y `test_cross_validate_skips_non_list_learning_refs`.
+
+### Hallazgo 3 (Baja) — AGENTS.md mentía sobre git mv
+- La sección "Slug = nombre de archivo" decía: "se preserva si renombras vía `git mv`". Eso contradice el validador, que exige `slug == path.stem`. Tras un `git mv`, el filename cambia pero el `slug:` dentro del frontmatter NO se auto-actualiza, así que el archivo queda en estado inválido hasta que se edite a mano.
+- **Fix**: AGENTS.md aclara que después de `git mv` hay que actualizar el `slug:` a mano para que coincida con el nuevo filename, y describe el workflow `git mv old.md new.md && sed -i 's/^slug: old$/slug: new/' new.md && bash scripts/check.sh`. El validador detecta el drift con el mensaje `slug must equal filename without extension`.
+
+### Hallazgo 4 (Baja) — CHANGELOG miscount
+- Sesión 19h decía "62 tests passing (4 nuevos: slug validation x3, cross_validate x1)" pero la suite pasó de 57 a 62, son 5 tests nuevos: 4 de slug + 1 de cross_validate.
+- **Fix**: corregido a "5 nuevos: slug validation x4, cross_validate failure x1".
+
+### Estado tras ronda 3
+- `bash scripts/check.sh` → all green.
+- 66 tests passing (4 nuevos respecto a sesión 19h: 2 yaml_array + 2 cross_validate skip).
+- 124/124 validate OK.
+- `build_indexes --check` up to date.
+
 ## [2026-05-03] — Sesión 19h (Review crítico ronda 2)
 
 Cuatro hallazgos del review ronda 2 sobre la sesión 19g. Los cuatro válidos. Aplicados con tests adicionales y un script de ritual para evitar el proceso fallado que disparó el primer hallazgo.
@@ -27,7 +54,7 @@ Cuatro hallazgos del review ronda 2 sobre la sesión 19g. Los cuatro válidos. A
 
 ### Estado tras ronda 2
 - `bash scripts/check.sh` → all green.
-- 62 tests passing (4 nuevos: slug validation x3, cross_validate failure x1).
+- 62 tests passing (5 nuevos respecto a sesión 19g: slug validation x4, cross_validate failure x1).
 - 124/124 validate OK.
 - `build_indexes --check` up to date.
 

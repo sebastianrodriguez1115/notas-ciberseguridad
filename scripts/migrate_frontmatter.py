@@ -103,11 +103,14 @@ def extract_clasificacion_block(text: str) -> tuple[str, dict] | None:
 
 
 def yaml_array(values: list[str]) -> str:
-    """Render a list as inline YAML array. Quote strings with special chars."""
+    """Render a list as inline YAML array. Quote strings with special chars
+    y escape comillas internas para evitar producir YAML inválido cuando un
+    valor contiene `"` (ej. title legacy `Foo: "Bar"` derivando a aliases)."""
     parts = []
     for v in values:
         if any(c in v for c in [":", ",", "[", "]", "&", "*", "#"]):
-            parts.append(f'"{v}"')
+            escaped = v.replace('"', '\\"')
+            parts.append(f'"{escaped}"')
         else:
             parts.append(v)
     return "[" + ", ".join(parts) + "]"

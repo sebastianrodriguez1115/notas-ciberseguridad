@@ -55,6 +55,33 @@ def test_yaml_array_quotes_special_chars():
     assert '"a:b"' in mf.yaml_array(["a:b", "plain"])
 
 
+def test_yaml_array_escapes_internal_quotes():
+    """Regression: title legacy 'Foo: \"Bar\"' derivando a aliases producía
+    YAML inválido porque yaml_array no escapaba comillas internas."""
+    out = mf.yaml_array(['Foo: "Bar"'])
+    assert out == '["Foo: \\"Bar\\""]'
+    # Y el output debe ser parseable por PyYAML
+    import yaml as _yaml
+    parsed = _yaml.safe_load(f"x: {out}")
+    assert parsed == {"x": ['Foo: "Bar"']}
+
+
+def test_yaml_array_with_aliases_derived_from_titled_quote():
+    """Caso end-to-end: title con `:` y `\"` en build_frontmatter."""
+    parsed_classification = {
+        "fase": ["Reconocimiento"],
+        "plataforma": "Web",
+        "dificultad": "Avanzada",
+        "mitre": ["T1190"],
+    }
+    fm = mf.build_frontmatter('Foo: "Bar"', "test", parsed_classification)
+    # Parseable por PyYAML
+    import yaml as _yaml
+    parsed = _yaml.safe_load(fm.split("---\n")[1])
+    assert parsed["title"] == 'Foo: "Bar"'
+    assert parsed["aliases"] == ['Foo: "Bar"']
+
+
 # ---------- extract_h1 / extract_clasificacion_block ----------
 
 

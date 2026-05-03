@@ -342,6 +342,34 @@ def test_learning_refs_path_does_not_exist(monkeypatch, sandbox, write_md):
 # ---------- main: cross_validate failure forces non-zero exit ----------
 
 
+def test_cross_validate_skips_non_list_related(monkeypatch, sandbox, write_md):
+    """Regression: si related no es lista (ej. string), cross_validate no
+    debe iterarla carácter por carácter generando errores falsos."""
+    patch_paths(monkeypatch, sandbox)
+    p = sandbox / "inventario" / "test.md"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text("# x\n", encoding="utf-8")
+    files_data = {p: {"related": "foo", "learning_refs": []}}
+    cross = validate.cross_validate(files_data, {})
+    # No debe haber 3 errores (uno por cada carácter de "foo")
+    assert p not in cross or all(
+        "'f'" not in e and "'o'" not in e for e in cross.get(p, [])
+    )
+
+
+def test_cross_validate_skips_non_list_learning_refs(monkeypatch, sandbox, write_md):
+    patch_paths(monkeypatch, sandbox)
+    p = sandbox / "inventario" / "test.md"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text("# x\n", encoding="utf-8")
+    files_data = {p: {"related": [], "learning_refs": "foo"}}
+    cross = validate.cross_validate(files_data, {})
+    # No debe iterar la string como path por carácter
+    assert p not in cross or all(
+        "'f'" not in e and "'o'" not in e for e in cross.get(p, [])
+    )
+
+
 def test_main_exits_nonzero_when_cross_validate_crashes(monkeypatch, sandbox, write_md, capsys):
     """Finding 3 ronda 2: si cross_validate crashea, el comando debe fallar
     aunque no haya errores per-file."""

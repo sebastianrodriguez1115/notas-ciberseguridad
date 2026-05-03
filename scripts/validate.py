@@ -213,12 +213,21 @@ def cross_validate(
     cross_errors: dict[Path, list[str]] = {}
     for path, fm in files_data.items():
         errs = []
-        for slug in fm.get("related", []) or []:
+        related_val = fm.get("related") or []
+        if not isinstance(related_val, list):
+            # Si no es lista (string, int, etc.), validate_file ya reportó el
+            # error de tipo. Iterar produciría falsos positivos (ej. iterar
+            # un string carácter por carácter).
+            related_val = []
+        for slug in related_val:
             if not isinstance(slug, str):
                 continue  # type error ya reportado en validate_file
             if slug not in all_slugs:
                 errs.append(f"related slug {slug!r} does not exist")
-        for ref in fm.get("learning_refs", []) or []:
+        learning_val = fm.get("learning_refs") or []
+        if not isinstance(learning_val, list):
+            learning_val = []
+        for ref in learning_val:
             if not isinstance(ref, str):
                 continue
             ref_path = LEARNING / ref

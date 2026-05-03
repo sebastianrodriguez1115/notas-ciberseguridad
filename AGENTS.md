@@ -242,7 +242,9 @@ Bloque obligatorio al inicio de TODOS los archivos técnicos. Es la fuente únic
 
 ### Slug = nombre de archivo
 
-Convención canónica: `slug = filename sin extensión`. Por ejemplo `analisis-sqli.md` tiene `slug: analisis-sqli`. Esto se deriva automáticamente en `scripts/migrate_frontmatter.py` y se preserva si renombras vía `git mv`.
+Convención canónica: `slug = filename sin extensión`. Por ejemplo `analisis-sqli.md` tiene `slug: analisis-sqli`. Esto se deriva automáticamente en `scripts/migrate_frontmatter.py`.
+
+**Cuando renombres un archivo (`git mv`)**: el filename cambia pero el `slug:` dentro del frontmatter NO se auto-actualiza. Hay que editarlo a mano para que vuelva a coincidir con el nuevo `path.stem`. El validador (`scripts/validate.py`) detecta el drift y falla con `slug must equal filename without extension` hasta que se actualice. Workflow: `git mv old.md new.md && sed -i 's/^slug: old$/slug: new/' new.md && bash scripts/check.sh`.
 
 ### Pares cross-fase
 
