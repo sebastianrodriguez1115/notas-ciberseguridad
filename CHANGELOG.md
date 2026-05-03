@@ -2,6 +2,36 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19f (Fixes del review crítico de Sprint 2)
+
+Pasada de fixes derivada de un review crítico externo del trabajo de Sprint 2. Cuatro hallazgos auditados, los cuatro corregidos. Discusión arquitectónica resuelta sobre la convención de slugs.
+
+### Hallazgo 1 (Alta): doc drift en convención de slug
+- TEMPLATE.md y AGENTS.md declaraban "análisis usa slug base (`sqli`), explotación usa `<slug>-explotacion` (`sqli-explotacion`)" pero la realidad implementada era `slug = filename sin extensión` (`analisis-sqli`, `explotacion-sqli`).
+- **Decisión arquitectónica**: alinear docs a la implementación, no al revés. Razones: slug=filename es derivable mecánicamente, invariante con `git mv`, y la "regla base+suffix" generaba ambigüedad para pares no-clásicos (pasivo/activo no tiene "base" obvio). Búsqueda por tópico cruzando fases vía `find inventario -name "*-sqli.md"` o `grep -rlE "^slug: .*[-_]sqli($|[-.])"`. Trade-off aceptado: un grep ligeramente más complejo a cambio de cero ambigüedad mental.
+- **Cambios**: TEMPLATE.md notas 1 y 2 reescritas. AGENTS.md sección "Pares cross-fase" y cookbook actualizados para reflejar la convención real.
+
+### Hallazgo 2 (Media): validate.py crasheaba con YAML mal tipado
+- `plataforma: [Web]` (lista en lugar de string) provocaba `TypeError: unhashable type: 'list'` al evaluar `plat not in PLATAFORMA_VALID`. Title no-string fallaba en `.strip()`. Un solo archivo malformado abortaba todo el run.
+- **Fix**: type checks defensivos por campo. Cada error se reporta como `plataforma must be string, got list` y el run continúa con los siguientes archivos. Red de seguridad adicional: `try/except` en el loop principal de `main()` captura cualquier edge case que escape los type checks y lo reporta sin abortar.
+- **Verificación**: tests sintéticos con `plataforma: [Web]`, `title: 42`, `related: [123, "valid"]` producen mensajes de error claros, todos los archivos siguen procesándose.
+
+### Hallazgo 3 (Media): tipos internos de related/learning_refs + writeup.md strict
+- `related: [123, "foo"]` rompía `slug not in all_slugs` con TypeError. `learning_refs: [123]` rompía `LEARNING / 123`.
+- **Fix 3a**: type-check de items dentro de los arrays. Items no-string se reportan como error y se saltan en cross-validation (en lugar de crashear).
+- **Fix 3b**: la política en AGENTS.md exigía writeup.md o equivalente Markdown estructurado, pero el validador aceptaba cualquier `*.md`. Ahora exige `writeup.md` específicamente. Razón: las directorios de course material multi-capítulo (como `tryhackme/abusingwindowsinternals/`) ya tienen writeup.md consolidado; esta política fuerza a futuros writeups a hacer lo mismo en lugar de aceptar fragmentos sueltos.
+- **Verificación**: las 4 archivos del inventario con learning_refs apuntan a dirs con writeup.md y siguen pasando. Test sintético con dir conteniendo sólo `notes.md` produce error: `learning_refs path missing writeup.md`.
+
+### Hallazgo 4 (Baja): build_indexes.py --check tocaba filesystem
+- `META_DIR.mkdir(exist_ok=True)` se ejecutaba incondicionalmente, creando `inventario/meta/` aunque el modo `--check` declarara no modificar nada.
+- **Fix**: mover `META_DIR.mkdir` dentro de la rama `if not args.check`. CI puede ahora correr `build_indexes.py --check` sobre un repo limpio sin ensuciar el árbol.
+
+### Estado tras fixes
+- `python3 scripts/validate.py` → 124/124 OK.
+- `python3 scripts/build_indexes.py --check` → up to date, no filesystem changes.
+- 0 archivos del inventario afectados (los fixes son sólo en docs y scripts).
+- Tests defensivos pasan: validador no crashea con YAML mal tipado.
+
 ## [2026-05-03] — Sesión 19e (Enriquecimiento de aliases + related + learning_refs)
 
 Pasada de enriquecimiento sobre 39 topics frecuentes para que las búsquedas por sinónimo y la cross-referencia entre fases funcionen. Aplicado vía script one-shot inline.

@@ -103,28 +103,34 @@ def validate_file(path: Path, all_slugs: dict[str, Path]) -> list[str]:
                 )
             all_slugs[slug] = path
 
-    # title vs H1
+    # title vs H1 (defensive: title puede no ser string si el YAML está mal)
     title = fm.get("title")
-    if title and body:
-        h1 = H1_RE.search(body)
-        if h1:
-            if h1.group(1).strip() != title.strip():
-                # Tolerar discrepancia menor: a veces el title es la versión
-                # corta y el H1 incluye paréntesis con info adicional. Avisar
-                # como warning suave (todavía error pero descriptible).
-                errors.append(
-                    f"title mismatch: frontmatter={title!r} vs H1={h1.group(1)!r}"
-                )
-        else:
-            errors.append("body has no H1")
+    if title is not None:
+        if not isinstance(title, str):
+            errors.append(f"title must be string, got {type(title).__name__}")
+        elif body:
+            h1 = H1_RE.search(body)
+            if h1:
+                if h1.group(1).strip() != title.strip():
+                    errors.append(
+                        f"title mismatch: frontmatter={title!r} vs H1={h1.group(1)!r}"
+                    )
+            else:
+                errors.append("body has no H1")
 
-    # Enums
+    # Enums (defensive: rechazar tipos no-string para evitar TypeError en `in`)
     plat = fm.get("plataforma")
-    if plat is not None and plat not in PLATAFORMA_VALID:
-        errors.append(f"invalid plataforma: {plat!r}")
+    if plat is not None:
+        if not isinstance(plat, str):
+            errors.append(f"plataforma must be string, got {type(plat).__name__}")
+        elif plat not in PLATAFORMA_VALID:
+            errors.append(f"invalid plataforma: {plat!r}")
     dif = fm.get("dificultad")
-    if dif is not None and dif not in DIFICULTAD_VALID:
-        errors.append(f"invalid dificultad: {dif!r}")
+    if dif is not None:
+        if not isinstance(dif, str):
+            errors.append(f"dificultad must be string, got {type(dif).__name__}")
+        elif dif not in DIFICULTAD_VALID:
+            errors.append(f"invalid dificultad: {dif!r}")
 
     # Arrays
     fase = fm.get("fase")
@@ -133,12 +139,19 @@ def validate_file(path: Path, all_slugs: dict[str, Path]) -> list[str]:
             errors.append("fase must be array")
         else:
             for f in fase:
-                if f not in FASE_VALID:
+                if not isinstance(f, str):
+                    errors.append(f"fase item must be string, got {type(f).__name__}: {f!r}")
+                elif f not in FASE_VALID:
                     errors.append(f"invalid fase value: {f!r}")
 
     aliases = fm.get("aliases")
-    if aliases is not None and not isinstance(aliases, list):
-        errors.append("aliases must be array")
+    if aliases is not None:
+        if not isinstance(aliases, list):
+            errors.append("aliases must be array")
+        else:
+            for a in aliases:
+                if not isinstance(a, str):
+                    errors.append(f"aliases item must be string, got {type(a).__name__}: {a!r}")
 
     mitre = fm.get("mitre")
     if mitre is not None:
@@ -150,16 +163,26 @@ def validate_file(path: Path, all_slugs: dict[str, Path]) -> list[str]:
                     errors.append(f"invalid mitre ID: {mid!r}")
             # Empty mitre only allowed for conceptual content
             if not mitre:
-                fase_set = set(fase or [])
+                fase_list = fase if isinstance(fase, list) else []
+                fase_set = {f for f in fase_list if isinstance(f, str)}
                 if not (fase_set & {"Fundamentos", "Forense y DFIR"}):
                     errors.append(
                         "empty mitre array: only allowed for Fundamentos or Forense y DFIR"
                     )
 
-    # related & learning_refs (validated later for resolution)
+    # related & learning_refs: tipo array + items strings (validador cruzado en cross_validate)
     for opt in OPTIONAL:
-        if opt in fm and not isinstance(fm[opt], list):
+        val = fm.get(opt)
+        if val is None:
+            continue
+        if not isinstance(val, list):
             errors.append(f"{opt} must be array")
+            continue
+        for item in val:
+            if not isinstance(item, str):
+                errors.append(
+                    f"{opt} item must be string, got {type(item).__name__}: {item!r}"
+                )
 
     # No `## Clasificación` in body
     if body and re.search(r"^## Clasificación\b", body, re.MULTILINE):
@@ -171,21 +194,30 @@ def validate_file(path: Path, all_slugs: dict[str, Path]) -> list[str]:
 def cross_validate(
     files_data: dict[Path, dict], all_slugs: dict[str, Path]
 ) -> dict[Path, list[str]]:
-    """Valida `related` y `learning_refs` después de tener todos los slugs."""
+    """Valida `related` y `learning_refs` después de tener todos los slugs.
+
+    Pre-condición: validate_file ya validó tipos. Aquí asumimos strings, pero
+    seguimos siendo defensivos: items no-string se saltan (ya reportados arriba).
+    """
     cross_errors: dict[Path, list[str]] = {}
     for path, fm in files_data.items():
         errs = []
         for slug in fm.get("related", []) or []:
+            if not isinstance(slug, str):
+                continue  # type error ya reportado en validate_file
             if slug not in all_slugs:
                 errs.append(f"related slug {slug!r} does not exist")
         for ref in fm.get("learning_refs", []) or []:
+            if not isinstance(ref, str):
+                continue
             ref_path = LEARNING / ref
             if not ref_path.is_dir():
                 errs.append(f"learning_refs path does not exist: {ref}")
-            else:
-                mds = list(ref_path.glob("*.md"))
-                if not mds:
-                    errs.append(f"learning_refs path has no .md files: {ref}")
+            elif not (ref_path / "writeup.md").is_file():
+                errs.append(
+                    f"learning_refs path missing writeup.md: {ref} "
+                    "(política: cada writeup linkeable debe consolidarse en writeup.md)"
+                )
         if errs:
             cross_errors[path] = errs
     return cross_errors
@@ -213,14 +245,26 @@ def main():
     per_file_errors: dict[Path, list[str]] = {}
 
     for f in files:
-        errors = validate_file(f, all_slugs)
-        fm, _, _ = parse_frontmatter(f)
-        if fm:
-            files_data[f] = fm
+        try:
+            errors = validate_file(f, all_slugs)
+        except Exception as e:
+            # Red de seguridad: si un edge case escapa los type checks,
+            # reportar el archivo como errored y continuar con el resto.
+            errors = [f"unexpected validator error: {type(e).__name__}: {e}"]
+        try:
+            fm, _, _ = parse_frontmatter(f)
+            if fm:
+                files_data[f] = fm
+        except Exception as e:
+            errors.append(f"unexpected parse error: {type(e).__name__}: {e}")
         if errors:
             per_file_errors[f] = errors
 
-    cross = cross_validate(files_data, all_slugs)
+    try:
+        cross = cross_validate(files_data, all_slugs)
+    except Exception as e:
+        print(f"FATAL cross-validation crashed: {type(e).__name__}: {e}", file=sys.stderr)
+        cross = {}
     for path, errs in cross.items():
         per_file_errors.setdefault(path, []).extend(errs)
 

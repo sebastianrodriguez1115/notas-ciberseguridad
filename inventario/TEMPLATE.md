@@ -52,11 +52,17 @@ NOTAS PARA EL REDACTOR:
 
    - title (string, requerido) — Nombre humano de la técnica. Coincide con el H1.
    - slug (string, requerido, único en todo el inventario) — Identificador estable
-     en kebab-case. Convención: usar acrónimo establecido cuando exista (sqli, xss,
-     csrf, ssrf, idor, lfi-rfi, xxe, ssti, jwt, nosqli, adcs). Slugs compuestos con
-     "-" separando modificadores (sqli-blind-time, privesc-linux). Para pares
-     análisis/explotación cross-fase, usar el mismo slug en ambos archivos
-     (ver sección "Pares cross-fase" más abajo).
+     en kebab-case. **Convención: slug = nombre del archivo sin extensión** (ej.
+     `analisis-sqli.md` → `analisis-sqli`). El naming de archivos ya impone un
+     prefijo de acción (`analisis-`, `explotacion-`, `enumeracion-`, etc.) y un
+     acrónimo establecido cuando exista (sqli, xss, csrf, ssrf, idor, lfi-rfi,
+     xxe, ssti, jwt, nosqli, adcs); el slug hereda eso. Cuando un archivo se
+     renombra (git mv), su slug también cambia. Para búsqueda por tópico cruzando
+     fases, usar regex sobre la raíz del tema: `grep -lE "[-_]sqli($|[-.])"` o
+     `grep -lE "\bsqli\b"`. Único conflicto operacional: dos archivos con el
+     mismo nombre en directorios distintos (ej. fingerprinting-tecnologias-web
+     en pasivo y activo). Se resuelve añadiendo modificador al nombre del archivo
+     (ej. `fingerprinting-tecnologias-web-activo.md`).
    - aliases (array de strings, requerido, puede ser vacío) — Nombres alternativos
      que un agente/usuario podría buscar. Incluir variantes ES/EN y acrónimos.
      Ejemplo: [Inyección SQL, SQLi, SQL Injection].
@@ -76,12 +82,17 @@ NOTAS PARA EL REDACTOR:
      en AGENTS.md.
 
 2. PARES CROSS-FASE — Cuando una técnica tiene archivo de análisis (Fase 03) y de
-   explotación (Fase 04) sobre el mismo tópico, ambos archivos deben:
-   - Compartir el mismo slug del tema en el nombre de archivo (analisis-sqli.md ↔
-     explotacion-sqli.md).
-   - Tener slugs YAML distintos para evitar colisión: convención del análisis usa el
-     slug base (`sqli`), la explotación usa `<slug>-explotacion` (ej. `sqli-explotacion`).
-   - Listarse mutuamente en `related:`.
+   explotación (Fase 04) sobre el mismo tópico:
+   - Compartir el mismo acrónimo en el nombre de archivo (`analisis-sqli.md` ↔
+     `explotacion-sqli.md`). Esto se garantiza por la convención de naming
+     documentada en AGENTS.md.
+   - Sus slugs heredan los nombres de archivo (`analisis-sqli`, `explotacion-sqli`).
+     No hay colisión porque los nombres ya son distintos por el prefijo de acción.
+   - Listarse mutuamente en `related:` para que la cross-referencia sea explícita.
+   - Para encontrar todos los archivos de un tópico via grep:
+     `grep -rlE "[-_]sqli($|[-.])" inventario/` matchea cualquier slug que termine
+     con `-sqli` o tenga `sqli` como sub-palabra final (analisis-sqli, explotacion-sqli,
+     y futuros como sqli-blind-time si los hubiera).
 
 3. HERRAMIENTAS — Cada entrada lleva nombre en bold, módulos/scripts entre paréntesis si
    los tiene, y descripción tras un guión largo (—). No listar solo el nombre.

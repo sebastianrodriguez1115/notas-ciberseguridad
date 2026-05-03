@@ -240,12 +240,20 @@ Bloque obligatorio al inicio de TODOS los archivos técnicos. Es la fuente únic
 | `related` | array de slugs | opcional, default `[]` | Slugs de otros archivos. NO paths. Validador resuelve a path. |
 | `learning_refs` | array de paths | opcional, default `[]` | Paths relativos a `learning/` apuntando a directorios con `writeup.md`. |
 
-### Pares cross-fase (slugs distintos)
+### Slug = nombre de archivo
+
+Convención canónica: `slug = filename sin extensión`. Por ejemplo `analisis-sqli.md` tiene `slug: analisis-sqli`. Esto se deriva automáticamente en `scripts/migrate_frontmatter.py` y se preserva si renombras vía `git mv`.
+
+### Pares cross-fase
 
 Cuando una técnica tiene archivo de análisis (Fase 03) y de explotación (Fase 04) sobre el mismo tópico:
-- Mismo slug del tema en el nombre de archivo: `analisis-sqli.md` ↔ `explotacion-sqli.md`.
-- Slugs YAML distintos para evitar colisión: análisis usa el slug base (`sqli`), explotación usa `<slug>-explotacion` (`sqli-explotacion`).
-- Listarse mutuamente en `related:`.
+- Mismo acrónimo del tema en el nombre de archivo: `analisis-sqli.md` ↔ `explotacion-sqli.md` (la convención de naming garantiza esto).
+- Sus slugs heredan los nombres de archivo: `analisis-sqli` y `explotacion-sqli`. No hay colisión porque los nombres ya son distintos por el prefijo de acción.
+- Listarse mutuamente en `related:` para que la cross-referencia sea explícita.
+
+### Único conflicto operacional
+
+Dos archivos con el mismo nombre en distintos directorios (ej. `pasivo/fingerprinting-tecnologias-web.md` y `web/fingerprinting-tecnologias-web.md`). Resolución: añadir modificador al nombre del archivo (`fingerprinting-tecnologias-web-activo.md`). El validador detecta colisiones de slug y obliga a fixar.
 
 ### Variantes válidas
 
@@ -313,13 +321,13 @@ Los archivos del inventario siguen un patrón `<prefijo-acción>-<slug-del-tema>
 Patrones de grep frecuentes sobre el inventario. La metadata vive en frontmatter YAML al inicio de cada archivo técnico, así que las queries más útiles son sobre líneas con `^<campo>:`. La fase 01 ya está migrada; las fases 02-08 se migran progresivamente.
 
 ```bash
-# Localizar un archivo por slug (único):
-grep -lE "^slug: sqli$" inventario/**/*.md
+# Localizar un archivo por slug exacto:
+grep -lE "^slug: analisis-sqli$" inventario/**/*.md
 
-# Localizar archivos relacionados a un slug (cross-fase):
-grep -lE "^slug: sqli($|-)" inventario/**/*.md         # base + variantes (sqli-explotacion)
-grep -lE "related:.*\bsqli\b" inventario/**/*.md       # quien dice "yo me relaciono con sqli"
-find inventario -name "*-sqli.md"                       # también funciona via filename
+# Localizar todos los archivos de un tópico cruzando fases (recomendado):
+find inventario -name "*-sqli.md"                       # captura analisis-sqli, explotacion-sqli, etc.
+grep -rlE "^slug: .*[-_]sqli($|[-.])" inventario/      # equivalente vía slug, captura sufijos
+grep -rl "^aliases:.*\bSQLi\b" inventario/             # por alias declarado
 
 # Listar todos los slugs únicos del inventario:
 grep -hE "^slug: " inventario/**/*.md | sort -u

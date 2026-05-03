@@ -273,8 +273,10 @@ def main():
         if not args.check:
             topics_path.write_text(topics, encoding="utf-8")
 
-    # 3. meta/ facets
-    META_DIR.mkdir(exist_ok=True)
+    # 3. meta/ facets. mkdir solo cuando vamos a escribir (en --check no
+    # tocamos filesystem aunque el directorio falte).
+    if not args.check:
+        META_DIR.mkdir(exist_ok=True)
     facet_specs = [
         ("by-mitre.md", "by-mitre", "Inventario por MITRE ATT&CK", lambda fm: fm.get("mitre", []) or ["(sin MITRE)"]),
         ("by-difficulty.md", "by-difficulty", "Inventario por Dificultad", lambda fm: [fm.get("dificultad", "—")]),
