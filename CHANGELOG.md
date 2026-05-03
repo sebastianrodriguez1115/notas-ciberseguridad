@@ -2,6 +2,32 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19g (Tests + bug encontrado por test)
+
+Tras aplicar los fixes del review crítico, se construyó una suite de tests con pytest para los 3 scripts de tooling. Cubre: type-check defensivo, casos felices, regresiones específicas del review (plataforma como lista, title como int, related con int, learning_refs sin writeup.md, --check no toca filesystem).
+
+### Suite de tests (`scripts/tests/`)
+- `conftest.py`: fixtures `sandbox` (tmp_path con inventario/ y learning/) y `write_md` (helper que genera `.md` con frontmatter formateado correctamente). Añade `scripts/` al sys.path para imports.
+- `test_validate.py` (23 tests): happy path, missing fields, enum invalidos, type checks defensivos, slug duplicado, title↔H1, MITRE format, mitre vacío sólo para conceptual, related dangling, learning_refs con/sin writeup.md, sección Clasificación residual.
+- `test_migrate_frontmatter.py` (18 tests): yaml_scalar/yaml_array, extract_h1, extract_clasificacion (simple, compound fase, multilínea MITRE, MITRE en link markdown), happy path, skip si ya tiene frontmatter, dry-run no escribe, title con `:` quotado, mitre vacío sólo para conceptual, validación de enums.
+- `test_build_indexes.py` (16 tests): short_title, render_table, collect_files exclusiones, regen_leaf_index (basic, idempotent, preserva narrativa, backlinks 1 y 2 niveles, sort por display title), build_topics, build_facet, --check no crea meta/, --check no modifica archivos, full run escribe.
+
+### Bug encontrado por los tests
+El test `test_extract_clasificacion_linked_mitre` falló al primer intento. Causa: `migrate_frontmatter.py` extraía T-IDs de cualquier parte del bloque MITRE incluyendo URLs de markdown links. Para `[T1592.002](https://attack.mitre.org/techniques/T1592/002/)` capturaba `T1592.002` (legítimo) y `T1592` (extraído del path del URL).
+
+- Confirmado en datos reales: `inventario/02-enumeracion/web/fingerprinting-tecnologias-web-activo.md` tenía `mitre: [T1592.002, T1592]`.
+- **Fix script**: pre-procesar el bloque MITRE reemplazando `[texto](url)` por `texto` antes de extraer T-IDs. Así URLs no contaminan la extracción.
+- **Fix data**: corregido el archivo afectado a `mitre: [T1592.002]`.
+- Otros archivos con T1XXX y T1XXX.NNN ambos (kerberos, bloodhound, pivoting-tunneling, process-injection) son intencionales: tienen multi-línea explícita con técnica padre + sub-técnicas distintas. No son afectados.
+
+### Otros fixes menores
+- `.gitignore` añade `__pycache__/`, `*.pyc`, `.pytest_cache/`. El commit anterior había incluido sin querer un `.pyc` que se untrackea aquí.
+
+### Estado tras tests
+- `python3 -m pytest scripts/tests/` → 57 passed in 0.12s.
+- `python3 scripts/validate.py` → 124/124 OK.
+- `python3 scripts/build_indexes.py --check` → up to date.
+
 ## [2026-05-03] — Sesión 19f (Fixes del review crítico de Sprint 2)
 
 Pasada de fixes derivada de un review crítico externo del trabajo de Sprint 2. Cuatro hallazgos auditados, los cuatro corregidos. Discusión arquitectónica resuelta sobre la convención de slugs.

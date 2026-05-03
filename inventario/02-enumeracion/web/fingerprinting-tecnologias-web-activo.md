@@ -5,7 +5,7 @@ aliases: [Fingerprinting Activo de Tecnologías Web, Active Tech Fingerprinting,
 fase: [Enumeración]
 plataforma: Web
 dificultad: Básica
-mitre: [T1592.002, T1592]
+mitre: [T1592.002]
 related: [fingerprinting-tecnologias-web, banner-grabbing-http, deteccion-waf]
 learning_refs: []
 ---

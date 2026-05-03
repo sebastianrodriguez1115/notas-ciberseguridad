@@ -74,9 +74,14 @@ def extract_clasificacion_block(text: str) -> tuple[str, dict] | None:
         re.DOTALL,
     )
     if mitre_m:
+        # Stripear URLs de markdown links para evitar capturar T-IDs internos
+        # de paths como `attack.mitre.org/techniques/T1592/002/`. Reemplazamos
+        # `[texto](url)` por sólo `texto`, así el T-ID legítimo del texto se
+        # captura pero los del URL no.
+        mitre_text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", mitre_m.group(1))
         ids = []
         seen = set()
-        for tm in MITRE_RE.finditer(mitre_m.group(1)):
+        for tm in MITRE_RE.finditer(mitre_text):
             base, sub = tm.group(1), tm.group(2)
             t_id = f"T{base}" + (f".{sub}" if sub else "")
             if t_id not in seen:
