@@ -1,12 +1,12 @@
 ---
 title: SMB Relay Attack
 slug: explotacion-smb-relay
-aliases: [SMB Relay Attack]
+aliases: [SMB Relay Attack, SMB Relay, NTLM relay, relay attack, ntlmrelayx, impacket-ntlmrelayx]
 fase: [Explotación]
 plataforma: Red
 dificultad: Avanzada
 mitre: [T1557.001]
-related: []
+related: [explotacion-mitm-responder, explotacion-mitm6, explotacion-adcs-relay, pass-the-hash, credential-dumping, explotacion-hash-cracking, enumeracion-smb]
 learning_refs: []
 ---
 

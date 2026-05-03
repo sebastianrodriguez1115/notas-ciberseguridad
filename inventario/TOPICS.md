@@ -54,7 +54,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-deserialization.md`](./03-analisis-vulnerabilidades/web/analisis-deserialization.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Avanzada
-- **Aliases**: Insecure Deserialization, Object Injection, Deserialization Attack
+- **Aliases**: Insecure Deserialization, Object Injection, Deserialization Attack, Java deserialization, ysoserial, CommonsCollections, rO0AB, .NET deserialization
 - **Related**: `explotacion-deserialization`, `analisis-ssti`
 
 ## `analisis-estatico-dinamico` — Análisis de Malware: Estático y Dinámico
@@ -203,8 +203,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/05-post-explotacion/privilege-escalation/windows/credential-dumping.md`](./05-post-explotacion/privilege-escalation/windows/credential-dumping.md)
 - **Fase**: Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
-- **Aliases**: Credential Dump, mimikatz, LSASS dump, DCSync, DPAPI
-- **Related**: `pass-the-hash`, `enumeracion-kerberos`
+- **Aliases**: Credential Dump, mimikatz, LSASS dump, DCSync, DPAPI, NTLM dump, hash dump, secretsdump
+- **Related**: `pass-the-hash`, `enumeracion-kerberos`, `explotacion-hash-cracking`
 
 ## `descubrimiento-hosts` — Descubrimiento de Hosts
 
@@ -282,7 +282,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/02-enumeracion/red/enumeracion-kerberos.md`](./02-enumeracion/red/enumeracion-kerberos.md)
 - **Fase**: Enumeración, Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
 - **Aliases**: Kerberos, Kerberos Enumeration, Kerberoasting, AS-REP Roasting, ASREPRoast, GetUserSPNs, GetNPUsers
-- **Related**: `enumeracion-ldap`, `enumeracion-smb`, `bloodhound`
+- **Related**: `enumeracion-ldap`, `enumeracion-smb`, `bloodhound`, `explotacion-hash-cracking`
 
 ## `enumeracion-kubernetes` — Enumeración Kubernetes (K8s) (Puerto 6443 / 443 / 10250)
 
@@ -365,7 +365,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/02-enumeracion/servicios/enumeracion-rdp.md`](./02-enumeracion/servicios/enumeracion-rdp.md)
 - **Fase**: Enumeración · **Plataforma**: Windows · **Dificultad**: Básica
-- **Aliases**: Enumeración RDP (Remote Desktop Protocol)
+- **Aliases**: RDP Enumeration, Remote Desktop Protocol, xfreerdp, rdesktop, BlueKeep
+- **Related**: `enumeracion-winrm`, `ejecucion-remota-windows`
 
 ## `enumeracion-redis` — Enumeración Redis (Puerto 6379)
 
@@ -420,7 +421,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/02-enumeracion/servicios/enumeracion-winrm.md`](./02-enumeracion/servicios/enumeracion-winrm.md)
 - **Fase**: Enumeración · **Plataforma**: Windows · **Dificultad**: Básica
-- **Aliases**: Enumeración WinRM (Windows Remote Management)
+- **Aliases**: WinRM Enumeration, Windows Remote Management, evil-winrm, WinRM Pass-the-Hash, winrs
+- **Related**: `enumeracion-rdp`, `ejecucion-remota-windows`
 
 ## `escaneo-openvas-gvm` — Escaneo de Vulnerabilidades con OpenVAS / GVM
 
@@ -446,7 +448,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/red/explotacion-adcs-relay.md`](./04-explotacion/red/explotacion-adcs-relay.md)
 - **Fase**: Explotación · **Plataforma**: Red · **Dificultad**: Avanzada
-- **Aliases**: Abuso de ADCS y Ataques de Relay
+- **Aliases**: Abuso de ADCS y Ataques de Relay, ADCS abuse, ADCS Relay, ESC1, ESC8, Certipy, Active Directory Certificate Services
+- **Related**: `explotacion-smb-relay`, `bloodhound`, `enumeracion-ldap`, `enumeracion-kerberos`, `pass-the-hash`
 
 ## `explotacion-arp-spoofing` — ARP Spoofing y Envenenamiento de Red
 
@@ -483,7 +486,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/web/explotacion-deserialization.md`](./04-explotacion/web/explotacion-deserialization.md)
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Avanzada
-- **Aliases**: Insecure Deserialization, Object Injection RCE, ysoserial
+- **Aliases**: Insecure Deserialization, Object Injection RCE, ysoserial, Java deserialization, CommonsCollections, rO0AB, .NET deserialization, marshalsec
 - **Related**: `analisis-deserialization`
 
 ## `explotacion-eternalblue` — EternalBlue (MS17-010)
@@ -504,7 +507,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/credenciales/explotacion-hash-cracking.md`](./04-explotacion/credenciales/explotacion-hash-cracking.md)
 - **Fase**: Explotación · **Plataforma**: Multi · **Dificultad**: Intermedia
-- **Aliases**: Crackeo de Hashes (Metodología)
+- **Aliases**: Crackeo de Hashes (Metodología), Hash Cracking, hashcat, John the Ripper, JtR, NTLM cracking, TGS cracking, AS-REP cracking
+- **Related**: `credential-dumping`, `pass-the-hash`, `enumeracion-kerberos`, `explotacion-mitm-responder`
 
 ## `explotacion-jwt` — Explotación de JSON Web Tokens (JWT)
 
@@ -529,13 +533,15 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/red/explotacion-mitm-responder.md`](./04-explotacion/red/explotacion-mitm-responder.md)
 - **Fase**: Explotación · **Plataforma**: Red · **Dificultad**: Intermedia
-- **Aliases**: Envenenamiento LLMNR/NBT-NS con Responder
+- **Aliases**: Envenenamiento LLMNR/NBT-NS con Responder, Responder, LLMNR poisoning, NBT-NS poisoning, Net-NTLM, NetNTLMv2, NTLM relay
+- **Related**: `explotacion-smb-relay`, `explotacion-hash-cracking`, `pass-the-hash`, `explotacion-mitm6`
 
 ## `explotacion-mitm6` — IPv6 DNS Takeover con mitm6
 
 - **Archivo**: [`inventario/04-explotacion/red/explotacion-mitm6.md`](./04-explotacion/red/explotacion-mitm6.md)
 - **Fase**: Explotación · **Plataforma**: Red · **Dificultad**: Avanzada
-- **Aliases**: IPv6 DNS Takeover con mitm6
+- **Aliases**: IPv6 DNS Takeover con mitm6, mitm6, IPv6 takeover, WPAD spoofing, DHCPv6 takeover
+- **Related**: `explotacion-mitm-responder`, `explotacion-smb-relay`, `explotacion-adcs-relay`
 
 ## `explotacion-msfvenom` — Generación de Payloads con msfvenom
 
@@ -578,7 +584,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/red/explotacion-smb-relay.md`](./04-explotacion/red/explotacion-smb-relay.md)
 - **Fase**: Explotación · **Plataforma**: Red · **Dificultad**: Avanzada
-- **Aliases**: SMB Relay Attack
+- **Aliases**: SMB Relay Attack, SMB Relay, NTLM relay, relay attack, ntlmrelayx, impacket-ntlmrelayx
+- **Related**: `explotacion-mitm-responder`, `explotacion-mitm6`, `explotacion-adcs-relay`, `pass-the-hash`, `credential-dumping`, `explotacion-hash-cracking`, `enumeracion-smb`
 
 ## `explotacion-sqli` — Inyección SQL (SQLi)
 
@@ -703,8 +710,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/05-post-explotacion/lateral-movement/pass-the-hash.md`](./05-post-explotacion/lateral-movement/pass-the-hash.md)
 - **Fase**: Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
-- **Aliases**: PtH, NTLM hash relay, psexec hash
-- **Related**: `credential-dumping`, `ejecucion-remota-windows`, `explotacion-smb-relay`
+- **Aliases**: PtH, NTLM hash relay, psexec hash, NTLM hash dump, hash dump, Pass the Hash
+- **Related**: `credential-dumping`, `ejecucion-remota-windows`, `explotacion-smb-relay`, `explotacion-hash-cracking`
 
 ## `persistencia-linux` — Persistencia en Linux
 
@@ -799,4 +806,5 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/07-fundamentos/sistemas/windows-arquitectura-ad.md`](./07-fundamentos/sistemas/windows-arquitectura-ad.md)
 - **Fase**: Fundamentos · **Plataforma**: Windows · **Dificultad**: Básica
-- **Aliases**: Sistemas: Arquitectura de Windows y Active Directory
+- **Aliases**: Sistemas: Arquitectura de Windows y Active Directory, Active Directory, AD architecture, Windows architecture, AD pentest
+- **Related**: `enumeracion-ldap`, `enumeracion-kerberos`, `enumeracion-smb`, `bloodhound`, `pass-the-hash`, `credential-dumping`

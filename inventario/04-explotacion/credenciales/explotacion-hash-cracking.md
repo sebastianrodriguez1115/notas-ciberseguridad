@@ -1,12 +1,12 @@
 ---
 title: Crackeo de Hashes (Metodología)
 slug: explotacion-hash-cracking
-aliases: [Crackeo de Hashes (Metodología)]
+aliases: [Crackeo de Hashes (Metodología), Hash Cracking, hashcat, John the Ripper, JtR, NTLM cracking, TGS cracking, AS-REP cracking]
 fase: [Explotación]
 plataforma: Multi
 dificultad: Intermedia
 mitre: [T1110.002]
-related: []
+related: [credential-dumping, pass-the-hash, enumeracion-kerberos, explotacion-mitm-responder]
 learning_refs: []
 ---
 

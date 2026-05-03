@@ -1,12 +1,12 @@
 ---
 title: Abuso de ADCS y Ataques de Relay
 slug: explotacion-adcs-relay
-aliases: [Abuso de ADCS y Ataques de Relay]
+aliases: [Abuso de ADCS y Ataques de Relay, ADCS abuse, ADCS Relay, ESC1, ESC8, Certipy, Active Directory Certificate Services]
 fase: [Explotación]
 plataforma: Red
 dificultad: Avanzada
 mitre: [T1557.001, T1187]
-related: []
+related: [explotacion-smb-relay, bloodhound, enumeracion-ldap, enumeracion-kerberos, pass-the-hash]
 learning_refs: []
 ---
 

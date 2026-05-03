@@ -1,7 +1,7 @@
 ---
 title: Análisis de Insecure Deserialization
 slug: analisis-deserialization
-aliases: [Insecure Deserialization, Object Injection, Deserialization Attack]
+aliases: [Insecure Deserialization, Object Injection, Deserialization Attack, Java deserialization, ysoserial, CommonsCollections, rO0AB, .NET deserialization]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Avanzada

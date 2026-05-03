@@ -1,12 +1,12 @@
 ---
 title: Credential Dumping (Volcado de Credenciales)
 slug: credential-dumping
-aliases: [Credential Dump, mimikatz, LSASS dump, DCSync, DPAPI]
+aliases: [Credential Dump, mimikatz, LSASS dump, DCSync, DPAPI, NTLM dump, hash dump, secretsdump]
 fase: [Post-Explotación]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1003.001, T1003.002]
-related: [pass-the-hash, enumeracion-kerberos]
+related: [pass-the-hash, enumeracion-kerberos, explotacion-hash-cracking]
 learning_refs: []
 ---
 

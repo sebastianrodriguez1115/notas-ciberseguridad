@@ -1,12 +1,12 @@
 ---
 title: "Sistemas: Arquitectura de Windows y Active Directory"
 slug: windows-arquitectura-ad
-aliases: ["Sistemas: Arquitectura de Windows y Active Directory"]
+aliases: ["Sistemas: Arquitectura de Windows y Active Directory", Active Directory, AD architecture, Windows architecture, AD pentest]
 fase: [Fundamentos]
 plataforma: Windows
 dificultad: Básica
 mitre: []
-related: []
+related: [enumeracion-ldap, enumeracion-kerberos, enumeracion-smb, bloodhound, pass-the-hash, credential-dumping]
 learning_refs: []
 ---
 

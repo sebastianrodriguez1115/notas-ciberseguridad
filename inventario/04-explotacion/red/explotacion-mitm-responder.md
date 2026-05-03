@@ -1,12 +1,12 @@
 ---
 title: Envenenamiento LLMNR/NBT-NS con Responder
 slug: explotacion-mitm-responder
-aliases: [Envenenamiento LLMNR/NBT-NS con Responder]
+aliases: [Envenenamiento LLMNR/NBT-NS con Responder, Responder, LLMNR poisoning, NBT-NS poisoning, Net-NTLM, NetNTLMv2, NTLM relay]
 fase: [Explotación]
 plataforma: Red
 dificultad: Intermedia
 mitre: [T1557.001]
-related: []
+related: [explotacion-smb-relay, explotacion-hash-cracking, pass-the-hash, explotacion-mitm6]
 learning_refs: []
 ---
 

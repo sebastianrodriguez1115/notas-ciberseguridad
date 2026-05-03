@@ -6,7 +6,7 @@ fase: [Enumeración, Post-Explotación]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1558, T1558.003, T1558.004]
-related: [enumeracion-ldap, enumeracion-smb, bloodhound]
+related: [enumeracion-ldap, enumeracion-smb, bloodhound, explotacion-hash-cracking]
 learning_refs: []
 ---
 

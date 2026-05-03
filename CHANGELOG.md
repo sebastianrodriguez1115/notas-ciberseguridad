@@ -2,6 +2,57 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19l (Sprint A: cierre del gap detectado por stress-test)
+
+Tras el stress-test de discoverabilidad (2 agentes con contexto frío resolviendo 8 escenarios reales), ambos convergieron en el mismo cuello de botella: cluster AD/red/credenciales tiene `related:` mayormente vacío, así que las cadenas operacionales ("tengo hashes NTLM, ¿qué sigue?", "AD pentest end-to-end") requerían inferencia manual. Sprint A cierra ese gap específico sin tocar los 71 archivos restantes que ya funcionaban clean.
+
+### Fix del cookbook AGENTS.md
+El primer agente tropezó con el patrón `inventario/**/*.md`: requiere `shopt -s globstar` que no está activo por default en bash. **Convertido todo el cookbook a `grep -r ... inventario/`** que es portable sin configuración previa. Añadida nota explícita sobre la portabilidad arriba del bloque, y mención de `rg -g '*.md'` como alternativa con ripgrep. Eliminado el comentario sobre "fases legacy" (todas las fases ya están migradas).
+
+### `related:` enriquecidos en 13 archivos del cluster AD/red/creds
+Edges añadidos por consenso de ambos agentes (overlap >80% en sus reportes):
+- `explotacion-smb-relay`: → mitm-responder, mitm6, adcs-relay, pass-the-hash, credential-dumping, hash-cracking, enumeracion-smb (estaba `[]`)
+- `explotacion-mitm-responder`: → smb-relay, hash-cracking, pass-the-hash, mitm6 (estaba `[]`)
+- `explotacion-mitm6`: → mitm-responder, smb-relay, adcs-relay (estaba `[]`)
+- `explotacion-adcs-relay`: → smb-relay, bloodhound, ldap, kerberos, pass-the-hash (estaba `[]`)
+- `explotacion-hash-cracking`: → credential-dumping, pass-the-hash, kerberos, mitm-responder (estaba `[]`)
+- `windows-arquitectura-ad`: → ldap, kerberos, smb, bloodhound, pass-the-hash, credential-dumping (estaba `[]`)
+- `enumeracion-kerberos`: añadido `explotacion-hash-cracking` (los TGS Kerberoasted se crackean ahí)
+- `enumeracion-winrm`, `enumeracion-rdp`: → ejecucion-remota-windows
+- `pass-the-hash`, `credential-dumping`: añadidas edges hacia hash-cracking
+
+### `aliases` enriquecidos con vocabulario operacional
+- `pass-the-hash`: + "NTLM hash dump", "hash dump", "Pass the Hash"
+- `credential-dumping`: + "NTLM dump", "hash dump", "secretsdump"
+- `explotacion-hash-cracking`: + "hashcat", "John the Ripper", "JtR", "NTLM cracking", "TGS cracking", "AS-REP cracking"
+- `enumeracion-winrm`: + "evil-winrm", "WinRM Pass-the-Hash", "winrs"
+- `enumeracion-rdp`: + "BlueKeep" (CVE conocido), "xfreerdp", "rdesktop"
+- `explotacion-smb-relay`: + "NTLM relay", "relay attack", "ntlmrelayx", "impacket-ntlmrelayx"
+- `explotacion-mitm-responder`: + "Responder", "LLMNR poisoning", "NBT-NS poisoning", "Net-NTLM", "NetNTLMv2", "NTLM relay"
+- `explotacion-mitm6`: + "mitm6", "IPv6 takeover", "WPAD spoofing", "DHCPv6 takeover"
+- `explotacion-adcs-relay`: + "ADCS abuse", "ADCS Relay", "ESC1", "ESC8", "Certipy", "Active Directory Certificate Services"
+- `windows-arquitectura-ad`: + "Active Directory", "AD architecture", "AD pentest"
+- `analisis-deserialization`, `explotacion-deserialization`: + "Java deserialization", "ysoserial", "CommonsCollections", "rO0AB", ".NET deserialization", "marshalsec"
+
+### Verificación end-to-end de queries operacionales
+- `grep -rl "^aliases:.*NTLM dump" inventario/` → encuentra credential-dumping (antes no matcheaba nada).
+- `grep -rl "^aliases:.*hashcat" inventario/` → encuentra explotacion-hash-cracking.
+- `grep -rl "^aliases:.*ysoserial" inventario/` → encuentra ambos archivos de deserialización.
+- `grep -rl "^aliases:.*ESC[18]" inventario/` → encuentra adcs-relay.
+- `related:` de smb-relay y windows-arquitectura-ad ahora apunta a 6+ archivos cada uno; cadena AD navegable sin grep adicional.
+
+### Hallazgos de coverage real (NO atacados en Sprint A, dejados para Sprint B opcional)
+- T1558.001 Golden Ticket y T1558.002 Silver Ticket no tienen archivos dedicados.
+- Pass-the-Ticket tampoco existe.
+- Kerberoasting está sepultado dentro de `enumeracion-kerberos.md` (mezcla enumeración + extracción de credenciales). Merece archivo propio en `04-explotacion/credenciales/explotacion-kerberoasting.md` con par cross-fase.
+
+### Estado tras Sprint A
+- `bash scripts/check.sh` → all green.
+- 143 tests passing (sin cambios en tests, sólo data + cookbook).
+- 124/124 validate OK.
+- TOPICS.md regenerado para reflejar nuevas aliases/related.
+- Escenarios 4 y 7 del stress-test (ambos messy en uno o ambos agentes) ahora resolverían en 1-2 queries dirigidas.
+
 ## [2026-05-03] — Sesión 19k (Review crítico ronda 5)
 
 Dos hallazgos (Media + Media). El primero es un bug puntual; el segundo me hizo replantear el approach de la ronda 4.

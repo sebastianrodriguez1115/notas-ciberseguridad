@@ -1,12 +1,12 @@
 ---
 title: Enumeración WinRM (Windows Remote Management)
 slug: enumeracion-winrm
-aliases: [Enumeración WinRM (Windows Remote Management)]
+aliases: [WinRM Enumeration, Windows Remote Management, evil-winrm, WinRM Pass-the-Hash, winrs]
 fase: [Enumeración]
 plataforma: Windows
 dificultad: Básica
 mitre: [T1021.006]
-related: []
+related: [enumeracion-rdp, ejecucion-remota-windows]
 learning_refs: []
 ---
 

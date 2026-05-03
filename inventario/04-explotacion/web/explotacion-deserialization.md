@@ -1,7 +1,7 @@
 ---
 title: Explotación de Deserialización Insegura
 slug: explotacion-deserialization
-aliases: [Insecure Deserialization, Object Injection RCE, ysoserial]
+aliases: [Insecure Deserialization, Object Injection RCE, ysoserial, Java deserialization, CommonsCollections, rO0AB, .NET deserialization, marshalsec]
 fase: [Explotación]
 plataforma: Web
 dificultad: Avanzada

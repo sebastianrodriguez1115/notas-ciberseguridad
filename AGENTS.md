@@ -320,11 +320,13 @@ Los archivos del inventario siguen un patrón `<prefijo-acción>-<slug-del-tema>
 
 ## Cookbook de Búsqueda (para agentes/LLM)
 
-Patrones de grep frecuentes sobre el inventario. La metadata vive en frontmatter YAML al inicio de cada archivo técnico, así que las queries más útiles son sobre líneas con `^<campo>:`. La fase 01 ya está migrada; las fases 02-08 se migran progresivamente.
+Patrones de grep frecuentes sobre el inventario. La metadata vive en frontmatter YAML al inicio de cada archivo técnico, así que las queries más útiles son sobre líneas con `^<campo>:`. Los 124 archivos están migrados a frontmatter.
+
+> **Nota de portabilidad**: usar `grep -r ... inventario/` (recursivo) en lugar de glob de bash `inventario/**/*.md`. El glob `**` requiere `shopt -s globstar` que no está activo por default. Si prefieres ripgrep: `rg -g '*.md' '...' inventario`. Ambos funcionan sin configuración previa.
 
 ```bash
 # Localizar un archivo por slug exacto:
-grep -lE "^slug: analisis-sqli$" inventario/**/*.md
+grep -rlE "^slug: analisis-sqli$" inventario/
 
 # Localizar todos los archivos de un tópico cruzando fases (recomendado):
 find inventario -name "*-sqli.md"                       # captura analisis-sqli, explotacion-sqli, etc.
@@ -332,41 +334,42 @@ grep -rlE "^slug: .*[-_]sqli($|[-.])" inventario/      # equivalente vía slug, 
 grep -rl "^aliases:.*\bSQLi\b" inventario/             # por alias declarado
 
 # Listar todos los slugs únicos del inventario:
-grep -hE "^slug: " inventario/**/*.md | sort -u
+grep -rhE "^slug: " inventario/ | sort -u
 
 # Filtrar por dificultad:
-grep -lE "^dificultad: Avanzada$" inventario/**/*.md
+grep -rlE "^dificultad: Avanzada$" inventario/
 
 # Filtrar por plataforma:
-grep -lE "^plataforma: Web$" inventario/**/*.md
+grep -rlE "^plataforma: Web$" inventario/
 
 # Filtrar por MITRE técnica (incluye sub-técnica):
-grep -lE "^mitre:.*\bT1190\b" inventario/**/*.md
+grep -rlE "^mitre:.*\bT1190\b" inventario/
 
 # Filtrar por fase (string exacto entre brackets/comas):
-grep -lE "^fase:.*Post-Explotación" inventario/**/*.md
+grep -rlE "^fase:.*Post-Explotación" inventario/
 
 # Búsqueda por alias (técnica conocida en otro idioma o por acrónimo):
-grep -lE "^aliases:.*Inyección SQL" inventario/**/*.md
+grep -rlE "^aliases:.*Inyección SQL" inventario/
 
 # Listar archivos que tienen learning_refs (writeups asociados):
-grep -lE "^learning_refs: \[[^]]" inventario/**/*.md
+grep -rlE "^learning_refs: \[[^]]" inventario/
 
 # Combinaciones (intersect): técnicas Avanzadas en plataforma Web
-grep -lE "^dificultad: Avanzada$" inventario/**/*.md | xargs grep -lE "^plataforma: Web$"
+grep -rlE "^dificultad: Avanzada$" inventario/ | xargs grep -lE "^plataforma: Web$"
 
 # Listar herramientas que aparecen en sección Herramientas (texto del body):
-grep -hE "^- \*\*[A-Z]" inventario/**/*.md | sort -u
+grep -rhE "^- \*\*[A-Z]" inventario/ | sort -u
 
 # Encontrar archivos que mencionan una herramienta específica en el body:
-grep -l "BloodHound" inventario/**/*.md
-grep -l "sqlmap" inventario/**/*.md
+grep -rl "BloodHound" inventario/
+grep -rl "sqlmap" inventario/
 
 # Encontrar archivos que referencian un libro por autor (en sección Referencias):
-grep -l "Allen, L." inventario/**/*.md
-```
+grep -rl "Allen, L." inventario/
 
-> **Nota legacy**: para archivos aún no migrados (fases 02-08 mientras dura Sprint 1), la metadata vive como `**Fase**: ...` en el body. Si un grep sobre frontmatter devuelve menos resultados de los esperados, complementar con queries legacy: `grep -lE "Dificultad.*Avanzada"`, `grep -lE "Plataforma.*Web"`, etc.
+# Vistas pre-computadas (no requieren grep): inventario/meta/ tiene índices facetados
+# por MITRE, dificultad, plataforma, fase. inventario/TOPICS.md indexa por slug.
+```
 
 ## Política `learning_refs` (writeups linkeables)
 

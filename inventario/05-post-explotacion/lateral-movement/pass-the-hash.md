@@ -1,12 +1,12 @@
 ---
 title: Pass-the-Hash (PtH)
 slug: pass-the-hash
-aliases: [PtH, NTLM hash relay, psexec hash]
+aliases: [PtH, NTLM hash relay, psexec hash, NTLM hash dump, hash dump, Pass the Hash]
 fase: [Post-Explotación]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1550.002]
-related: [credential-dumping, ejecucion-remota-windows, explotacion-smb-relay]
+related: [credential-dumping, ejecucion-remota-windows, explotacion-smb-relay, explotacion-hash-cracking]
 learning_refs: []
 ---
 

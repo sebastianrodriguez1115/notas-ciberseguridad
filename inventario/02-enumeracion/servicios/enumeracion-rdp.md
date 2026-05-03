@@ -1,12 +1,12 @@
 ---
 title: Enumeración RDP (Remote Desktop Protocol)
 slug: enumeracion-rdp
-aliases: [Enumeración RDP (Remote Desktop Protocol)]
+aliases: [RDP Enumeration, Remote Desktop Protocol, xfreerdp, rdesktop, BlueKeep]
 fase: [Enumeración]
 plataforma: Windows
 dificultad: Básica
 mitre: [T1021.001]
-related: []
+related: [enumeracion-winrm, ejecucion-remota-windows]
 learning_refs: []
 ---
 

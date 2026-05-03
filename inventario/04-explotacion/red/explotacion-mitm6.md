@@ -1,12 +1,12 @@
 ---
 title: IPv6 DNS Takeover con mitm6
 slug: explotacion-mitm6
-aliases: [IPv6 DNS Takeover con mitm6]
+aliases: [IPv6 DNS Takeover con mitm6, mitm6, IPv6 takeover, WPAD spoofing, DHCPv6 takeover]
 fase: [Explotación]
 plataforma: Red
 dificultad: Avanzada
 mitre: [T1557.001]
-related: []
+related: [explotacion-mitm-responder, explotacion-smb-relay, explotacion-adcs-relay]
 learning_refs: []
 ---
 
