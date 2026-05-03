@@ -2,6 +2,37 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19k (Review crítico ronda 5)
+
+Dos hallazgos (Media + Media). El primero es un bug puntual; el segundo me hizo replantear el approach de la ronda 4.
+
+### Hallazgo 1 (Media) — slug emitido sin pasar por yaml_scalar
+- `build_frontmatter()` quotaba `title` y los arrays vía `yaml_scalar`/`yaml_array`, pero emitía `slug`, `plataforma`, `dificultad` con f-string raw. Un legacy `no.md` migraba a `slug: no` que PyYAML resuelve a `False`. Después validate.py reporta `slug must be string, got bool` y se rompe la convención `slug == path.stem`.
+- **Fix**: los 3 campos pasan por `yaml_scalar` ahora. Los enums actuales (Web/Linux/Avanzada/etc.) no colisionan con scalars reservados, pero la emisión defensiva resiste cambios futuros del schema.
+- **Tests**: `test_build_frontmatter_slug_round_trip` con 6 slugs problemáticos (no/yes/true/null/123/0xff). `test_build_frontmatter_plataforma_dificultad_through_yaml_scalar` con valores hipotéticos `On`/`1.0`.
+
+### Hallazgo 2 (Media) — Cobertura incompleta de tipos implícitos PyYAML
+- La ronda 4 había añadido regex para bool/null/números, pero PyYAML también resuelve **timestamps** (`2024-01-01` → `datetime.date`) y **special floats** (`.nan`, `.inf`, `+.inf`, `-.inf` → `float`). Mis regex no los cubrían.
+- **Decisión arquitectónica**: en lugar de seguir enumerando categorías YAML 1.1 una por una (ya van 4 sesiones encontrando casos faltantes), delegar a PyYAML mismo via round-trip. Si `yaml.safe_load(f"_: {s}\\n")` no devuelve `{_: <s>}` con `<s>` como string igual al original, hay que quotar. Cubre TODA resolución implícita sin enumerarla.
+- **Implementación**: `_needs_quoting()` reescrito. Mantiene early-exit rápido para chars especiales, prefijos reservados, trailing whitespace, y string vacío. Para todo lo demás, llama a `yaml.safe_load` y verifica round-trip.
+- **Performance**: ~1ms por scalar via PyYAML. Para migrar 124 archivos (~10 scalars c/u = 1240 calls) → < 2s total. Aceptable.
+- **Bonus**: la delegación me corrigió mi propia enumeración previa. Tests de ronda 4 asumían que `Y`, `n`, `None`, `1e10`, `0o777` se resolvían pero PyYAML los lee como string. Eran sobre-aserciones. La nueva implementación correctamente los marca como safe-unquoted.
+
+### Tests reorganizados
+- `test_yaml_scalar_quotes_pyyaml_implicit_types`: parametrize unificado con todos los casos que PyYAML SÍ resuelve. Listas internas categorizadas: `_RESOLVES_TO_BOOL`, `_RESOLVES_TO_NULL`, `_RESOLVES_TO_NUMBER`, `_RESOLVES_TO_DATE`, `_RESOLVES_TO_DATETIME`, `_RESOLVES_TO_SPECIAL_FLOAT`. Verificadas empíricamente con `yaml.safe_load` antes de añadir.
+- `test_yaml_scalar_does_not_quote_safe_strings`: parametrize con casos que PyYAML lee como string. Documenta explícitamente qué NO se quota (Y, n, None, 1e10, 0o777, etc.) para no regresionar a sobre-quoting.
+- `test_build_frontmatter_round_trip` ampliado con `2024-01-01`, `.nan`, `+.inf` además de los previos.
+- `test_build_frontmatter_slug_round_trip` y `test_build_frontmatter_plataforma_dificultad_through_yaml_scalar` nuevos.
+
+### Sutileza encontrada por los tests
+PyYAML requiere **signo explícito en el exponente** para resolver float: `1.0e+10` → float, `1.0e10` → string. Mismo con `1.0E5` → string (no exp). Documentado en el comentario del regex `_RESOLVES_TO_NUMBER`.
+
+### Estado tras ronda 5
+- `bash scripts/check.sh` → all green.
+- 143 tests passing (40 nuevos respecto a sesión 19j).
+- 124/124 validate OK.
+- `build_indexes --check` up to date.
+
 ## [2026-05-03] — Sesión 19j (Review crítico ronda 4: YAML implicit type resolution)
 
 Un hallazgo (Media) en `migrate_frontmatter.py` sobre resolución implícita de tipos YAML 1.1. Bug profundo y futuro-proof. Aplicado con cobertura paramétrica.

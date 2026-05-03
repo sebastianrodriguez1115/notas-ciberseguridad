@@ -102,18 +102,13 @@ def extract_clasificacion_block(text: str) -> tuple[str, dict] | None:
     return block, parsed
 
 
-# Scalars que YAML 1.1 (PyYAML safe_load default) resuelve a bool/null/Y/N.
-# Todas las case-variantes (TRUE, true, True) caen aquí.
-_YAML_RESERVED_SCALARS = re.compile(
-    r"^(true|false|yes|no|on|off|y|n|null|None|~)$",
-    re.IGNORECASE,
-)
-# Números enteros, flotantes, notación científica.
-_YAML_NUMBER = re.compile(r"^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$")
-# Otras bases reconocidas: 0x, 0o, 0b, octal con prefijo 0.
-_YAML_NUMBER_RADIX = re.compile(r"^[+-]?0([xX][0-9a-fA-F]+|[oO][0-7]+|[bB][01]+|[0-7]+)$")
-# Caracteres que requieren quoting en flow-context (donde emitimos arrays inline).
-# Incluye los que YAML interpreta especiales en cualquier lado más los de flow.
+try:
+    import yaml as _yaml_for_quoting
+except ImportError:
+    _yaml_for_quoting = None  # type: ignore
+
+# Caracteres que requieren quoting en flow-context (donde emitimos arrays
+# inline). Early-exit rápido antes del round-trip.
 _YAML_FLOW_SPECIAL = set(":#&*!|>%@`'\"" + ",[]{}")
 # Si el primer char es uno de estos, también requiere quoting (puede iniciar
 # sintaxis YAML: anchor, alias, tag, list item, mapping, etc.).
@@ -121,12 +116,16 @@ _YAML_RESERVED_PREFIXES = ("-", "?", ":", " ", "\t")
 
 
 def _needs_quoting(s: str) -> bool:
-    """¿Hay que quotar este scalar para garantizar que PyYAML lo lea como string?"""
+    """¿Hay que quotar este scalar para garantizar que PyYAML lo lea como string?
+
+    Estrategia: chequeos rápidos primero (vacío, chars especiales, prefijos);
+    para todo lo demás, delegar al propio PyYAML via round-trip. Si
+    `yaml.safe_load("_: <s>\\n")` no devuelve `{_: <s>}` con `<s>` como string
+    igual al original, hay que quotar. Esto cubre TODA resolución implícita
+    de PyYAML (bool, null, int, float, special floats `.nan`/`.inf`,
+    timestamps `2024-01-01`, números en otras bases, etc.) sin enumerarlas.
+    """
     if s == "":
-        return True
-    if _YAML_RESERVED_SCALARS.match(s):
-        return True
-    if _YAML_NUMBER.match(s) or _YAML_NUMBER_RADIX.match(s):
         return True
     if any(c in s for c in _YAML_FLOW_SPECIAL):
         return True
@@ -134,13 +133,25 @@ def _needs_quoting(s: str) -> bool:
         return True
     if s.endswith((" ", "\t")):
         return True
+    if _yaml_for_quoting is None:
+        # PyYAML no disponible: fallback a quotar siempre por seguridad.
+        return True
+    try:
+        result = _yaml_for_quoting.safe_load(f"_: {s}\n")
+    except _yaml_for_quoting.YAMLError:
+        return True
+    if not isinstance(result, dict):
+        return True
+    loaded = result.get("_")
+    if not isinstance(loaded, str) or loaded != s:
+        return True
     return False
 
 
 def yaml_scalar(s: str) -> str:
     """Emite un string como scalar YAML. Quota cuando es necesario para que
-    PyYAML safe_load lo reconstruya como string y no como bool/null/number.
-    Escapa `\\` y `"` internas cuando quota."""
+    PyYAML safe_load lo reconstruya como string y no como bool/null/number/
+    timestamp/special-float/etc. Escapa `\\` y `"` internas cuando quota."""
     if not isinstance(s, str):
         raise TypeError(f"yaml_scalar expects str, got {type(s).__name__}")
     if not _needs_quoting(s):
@@ -165,11 +176,11 @@ def build_frontmatter(title: str, slug: str, parsed: dict) -> str:
     return (
         "---\n"
         f"title: {yaml_scalar(title)}\n"
-        f"slug: {slug}\n"
+        f"slug: {yaml_scalar(slug)}\n"
         f"aliases: {yaml_array(aliases)}\n"
         f"fase: {yaml_array(fase)}\n"
-        f"plataforma: {plataforma}\n"
-        f"dificultad: {dificultad}\n"
+        f"plataforma: {yaml_scalar(plataforma)}\n"
+        f"dificultad: {yaml_scalar(dificultad)}\n"
         f"mitre: {yaml_array(mitre)}\n"
         f"related: []\n"
         f"learning_refs: []\n"
