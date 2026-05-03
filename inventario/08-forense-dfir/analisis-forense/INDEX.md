@@ -2,10 +2,12 @@
 
 Técnicas de recolección y análisis de evidencias en hosts y memoria.
 
-| Técnica | Plataforma | Dificultad |
-| :--- | :--- | :--- |
-| [Artefactos Windows Host](./artefactos-windows-host.md) | Windows | Intermedia |
-| [Volatility Memoria](./volatility-memoria.md) | Multi | Avanzada |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Análisis Forense de Memoria](./volatility-memoria.md) | T1055 | Avanzada | Multi |
+| [Artefactos de Windows](./artefactos-windows-host.md) | — | Intermedia | Windows |
 
 ---
-[Volver a Fase 08](../INDEX.md)
+[Volver a Forense y DFIR](../INDEX.md)

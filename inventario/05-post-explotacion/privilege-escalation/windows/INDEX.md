@@ -2,13 +2,15 @@
 
 Técnicas para obtener acceso SYSTEM o Administrador en Windows.
 
-| Técnica | MITRE ID | Dificultad |
-| :--- | :--- | :--- |
-| [Abuso de Servicios Windows](./abuso-servicios-windows.md) | T1574.010 | Intermedia |
-| [Abuso de Tareas Programadas](./abuso-tareas-programadas.md) | T1053.005 | Intermedia |
-| [Credential Dumping](./credential-dumping.md) | T1003.001 | Intermedia |
-| [Enumeración Privesc Windows](./enumeracion-privesc-windows.md) | T1082 | Básica |
-| [Token Impersonation](./token-impersonation.md) | T1134.001 | Intermedia |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Abuso de Servicios de Windows](./abuso-servicios-windows.md) | T1574.010 | Intermedia | Windows |
+| [Abuso de Tareas Programadas (Scheduled Tasks)](./abuso-tareas-programadas.md) | T1053.005 | Intermedia | Windows |
+| [Credential Dumping (Volcado de Credenciales)](./credential-dumping.md) | T1003.001 | Intermedia | Windows |
+| [Enumeración para Escalada de Privilegios en Windows](./enumeracion-privesc-windows.md) | T1082 | Básica | Windows |
+| [Token Impersonation (Suplantación de Tokens)](./token-impersonation.md) | T1134.001 | Intermedia | Windows |
 
 ---
-[Volver a Escalada de Privilegios](../INDEX.md)
+[Volver a Post-Explotación](../../INDEX.md)

@@ -2,9 +2,11 @@
 
 Uso avanzado del proxy interceptor y sus módulos.
 
-| Guía | MITRE ID | Dificultad |
-| :--- | :--- | :--- |
-| [Configuración y Uso Avanzado](./configuracion-uso-avanzado.md) | T1595.002 | Intermedia |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Configuración y Uso Avanzado](./configuracion-uso-avanzado.md) | T1595.002 | Intermedia | Web |
 
 ---
-[Volver a Fase 06](../INDEX.md)
+[Volver a Frameworks y Herramientas](../INDEX.md)

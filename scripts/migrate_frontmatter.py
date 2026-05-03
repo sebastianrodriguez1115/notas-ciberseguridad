@@ -108,6 +108,14 @@ def yaml_array(values: list[str]) -> str:
     return "[" + ", ".join(parts) + "]"
 
 
+def yaml_scalar(s: str) -> str:
+    """Quote a scalar if it contains YAML-special chars (`:`, `#`, etc.)."""
+    if any(c in s for c in [":", "#", "&", "*", "!", "|", ">", "%", "@", "`"]):
+        escaped = s.replace('"', '\\"')
+        return f'"{escaped}"'
+    return s
+
+
 def build_frontmatter(title: str, slug: str, parsed: dict) -> str:
     fase = parsed.get("fase", [])
     plataforma = parsed.get("plataforma", "")
@@ -117,7 +125,7 @@ def build_frontmatter(title: str, slug: str, parsed: dict) -> str:
 
     return (
         "---\n"
-        f"title: {title}\n"
+        f"title: {yaml_scalar(title)}\n"
         f"slug: {slug}\n"
         f"aliases: {yaml_array(aliases)}\n"
         f"fase: {yaml_array(fase)}\n"

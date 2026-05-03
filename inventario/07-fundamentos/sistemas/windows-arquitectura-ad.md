@@ -1,5 +1,5 @@
 ---
-title: Sistemas: Arquitectura de Windows y Active Directory
+title: "Sistemas: Arquitectura de Windows y Active Directory"
 slug: windows-arquitectura-ad
 aliases: ["Sistemas: Arquitectura de Windows y Active Directory"]
 fase: [Fundamentos]

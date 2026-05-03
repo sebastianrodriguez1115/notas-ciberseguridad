@@ -1,5 +1,5 @@
 ---
-title: Metasploit Framework: Uso Avanzado y Automatización
+title: "Metasploit Framework: Uso Avanzado y Automatización"
 slug: metasploit-avanzado
 aliases: ["Metasploit Framework: Uso Avanzado y Automatización"]
 fase: [Análisis de Vulnerabilidades, Explotación, Post-Explotación]

@@ -2,11 +2,13 @@
 
 Mantenimiento de acceso a largo plazo.
 
-| Técnica | MITRE ID | Dificultad |
-| :--- | :--- | :--- |
-| [Persistencia Linux](./persistencia-linux.md) | T1053.003 | Intermedia |
-| [Persistencia Windows](./persistencia-windows.md) | T1547.001 | Intermedia |
-| [Web Shells](./web-shells.md) | T1505.003 | Básica |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Persistencia en Linux](./persistencia-linux.md) | T1053.003 | Intermedia | Linux |
+| [Persistencia en Windows](./persistencia-windows.md) | T1547.001 | Intermedia | Windows |
+| [Web Shells](./web-shells.md) | T1505.003 | Básica | Web |
 
 ---
-[Volver a Fase 05](../INDEX.md)
+[Volver a Post-Explotación](../INDEX.md)

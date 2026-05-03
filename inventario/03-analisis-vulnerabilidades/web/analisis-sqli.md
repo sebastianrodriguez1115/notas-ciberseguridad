@@ -1,5 +1,5 @@
 ---
-title: Análisis de Vulnerabilidades: SQL Injection (SQLi)
+title: "Análisis de Vulnerabilidades: SQL Injection (SQLi)"
 slug: analisis-sqli
 aliases: ["Análisis de Vulnerabilidades: SQL Injection (SQLi)"]
 fase: [Análisis de Vulnerabilidades]

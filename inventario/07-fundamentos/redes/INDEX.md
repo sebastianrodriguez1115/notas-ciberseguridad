@@ -1,8 +1,10 @@
 # Fundamentos: Redes
 
-| Guía | Dificultad |
-| :--- | :--- |
-| [Modelo OSI y TCP/IP](./modelo-osi-tcp-ip.md) | Básica |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Modelo OSI y Protocolos TCP/IP](./modelo-osi-tcp-ip.md) | — | Básica | Red |
 
 ---
-[Volver a Fase 07](../INDEX.md)
+[Volver a Fundamentos](../INDEX.md)

@@ -1,5 +1,5 @@
 ---
-title: Análisis Forense: Artefactos de Windows
+title: "Análisis Forense: Artefactos de Windows"
 slug: artefactos-windows-host
 aliases: ["Análisis Forense: Artefactos de Windows"]
 fase: [Forense y DFIR]

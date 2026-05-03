@@ -1,5 +1,5 @@
 ---
-title: Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)
+title: "Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)"
 slug: analisis-csrf
 aliases: ["Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)"]
 fase: [Análisis de Vulnerabilidades]

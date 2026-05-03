@@ -1,5 +1,5 @@
 ---
-title: Análisis de Vulnerabilidades: Software Obsoleto
+title: "Análisis de Vulnerabilidades: Software Obsoleto"
 slug: analisis-software-obsoleto
 aliases: ["Análisis de Vulnerabilidades: Software Obsoleto"]
 fase: [Análisis de Vulnerabilidades]

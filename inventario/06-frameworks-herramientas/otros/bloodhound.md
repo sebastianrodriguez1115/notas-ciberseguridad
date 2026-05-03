@@ -1,5 +1,5 @@
 ---
-title: BloodHound: Análisis de Rutas de Ataque en AD
+title: "BloodHound: Análisis de Rutas de Ataque en AD"
 slug: bloodhound
 aliases: ["BloodHound: Análisis de Rutas de Ataque en AD"]
 fase: [Reconocimiento, Post-Explotación]

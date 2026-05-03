@@ -2,12 +2,14 @@
 
 Análisis de parches y configuraciones inseguras a nivel de OS.
 
-| Técnica | MITRE ID | Dificultad |
-| :--- | :--- | :--- |
-| [Análisis de Parches Windows](./analisis-parches-windows.md) | T1068 | Básica |
-| [Análisis de Permisos Linux](./analisis-permisos-linux.md) | T1068 | Intermedia |
-| [Análisis de Servicios Mal Configurados](./analisis-servicios-mal-configurados.md) | T1078 | Básica |
-| [Análisis de Software Obsoleto](./analisis-software-obsoleto.md) | T1595.002 | Básica |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Gestión de Parches en Windows](./analisis-parches-windows.md) | T1068 | Básica | Windows |
+| [Permisos Inseguros en Linux](./analisis-permisos-linux.md) | T1068 | Intermedia | Linux |
+| [Servicios Mal Configurados](./analisis-servicios-mal-configurados.md) | T1078 | Básica | Multi |
+| [Software Obsoleto](./analisis-software-obsoleto.md) | T1595.002 | Básica | Multi |
 
 ---
-[Volver a Fase 03](../INDEX.md)
+[Volver a Análisis de Vulnerabilidades](../INDEX.md)

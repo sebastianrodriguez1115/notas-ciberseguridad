@@ -2,9 +2,11 @@
 
 Dominio del entorno msfconsole y sus capacidades de automatización.
 
-| Guía | MITRE ID | Dificultad |
-| :--- | :--- | :--- |
-| [Metasploit Avanzado](./metasploit-avanzado.md) | T1210 | Intermedia |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Uso Avanzado y Automatización](./metasploit-avanzado.md) | T1595.002 | Intermedia | Multi |
 
 ---
-[Volver a Fase 06](../INDEX.md)
+[Volver a Frameworks y Herramientas](../INDEX.md)

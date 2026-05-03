@@ -1,8 +1,10 @@
 # Fundamentos: Criptografía
 
-| Guía | Dificultad |
-| :--- | :--- |
-| [Hashing y Codificación](./hashing-codificacion.md) | Básica |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Hashing y Codificación](./hashing-codificacion.md) | — | Básica | Multi |
 
 ---
-[Volver a Fase 07](../INDEX.md)
+[Volver a Fundamentos](../INDEX.md)

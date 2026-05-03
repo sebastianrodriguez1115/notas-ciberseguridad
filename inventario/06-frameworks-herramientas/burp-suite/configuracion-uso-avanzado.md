@@ -1,5 +1,5 @@
 ---
-title: Burp Suite: Configuración y Uso Avanzado
+title: "Burp Suite: Configuración y Uso Avanzado"
 slug: configuracion-uso-avanzado
 aliases: ["Burp Suite: Configuración y Uso Avanzado"]
 fase: [Análisis de Vulnerabilidades, Explotación]

@@ -1,5 +1,5 @@
 ---
-title: Análisis de Vulnerabilidades: LFI y RFI
+title: "Análisis de Vulnerabilidades: LFI y RFI"
 slug: analisis-lfi-rfi
 aliases: ["Análisis de Vulnerabilidades: LFI y RFI"]
 fase: [Análisis de Vulnerabilidades]

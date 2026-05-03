@@ -1,5 +1,5 @@
 ---
-title: Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)
+title: "Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)"
 slug: analisis-xss
 aliases: ["Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)"]
 fase: [Análisis de Vulnerabilidades]

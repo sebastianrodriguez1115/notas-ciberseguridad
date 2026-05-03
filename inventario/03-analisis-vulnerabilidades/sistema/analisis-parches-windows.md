@@ -1,5 +1,5 @@
 ---
-title: Análisis de Vulnerabilidades: Gestión de Parches en Windows
+title: "Análisis de Vulnerabilidades: Gestión de Parches en Windows"
 slug: analisis-parches-windows
 aliases: ["Análisis de Vulnerabilidades: Gestión de Parches en Windows"]
 fase: [Análisis de Vulnerabilidades]

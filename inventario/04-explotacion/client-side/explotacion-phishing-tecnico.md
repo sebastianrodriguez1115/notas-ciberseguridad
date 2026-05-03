@@ -1,5 +1,5 @@
 ---
-title: Phishing Técnico (Evilginx2 & Gophish)
+title: "Phishing Técnico (Evilginx2 & Gophish)"
 slug: explotacion-phishing-tecnico
 aliases: ["Phishing Técnico (Evilginx2 & Gophish)"]
 fase: [Explotación]

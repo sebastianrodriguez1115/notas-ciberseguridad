@@ -2,12 +2,14 @@
 
 Técnicas de descubrimiento mediante fuerza bruta sistemática.
 
-| Técnica | MITRE ID | Dificultad |
-| :--- | :--- | :--- |
-| [Fuzzing de Directorios y Archivos](./fuzzing-directorios-archivos.md) | T1595.002 | Básica |
-| [Fuzzing de LFI y SSRF](./fuzzing-lfi-ssrf.md) | T1595.002 | Intermedia |
-| [Fuzzing de Parámetros HTTP](./fuzzing-parametros.md) | T1595.002 | Intermedia |
-| [Fuzzing de Subdominios y VHosts](./fuzzing-subdominios-vhosts.md) | T1595.002 | Básica |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Fuzzing de Directorios y Archivos Web](./fuzzing-directorios-archivos.md) | T1595.002 | Básica | Web |
+| [Fuzzing de LFI y Escaneo de Puertos vía SSRF](./fuzzing-lfi-ssrf.md) | T1595.002 | Intermedia | Web |
+| [Fuzzing de Parámetros HTTP](./fuzzing-parametros.md) | T1595.002 | Intermedia | Web |
+| [Fuzzing de Subdominios y Virtual Hosts](./fuzzing-subdominios-vhosts.md) | T1595.002 | Básica | Web |
 
 ---
-[Volver a Fase 02](../INDEX.md)
+[Volver a Enumeración](../INDEX.md)

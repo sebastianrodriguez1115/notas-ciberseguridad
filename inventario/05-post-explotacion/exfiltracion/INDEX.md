@@ -2,10 +2,12 @@
 
 Técnicas de extracción de información sensible.
 
-| Técnica | MITRE ID | Dificultad |
-| :--- | :--- | :--- |
-| [Canales Encubiertos](./canales-encubiertos.md) | T1048.001 | Avanzada |
-| [Transferencia de Archivos](./transferencia-archivos.md) | T1105 | Básica |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Exfiltración por Canales Encubiertos](./canales-encubiertos.md) | T1048.001 | Avanzada | Multi |
+| [Transferencia de Archivos en Post-Explotación](./transferencia-archivos.md) | T1105 | Básica | Multi |
 
 ---
-[Volver a Fase 05](../INDEX.md)
+[Volver a Post-Explotación](../INDEX.md)

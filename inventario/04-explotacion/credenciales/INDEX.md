@@ -2,11 +2,13 @@
 
 Técnicas para obtener acceso mediante la manipulación de credenciales.
 
-| Técnica | MITRE ID | Dificultad |
-| :--- | :--- | :--- |
-| [Explotación Brute Force Advanced](./explotacion-brute-force-advanced.md) | T1110.001 | Intermedia |
-| [Explotación Hash Cracking](./explotacion-hash-cracking.md) | T1110.002 | Intermedia |
-| [Explotación Password Spraying](./explotacion-password-spraying.md) | T1110.003 | Básica |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Ataques de Fuerza Bruta Avanzados](./explotacion-brute-force-advanced.md) | T1110.001 | Intermedia | Multi |
+| [Crackeo de Hashes (Metodología)](./explotacion-hash-cracking.md) | T1110.002 | Intermedia | Multi |
+| [Password Spraying](./explotacion-password-spraying.md) | T1110.003 | Básica | Multi |
 
 ---
-[Volver a Fase 04](../INDEX.md)
+[Volver a Explotación](../INDEX.md)

@@ -1,5 +1,5 @@
 ---
-title: Análisis de Vulnerabilidades: Servicios Mal Configurados
+title: "Análisis de Vulnerabilidades: Servicios Mal Configurados"
 slug: analisis-servicios-mal-configurados
 aliases: ["Análisis de Vulnerabilidades: Servicios Mal Configurados"]
 fase: [Análisis de Vulnerabilidades]

@@ -2,9 +2,11 @@
 
 Análisis de rutas de ataque y herramientas especializadas.
 
-| Guía | MITRE ID | Dificultad |
-| :--- | :--- | :--- |
-| [BloodHound](./bloodhound.md) | T1087.002 | Intermedia |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Análisis de Rutas de Ataque en AD](./bloodhound.md) | T1087.002 | Intermedia | Windows |
 
 ---
-[Volver a Fase 06](../INDEX.md)
+[Volver a Frameworks y Herramientas](../INDEX.md)

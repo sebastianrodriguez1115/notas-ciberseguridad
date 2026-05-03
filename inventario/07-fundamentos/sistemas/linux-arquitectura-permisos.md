@@ -1,5 +1,5 @@
 ---
-title: Sistemas: Arquitectura y Permisos en Linux
+title: "Sistemas: Arquitectura y Permisos en Linux"
 slug: linux-arquitectura-permisos
 aliases: ["Sistemas: Arquitectura y Permisos en Linux"]
 fase: [Fundamentos]

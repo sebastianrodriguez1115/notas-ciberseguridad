@@ -2,11 +2,13 @@
 
 Ataques dirigidos a los usuarios y sus estaciones de trabajo.
 
-| Técnica | MITRE ID | Dificultad |
-| :--- | :--- | :--- |
-| [Explotación con Msfvenom](./explotacion-msfvenom.md) | T1587.001 | Básica |
-| [Explotación Phishing Técnico](./explotacion-phishing-tecnico.md) | T1566 | Avanzada |
-| [Explotación Process Injection](./explotacion-process-injection.md) | T1055 | Avanzada |
+<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->
+
+| Técnica | MITRE | Dificultad | Plataforma |
+| :--- | :--- | :--- | :--- |
+| [Generación de Payloads con msfvenom](./explotacion-msfvenom.md) | T1587.001 | Básica | Multi |
+| [Phishing Técnico (Evilginx2 & Gophish)](./explotacion-phishing-tecnico.md) | T1566 | Avanzada | Multi |
+| [Process Injection y Evasión](./explotacion-process-injection.md) | T1055 | Avanzada | Windows |
 
 ---
-[Volver a Fase 04](../INDEX.md)
+[Volver a Explotación](../INDEX.md)

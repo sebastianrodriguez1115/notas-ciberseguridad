@@ -1,5 +1,5 @@
 ---
-title: Incident Response: Metodología PICERL
+title: "Incident Response: Metodología PICERL"
 slug: metodologia-picerl
 aliases: ["Incident Response: Metodología PICERL"]
 fase: [Forense y DFIR]

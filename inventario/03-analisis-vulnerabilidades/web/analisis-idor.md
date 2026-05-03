@@ -1,5 +1,5 @@
 ---
-title: Análisis de Vulnerabilidades: Insecure Direct Object Reference (IDOR)
+title: "Análisis de Vulnerabilidades: Insecure Direct Object Reference (IDOR)"
 slug: analisis-idor
 aliases: ["Análisis de Vulnerabilidades: Insecure Direct Object Reference (IDOR)"]
 fase: [Análisis de Vulnerabilidades]

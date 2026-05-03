@@ -1,5 +1,5 @@
 ---
-title: Análisis de Vulnerabilidades: Permisos Inseguros en Linux
+title: "Análisis de Vulnerabilidades: Permisos Inseguros en Linux"
 slug: analisis-permisos-linux
 aliases: ["Análisis de Vulnerabilidades: Permisos Inseguros en Linux"]
 fase: [Análisis de Vulnerabilidades]

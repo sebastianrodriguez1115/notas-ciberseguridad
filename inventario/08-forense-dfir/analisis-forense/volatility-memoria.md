@@ -1,5 +1,5 @@
 ---
-title: Volatility: Análisis Forense de Memoria
+title: "Volatility: Análisis Forense de Memoria"
 slug: volatility-memoria
 aliases: ["Volatility: Análisis Forense de Memoria"]
 fase: [Forense y DFIR]

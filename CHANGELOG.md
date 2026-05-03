@@ -2,6 +2,32 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19d (Sprint 2: validate.py + build_indexes.py)
+
+Sprint 2 del plan de discoverabilidad. Tooling para validar la integridad del frontmatter y regenerar índices automáticamente.
+
+### `scripts/validate.py` (nuevo)
+- Valida los 124 archivos técnicos del inventario contra el schema documentado en TEMPLATE.md y AGENTS.md.
+- Comprueba: presencia de frontmatter, parseable como YAML, campos requeridos (title, slug, aliases, fase, plataforma, dificultad, mitre), tipos y enums correctos, slugs únicos globalmente, paridad entre `title` del frontmatter y H1 del body, formato MITRE `T\d{4}(\.\d{3})?`, vacío permitido en `mitre` sólo si fase es Fundamentos o Forense y DFIR, ausencia de sección `## Clasificación` en el body, y resolución cruzada de `related` (cada slug existe) y `learning_refs` (cada path existe en learning/ y contiene .md).
+- Salida: `ERR <path>: <descripción>` por cada problema, código de salida 0/1.
+
+### `scripts/build_indexes.py` (nuevo)
+- Regenera los **29 INDEX.md hoja** desde frontmatter. Tabla `Técnica | MITRE | Dificultad | Plataforma`, ordenada alfabéticamente por nombre mostrado, con backlink correcto a cada fase (acentos preservados en "Análisis de Vulnerabilidades", "Explotación", etc.).
+- Genera nuevo **`inventario/TOPICS.md`**: índice plano por slug con archivo, fase, plataforma, dificultad, aliases, related (como slugs) y learning_refs (con links a learning/).
+- Genera nuevo **`inventario/meta/`** con vistas facetadas auto-generadas: `by-mitre.md`, `by-difficulty.md`, `by-platform.md`, `by-fase.md`. Cada una agrupa los 124 archivos por el valor del facet correspondiente.
+- Idempotente: el marcador `<!-- AUTOGENERADO por scripts/build_indexes.py. NO editar a mano la tabla. -->` delimita la zona generada; la narrativa antes del marcador (H1 + descripción de la subcategoría) se preserva inalterada.
+- Modo `--check` para integración con CI/git hooks: falla si los archivos están desactualizados sin escribirlos.
+
+### Fixes derivados
+- 22 archivos con título conteniendo `:` rompían el parsing YAML. Fix one-shot quotó los títulos: `title: "Análisis de Vulnerabilidades: SQL Injection (SQLi)"`. El script `migrate_frontmatter.py` ahora cita preventivamente cualquier scalar con caracteres YAML especiales (`:`, `#`, `&`, `*`, `!`, `|`, `>`, `%`, `@`, `` ` ``).
+- 2 archivos de Fase 01 (`deteccion-waf.md`, `transparencia-certificados.md`) tenían title del frontmatter más corto que el H1 del body. Sincronizados al H1 (la versión larga es la canónica para humanos).
+
+### Estado tras Sprint 2
+- `python3 scripts/validate.py` → 124/124 OK.
+- `python3 scripts/build_indexes.py --check` → up to date.
+- Discoverabilidad LLM: queries por slug, fase, plataforma, dificultad y MITRE funcionan vía grep sobre frontmatter; vistas facetadas en `inventario/meta/` permiten lookup directo sin grep; TOPICS.md da una vista por tema cruzada.
+- Pendiente sólo: enriquecimiento manual de aliases/related para topics frecuentes (búsqueda por sinónimo como "Kerberoasting" todavía no encuentra el archivo correspondiente porque sus aliases son auto-derivados de title).
+
 ## [2026-05-03] — Sesión 19c (Sprint 1: frontmatter YAML en Fases 02-08)
 
 Continuación de la sesión 19b. Tras validar el patrón en Fase 01, se construyó un script de migración para procesar las fases 02-08 sin escribir frontmatter a mano por 111 archivos.

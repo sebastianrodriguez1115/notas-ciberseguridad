@@ -1,5 +1,5 @@
 ---
-title: Detección de WAF
+title: Detección de WAF (Web Application Firewall)
 slug: deteccion-waf
 aliases: [WAF Detection, Web Application Firewall Detection, wafw00f]
 fase: [Reconocimiento]

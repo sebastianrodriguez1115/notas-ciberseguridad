@@ -1,5 +1,5 @@
 ---
-title: Criptografía: Hashing y Codificación
+title: "Criptografía: Hashing y Codificación"
 slug: hashing-codificacion
 aliases: ["Criptografía: Hashing y Codificación"]
 fase: [Fundamentos]

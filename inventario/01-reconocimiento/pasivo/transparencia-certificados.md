@@ -1,5 +1,5 @@
 ---
-title: Transparencia de Certificados
+title: Transparencia de Certificados (Certificate Transparency)
 slug: transparencia-certificados
 aliases: [Certificate Transparency, CT Logs, crt.sh, SAN Discovery]
 fase: [Reconocimiento]

@@ -1,5 +1,5 @@
 ---
-title: Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP
+title: "Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP"
 slug: analisis-seguridad-cabeceras
 aliases: ["Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP"]
 fase: [Análisis de Vulnerabilidades]

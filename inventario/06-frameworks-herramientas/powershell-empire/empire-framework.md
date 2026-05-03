@@ -1,5 +1,5 @@
 ---
-title: PowerShell Empire: Post-Explotación y C2
+title: "PowerShell Empire: Post-Explotación y C2"
 slug: empire-framework
 aliases: ["PowerShell Empire: Post-Explotación y C2"]
 fase: [Post-Explotación]
