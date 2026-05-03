@@ -6,7 +6,7 @@ fase: [Post-Explotación]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1021.002, T1021.006, T1021.001, T1047]
-related: [pass-the-hash, enumeracion-winrm, enumeracion-rdp]
+related: [pass-the-hash, pass-the-ticket, enumeracion-winrm, enumeracion-rdp, credential-dumping]
 learning_refs: []
 ---
 

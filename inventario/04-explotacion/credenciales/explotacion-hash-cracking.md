@@ -6,7 +6,7 @@ fase: [Explotación]
 plataforma: Multi
 dificultad: Intermedia
 mitre: [T1110.002]
-related: [credential-dumping, pass-the-hash, enumeracion-kerberos, explotacion-mitm-responder]
+related: [credential-dumping, pass-the-hash, enumeracion-kerberos, explotacion-mitm-responder, explotacion-kerberoasting]
 learning_refs: []
 ---
 

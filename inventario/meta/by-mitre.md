@@ -314,6 +314,10 @@ archivos por valor de `by-mitre`.
 
 - [`pass-the-hash`](../05-post-explotacion/lateral-movement/pass-the-hash.md) — Pass-the-Hash (PtH)
 
+## T1550.003 (1)
+
+- [`pass-the-ticket`](../05-post-explotacion/lateral-movement/pass-the-ticket.md) — Pass-the-Ticket
+
 ## T1557.001 (4)
 
 - [`explotacion-adcs-relay`](../04-explotacion/red/explotacion-adcs-relay.md) — Abuso de ADCS y Ataques de Relay
@@ -329,13 +333,23 @@ archivos por valor de `by-mitre`.
 
 - [`enumeracion-kerberos`](../02-enumeracion/red/enumeracion-kerberos.md) — Enumeración Kerberos (Puerto 88)
 
-## T1558.003 (1)
+## T1558.001 (1)
+
+- [`golden-ticket`](../05-post-explotacion/lateral-movement/golden-ticket.md) — Golden Ticket
+
+## T1558.002 (1)
+
+- [`silver-ticket`](../05-post-explotacion/lateral-movement/silver-ticket.md) — Silver Ticket
+
+## T1558.003 (2)
 
 - [`enumeracion-kerberos`](../02-enumeracion/red/enumeracion-kerberos.md) — Enumeración Kerberos (Puerto 88)
+- [`explotacion-kerberoasting`](../04-explotacion/credenciales/explotacion-kerberoasting.md) — Kerberoasting y AS-REP Roasting
 
-## T1558.004 (1)
+## T1558.004 (2)
 
 - [`enumeracion-kerberos`](../02-enumeracion/red/enumeracion-kerberos.md) — Enumeración Kerberos (Puerto 88)
+- [`explotacion-kerberoasting`](../04-explotacion/credenciales/explotacion-kerberoasting.md) — Kerberoasting y AS-REP Roasting
 
 ## T1566 (1)
 

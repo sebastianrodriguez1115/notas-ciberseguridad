@@ -6,7 +6,7 @@ fase: [Post-Explotación]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1003.001, T1003.002]
-related: [pass-the-hash, enumeracion-kerberos, explotacion-hash-cracking]
+related: [pass-the-hash, enumeracion-kerberos, explotacion-hash-cracking, golden-ticket, silver-ticket, pass-the-ticket]
 learning_refs: []
 ---
 

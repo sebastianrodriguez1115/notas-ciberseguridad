@@ -6,7 +6,7 @@ fase: [Fundamentos]
 plataforma: Windows
 dificultad: Básica
 mitre: []
-related: [enumeracion-ldap, enumeracion-kerberos, enumeracion-smb, bloodhound, pass-the-hash, credential-dumping]
+related: [enumeracion-ldap, enumeracion-kerberos, enumeracion-smb, bloodhound, pass-the-hash, credential-dumping, golden-ticket, silver-ticket]
 learning_refs: []
 ---
 

@@ -120,7 +120,7 @@ archivos por valor de `by-platform`.
 - [`wayback-machine`](../01-reconocimiento/pasivo/wayback-machine.md) — Wayback Machine
 - [`web-shells`](../05-post-explotacion/persistencia/web-shells.md) — Web Shells
 
-## Windows (21)
+## Windows (25)
 
 - [`abuso-servicios-windows`](../05-post-explotacion/privilege-escalation/windows/abuso-servicios-windows.md) — Abuso de Servicios de Windows
 - [`abuso-tareas-programadas`](../05-post-explotacion/privilege-escalation/windows/abuso-tareas-programadas.md) — Abuso de Tareas Programadas (Scheduled Tasks)
@@ -135,11 +135,15 @@ archivos por valor de `by-platform`.
 - [`enumeracion-rdp`](../02-enumeracion/servicios/enumeracion-rdp.md) — Enumeración RDP (Remote Desktop Protocol)
 - [`enumeracion-winrm`](../02-enumeracion/servicios/enumeracion-winrm.md) — Enumeración WinRM (Windows Remote Management)
 - [`explotacion-eternalblue`](../04-explotacion/sistema/explotacion-eternalblue.md) — EternalBlue (MS17-010)
+- [`explotacion-kerberoasting`](../04-explotacion/credenciales/explotacion-kerberoasting.md) — Kerberoasting y AS-REP Roasting
 - [`explotacion-kernel-windows`](../04-explotacion/sistema/explotacion-kernel-windows.md) — Explotación de Kernel Windows
 - [`explotacion-process-injection`](../04-explotacion/client-side/explotacion-process-injection.md) — Process Injection y Evasión
 - [`explotacion-zerologon`](../04-explotacion/sistema/explotacion-zerologon.md) — Explotación de Zerologon (CVE-2020-1472)
+- [`golden-ticket`](../05-post-explotacion/lateral-movement/golden-ticket.md) — Golden Ticket
 - [`pass-the-hash`](../05-post-explotacion/lateral-movement/pass-the-hash.md) — Pass-the-Hash (PtH)
+- [`pass-the-ticket`](../05-post-explotacion/lateral-movement/pass-the-ticket.md) — Pass-the-Ticket
 - [`persistencia-windows`](../05-post-explotacion/persistencia/persistencia-windows.md) — Persistencia en Windows
+- [`silver-ticket`](../05-post-explotacion/lateral-movement/silver-ticket.md) — Silver Ticket
 - [`token-impersonation`](../05-post-explotacion/privilege-escalation/windows/token-impersonation.md) — Token Impersonation (Suplantación de Tokens)
 - [`windows-api-hacking`](../07-fundamentos/sistemas/windows-api-hacking.md) — Windows API para Hacking
 - [`windows-arquitectura-ad`](../07-fundamentos/sistemas/windows-arquitectura-ad.md) — Arquitectura de Windows y Active Directory

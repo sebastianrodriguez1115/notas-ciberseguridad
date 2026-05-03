@@ -6,7 +6,7 @@ fase: [Post-Explotación]
 plataforma: Windows
 dificultad: Intermedia
 mitre: [T1550.002]
-related: [credential-dumping, ejecucion-remota-windows, explotacion-smb-relay, explotacion-hash-cracking]
+related: [credential-dumping, ejecucion-remota-windows, explotacion-smb-relay, explotacion-hash-cracking, pass-the-ticket]
 learning_refs: []
 ---
 

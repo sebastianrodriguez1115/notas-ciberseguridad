@@ -2,6 +2,40 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19m (Sprint B: cobertura AD ticket-forging)
+
+Hueco de coverage real identificado por el agente 2 del stress-test: T1558.001 Golden Ticket, T1558.002 Silver Ticket, T1550.003 Pass-the-Ticket no tenían archivos dedicados, y Kerberoasting estaba sepultado dentro de `enumeracion-kerberos.md` (mezclando enumeración + extracción de credenciales). Sprint B añade 4 archivos nuevos al cluster AD y reconecta el grafo `related:`.
+
+### Archivos nuevos (4 técnicas, 128 total)
+
+- **`04-explotacion/credenciales/explotacion-kerberoasting.md`** (T1558.003 + T1558.004): combinado Kerberoasting y AS-REP Roasting. Diferencia operacional clave: Kerberoasting requiere credenciales válidas de cualquier usuario, AS-REP Roasting no. Cubre Impacket (`GetUserSPNs`, `GetNPUsers`), Rubeus (`kerberoast`, `asreproast`), PowerView, hashcat modes 13100/18200, john (`krb5tgs`/`krb5asrep`). Pareja cross-fase con `enumeracion-kerberos.md`.
+
+- **`05-post-explotacion/lateral-movement/golden-ticket.md`** (T1558.001): forja de TGT con la clave de krbtgt. Cubre mimikatz `kerberos::golden`, Impacket `ticketer.py`, Rubeus `golden`. Incluye pre-requisito DCSync (extracción del hash de krbtgt), variantes RC4 vs AES-256, persistencia con usuarios inexistentes, y detección via Defender for Identity. Contramedida principal: rotación DOBLE de krbtgt con ≥10 horas entre resets.
+
+- **`05-post-explotacion/lateral-movement/silver-ticket.md`** (T1558.002): forja de TGS con la clave de una computer account o cuenta de servicio. Bypassa el TGS-REQ totalmente (el atacante construye el ticket localmente, no contacta al KDC). Cubre los 6 SPNs frecuentes de forja (cifs, host, ldap, MSSQLSvc, HTTP, HOST), comparación contra Golden Ticket, contramedida via Protected Users + AES-256.
+
+- **`05-post-explotacion/lateral-movement/pass-the-ticket.md`** (T1550.003): reutilización de tickets Kerberos robados de LSASS o ccache. Cubre extracción con mimikatz `sekurlsa::tickets /export` y Rubeus `dump`/`monitor`/`ptt`, conversión cross-platform `.kirbi` ↔ `.ccache` con `ticketConverter.py`, uso desde Linux via `KRB5CCNAME`. Comparación explícita contra PtH (PtH usa hash, PtT usa ticket) y caso compuesto Silver+PtT.
+
+### `related:` del cluster existente reconectado
+
+6 archivos previos actualizados para apuntar a los nuevos:
+- `enumeracion-kerberos`: + `explotacion-kerberoasting` (cierra el par cross-fase)
+- `pass-the-hash`: + `pass-the-ticket` (alternativa Kerberos)
+- `credential-dumping`: + `golden-ticket`, `silver-ticket`, `pass-the-ticket` (es la fuente de hashes/tickets que estos consumen)
+- `explotacion-hash-cracking`: + `explotacion-kerberoasting` (los TGS Kerberoasted terminan crackeándose ahí)
+- `ejecucion-remota-windows`: + `pass-the-ticket` (vector de autenticación válido para los exec remotos)
+- `windows-arquitectura-ad`: + `golden-ticket`, `silver-ticket` (complementan el panorama AD)
+
+### AGENTS.md
+- Conteo actualizado: 165 → 169 archivos Markdown (128 técnicas + 40 INDEX + 1 TEMPLATE).
+- Cookbook menciona los 128 archivos migrados.
+
+### Verificación
+- `bash scripts/check.sh` → all green.
+- 128/128 validate OK.
+- `build_indexes --check` up to date tras regeneración (TOPICS.md + 4 meta/* + INDEX hojas afectados).
+- Las cadenas operacionales del stress-test ahora tienen archivos dedicados: "qué hacer con un hash de krbtgt" → `golden-ticket.md` directo. "TGS Kerberoasted" → `explotacion-kerberoasting.md` → `explotacion-hash-cracking.md`.
+
 ## [2026-05-03] — Sesión 19l (Sprint A: cierre del gap detectado por stress-test)
 
 Tras el stress-test de discoverabilidad (2 agentes con contexto frío resolviendo 8 escenarios reales), ambos convergieron en el mismo cuello de botella: cluster AD/red/credenciales tiene `related:` mayormente vacío, así que las cadenas operacionales ("tengo hashes NTLM, ¿qué sigue?", "AD pentest end-to-end") requerían inferencia manual. Sprint A cierra ese gap específico sin tocar los 71 archivos restantes que ya funcionaban clean.

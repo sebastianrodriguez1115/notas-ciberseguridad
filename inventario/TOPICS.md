@@ -204,7 +204,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/05-post-explotacion/privilege-escalation/windows/credential-dumping.md`](./05-post-explotacion/privilege-escalation/windows/credential-dumping.md)
 - **Fase**: Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
 - **Aliases**: Credential Dump, mimikatz, LSASS dump, DCSync, DPAPI, NTLM dump, hash dump, secretsdump
-- **Related**: `pass-the-hash`, `enumeracion-kerberos`, `explotacion-hash-cracking`
+- **Related**: `pass-the-hash`, `enumeracion-kerberos`, `explotacion-hash-cracking`, `golden-ticket`, `silver-ticket`, `pass-the-ticket`
 
 ## `descubrimiento-hosts` — Descubrimiento de Hosts
 
@@ -232,7 +232,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/05-post-explotacion/lateral-movement/ejecucion-remota-windows.md`](./05-post-explotacion/lateral-movement/ejecucion-remota-windows.md)
 - **Fase**: Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
 - **Aliases**: Remote Execution Windows, psexec, wmiexec, smbexec, atexec
-- **Related**: `pass-the-hash`, `enumeracion-winrm`, `enumeracion-rdp`
+- **Related**: `pass-the-hash`, `pass-the-ticket`, `enumeracion-winrm`, `enumeracion-rdp`, `credential-dumping`
 
 ## `empire-framework` — PowerShell Empire: Post-Explotación y C2
 
@@ -282,7 +282,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/02-enumeracion/red/enumeracion-kerberos.md`](./02-enumeracion/red/enumeracion-kerberos.md)
 - **Fase**: Enumeración, Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
 - **Aliases**: Kerberos, Kerberos Enumeration, Kerberoasting, AS-REP Roasting, ASREPRoast, GetUserSPNs, GetNPUsers
-- **Related**: `enumeracion-ldap`, `enumeracion-smb`, `bloodhound`, `explotacion-hash-cracking`
+- **Related**: `enumeracion-ldap`, `enumeracion-smb`, `bloodhound`, `explotacion-hash-cracking`, `explotacion-kerberoasting`
 
 ## `enumeracion-kubernetes` — Enumeración Kubernetes (K8s) (Puerto 6443 / 443 / 10250)
 
@@ -508,7 +508,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/04-explotacion/credenciales/explotacion-hash-cracking.md`](./04-explotacion/credenciales/explotacion-hash-cracking.md)
 - **Fase**: Explotación · **Plataforma**: Multi · **Dificultad**: Intermedia
 - **Aliases**: Crackeo de Hashes (Metodología), Hash Cracking, hashcat, John the Ripper, JtR, NTLM cracking, TGS cracking, AS-REP cracking
-- **Related**: `credential-dumping`, `pass-the-hash`, `enumeracion-kerberos`, `explotacion-mitm-responder`
+- **Related**: `credential-dumping`, `pass-the-hash`, `enumeracion-kerberos`, `explotacion-mitm-responder`, `explotacion-kerberoasting`
 
 ## `explotacion-jwt` — Explotación de JSON Web Tokens (JWT)
 
@@ -516,6 +516,13 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
 - **Aliases**: JWT, JSON Web Token, jwt_tool, JWT Token Forgery
 - **Related**: `explotacion-auth-bypass-oauth`, `hashing-codificacion`
+
+## `explotacion-kerberoasting` — Kerberoasting y AS-REP Roasting
+
+- **Archivo**: [`inventario/04-explotacion/credenciales/explotacion-kerberoasting.md`](./04-explotacion/credenciales/explotacion-kerberoasting.md)
+- **Fase**: Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
+- **Aliases**: Kerberoasting, AS-REP Roasting, ASREPRoast, GetUserSPNs, GetNPUsers, Rubeus kerberoast, TGS roasting, AS-REP cracking
+- **Related**: `enumeracion-kerberos`, `enumeracion-ldap`, `explotacion-hash-cracking`, `credential-dumping`, `golden-ticket`, `silver-ticket`
 
 ## `explotacion-kernel-linux` — Explotación de Kernel Linux
 
@@ -651,6 +658,13 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Aliases**: Subdomain Fuzzing, Virtual Host Discovery, vhost enum, ffuf vhost
 - **Related**: `fuzzing-directorios-archivos`, `dns-pasivo`, `transparencia-certificados`
 
+## `golden-ticket` — Golden Ticket
+
+- **Archivo**: [`inventario/05-post-explotacion/lateral-movement/golden-ticket.md`](./05-post-explotacion/lateral-movement/golden-ticket.md)
+- **Fase**: Post-Explotación · **Plataforma**: Windows · **Dificultad**: Avanzada
+- **Aliases**: Golden Ticket, krbtgt forge, TGT forging, mimikatz golden, ticketer golden, Domain Persistence Kerberos
+- **Related**: `silver-ticket`, `pass-the-ticket`, `credential-dumping`, `persistencia-windows`, `ejecucion-remota-windows`, `enumeracion-kerberos`
+
 ## `google-dorking` — Google Dorking
 
 - **Archivo**: [`inventario/01-reconocimiento/pasivo/google-dorking.md`](./01-reconocimiento/pasivo/google-dorking.md)
@@ -711,7 +725,14 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/05-post-explotacion/lateral-movement/pass-the-hash.md`](./05-post-explotacion/lateral-movement/pass-the-hash.md)
 - **Fase**: Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
 - **Aliases**: PtH, NTLM hash relay, psexec hash, NTLM hash dump, hash dump, Pass the Hash
-- **Related**: `credential-dumping`, `ejecucion-remota-windows`, `explotacion-smb-relay`, `explotacion-hash-cracking`
+- **Related**: `credential-dumping`, `ejecucion-remota-windows`, `explotacion-smb-relay`, `explotacion-hash-cracking`, `pass-the-ticket`
+
+## `pass-the-ticket` — Pass-the-Ticket
+
+- **Archivo**: [`inventario/05-post-explotacion/lateral-movement/pass-the-ticket.md`](./05-post-explotacion/lateral-movement/pass-the-ticket.md)
+- **Fase**: Post-Explotación · **Plataforma**: Windows · **Dificultad**: Intermedia
+- **Aliases**: Pass-the-Ticket, PtT, ticket reuse, mimikatz ptt, Rubeus ptt, ccache reuse, Kerberos ticket injection
+- **Related**: `pass-the-hash`, `golden-ticket`, `silver-ticket`, `credential-dumping`, `ejecucion-remota-windows`, `enumeracion-kerberos`
 
 ## `persistencia-linux` — Persistencia en Linux
 
@@ -744,6 +765,13 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Reconocimiento · **Plataforma**: Web · **Dificultad**: Básica
 - **Aliases**: Shodan, Censys, Internet-Wide Scan, IoT Search Engine
 - **Related**: `google-dorking`, `transparencia-certificados`, `dns-pasivo`
+
+## `silver-ticket` — Silver Ticket
+
+- **Archivo**: [`inventario/05-post-explotacion/lateral-movement/silver-ticket.md`](./05-post-explotacion/lateral-movement/silver-ticket.md)
+- **Fase**: Post-Explotación · **Plataforma**: Windows · **Dificultad**: Avanzada
+- **Aliases**: Silver Ticket, TGS forging, service ticket forge, mimikatz silver, computer account hash forge
+- **Related**: `golden-ticket`, `pass-the-ticket`, `explotacion-kerberoasting`, `credential-dumping`, `ejecucion-remota-windows`
 
 ## `suid-sgid` — Explotación de Binarios SUID/SGID
 
@@ -807,4 +835,4 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/07-fundamentos/sistemas/windows-arquitectura-ad.md`](./07-fundamentos/sistemas/windows-arquitectura-ad.md)
 - **Fase**: Fundamentos · **Plataforma**: Windows · **Dificultad**: Básica
 - **Aliases**: Sistemas: Arquitectura de Windows y Active Directory, Active Directory, AD architecture, Windows architecture, AD pentest
-- **Related**: `enumeracion-ldap`, `enumeracion-kerberos`, `enumeracion-smb`, `bloodhound`, `pass-the-hash`, `credential-dumping`
+- **Related**: `enumeracion-ldap`, `enumeracion-kerberos`, `enumeracion-smb`, `bloodhound`, `pass-the-hash`, `credential-dumping`, `golden-ticket`, `silver-ticket`

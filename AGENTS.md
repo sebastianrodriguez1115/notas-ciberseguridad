@@ -18,7 +18,7 @@ Construir un inventario estructurado y completo de técnicas de ciberseguridad, 
 
 ### 1. `inventario/` — Conocimiento estructurado del proyecto (fuente canónica)
 
-Taxonomía de **165 archivos Markdown** (124 técnicas + 40 INDEX + 1 TEMPLATE) organizados por fases de pentest (`01-reconocimiento` → `08-forense-dfir`, más `06-frameworks-herramientas` y `07-fundamentos` como soportes). Cada archivo sigue `inventario/TEMPLATE.md` con dos perfiles de uso:
+Taxonomía de **169 archivos Markdown** (128 técnicas + 40 INDEX + 1 TEMPLATE) organizados por fases de pentest (`01-reconocimiento` → `08-forense-dfir`, más `06-frameworks-herramientas` y `07-fundamentos` como soportes). Cada archivo sigue `inventario/TEMPLATE.md` con dos perfiles de uso:
 
 - **Técnicas y herramientas concretas**: usan las 6 secciones obligatorias (Descripción → Clasificación → Herramientas → Comandos / Ejemplos → Contramedidas → Referencias).
 - **Contenido conceptual o metodológico** (modelos teóricos como OSI/TCP-IP, ciclos como PICERL, marcos teóricos): secciones obligatorias reducidas (Título → Descripción → Clasificación → Referencias). Las secciones Herramientas, Comandos / Ejemplos y Contramedidas son opcionales y pueden sustituirse por secciones propias relevantes al tema.
@@ -320,7 +320,7 @@ Los archivos del inventario siguen un patrón `<prefijo-acción>-<slug-del-tema>
 
 ## Cookbook de Búsqueda (para agentes/LLM)
 
-Patrones de grep frecuentes sobre el inventario. La metadata vive en frontmatter YAML al inicio de cada archivo técnico, así que las queries más útiles son sobre líneas con `^<campo>:`. Los 124 archivos están migrados a frontmatter.
+Patrones de grep frecuentes sobre el inventario. La metadata vive en frontmatter YAML al inicio de cada archivo técnico, así que las queries más útiles son sobre líneas con `^<campo>:`. Los 128 archivos están migrados a frontmatter.
 
 > **Nota de portabilidad**: usar `grep -r ... inventario/` (recursivo) en lugar de glob de bash `inventario/**/*.md`. El glob `**` requiere `shopt -s globstar` que no está activo por default. Si prefieres ripgrep: `rg -g '*.md' '...' inventario`. Ambos funcionan sin configuración previa.
 

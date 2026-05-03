@@ -5,7 +5,7 @@
 Índice facetado generado desde frontmatter. Cada sección agrupa los
 archivos por valor de `by-difficulty`.
 
-## Avanzada (19)
+## Avanzada (21)
 
 - [`analisis-deserialization`](../03-analisis-vulnerabilidades/web/analisis-deserialization.md) — Análisis de Insecure Deserialization
 - [`analisis-estatico-dinamico`](../08-forense-dfir/malware-analysis/analisis-estatico-dinamico.md) — Estático y Dinámico
@@ -23,8 +23,10 @@ archivos por valor de `by-difficulty`.
 - [`explotacion-phishing-tecnico`](../04-explotacion/client-side/explotacion-phishing-tecnico.md) — Phishing Técnico (Evilginx2 & Gophish)
 - [`explotacion-process-injection`](../04-explotacion/client-side/explotacion-process-injection.md) — Process Injection y Evasión
 - [`explotacion-smb-relay`](../04-explotacion/red/explotacion-smb-relay.md) — SMB Relay Attack
+- [`golden-ticket`](../05-post-explotacion/lateral-movement/golden-ticket.md) — Golden Ticket
 - [`kernel-exploits-privesc-linux`](../05-post-explotacion/privilege-escalation/linux/kernel-exploits-privesc-linux.md) — Escalada de Privilegios mediante Kernel Exploits (Linux)
 - [`pivoting-tunneling`](../05-post-explotacion/lateral-movement/pivoting-tunneling.md) — Pivoting y Tunneling
+- [`silver-ticket`](../05-post-explotacion/lateral-movement/silver-ticket.md) — Silver Ticket
 - [`volatility-memoria`](../08-forense-dfir/analisis-forense/volatility-memoria.md) — Análisis Forense de Memoria
 
 ## Básica (51)
@@ -81,7 +83,7 @@ archivos por valor de `by-difficulty`.
 - [`whois-registros-dominio`](../01-reconocimiento/pasivo/whois-registros-dominio.md) — WHOIS y Registros de Dominio
 - [`windows-arquitectura-ad`](../07-fundamentos/sistemas/windows-arquitectura-ad.md) — Arquitectura de Windows y Active Directory
 
-## Intermedia (54)
+## Intermedia (56)
 
 - [`abuso-cron-jobs`](../05-post-explotacion/privilege-escalation/linux/abuso-cron-jobs.md) — Abuso de Cron Jobs
 - [`abuso-servicios-windows`](../05-post-explotacion/privilege-escalation/windows/abuso-servicios-windows.md) — Abuso de Servicios de Windows
@@ -121,6 +123,7 @@ archivos por valor de `by-difficulty`.
 - [`explotacion-fileupload`](../04-explotacion/web/explotacion-fileupload.md) — File Upload Exploitation
 - [`explotacion-hash-cracking`](../04-explotacion/credenciales/explotacion-hash-cracking.md) — Crackeo de Hashes (Metodología)
 - [`explotacion-jwt`](../04-explotacion/web/explotacion-jwt.md) — Explotación de JSON Web Tokens (JWT)
+- [`explotacion-kerberoasting`](../04-explotacion/credenciales/explotacion-kerberoasting.md) — Kerberoasting y AS-REP Roasting
 - [`explotacion-mitm-responder`](../04-explotacion/red/explotacion-mitm-responder.md) — Envenenamiento LLMNR/NBT-NS con Responder
 - [`explotacion-nosqli`](../04-explotacion/web/explotacion-nosqli.md) — Inyección NoSQL (NoSQLi)
 - [`explotacion-shellshock`](../04-explotacion/sistema/explotacion-shellshock.md) — Shellshock (CVE-2014-6271)
@@ -133,6 +136,7 @@ archivos por valor de `by-difficulty`.
 - [`metodologia-picerl`](../08-forense-dfir/incident-response/metodologia-picerl.md) — Metodología PICERL
 - [`nfs-no-root-squash`](../05-post-explotacion/privilege-escalation/linux/nfs-no-root-squash.md) — Escalada de Privilegios vía NFS no_root_squash
 - [`pass-the-hash`](../05-post-explotacion/lateral-movement/pass-the-hash.md) — Pass-the-Hash (PtH)
+- [`pass-the-ticket`](../05-post-explotacion/lateral-movement/pass-the-ticket.md) — Pass-the-Ticket
 - [`persistencia-linux`](../05-post-explotacion/persistencia/persistencia-linux.md) — Persistencia en Linux
 - [`persistencia-windows`](../05-post-explotacion/persistencia/persistencia-windows.md) — Persistencia en Windows
 - [`token-impersonation`](../05-post-explotacion/privilege-escalation/windows/token-impersonation.md) — Token Impersonation (Suplantación de Tokens)

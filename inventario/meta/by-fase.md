@@ -67,7 +67,7 @@ archivos por valor de `by-fase`.
 - [`fuzzing-subdominios-vhosts`](../02-enumeracion/fuzzing/fuzzing-subdominios-vhosts.md) — Fuzzing de Subdominios y Virtual Hosts
 - [`nikto`](../02-enumeracion/web/nikto.md) — Escaneo de Vulnerabilidades Web con Nikto
 
-## Explotación (28)
+## Explotación (29)
 
 - [`configuracion-uso-avanzado`](../06-frameworks-herramientas/burp-suite/configuracion-uso-avanzado.md) — Configuración y Uso Avanzado
 - [`enumeracion-docker`](../02-enumeracion/servicios/enumeracion-docker.md) — Enumeración Docker (Puerto 2375/2376)
@@ -83,6 +83,7 @@ archivos por valor de `by-fase`.
 - [`explotacion-fileupload`](../04-explotacion/web/explotacion-fileupload.md) — File Upload Exploitation
 - [`explotacion-hash-cracking`](../04-explotacion/credenciales/explotacion-hash-cracking.md) — Crackeo de Hashes (Metodología)
 - [`explotacion-jwt`](../04-explotacion/web/explotacion-jwt.md) — Explotación de JSON Web Tokens (JWT)
+- [`explotacion-kerberoasting`](../04-explotacion/credenciales/explotacion-kerberoasting.md) — Kerberoasting y AS-REP Roasting
 - [`explotacion-kernel-linux`](../04-explotacion/sistema/explotacion-kernel-linux.md) — Explotación de Kernel Linux
 - [`explotacion-kernel-windows`](../04-explotacion/sistema/explotacion-kernel-windows.md) — Explotación de Kernel Windows
 - [`explotacion-mitm-responder`](../04-explotacion/red/explotacion-mitm-responder.md) — Envenenamiento LLMNR/NBT-NS con Responder
@@ -113,7 +114,7 @@ archivos por valor de `by-fase`.
 - [`windows-api-hacking`](../07-fundamentos/sistemas/windows-api-hacking.md) — Windows API para Hacking
 - [`windows-arquitectura-ad`](../07-fundamentos/sistemas/windows-arquitectura-ad.md) — Arquitectura de Windows y Active Directory
 
-## Post-Explotación (24)
+## Post-Explotación (27)
 
 - [`abuso-cron-jobs`](../05-post-explotacion/privilege-escalation/linux/abuso-cron-jobs.md) — Abuso de Cron Jobs
 - [`abuso-servicios-windows`](../05-post-explotacion/privilege-escalation/windows/abuso-servicios-windows.md) — Abuso de Servicios de Windows
@@ -128,13 +129,16 @@ archivos por valor de `by-fase`.
 - [`enumeracion-kerberos`](../02-enumeracion/red/enumeracion-kerberos.md) — Enumeración Kerberos (Puerto 88)
 - [`enumeracion-privesc-linux`](../05-post-explotacion/privilege-escalation/linux/enumeracion-privesc-linux.md) — Enumeración para Escalada de Privilegios en Linux
 - [`enumeracion-privesc-windows`](../05-post-explotacion/privilege-escalation/windows/enumeracion-privesc-windows.md) — Enumeración para Escalada de Privilegios en Windows
+- [`golden-ticket`](../05-post-explotacion/lateral-movement/golden-ticket.md) — Golden Ticket
 - [`kernel-exploits-privesc-linux`](../05-post-explotacion/privilege-escalation/linux/kernel-exploits-privesc-linux.md) — Escalada de Privilegios mediante Kernel Exploits (Linux)
 - [`metasploit-avanzado`](../06-frameworks-herramientas/metasploit/metasploit-avanzado.md) — Uso Avanzado y Automatización
 - [`nfs-no-root-squash`](../05-post-explotacion/privilege-escalation/linux/nfs-no-root-squash.md) — Escalada de Privilegios vía NFS no_root_squash
 - [`pass-the-hash`](../05-post-explotacion/lateral-movement/pass-the-hash.md) — Pass-the-Hash (PtH)
+- [`pass-the-ticket`](../05-post-explotacion/lateral-movement/pass-the-ticket.md) — Pass-the-Ticket
 - [`persistencia-linux`](../05-post-explotacion/persistencia/persistencia-linux.md) — Persistencia en Linux
 - [`persistencia-windows`](../05-post-explotacion/persistencia/persistencia-windows.md) — Persistencia en Windows
 - [`pivoting-tunneling`](../05-post-explotacion/lateral-movement/pivoting-tunneling.md) — Pivoting y Tunneling
+- [`silver-ticket`](../05-post-explotacion/lateral-movement/silver-ticket.md) — Silver Ticket
 - [`suid-sgid`](../05-post-explotacion/privilege-escalation/linux/suid-sgid.md) — Explotación de Binarios SUID/SGID
 - [`token-impersonation`](../05-post-explotacion/privilege-escalation/windows/token-impersonation.md) — Token Impersonation (Suplantación de Tokens)
 - [`transferencia-archivos`](../05-post-explotacion/exfiltracion/transferencia-archivos.md) — Transferencia de Archivos en Post-Explotación
