@@ -2,6 +2,22 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19 (Sprint 0 del plan de discoverabilidad LLM-first)
+
+Primer sprint del plan de mejoras de discoverabilidad (`~/.claude/plans/ok-haz-un-plan-sequential-parnas.md`). Sprint 0 abarca naming + documentación; Sprints 1-2 (frontmatter YAML + tooling) llegan en sesiones siguientes.
+
+### Renombrado
+- `inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md` → `analisis-sqli.md`. Razón: alinear con el par `04-explotacion/web/explotacion-sqli.md` y con la convención de naming recién documentada (acrónimo establecido en lugar de palabra completa). Era la única inconsistencia cross-fase del inventario tras auditar todos los pares topic. Historia preservada vía `git mv`. Referencias activas actualizadas en el INDEX correspondiente y en 5 writeups de `learning/portswigger/` (visible-error-based, blind-time-delays, blind-time-delays-info-retrieval, blind-out-of-band, sqli-filter-bypass-xml-encoding). Las menciones históricas en este CHANGELOG se dejaron intactas por fidelidad temporal.
+
+### Documentación añadida en `AGENTS.md`
+- **Sección "Convención de Naming de Archivos"**: codifica el patrón `<prefijo-acción>-<slug>.md`, mapeo de prefijo por fase (`analisis-` para 03, `explotacion-` para 04, `enumeracion-` para 02, `abuso-`/sin-prefijo en 05 según el caso, sin prefijo en 06-08), regla de "usar acrónimo establecido" con tabla de slugs canónicos (sqli, xss, csrf, ssrf, idor, lfi-rfi, xxe, ssti, jwt, nosqli, adcs), y regla de paridad entre pares cross-fase.
+- **Sección "Cookbook de Búsqueda"**: ~10 patrones de grep que un agente puede ejecutar para localizar técnicas sin recorrer la jerarquía de INDEX (find por slug, grep por dificultad/plataforma/MITRE/fase/herramienta/autor de referencia). Anota que el cookbook cambiará tras la migración a frontmatter YAML.
+- **Sección "Política `learning_refs`"**: define qué cuenta como writeup linkeable (directorio con `writeup.md` estructurado) vs scratch (scripts sueltos, wordlists, fragmentos de curso). Sirve de guía para el Sprint 1 del plan, cuando los archivos del inventario ganen el campo `learning_refs:` en frontmatter.
+
+### Auditoría sin cambios
+- Pares cross-fase verificados con `diff` entre `03/web` y `04/web`: SQLi era la única inconsistencia. `deserialization` ya estaba alineado. No hay otros pares que requieran rename.
+- Contenido de `learning/`: clasificado en linkeable (10 labs PortSwigger + `tryhackme/abusingwindowsinternals/`) vs no-linkeable (8 directorios de scripts en TryHackMe + archivos sueltos). No se movió nada físicamente — la política de `learning_refs` filtra a nivel de referencias.
+
 ## [2026-05-03] — Sesión 18 (Mantenimiento de consistencia tras review crítico)
 
 Sesión de mantenimiento estructural disparada por review crítico de un agente externo. Se auditó cada hallazgo contra el repo, se calibraron severidades, se discutió y aprobó la decisión arquitectónica de **secciones opcionales en TEMPLATE** en lugar de un template alterno para contenido conceptual, y se aplicaron todos los fixes derivados.

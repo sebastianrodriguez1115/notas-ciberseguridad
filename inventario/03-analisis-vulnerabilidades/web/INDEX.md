@@ -12,7 +12,7 @@ Identificación de fallos en aplicaciones web.
 | [Análisis de LFI y RFI](./analisis-lfi-rfi.md) | T1190 | Intermedia |
 | [Análisis de Open Redirect](./analisis-open-redirect.md) | T1190 | Básica |
 | [Análisis de Seguridad de Cabeceras](./analisis-seguridad-cabeceras.md) | T1595.002 | Básica |
-| [Análisis de SQL Injection](./analisis-sql-injection.md) | T1190 | Avanzada |
+| [Análisis de SQL Injection](./analisis-sqli.md) | T1190 | Avanzada |
 | [Análisis de SSRF](./analisis-ssrf.md) | T1190 | Avanzada |
 | [Análisis de SSTI](./analisis-ssti.md) | T1190 | Intermedia |
 | [Análisis de XSS](./analisis-xss.md) | T1190 | Intermedia |

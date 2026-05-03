@@ -316,6 +316,6 @@ Defensas en orden de robustez:
 - PortSwigger Web Security Academy. (s.f.). *Blind SQL injection*. https://portswigger.net/web-security/sql-injection/blind
 - PostgreSQL Documentation. (s.f.). *Type conversion / CAST*. https://www.postgresql.org/docs/current/sql-expressions.html#SQL-SYNTAX-TYPE-CASTS
 - OWASP Foundation. (s.f.). *SQL Injection Prevention Cheat Sheet*. https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
-- Inventario interno: [`inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md`](../../../inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md)
+- Inventario interno: [`inventario/03-analisis-vulnerabilidades/web/analisis-sqli.md`](../../../inventario/03-analisis-vulnerabilidades/web/analisis-sqli.md)
 - Inventario interno: [`inventario/04-explotacion/web/explotacion-sqli.md`](../../../inventario/04-explotacion/web/explotacion-sqli.md)
 

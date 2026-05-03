@@ -253,5 +253,5 @@ La estrategia que aplica PortSwigger Academy (firewall outbound restrictivo en e
 - OWASP Foundation. (s.f.). *Out-of-band Application Security Testing*. https://owasp.org/www-community/attacks/Blind_SQL_Injection
 - Writeup propio: [`learning/portswigger/blind-sqli-time-delays/`](../blind-sqli-time-delays/writeup.md) — base time-based de la serie.
 - Writeup propio: [`learning/portswigger/blind-sqli-time-delays-info-retrieval/`](../blind-sqli-time-delays-info-retrieval/writeup.md) — extracción time-based con script.
-- Inventario interno: [`inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md`](../../../inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md)
+- Inventario interno: [`inventario/03-analisis-vulnerabilidades/web/analisis-sqli.md`](../../../inventario/03-analisis-vulnerabilidades/web/analisis-sqli.md)
 - Inventario interno: [`inventario/04-explotacion/web/explotacion-sqli.md`](../../../inventario/04-explotacion/web/explotacion-sqli.md)

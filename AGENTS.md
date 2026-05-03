@@ -248,6 +248,83 @@ swisskyrepo. (s.f.). *PayloadsAllTheThings* [Repositorio]. GitHub. https://githu
 
 > **Nota**: Para libros de `referencias/`, usar los datos reales del PDF (autor, año, editorial). Usar `(s.f.)` (sin fecha) cuando no se conozca el año de publicación.
 
+## Convención de Naming de Archivos
+
+Los archivos del inventario siguen un patrón `<prefijo-acción>-<slug-del-tema>.md` en kebab-case. La uniformidad permite a un agente predecir el nombre de un archivo sin consultar el INDEX.
+
+### Reglas
+
+1. **Prefijo de acción** según fase del archivo:
+   - `analisis-` para Fase 03 (Análisis de Vulnerabilidades).
+   - `explotacion-` para Fase 04 (Explotación).
+   - `enumeracion-` para Fase 02 (Enumeración).
+   - `abuso-` en Fase 05 cuando la técnica explota una feature legítima del SO (sudo, cron, services, scheduled tasks).
+   - Sin prefijo en Fase 05 cuando el nombre de la técnica ES el slug (`pass-the-hash`, `suid-sgid`, `pivoting-tunneling`).
+   - Para herramientas/frameworks (Fase 06) y conceptos (Fase 07-08) no se aplica prefijo de acción; usar el nombre directo (`bloodhound.md`, `modelo-osi-tcp-ip.md`).
+
+2. **Slug del tema** en kebab-case. Cuando exista un acrónimo establecido en el dominio, **usarlo en lugar de la palabra completa**:
+   - SQL Injection → `sqli` (no `sql-injection`).
+   - Cross-Site Scripting → `xss`.
+   - Cross-Site Request Forgery → `csrf`.
+   - Server-Side Request Forgery → `ssrf`.
+   - Insecure Direct Object Reference → `idor`.
+   - Local/Remote File Inclusion → `lfi-rfi`.
+   - XML External Entity → `xxe`.
+   - Server-Side Template Injection → `ssti`.
+   - JSON Web Token → `jwt`.
+   - NoSQL Injection → `nosqli`.
+   - Active Directory Certificate Services → `adcs`.
+
+3. **Pares cross-fase deben coincidir** en el slug del tema: `analisis-sqli.md` ↔ `explotacion-sqli.md`. Esto permite al agente buscar todas las técnicas relacionadas a un tópico con `find inventario -name "*-<slug>.md"`.
+
+4. **Slug compuesto cuando aplique**: usar `-` para separar modificadores. Ejemplos: `enumeracion-privesc-linux.md`, `abuso-tareas-programadas.md`, `kernel-exploits-privesc-linux.md`.
+
+## Cookbook de Búsqueda (para agentes/LLM)
+
+Patrones de grep frecuentes sobre el inventario. Útiles para localizar técnicas sin recorrer la jerarquía de INDEX.
+
+```bash
+# Listar todas las técnicas de un tópico (cross-fase):
+find inventario -name "*-sqli.md"
+find inventario -name "*-xss.md"
+
+# Filtrar por dificultad (campo del bloque Clasificación):
+grep -lE "Dificultad.*Avanzada" inventario/**/*.md
+
+# Filtrar por plataforma:
+grep -lE "Plataforma.*Web" inventario/**/*.md
+
+# Filtrar por MITRE técnica:
+grep -lE "T1190" inventario/**/*.md
+
+# Filtrar por fase explícita en el cuerpo:
+grep -lE "Fase.*Post-Explotación" inventario/**/*.md
+
+# Listar herramientas únicas que aparecen en sección Herramientas:
+grep -hE "^- \*\*[A-Z]" inventario/**/*.md | sort -u
+
+# Encontrar archivos que mencionan una herramienta específica:
+grep -l "BloodHound" inventario/**/*.md
+grep -l "sqlmap" inventario/**/*.md
+
+# Encontrar archivos que referencian un libro de referencias/ por autor:
+grep -l "Allen, L." inventario/**/*.md
+```
+
+> **Nota**: post-migración a frontmatter YAML (Sprint 1 del plan de discoverabilidad), los patrones cambiarán a `grep -lE "^mitre:.*T1190"`, `grep -lE "^slug: sqli"`, `grep -lE "^dificultad: Avanzada"`, etc. Este cookbook se actualizará cuando ocurra la migración.
+
+## Política `learning_refs` (writeups linkeables)
+
+`learning/` contiene material práctico de cursos (PortSwigger, TryHackMe). Sólo es candidato a referenciarse desde el inventario el material que sea un **writeup estructurado**, no scratch ni código suelto.
+
+**Es linkeable** un directorio que cumple ambas condiciones:
+1. Vive en `learning/<plataforma>/<lab-slug>/`.
+2. Contiene un archivo `writeup.md` (o equivalente Markdown estructurado) con descripción del problema, solución y referencias.
+
+**No son linkeables**: directorios con sólo scripts (`.py`, `.sh`, `.rb`), wordlists, archivos sueltos al nivel raíz de `learning/<plataforma>/`, ni material de curso fragmentado sin un writeup consolidado.
+
+Cuando se añada `learning_refs:` a archivos del inventario (Sprint 1 del plan de discoverabilidad), sólo apuntar a directorios de la lista linkeable.
+
 ## Heurísticas de Prioridad
 
 Para garantizar la precisión y actualidad del inventario, los agentes deben seguir este orden de prioridad al recopilar información:

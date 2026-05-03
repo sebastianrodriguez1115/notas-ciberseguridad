@@ -203,5 +203,5 @@ Defensas en orden de robustez:
 - PostgreSQL Documentation. (s.f.). *Delaying Execution — `pg_sleep`*. https://www.postgresql.org/docs/current/functions-datetime.html#FUNCTIONS-DATETIME-DELAY
 - OWASP Foundation. (s.f.). *Blind SQL Injection*. https://owasp.org/www-community/attacks/Blind_SQL_Injection
 - OWASP Foundation. (s.f.). *SQL Injection Prevention Cheat Sheet*. https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
-- Inventario interno: [`inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md`](../../../inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md)
+- Inventario interno: [`inventario/03-analisis-vulnerabilidades/web/analisis-sqli.md`](../../../inventario/03-analisis-vulnerabilidades/web/analisis-sqli.md)
 - Inventario interno: [`inventario/04-explotacion/web/explotacion-sqli.md`](../../../inventario/04-explotacion/web/explotacion-sqli.md)

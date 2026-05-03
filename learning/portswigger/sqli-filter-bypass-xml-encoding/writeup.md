@@ -245,5 +245,5 @@ Defensas en orden de robustez:
 - W3C. (2008). *Extensible Markup Language (XML) 1.0 (Fifth Edition) — Character References*. https://www.w3.org/TR/xml/#sec-references
 - OWASP Foundation. (s.f.). *SQL Injection Prevention Cheat Sheet*. https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
 - OWASP Foundation. (s.f.). *Web Application Firewall*. https://owasp.org/www-community/Web_Application_Firewall
-- Inventario interno: [`inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md`](../../../inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md)
+- Inventario interno: [`inventario/03-analisis-vulnerabilidades/web/analisis-sqli.md`](../../../inventario/03-analisis-vulnerabilidades/web/analisis-sqli.md)
 - Inventario interno: [`inventario/04-explotacion/web/explotacion-sqli.md`](../../../inventario/04-explotacion/web/explotacion-sqli.md)

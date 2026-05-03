@@ -256,5 +256,5 @@ Las del lab anterior siguen aplicando (parametrización, deshabilitar multi-stat
 - Reitz, K. (s.f.). *Requests: HTTP for Humans*. https://requests.readthedocs.io/
 - OWASP Foundation. (s.f.). *Blind SQL Injection*. https://owasp.org/www-community/attacks/Blind_SQL_Injection
 - Writeup propio: [`learning/portswigger/blind-sqli-time-delays/writeup.md`](../blind-sqli-time-delays/writeup.md) — lab anterior de la serie, con la base de stacked queries y `;` URL-encoded.
-- Inventario interno: [`inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md`](../../../inventario/03-analisis-vulnerabilidades/web/analisis-sql-injection.md) (sección 3 Time-blind, inferencia con `CASE WHEN`).
+- Inventario interno: [`inventario/03-analisis-vulnerabilidades/web/analisis-sqli.md`](../../../inventario/03-analisis-vulnerabilidades/web/analisis-sqli.md) (sección 3 Time-blind, inferencia con `CASE WHEN`).
 - Inventario interno: [`inventario/04-explotacion/web/explotacion-sqli.md`](../../../inventario/04-explotacion/web/explotacion-sqli.md) (bloque time-based en pruebas manuales).
