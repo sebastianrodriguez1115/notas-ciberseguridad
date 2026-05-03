@@ -1,13 +1,19 @@
+---
+title: Transparencia de Certificados
+slug: transparencia-certificados
+aliases: [Certificate Transparency, CT Logs, crt.sh, SAN Discovery]
+fase: [Reconocimiento]
+plataforma: Web
+dificultad: Básica
+mitre: [T1596.003]
+related: [dns-pasivo, shodan-censys, fingerprinting-tecnologias-web]
+learning_refs: []
+---
+
 # Transparencia de Certificados (Certificate Transparency)
 
 ## Descripción
 Consulta de logs de Certificate Transparency (CT) para descubrir subdominios e infraestructura asociada. Según *The Hacker Playbook 3*, la transparencia de certificados es una de las fuentes de inteligencia más valiosas para descubrir **subdominios de desarrollo o staging** que a menudo están menos protegidos que los de producción. La clave reside en analizar el campo **SAN (Subject Alternative Name)** de los certificados emitidos.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1596.003 (Search Open Technical Databases: Digital Certificates)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **crt.sh** — Interfaz web para consultar logs de CT de forma masiva

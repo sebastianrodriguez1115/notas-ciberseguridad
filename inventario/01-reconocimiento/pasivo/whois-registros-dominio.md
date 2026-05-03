@@ -1,13 +1,19 @@
+---
+title: WHOIS y Registros de Dominio
+slug: whois-registros-dominio
+aliases: [WHOIS, Reverse WHOIS, ASN Lookup, Domain Registration]
+fase: [Reconocimiento]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1596.002]
+related: [dns-pasivo, recoleccion-emails]
+learning_refs: []
+---
+
 # WHOIS y Registros de Dominio
 
 ## Descripción
 Consulta de bases de datos WHOIS para obtener información de registro de dominios e IPs. Según *Mastering Kali Linux*, el WHOIS es la base para el **mapeo de holdings empresariales** mediante técnicas de **Reverse WHOIS**. Al identificar el nombre del registrante o su correo corporativo, se pueden descubrir otros dominios propiedad de la misma organización que podrian estar menos protegidos o ser desconocidos para el equipo de seguridad.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1596.002 (Search Open Technical Databases: WHOIS)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **whois (CLI)** — Cliente estándar para consultas básicas de dominios e IPs

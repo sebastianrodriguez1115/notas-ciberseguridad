@@ -1,15 +1,21 @@
+---
+title: Fingerprinting Pasivo de Tecnologías Web
+slug: fingerprinting-tecnologias-web
+aliases: [Passive Tech Fingerprinting, Web Tech Stack Detection, BuiltWith, Wappalyzer]
+fase: [Reconocimiento]
+plataforma: Web
+dificultad: Básica
+mitre: [T1592.002]
+related: [fingerprinting-tecnologias-web-activo, deteccion-waf, transparencia-certificados, wayback-machine]
+learning_refs: []
+---
+
 # Fingerprinting Pasivo de Tecnologías Web
 
 ## Descripción
 Identificación del stack tecnológico de una aplicación web (servidor HTTP, framework, CMS, lenguaje, librerías) **sin enviar peticiones directas al objetivo**. Se apoya en servicios de terceros que ya han indexado al objetivo (BuiltWith, Wappalyzer cloud, Stackshare), historiales públicos (archive.org, certificate transparency), y análisis de artefactos JavaScript previamente descargados (Retire.js sobre archivos locales). El valor estratégico es el sigilo: el objetivo no detecta ningún tráfico relacionado con el reconocimiento.
 
 > **Variante activa**: para fingerprinting que envía peticiones al objetivo (WhatWeb, httpx, Wappalyzer CLI), ver [`02-enumeracion/web/fingerprinting-tecnologias-web.md`](../../02-enumeracion/web/fingerprinting-tecnologias-web.md).
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: [T1592.002](https://attack.mitre.org/techniques/T1592/002/) (Gather Victim Host Information: Software)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **BuiltWith** (`builtwith.com`) — Perfil tecnológico completo del objetivo basado en datos pre-recolectados; incluye historial de cambios de stack

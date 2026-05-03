@@ -1,13 +1,19 @@
+---
+title: Detección de WAF
+slug: deteccion-waf
+aliases: [WAF Detection, Web Application Firewall Detection, wafw00f]
+fase: [Reconocimiento]
+plataforma: Web
+dificultad: Intermedia
+mitre: [T1595]
+related: [fingerprinting-tecnologias-web, fingerprinting-tecnologias-web-activo]
+learning_refs: []
+---
+
 # Detección de WAF (Web Application Firewall)
 
 ## Descripción
 Identificación de Web Application Firewalls que protegen las aplicaciones web del objetivo. Según *Gray Hat Hacking*, la detección no solo sirve para identificar el producto, sino para determinar el **umbral de bloqueo** y los métodos de evasión (bypass). Técnicas avanzadas incluyen el uso de **encodings no convencionales** (ej: IBM037) y la manipulación del campo `Transfer-Encoding: chunked` para confundir al WAF.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1595 (Active Scanning)
-- **Plataforma**: Web
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **wafw00f** — Herramienta lider en detección e identificación por huellas dactilares (cookies, headers, respuestas)

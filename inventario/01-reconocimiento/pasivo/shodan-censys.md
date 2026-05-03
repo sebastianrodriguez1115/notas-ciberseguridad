@@ -1,13 +1,19 @@
+---
+title: Shodan y Censys
+slug: shodan-censys
+aliases: [Shodan, Censys, Internet-Wide Scan, IoT Search Engine]
+fase: [Reconocimiento]
+plataforma: Web
+dificultad: Básica
+mitre: [T1596]
+related: [google-dorking, transparencia-certificados, dns-pasivo]
+learning_refs: []
+---
+
 # Shodan y Censys
 
 ## Descripción
 Motores de búsqueda especializados en dispositivos conectados a internet. Según *Mastering Kali Linux*, estas herramientas permiten mapear la infraestructura del objetivo sin generar una sola alerta en sus sistemas. El uso de **facetas** (facets) permite agregar datos para identificar patrones, como versiones de software más comunes o países donde el objetivo tiene más presencia.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1596 (Search Open Technical Databases)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **Shodan** (shodan.io) — Especializado en banners de servicio y dispositivos IoT

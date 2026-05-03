@@ -1,13 +1,19 @@
+---
+title: Google Dorking
+slug: google-dorking
+aliases: [Google Hacking, GHDB, Search Engine Hacking]
+fase: [Reconocimiento]
+plataforma: Web
+dificultad: Básica
+mitre: [T1593]
+related: [shodan-censys, wayback-machine, recoleccion-emails]
+learning_refs: []
+---
+
 # Google Dorking
 
 ## Descripción
 Técnica de reconocimiento pasivo que utiliza operadores avanzados de búsqueda de Google para localizar información expuesta. Según *The Hacker Playbook 3*, el dorking moderno es fundamental para descubrir **activos en la nube** (S3 Buckets) y **entornos de desarrollo** (Jenkins, Gitlab) que han sido mal configurados por equipos de DevOps y expuestos a internet.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1593 (Search Open Websites/Domains)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **Google Search Operators** — site, inurl, intitle, filetype, cache, intext

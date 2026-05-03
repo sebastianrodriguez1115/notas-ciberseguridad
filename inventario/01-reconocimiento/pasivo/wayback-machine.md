@@ -1,13 +1,19 @@
+---
+title: Wayback Machine
+slug: wayback-machine
+aliases: [Internet Archive, archive.org, Web Archive, gau, waybackurls]
+fase: [Reconocimiento]
+plataforma: Web
+dificultad: Básica
+mitre: [T1593]
+related: [google-dorking, fingerprinting-tecnologias-web]
+learning_refs: []
+---
+
 # Wayback Machine
 
 ## Descripción
 Acceso a snapshots historicos de sitios web a través del archivo de Internet Archive. Según *The Hacker Playbook 3*, la Wayback Machine es una mina de oro para el reconocimiento, ya que permite encontrar **versiones antiguas de archivos JavaScript** que contienen endpoints de API que siguen funcionales pero ya no están documentados, o incluso **API keys** que fueron expuestas y eliminadas pero permanecen en el archivo historico.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1593 (Search Open Websites/Domains)
-- **Plataforma**: Web
-- **Dificultad**: Básica
 
 ## Herramientas
 - **Wayback Machine** (web.archive.org) — Repositorio historico mundial de la web

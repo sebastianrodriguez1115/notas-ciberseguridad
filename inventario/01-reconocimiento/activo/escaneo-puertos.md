@@ -1,13 +1,19 @@
+---
+title: Escaneo de Puertos
+slug: escaneo-puertos
+aliases: [Port Scanning, TCP Scan, UDP Scan, SYN Scan, nmap port scan]
+fase: [Reconocimiento]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1046]
+related: [descubrimiento-hosts, fingerprinting-os-servicios, escaneo-vulnerabilidades]
+learning_refs: []
+---
+
 # Escaneo de Puertos
 
 ## Descripción
 Técnica fundamental del reconocimiento activo que consiste en descubrir puertos abiertos y servicios en ejecución en los hosts objetivo. Mediante el envío de paquetes TCP o UDP a diferentes puertos, se determina cuales están abiertos (escuchando), cerrados o filtrados. El resultado define la superficie de ataque disponible y guía las fases posteriores de enumeración y explotación. Según *Mastering Kali Linux*, el escaneo no solo busca puertos, sino que analiza el comportamiento del stack TCP/IP ante respuestas no estándar para evadir firewalls.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1046 (Network Service Discovery)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** — Escáner de puertos por excelencia con múltiples técnicas de escaneo (SYN, Connect, UDP, FIN, XMAS)

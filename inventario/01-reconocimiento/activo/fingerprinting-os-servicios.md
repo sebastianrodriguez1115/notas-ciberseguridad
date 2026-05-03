@@ -1,13 +1,19 @@
+---
+title: Fingerprinting de OS y Servicios
+slug: fingerprinting-os-servicios
+aliases: [OS Fingerprinting, Service Fingerprinting, Banner Grabbing, OS Detection, p0f]
+fase: [Reconocimiento]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1592.002, T1046]
+related: [escaneo-puertos, descubrimiento-hosts]
+learning_refs: []
+---
+
 # Fingerprinting de OS y Servicios
 
 ## Descripción
 Técnica que permite determinar el sistema operativo y las versiones de servicios que se ejecutan en los hosts objetivo mediante sondeo activo. Según *Mastering Kali Linux*, el fingerprinting no solo analiza banners, sino que estudia el comportamiento del stack TCP/IP ante paquetes no estándar (probes). Parametros como el valor inicial del **TTL** (Time To Live) y el **TCP Window Size** son fundamentales para la identificación.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1592.002 (Gather Victim Host Information: Software) / T1046 (Network Service Discovery)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **nmap** — El estándar con su base de datos de firmas `nmap-os-db`

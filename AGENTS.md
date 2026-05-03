@@ -193,16 +193,22 @@ Cada técnica del inventario se documenta como un archivo Markdown siguiendo el 
 La estructura resumida (perfil "técnica concreta") es:
 
 ```markdown
+---
+title: Nombre de la Técnica
+slug: nombre-tecnica
+aliases: [Alias 1, Alias 2]
+fase: [Reconocimiento]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1046]
+related: [otro-slug-relacionado]
+learning_refs: [portswigger/lab-relacionado]
+---
+
 # Nombre de la Técnica
 
 ## Descripción
 Qué es y para qué se usa.
-
-## Clasificación
-- **Fase**: Reconocimiento | Enumeración | Análisis de Vulnerabilidades | Explotación | Post-Explotación | Fundamentos | Forense y DFIR
-- **MITRE ATT&CK**: ID de la técnica si aplica (ej. T1595). Para vulnerabilidades web sin mapping limpio (CSRF, IDOR), usar T1190 por defecto.
-- **Plataforma**: Linux | Windows | Web | Red | Multi
-- **Dificultad**: Básica | Intermedia | Avanzada
 
 ## Herramientas
 - Herramienta 1 — uso básico
@@ -218,11 +224,34 @@ Cómo defenderse de esta técnica.
 - Referencias en formato APA 7ma edición (ver guía de formato abajo).
 ```
 
+### Schema del frontmatter YAML
+
+Bloque obligatorio al inicio de TODOS los archivos técnicos. Es la fuente única de verdad para metadata. La sección antigua `## Clasificación` en el body fue eliminada el 2026-05-03 (Sprint 1 del plan de discoverabilidad). Campos:
+
+| Campo | Tipo | Requerido | Notas |
+|---|---|---|---|
+| `title` | string | sí | Nombre humano. Coincide con el H1. |
+| `slug` | string | sí | Identificador estable, único en todo el inventario, kebab-case. Usar acrónimo establecido cuando exista (sqli, xss, csrf, etc.). |
+| `aliases` | array de strings | sí (puede ser `[]`) | Variantes ES/EN y acrónimos para búsqueda. |
+| `fase` | array de strings | sí | SIEMPRE array, aún con un único valor. Enums: Reconocimiento \| Enumeración \| Análisis de Vulnerabilidades \| Explotación \| Post-Explotación \| Fundamentos \| Forense y DFIR. |
+| `plataforma` | string | sí | Un valor: Linux \| Windows \| Web \| Red \| Multi. |
+| `dificultad` | string | sí | Un valor: Básica \| Intermedia \| Avanzada. |
+| `mitre` | array de strings | sí | SIEMPRE array. IDs `T\d{4}(\.\d{3})?` con sub-técnica si aplica. |
+| `related` | array de slugs | opcional, default `[]` | Slugs de otros archivos. NO paths. Validador resuelve a path. |
+| `learning_refs` | array de paths | opcional, default `[]` | Paths relativos a `learning/` apuntando a directorios con `writeup.md`. |
+
+### Pares cross-fase (slugs distintos)
+
+Cuando una técnica tiene archivo de análisis (Fase 03) y de explotación (Fase 04) sobre el mismo tópico:
+- Mismo slug del tema en el nombre de archivo: `analisis-sqli.md` ↔ `explotacion-sqli.md`.
+- Slugs YAML distintos para evitar colisión: análisis usa el slug base (`sqli`), explotación usa `<slug>-explotacion` (`sqli-explotacion`).
+- Listarse mutuamente en `related:`.
+
 ### Variantes válidas
 
-- **Compound Fase** (técnica/herramienta que cruza fases genuinamente, ej. BloodHound, Metasploit): listar valores separados por coma+espacio. Ejemplo: `**Fase**: Reconocimiento, Post-Explotación`. No usar `/` ni `|`.
-- **Contenido conceptual o metodológico** (modelos teóricos como OSI, ciclos como PICERL, marcos como NIST CSF): las secciones Herramientas, Comandos / Ejemplos y Contramedidas son **opcionales**. Pueden sustituirse por secciones propias relevantes al tema (ej. "Capas del Modelo OSI", "Fases del Ciclo PICERL"). Las secciones obligatorias en este perfil son sólo: Título, Descripción, Clasificación, Referencias.
-- **Plataforma** se mantiene siempre estricta (un valor de la lista o `Multi`). Sin paréntesis explicativos. El contexto cross-plataforma (ej. "tool corre en Linux pero target es Windows") va en Descripción.
+- **Compound `fase`** (técnica/herramienta que cruza fases genuinamente, ej. BloodHound, Metasploit): listar varios valores en el array. Ejemplo: `fase: [Reconocimiento, Post-Explotación]`.
+- **Contenido conceptual o metodológico** (modelos teóricos como OSI, ciclos como PICERL, marcos como NIST CSF): las secciones Herramientas, Comandos / Ejemplos y Contramedidas son **opcionales**. Pueden sustituirse por secciones propias relevantes al tema. El frontmatter sigue siendo obligatorio. Las secciones de body obligatorias en este perfil son sólo: Título, Descripción, Referencias.
+- **`plataforma`** se mantiene siempre estricta (un valor de la lista). Sin paréntesis explicativos. El contexto cross-plataforma (ej. "tool corre en Linux pero target es Windows") va en Descripción.
 
 ### Formato de Referencias (APA 7ma Edición)
 
@@ -281,37 +310,53 @@ Los archivos del inventario siguen un patrón `<prefijo-acción>-<slug-del-tema>
 
 ## Cookbook de Búsqueda (para agentes/LLM)
 
-Patrones de grep frecuentes sobre el inventario. Útiles para localizar técnicas sin recorrer la jerarquía de INDEX.
+Patrones de grep frecuentes sobre el inventario. La metadata vive en frontmatter YAML al inicio de cada archivo técnico, así que las queries más útiles son sobre líneas con `^<campo>:`. La fase 01 ya está migrada; las fases 02-08 se migran progresivamente.
 
 ```bash
-# Listar todas las técnicas de un tópico (cross-fase):
-find inventario -name "*-sqli.md"
-find inventario -name "*-xss.md"
+# Localizar un archivo por slug (único):
+grep -lE "^slug: sqli$" inventario/**/*.md
 
-# Filtrar por dificultad (campo del bloque Clasificación):
-grep -lE "Dificultad.*Avanzada" inventario/**/*.md
+# Localizar archivos relacionados a un slug (cross-fase):
+grep -lE "^slug: sqli($|-)" inventario/**/*.md         # base + variantes (sqli-explotacion)
+grep -lE "related:.*\bsqli\b" inventario/**/*.md       # quien dice "yo me relaciono con sqli"
+find inventario -name "*-sqli.md"                       # también funciona via filename
+
+# Listar todos los slugs únicos del inventario:
+grep -hE "^slug: " inventario/**/*.md | sort -u
+
+# Filtrar por dificultad:
+grep -lE "^dificultad: Avanzada$" inventario/**/*.md
 
 # Filtrar por plataforma:
-grep -lE "Plataforma.*Web" inventario/**/*.md
+grep -lE "^plataforma: Web$" inventario/**/*.md
 
-# Filtrar por MITRE técnica:
-grep -lE "T1190" inventario/**/*.md
+# Filtrar por MITRE técnica (incluye sub-técnica):
+grep -lE "^mitre:.*\bT1190\b" inventario/**/*.md
 
-# Filtrar por fase explícita en el cuerpo:
-grep -lE "Fase.*Post-Explotación" inventario/**/*.md
+# Filtrar por fase (string exacto entre brackets/comas):
+grep -lE "^fase:.*Post-Explotación" inventario/**/*.md
 
-# Listar herramientas únicas que aparecen en sección Herramientas:
+# Búsqueda por alias (técnica conocida en otro idioma o por acrónimo):
+grep -lE "^aliases:.*Inyección SQL" inventario/**/*.md
+
+# Listar archivos que tienen learning_refs (writeups asociados):
+grep -lE "^learning_refs: \[[^]]" inventario/**/*.md
+
+# Combinaciones (intersect): técnicas Avanzadas en plataforma Web
+grep -lE "^dificultad: Avanzada$" inventario/**/*.md | xargs grep -lE "^plataforma: Web$"
+
+# Listar herramientas que aparecen en sección Herramientas (texto del body):
 grep -hE "^- \*\*[A-Z]" inventario/**/*.md | sort -u
 
-# Encontrar archivos que mencionan una herramienta específica:
+# Encontrar archivos que mencionan una herramienta específica en el body:
 grep -l "BloodHound" inventario/**/*.md
 grep -l "sqlmap" inventario/**/*.md
 
-# Encontrar archivos que referencian un libro de referencias/ por autor:
+# Encontrar archivos que referencian un libro por autor (en sección Referencias):
 grep -l "Allen, L." inventario/**/*.md
 ```
 
-> **Nota**: post-migración a frontmatter YAML (Sprint 1 del plan de discoverabilidad), los patrones cambiarán a `grep -lE "^mitre:.*T1190"`, `grep -lE "^slug: sqli"`, `grep -lE "^dificultad: Avanzada"`, etc. Este cookbook se actualizará cuando ocurra la migración.
+> **Nota legacy**: para archivos aún no migrados (fases 02-08 mientras dura Sprint 1), la metadata vive como `**Fase**: ...` en el body. Si un grep sobre frontmatter devuelve menos resultados de los esperados, complementar con queries legacy: `grep -lE "Dificultad.*Avanzada"`, `grep -lE "Plataforma.*Web"`, etc.
 
 ## Política `learning_refs` (writeups linkeables)
 
@@ -370,16 +415,22 @@ Para garantizar la precisión y actualidad del inventario, los agentes deben seg
 - **Output**: Reporte con issues por archivo y resumen de problemas transversales
 - **Herramientas**: Read, Glob, Grep
 - **Instrucciones**: Verificar en cada archivo:
-  1. Las secciones obligatorias están presentes según perfil del contenido:
-     - Técnicas/herramientas concretas: 7 secciones (Título, Descripción, Clasificación, Herramientas, Comandos / Ejemplos, Contramedidas, Referencias)
-     - Contenido conceptual/metodológico (07-fundamentos, 08-forense-dfir/incident-response, modelos teóricos): 4 secciones obligatorias (Título, Descripción, Clasificación, Referencias) más las secciones propias relevantes
-  2. El ID de MITRE ATT&CK es correcto y la sub-técnica aplica. T1190 es el ID por defecto defensible para vulnerabilidades de aplicación sin mapping limpio (CSRF, IDOR, race conditions)
-  3. El archivo está en la carpeta correcta según la taxonomía
-  4. Los comandos son sintácticamente correctos y no usan herramientas desactualizadas
-  5. Las referencias siguen formato APA y al menos una corresponde a un libro de `referencias/`
-  6. El campo `Plataforma` es consistente con el contenido y usa un valor único de la lista (sin compound, sin paréntesis)
-  7. El campo `Fase` usa un valor de la lista permitida o, si compone fases, el separador es coma+espacio (no `/` ni `|`)
-  8. Acentos y ortografía españolas correctas en todo el cuerpo del archivo
+  1. **Frontmatter YAML presente y correcto** al inicio del archivo (entre `---` ... `---`):
+     - Campos requeridos: `title`, `slug`, `aliases`, `fase`, `plataforma`, `dificultad`, `mitre`. Opcionales: `related`, `learning_refs`.
+     - `slug` único en el inventario, kebab-case, usa acrónimo establecido (sqli/xss/csrf/etc.) cuando aplique.
+     - `fase` y `mitre` son arrays incluso con un único valor.
+     - Enums respetados: `plataforma ∈ {Linux, Windows, Web, Red, Multi}`, `dificultad ∈ {Básica, Intermedia, Avanzada}`, `fase ∈` las 7 fases permitidas.
+     - `mitre` con formato `T\d{4}(\.\d{3})?`.
+     - `title` coincide con el H1 del body.
+  2. Las secciones de body obligatorias están presentes según perfil del contenido:
+     - Técnicas/herramientas concretas: 5 secciones (Descripción, Herramientas, Comandos / Ejemplos, Contramedidas, Referencias) más el H1 y el frontmatter.
+     - Contenido conceptual/metodológico (07-fundamentos, 08-forense-dfir/incident-response, modelos teóricos): 2 secciones obligatorias (Descripción, Referencias) más el H1, el frontmatter, y las secciones propias relevantes.
+     - **Ningún archivo debe tener una sección `## Clasificación`** (deprecada en favor del frontmatter).
+  3. El ID de MITRE ATT&CK es correcto y la sub-técnica aplica. T1190 es el ID por defecto defensible para vulnerabilidades de aplicación sin mapping limpio (CSRF, IDOR, race conditions).
+  4. El archivo está en la carpeta correcta según la taxonomía y el nombre sigue la convención de naming (prefijo de acción + slug acrónimo).
+  5. Los comandos son sintácticamente correctos y no usan herramientas desactualizadas.
+  6. Las referencias siguen formato APA y al menos una corresponde a un libro de `referencias/`.
+  7. Acentos y ortografía españolas correctas en todo el cuerpo del archivo.
 
 ## Workflow Probado
 

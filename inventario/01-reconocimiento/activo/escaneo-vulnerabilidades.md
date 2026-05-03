@@ -1,13 +1,19 @@
+---
+title: Escaneo de Vulnerabilidades
+slug: escaneo-vulnerabilidades
+aliases: [Vulnerability Scanning, Nessus Scan, OpenVAS Scan, Nuclei]
+fase: [Reconocimiento]
+plataforma: Multi
+dificultad: Intermedia
+mitre: [T1595.002]
+related: [escaneo-puertos, fingerprinting-os-servicios]
+learning_refs: []
+---
+
 # Escaneo de Vulnerabilidades
 
 ## Descripción
 Técnica que utiliza herramientas automatizadas para identificar vulnerabilidades conocidas, errores de configuración y debilidades de seguridad en sistemas y aplicaciones web objetivo. Los escáneres comparan los servicios detectados contra bases de datos de vulnerabilidades (CVE, NVD) y realizan pruebas activas para confirmar la existencia de fallos explotables. Según *Mastering Kali Linux*, un escaneo efectivo debe diferenciar entre escaneos **no autenticados** (visión externa del atacante) y **autenticados** (visión interna con privilegios), siendo estos últimos mucho más precisos al analizar software instalado y configuraciones locales.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1595.002 (Active Scanning: Vulnerability Scanning)
-- **Plataforma**: Multi
-- **Dificultad**: Intermedia
 
 ## Herramientas
 - **nikto** — Escáner de servidores web que detecta configuraciones peligrosas y archivos por defecto

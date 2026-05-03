@@ -2,6 +2,35 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19b (Sprint 1 piloto: frontmatter YAML en Fase 01)
+
+Continuación de la sesión 19. Sprint 1 del plan de discoverabilidad ejecutado en Fase 01 (Reconocimiento) como piloto antes de escalar a fases 02-08.
+
+### TEMPLATE.md reescrito
+- Frontmatter YAML añadido como bloque obligatorio al inicio (10 campos: title, slug, aliases, fase, plataforma, dificultad, mitre, related, learning_refs).
+- Sección `## Clasificación` eliminada del body — el frontmatter es ahora la fuente única de verdad para la metadata.
+- Comentario HTML al final ampliado: 10 notas que documentan cada campo del frontmatter, las reglas de pares cross-fase (slug base vs `<slug>-explotacion`), y las reglas de arrays siempre para `fase`/`mitre`.
+
+### AGENTS.md actualizado
+- Sección "Formato de cada Técnica" reescrita: ejemplo de bloque incluye frontmatter al inicio, tabla con tipo y obligatoriedad de cada campo, regla de slugs distintos para pares análisis/explotación cross-fase.
+- "Cookbook de Búsqueda" actualizado con queries sobre frontmatter (`grep -lE "^slug: sqli$"`, `grep -lE "^mitre:.*\bT1190\b"`, intersecciones via xargs). Nota legacy para fases aún no migradas.
+- Instrucciones del agente `revisor` ampliadas para validar frontmatter (campos requeridos, enums, arrays, formato MITRE, paridad title↔H1) y prohibir explícitamente la sección `## Clasificación` en el body.
+
+### Fase 01 migrada (13 archivos)
+- 5 archivos en `activo/`: descubrimiento-hosts, deteccion-waf, escaneo-puertos, escaneo-vulnerabilidades, fingerprinting-os-servicios.
+- 8 archivos en `pasivo/`: dns-pasivo, fingerprinting-tecnologias-web, google-dorking, recoleccion-emails, shodan-censys, transparencia-certificados, wayback-machine, whois-registros-dominio.
+- Cada archivo recibió frontmatter con slug único, aliases derivados del título y herramientas mencionadas, mitre como array (preservando sub-técnicas, ej. `[T1018, T1595.001]`), y `related:` con slugs de Fase 01 (algunos cross-fase como `enumeracion-dns` o `fingerprinting-tecnologias-web-activo` quedan pendientes de resolver hasta que las fases 02+ se migren — el validador del Sprint 2 los detectará si quedan dangling).
+- Sección `## Clasificación` eliminada del body en los 13 archivos. Las otras 5 secciones (Descripción, Herramientas, Comandos, Contramedidas, Referencias) intactas.
+
+### Queries de verificación (todas pasan)
+- `grep -lE "^## Clasificación" inventario/01-reconocimiento/**/*.md` → 0 resultados.
+- 13 slugs únicos en Fase 01.
+- `grep -lE "^dificultad: Intermedia$"` y otras queries facetadas devuelven los archivos esperados.
+
+### Pendiente para sesiones siguientes
+- Sprint 1 fases 02-08 (~111 archivos restantes).
+- Sprint 2: `scripts/validate.py` y `scripts/build_indexes.py` para garantizar que `related:` resuelve, slugs son únicos globalmente, y los 40 INDEX.md hoja se regeneran desde frontmatter.
+
 ## [2026-05-03] — Sesión 19 (Sprint 0 del plan de discoverabilidad LLM-first)
 
 Primer sprint del plan de mejoras de discoverabilidad (`~/.claude/plans/ok-haz-un-plan-sequential-parnas.md`). Sprint 0 abarca naming + documentación; Sprints 1-2 (frontmatter YAML + tooling) llegan en sesiones siguientes.

@@ -1,13 +1,19 @@
+---
+title: Descubrimiento de Hosts
+slug: descubrimiento-hosts
+aliases: [Host Discovery, Ping Sweep, ICMP Sweep, ARP Scan]
+fase: [Reconocimiento]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1018, T1595.001]
+related: [escaneo-puertos, fingerprinting-os-servicios]
+learning_refs: []
+---
+
 # Descubrimiento de Hosts
 
 ## Descripción
 Técnica que consiste en identificar hosts activos dentro de una red mediante sondeo activo. Se utilizan diversos protocolos como ICMP (ping), ARP (a nivel de capa 2) y TCP (SYN/ACK probes). Según *Gray Hat Hacking*, en entornos modernos el descubrimiento de hosts es la fase donde más se debe cuidar la evasión, ya que los firewalls suelen bloquear el tráfico ICMP Echo Request estándar.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1018 (Remote System Discovery) / T1595.001 (Active Scanning: Scanning IP Blocks)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **nmap** — Soporta métodos avanzados como ICMP Timestamp y Address Mask

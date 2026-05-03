@@ -1,13 +1,19 @@
+---
+title: DNS Pasivo
+slug: dns-pasivo
+aliases: [Passive DNS, pDNS, DNS Historical Records, SecurityTrails]
+fase: [Reconocimiento]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1590.002]
+related: [transparencia-certificados, whois-registros-dominio, enumeracion-dns]
+learning_refs: []
+---
+
 # DNS Pasivo
 
 ## Descripción
 Recopilación de información DNS sin consultar directamente los servidores DNS del objetivo. Según *Mastering Kali Linux*, el DNS Pasivo utiliza repositorios de inteligencia de amenazas que han recolectado resoluciones DNS a lo largo del tiempo. Es ideal para descubrir **subdominios historicos** que han sido eliminados del DNS actual pero cuyos servicios podrian seguir activos en IPs antiguas.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1590.002 (Gather Victim Network Information: DNS)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **DNSDumpster** (dnsdumpster.com) — Visualización grafica de relaciones DNS

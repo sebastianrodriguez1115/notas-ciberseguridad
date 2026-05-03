@@ -1,13 +1,19 @@
+---
+title: Recolección de Emails
+slug: recoleccion-emails
+aliases: [Email Harvesting, theHarvester, OSINT Email, Email OSINT]
+fase: [Reconocimiento]
+plataforma: Multi
+dificultad: Básica
+mitre: [T1589.002]
+related: [google-dorking, whois-registros-dominio]
+learning_refs: []
+---
+
 # Recolección de Emails
 
 ## Descripción
 Descubrimiento de direcciones de correo electrónico asociadas a una organización objetivo. Según *Mastering Kali Linux*, la recolección moderna incluye la búsqueda en **brechas de datos historicas** para encontrar no solo emails, sino credenciales filtradas que pueden ser probadas en ataques de password spraying o reutilización de contraseñas.
-
-## Clasificación
-- **Fase**: Reconocimiento
-- **MITRE ATT&CK**: T1589.002 (Gather Victim Identity Information: Email Addresses)
-- **Plataforma**: Multi
-- **Dificultad**: Básica
 
 ## Herramientas
 - **theHarvester** — Recolección automatizada de emails en múltiples fuentes (scraping + APIs)
