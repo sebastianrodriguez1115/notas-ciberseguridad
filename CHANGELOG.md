@@ -2,6 +2,94 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19r (writeup PortSwigger XSS cookie stealing + hallazgo del firewall del lab)
+
+Lab: "Exploiting cross-site scripting to steal cookies". Stored XSS trivial en comentarios; el reto real fue exfiltrar la cookie del bot sin Burp Pro. La sesión documenta dos hallazgos no obvios que merecen quedar registrados.
+
+### Hallazgos no obvios
+
+1. **Firewall egress del lab de PortSwigger Academy**: bloquea salidas a webhook.site, interactsh, requestbin y similares. Solo deja pasar tráfico a Burp Collaborator (`*.oastify.com`) y al exploit server propio del lab. Confirmado tras debugging fallido (~30 min con bot que ejecutaba el script pero cuyo `fetch` nunca llegaba a webhook.site) y revisión del foro oficial. Anotado en `memory/project_portswigger_firewall.md` como memoria persistente para no repetir el error en futuras sesiones.
+
+2. **Auto-exfiltración same-origin como alternativa a Collaborator**: cuando el lab no provee exploit server y el atacante no tiene Burp Pro, el patrón es usar un endpoint same-origin del propio lab que persista contenido legible. En este caso, el script malicioso publica un comentario nuevo en el blog usando la cookie del bot como cuerpo del comentario; el atacante refresca el post y la lee en texto plano. Cero tráfico saliente, no toca el firewall.
+
+3. **Bug de DOM timing**: el primer payload same-origin fallaba con `Cannot read properties of null (reading 'value')` porque `<script>` inline ejecuta cuando el parser HTML lo encuentra, ANTES de que los elementos posteriores en el DOM (el form con el token CSRF al final de la página) existan. Fix: diferir con `addEventListener('DOMContentLoaded', ...)`.
+
+### Archivos nuevos
+- **`learning/portswigger/exploiting-xss-to-steal-cookies/writeup.md`**: 10 secciones cubriendo el camino real (incluyendo el plan-A fallido con webhook.site), el flujo same-origin con diagrama de secuencia, el debug del DOM timing, y una tabla de tipos-de-exfil con sus alternativas same-origin para futuros labs.
+- **`learning/portswigger/exploiting-xss-to-steal-cookies/solved.png`**: confirmación del lab.
+
+### `learning/portswigger/PENDING.md` reescrito
+- El archivo evolucionó de "labs aplazados" a documento de hallazgo del firewall del lab + razones recurrentes esperables.
+- Los dos labs que estaban listados (`lab-stealing-cookies`, `lab-capturing-passwords`) salen de la lista: el primero se completó en esta sesión y el segundo es resoluble por la misma técnica same-origin.
+
+### Conexión inventario
+- `inventario/03-analisis-vulnerabilidades/web/analisis-xss.md`: + `portswigger/exploiting-xss-to-steal-cookies` en `learning_refs:`.
+
+### Memoria persistente nueva
+- `memory/project_portswigger_firewall.md` (nuevo): documenta el comportamiento del firewall del lab y las rutas alternativas. Indexado en `MEMORY.md`.
+
+### Verificación
+- `bash scripts/check.sh` → all green.
+- 143 tests passing.
+- 128/128 validate OK.
+- `build_indexes --check` up to date tras regeneración de `TOPICS.md`.
+
+## [2026-05-03] — Sesión 19q (writeup PortSwigger AngularJS sandbox escape + CSP)
+
+Writeup del lab "Reflected XSS with AngularJS sandbox escape and CSP". El reto combina client-side template injection en AngularJS con una CSP que bloquea handlers inline nativos; el bypass usa `ng-focus`, fragment `#x`, `$event.composedPath()` y `orderBy` para ejecutar `alert(document.cookie)`.
+
+### Archivo nuevo
+- **`learning/portswigger/reflected-xss-angularjs-sandbox-escape-and-csp/writeup.md`**: explicación de CSP como política aplicada por el navegador, diferencia entre `onfocus` nativo y `ng-focus` de AngularJS, payload del exploit server, flujo de activación con `#x`, diagrama mermaid y contramedidas.
+- **`learning/portswigger/reflected-xss-angularjs-sandbox-escape-and-csp/solved.png`**: captura del lab resuelto.
+
+### Conexión inventario
+- `inventario/03-analisis-vulnerabilidades/web/analisis-xss.md`: + `portswigger/reflected-xss-angularjs-sandbox-escape-and-csp` en `learning_refs:`.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-seguridad-cabeceras.md`: + aliases `Content Security Policy`, `CSP`, `HTTP Security Headers`; `related: [analisis-xss]`; + learning ref al lab.
+- `inventario/TOPICS.md`: regenerado para reflejar los nuevos aliases, enlaces y referencias prácticas.
+
+### Verificación
+- `bash scripts/check.sh` → all green.
+- 143 tests passing.
+- 128/128 validate OK.
+- `build_indexes --check` up to date tras regeneración de `TOPICS.md`.
+
+## [2026-05-03] — Sesión 19p (writeup PortSwigger AngularJS sandbox escape)
+
+Writeup del lab "Reflected XSS with AngularJS sandbox escape without strings". El reto usa client-side template injection en AngularJS: `{{7*7}}` como valor de `search` no se evalúa; el punto explotable es el nombre de un parámetro que llega a `$parse`.
+
+### Archivo nuevo
+- **`learning/portswigger/reflected-xss-angularjs-sandbox-escape-without-strings/writeup.md`**: reconocimiento del contexto `$parse(key)`, explicación del payload sin strings, escape `charAt=[].join`, uso de `orderBy` como sustituto de `$eval`, diagrama mermaid y contramedidas.
+- **`learning/portswigger/reflected-xss-angularjs-sandbox-escape-without-strings/solved.png`**: captura del lab resuelto.
+
+### Conexión inventario
+- `inventario/03-analisis-vulnerabilidades/web/analisis-xss.md`: + aliases `Client-Side Template Injection`, `CSTI`, `AngularJS sandbox escape`.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-xss.md`: + `portswigger/reflected-xss-angularjs-sandbox-escape-without-strings` en `learning_refs:`.
+- `inventario/TOPICS.md`: regenerado para reflejar los nuevos aliases y enlaces.
+
+### Verificación
+- `bash scripts/check.sh` → all green.
+- 143 tests passing.
+- 128/128 validate OK.
+- `build_indexes --check` up to date tras regeneración de `TOPICS.md`.
+
+## [2026-05-03] — Sesión 19o (writeup PortSwigger XSS para bypass CSRF)
+
+Writeup del lab "Exploiting XSS to bypass CSRF defenses". El reto combina stored XSS en comentarios con lectura same-origin de `/my-account` para extraer el token anti-CSRF y enviarlo en `POST /my-account/change-email`.
+
+### Archivo nuevo
+- **`learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/writeup.md`**: flujo de reconocimiento, payload `XMLHttpRequest` compacto, explicación de por qué XSS invalida la premisa de los tokens anti-CSRF, resumen mermaid y contramedidas.
+
+### Conexión inventario
+- `inventario/03-analisis-vulnerabilidades/web/analisis-xss.md`: + `portswigger/exploiting-xss-to-bypass-csrf-defenses` en `learning_refs:`.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-csrf.md`: + `portswigger/exploiting-xss-to-bypass-csrf-defenses` en `learning_refs:`.
+- `inventario/TOPICS.md`: regenerado para reflejar los nuevos enlaces.
+
+### Verificación
+- `bash scripts/check.sh` → all green.
+- 143 tests passing.
+- 128/128 validate OK.
+- `build_indexes --check` up to date tras regeneración de `TOPICS.md`.
+
 ## [2026-05-03] — Sesión 19n (writeup PortSwigger XSS template literal)
 
 Quinto writeup de la serie PortSwigger XSS-en-JS-string. Lab: "Reflected XSS into a JavaScript string with angle brackets, single, double quotes, backslash and backticks Unicode-escaped". El reto filtra `<>`, `'`, `"`, `` ` `` y `\` (todos escapados). El payload ganador es `${alert(1)}` aprovechando que la entrada se refleja dentro de un **template literal** y la interpolación `${...}` es sintaxis de lenguaje, no caracteres tipográficos.

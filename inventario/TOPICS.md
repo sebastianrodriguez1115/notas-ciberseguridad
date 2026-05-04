@@ -48,7 +48,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
 - **Aliases**: CSRF, Cross-Site Request Forgery, XSRF, SameSite bypass
 - **Related**: `analisis-xss`, `analisis-cors`, `analisis-seguridad-cabeceras`
-- **Learning**: [`portswigger/samesite-lax-bypass-via-cookie-refresh`](../learning/portswigger/samesite-lax-bypass-via-cookie-refresh/)
+- **Learning**: [`portswigger/exploiting-xss-to-bypass-csrf-defenses`](../learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/), [`portswigger/samesite-lax-bypass-via-cookie-refresh`](../learning/portswigger/samesite-lax-bypass-via-cookie-refresh/)
 
 ## `analisis-deserialization` — Análisis de Insecure Deserialization
 
@@ -111,7 +111,9 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-seguridad-cabeceras.md`](./03-analisis-vulnerabilidades/web/analisis-seguridad-cabeceras.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Básica
-- **Aliases**: Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP
+- **Aliases**: Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP, Content Security Policy, CSP, HTTP Security Headers
+- **Related**: `analisis-xss`
+- **Learning**: [`portswigger/reflected-xss-angularjs-sandbox-escape-and-csp`](../learning/portswigger/reflected-xss-angularjs-sandbox-escape-and-csp/)
 
 ## `analisis-servicios-mal-configurados` — Análisis de Vulnerabilidades: Servicios Mal Configurados
 
@@ -151,9 +153,9 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-xss.md`](./03-analisis-vulnerabilidades/web/analisis-xss.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: XSS, Cross-Site Scripting, Reflected XSS, Stored XSS, DOM XSS
+- **Aliases**: XSS, Cross-Site Scripting, Reflected XSS, Stored XSS, DOM XSS, Client-Side Template Injection, CSTI, AngularJS sandbox escape
 - **Related**: `analisis-csrf`, `analisis-seguridad-cabeceras`
-- **Learning**: [`portswigger/reflected-xss-canonical-link-tag`](../learning/portswigger/reflected-xss-canonical-link-tag/), [`portswigger/reflected-xss-js-string-angle-quotes-encoded`](../learning/portswigger/reflected-xss-js-string-angle-quotes-encoded/), [`portswigger/reflected-xss-js-string-sq-backslash-escaped`](../learning/portswigger/reflected-xss-js-string-sq-backslash-escaped/), [`portswigger/reflected-xss-js-template-literal-escapes`](../learning/portswigger/reflected-xss-js-template-literal-escapes/), [`portswigger/stored-xss-onclick-html-entity-bypass`](../learning/portswigger/stored-xss-onclick-html-entity-bypass/)
+- **Learning**: [`portswigger/exploiting-xss-to-bypass-csrf-defenses`](../learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/), [`portswigger/exploiting-xss-to-steal-cookies`](../learning/portswigger/exploiting-xss-to-steal-cookies/), [`portswigger/reflected-xss-angularjs-sandbox-escape-and-csp`](../learning/portswigger/reflected-xss-angularjs-sandbox-escape-and-csp/), [`portswigger/reflected-xss-angularjs-sandbox-escape-without-strings`](../learning/portswigger/reflected-xss-angularjs-sandbox-escape-without-strings/), [`portswigger/reflected-xss-canonical-link-tag`](../learning/portswigger/reflected-xss-canonical-link-tag/), [`portswigger/reflected-xss-js-string-angle-quotes-encoded`](../learning/portswigger/reflected-xss-js-string-angle-quotes-encoded/), [`portswigger/reflected-xss-js-string-sq-backslash-escaped`](../learning/portswigger/reflected-xss-js-string-sq-backslash-escaped/), [`portswigger/reflected-xss-js-template-literal-escapes`](../learning/portswigger/reflected-xss-js-template-literal-escapes/), [`portswigger/stored-xss-onclick-html-entity-bypass`](../learning/portswigger/stored-xss-onclick-html-entity-bypass/)
 
 ## `analisis-xxe` — Análisis de XXE (XML External Entity)
 
