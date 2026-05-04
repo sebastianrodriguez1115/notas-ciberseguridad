@@ -2,6 +2,29 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-04] — Sesión 19x (writeup PortSwigger CSP bypass via directive injection)
+
+Lab corto pero muy didáctico. La CSP del lab incluía `report-uri /csp-report?token=` con el `token` reflejado tal cual desde el query string. Pasar `;` y comillas sin sanitizar permite añadir directivas nuevas al header. La directiva `script-src-elem 'unsafe-inline'`, al ser más específica que `script-src`, gana sobre `script-src 'self'` para los `<script>` elements y permite ejecutar inline.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Si el header CSP se construye concatenando input de URL, la CSP es atacable via inyección de directivas**. El `;` es el separador de directivas; basta con que el reflejo no lo sanitice.
+
+2. **CSP no es monotónica**. Añadir una directiva más específica puede *relajar* la política. `script-src 'self'; script-src-elem 'unsafe-inline'` es estrictamente menos seguro que `script-src 'self'` solo, porque `script-src-elem` gana para los `<script>` elements.
+
+3. **`report-uri` es el portador típico del payload de inyección**, porque suele incluir identificadores dinámicos (tenant, sesión, deployment). En auditorías, leer cada directiva CSP buscando interpolaciones, no solo las "obvias".
+
+4. **`report-uri` está deprecada** en favor de `report-to`. La migración elimina el caso de uso de meter valores dinámicos en el header CSP.
+
+### Archivo nuevo
+- **`learning/portswigger/reflected-xss-csp-directive-injection/writeup.md`**: 7 secciones cubriendo recon del sink y la CSP, identificación del reflejo en `report-uri`, jerarquía `script-src`/`script-src-elem`/`script-src-attr`, payload final, y contramedidas (incluye referencia al paper Weichselbaum et al. 2016 sobre la insecurity de allowlists CSP).
+
+### Conexión inventario
+- `explotacion-xss.md`: + `portswigger/reflected-xss-csp-directive-injection` en `learning_refs:`. + aliases `CSP directive injection, script-src-elem override`.
+- `analisis-seguridad-cabeceras.md`: + `portswigger/reflected-xss-csp-directive-injection` en `learning_refs:`. + aliases `CSP directive injection, report-uri injection, script-src-elem precedence`.
+
+---
+
 ## [2026-05-04] — Sesión 19w (writeup PortSwigger CSP estricta + dangling markup attack)
 
 Lab más complejo de la serie hasta ahora. Combina XSS reflejado, CSP estricta sin `form-action` listada, dangling markup con `<button formaction>`, ataque 2-stage entre exploit server y lab, y manejo de SameSite=Lax cookies. 30+ minutos de debugging real, tres iteraciones del payload del exploit server.

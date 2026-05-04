@@ -1,13 +1,13 @@
 ---
 title: "Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP"
 slug: analisis-seguridad-cabeceras
-aliases: ["Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP", Content Security Policy, CSP, HTTP Security Headers]
+aliases: ["Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP", Content Security Policy, CSP, HTTP Security Headers, CSP directive injection, report-uri injection, script-src-elem precedence]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Básica
 mitre: [T1595.002]
 related: [analisis-xss]
-learning_refs: [portswigger/reflected-xss-angularjs-sandbox-escape-and-csp]
+learning_refs: [portswigger/reflected-xss-angularjs-sandbox-escape-and-csp, portswigger/reflected-xss-csp-directive-injection]
 ---
 
 # Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP

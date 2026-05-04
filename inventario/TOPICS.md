@@ -111,9 +111,9 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-seguridad-cabeceras.md`](./03-analisis-vulnerabilidades/web/analisis-seguridad-cabeceras.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Básica
-- **Aliases**: Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP, Content Security Policy, CSP, HTTP Security Headers
+- **Aliases**: Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP, Content Security Policy, CSP, HTTP Security Headers, CSP directive injection, report-uri injection, script-src-elem precedence
 - **Related**: `analisis-xss`
-- **Learning**: [`portswigger/reflected-xss-angularjs-sandbox-escape-and-csp`](../learning/portswigger/reflected-xss-angularjs-sandbox-escape-and-csp/)
+- **Learning**: [`portswigger/reflected-xss-angularjs-sandbox-escape-and-csp`](../learning/portswigger/reflected-xss-angularjs-sandbox-escape-and-csp/), [`portswigger/reflected-xss-csp-directive-injection`](../learning/portswigger/reflected-xss-csp-directive-injection/)
 
 ## `analisis-servicios-mal-configurados` — Análisis de Vulnerabilidades: Servicios Mal Configurados
 
@@ -608,9 +608,9 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/web/explotacion-xss.md`](./04-explotacion/web/explotacion-xss.md)
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: XSS exploitation, cookie hijacking, session theft, BeEF, form override, keylogger client-side, XSS to CSRF, XSS chain, same-origin auto-exfiltration, password manager autofill abuse, credential capture, dangling markup attack, formaction hijack, two-stage CSRF chain, SameSite bypass via GET
+- **Aliases**: XSS exploitation, cookie hijacking, session theft, BeEF, form override, keylogger client-side, XSS to CSRF, XSS chain, same-origin auto-exfiltration, password manager autofill abuse, credential capture, dangling markup attack, formaction hijack, two-stage CSRF chain, SameSite bypass via GET, CSP directive injection, script-src-elem override
 - **Related**: `analisis-xss`, `analisis-csrf`, `analisis-seguridad-cabeceras`
-- **Learning**: [`portswigger/exploiting-xss-to-steal-cookies`](../learning/portswigger/exploiting-xss-to-steal-cookies/), [`portswigger/exploiting-xss-to-capture-passwords`](../learning/portswigger/exploiting-xss-to-capture-passwords/), [`portswigger/exploiting-xss-to-bypass-csrf-defenses`](../learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/), [`portswigger/reflected-xss-very-strict-csp-dangling-markup`](../learning/portswigger/reflected-xss-very-strict-csp-dangling-markup/)
+- **Learning**: [`portswigger/exploiting-xss-to-steal-cookies`](../learning/portswigger/exploiting-xss-to-steal-cookies/), [`portswigger/exploiting-xss-to-capture-passwords`](../learning/portswigger/exploiting-xss-to-capture-passwords/), [`portswigger/exploiting-xss-to-bypass-csrf-defenses`](../learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/), [`portswigger/reflected-xss-very-strict-csp-dangling-markup`](../learning/portswigger/reflected-xss-very-strict-csp-dangling-markup/), [`portswigger/reflected-xss-csp-directive-injection`](../learning/portswigger/reflected-xss-csp-directive-injection/)
 
 ## `explotacion-zerologon` — Explotación de Zerologon (CVE-2020-1472)
 
