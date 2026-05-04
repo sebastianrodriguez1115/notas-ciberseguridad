@@ -1,13 +1,13 @@
 ---
 title: Explotación de Cross-Site Scripting (XSS)
 slug: explotacion-xss
-aliases: [XSS exploitation, cookie hijacking, session theft, BeEF, form override, keylogger client-side, XSS to CSRF, XSS chain, same-origin auto-exfiltration, password manager autofill abuse, credential capture]
+aliases: [XSS exploitation, cookie hijacking, session theft, BeEF, form override, keylogger client-side, XSS to CSRF, XSS chain, same-origin auto-exfiltration, password manager autofill abuse, credential capture, dangling markup attack, formaction hijack, two-stage CSRF chain, SameSite bypass via GET]
 fase: [Explotación]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1539, T1185, T1059.007]
 related: [analisis-xss, analisis-csrf, analisis-seguridad-cabeceras]
-learning_refs: [portswigger/exploiting-xss-to-steal-cookies, portswigger/exploiting-xss-to-capture-passwords, portswigger/exploiting-xss-to-bypass-csrf-defenses]
+learning_refs: [portswigger/exploiting-xss-to-steal-cookies, portswigger/exploiting-xss-to-capture-passwords, portswigger/exploiting-xss-to-bypass-csrf-defenses, portswigger/reflected-xss-very-strict-csp-dangling-markup]
 ---
 
 # Explotación de Cross-Site Scripting (XSS)

@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-04] — Sesión 19w (writeup PortSwigger CSP estricta + dangling markup attack)
+
+Lab más complejo de la serie hasta ahora. Combina XSS reflejado, CSP estricta sin `form-action` listada, dangling markup con `<button formaction>`, ataque 2-stage entre exploit server y lab, y manejo de SameSite=Lax cookies. 30+ minutos de debugging real, tres iteraciones del payload del exploit server.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **`form-action` omitida en CSP es la grieta más recurrente**. Las directivas script-src/style-src/img-src se documentan religiosamente, pero `form-action` se olvida frecuentemente. Es la palanca para hijack de submisiones cross-origin.
+
+2. **SameSite=Lax bloquea cookies en POST cross-site, NO en GET top-level**. Por eso el truco de `formmethod="get"` en lugar de POST: capturar el csrf vía GET (cookies sí se mandan), después hacer un POST same-origin desde el exploit server (cookies sí se mandan otra vez).
+
+3. **`new URL(location)` falla silenciosamente en algunos headless browsers**. El bot de PortSwigger es uno. Workaround robusto: `location.search.match(/[?&]csrf=([^&]+)/)`. Mismo patrón con `document.body` (puede ser null) → `document.documentElement` (siempre existe).
+
+4. **2-stage attack con exploit server**: stage 1 redirige al lab con dangling markup, stage 2 captura csrf en URL del exploit server y auto-submitea POST a change-email. El bot necesita visitar el exploit server DOS veces (una para redirect, otra después de clickear).
+
+### Archivo nuevo
+- **`learning/portswigger/reflected-xss-very-strict-csp-dangling-markup/writeup.md`** + `solved.png`: 9 secciones cubriendo análisis del CSP, estrategia 2-stage con diagrama de secuencia, payload de dangling markup, body completo del exploit server con explicación de los detalles defensivos del JS, y debugging real (3 iteraciones documentadas).
+
+### Conexión inventario
+- `explotacion-xss.md`: + `portswigger/reflected-xss-very-strict-csp-dangling-markup` en `learning_refs:`.
+- `explotacion-xss.md`: + aliases `dangling markup attack, formaction hijack, two-stage CSRF chain, SameSite bypass via GET`.
+
+### Verificación
+- `bash scripts/check.sh` → all green.
+- 143 tests passing.
+- 129/129 validate OK.
+- TOPICS.md regenerado.
+
 ## [2026-05-03] — Sesión 19v (writeup PortSwigger XSS javascript URL chars blocked - throw onerror trick)
 
 Lab "Reflected XSS in a JavaScript URL with some characters blocked". Reflejo en el body de un `fetch()` dentro de una URL `javascript:` que es el `href` de un `<a>`. Filtros descubiertos vía sondeos atómicos (8 probes esta vez, metodología completa): el server BORRA paréntesis y backticks; el resto pasa URL-encoded.
