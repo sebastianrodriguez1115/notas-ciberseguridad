@@ -67,7 +67,7 @@ archivos por valor de `by-fase`.
 - [`fuzzing-subdominios-vhosts`](../02-enumeracion/fuzzing/fuzzing-subdominios-vhosts.md) — Fuzzing de Subdominios y Virtual Hosts
 - [`nikto`](../02-enumeracion/web/nikto.md) — Escaneo de Vulnerabilidades Web con Nikto
 
-## Explotación (29)
+## Explotación (30)
 
 - [`configuracion-uso-avanzado`](../06-frameworks-herramientas/burp-suite/configuracion-uso-avanzado.md) — Configuración y Uso Avanzado
 - [`enumeracion-docker`](../02-enumeracion/servicios/enumeracion-docker.md) — Enumeración Docker (Puerto 2375/2376)
@@ -96,6 +96,7 @@ archivos por valor de `by-fase`.
 - [`explotacion-shellshock`](../04-explotacion/sistema/explotacion-shellshock.md) — Shellshock (CVE-2014-6271)
 - [`explotacion-smb-relay`](../04-explotacion/red/explotacion-smb-relay.md) — SMB Relay Attack
 - [`explotacion-sqli`](../04-explotacion/web/explotacion-sqli.md) — Inyección SQL (SQLi)
+- [`explotacion-xss`](../04-explotacion/web/explotacion-xss.md) — Explotación de Cross-Site Scripting (XSS)
 - [`explotacion-zerologon`](../04-explotacion/sistema/explotacion-zerologon.md) — Explotación de Zerologon (CVE-2020-1472)
 - [`metasploit-avanzado`](../06-frameworks-herramientas/metasploit/metasploit-avanzado.md) — Uso Avanzado y Automatización
 

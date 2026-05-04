@@ -8,6 +8,7 @@ Explotación de vulnerabilidades en aplicaciones web y CMS.
 | :--- | :--- | :--- | :--- |
 | [Bypass de Autenticación en OAuth2 y OpenID](./explotacion-auth-bypass-oauth.md) | T1190 | Avanzada | Web |
 | [Explotación de CMS WordPress](./explotacion-cms-wordpress.md) | T1190 | Intermedia | Web |
+| [Explotación de Cross-Site Scripting (XSS)](./explotacion-xss.md) | T1539 | Intermedia | Web |
 | [Explotación de Deserialización Insegura](./explotacion-deserialization.md) | T1190 | Avanzada | Web |
 | [Explotación de JSON Web Tokens (JWT)](./explotacion-jwt.md) | T1190 | Intermedia | Web |
 | [File Upload Exploitation](./explotacion-fileupload.md) | T1190 | Intermedia | Web |

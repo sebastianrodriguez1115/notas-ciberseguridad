@@ -6,8 +6,8 @@ fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
-related: [analisis-csrf, analisis-seguridad-cabeceras]
-learning_refs: [portswigger/exploiting-xss-to-bypass-csrf-defenses, portswigger/exploiting-xss-to-steal-cookies, portswigger/reflected-xss-angularjs-sandbox-escape-and-csp, portswigger/reflected-xss-angularjs-sandbox-escape-without-strings, portswigger/reflected-xss-canonical-link-tag, portswigger/reflected-xss-js-string-angle-quotes-encoded, portswigger/reflected-xss-js-string-sq-backslash-escaped, portswigger/reflected-xss-js-template-literal-escapes, portswigger/stored-xss-onclick-html-entity-bypass]
+related: [explotacion-xss, analisis-csrf, analisis-seguridad-cabeceras]
+learning_refs: [portswigger/reflected-xss-angularjs-sandbox-escape-and-csp, portswigger/reflected-xss-angularjs-sandbox-escape-without-strings, portswigger/reflected-xss-canonical-link-tag, portswigger/reflected-xss-js-string-angle-quotes-encoded, portswigger/reflected-xss-js-string-sq-backslash-escaped, portswigger/reflected-xss-js-template-literal-escapes, portswigger/stored-xss-onclick-html-entity-bypass]
 ---
 
 # Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)

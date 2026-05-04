@@ -132,6 +132,10 @@ archivos por valor de `by-mitre`.
 
 - [`empire-framework`](../06-frameworks-herramientas/powershell-empire/empire-framework.md) — Post-Explotación y C2
 
+## T1059.007 (1)
+
+- [`explotacion-xss`](../04-explotacion/web/explotacion-xss.md) — Explotación de Cross-Site Scripting (XSS)
+
 ## T1068 (5)
 
 - [`analisis-parches-windows`](../03-analisis-vulnerabilidades/sistema/analisis-parches-windows.md) — Gestión de Parches en Windows
@@ -227,6 +231,10 @@ archivos por valor de `by-mitre`.
 - [`enumeracion-nfs`](../02-enumeracion/red/enumeracion-nfs.md) — Enumeración NFS (Network File System)
 - [`enumeracion-smb`](../02-enumeracion/red/enumeracion-smb.md) — Enumeración SMB (Server Message Block)
 
+## T1185 (1)
+
+- [`explotacion-xss`](../04-explotacion/web/explotacion-xss.md) — Explotación de Cross-Site Scripting (XSS)
+
 ## T1187 (1)
 
 - [`explotacion-adcs-relay`](../04-explotacion/red/explotacion-adcs-relay.md) — Abuso de ADCS y Ataques de Relay
@@ -278,6 +286,10 @@ archivos por valor de `by-mitre`.
 ## T1505.003 (1)
 
 - [`web-shells`](../05-post-explotacion/persistencia/web-shells.md) — Web Shells
+
+## T1539 (1)
+
+- [`explotacion-xss`](../04-explotacion/web/explotacion-xss.md) — Explotación de Cross-Site Scripting (XSS)
 
 ## T1543.003 (1)
 

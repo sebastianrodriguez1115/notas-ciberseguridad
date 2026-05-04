@@ -2,6 +2,28 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19s (cierre del par analisis/explotacion para XSS)
+
+Hueco estructural detectado al revisar los writeups recientes: el inventario tenía `analisis-xss.md` pero NO `explotacion-xss.md`, mientras que para SQLi sí existe el par (`analisis-sqli` ↔ `explotacion-sqli`). Los 4 writeups recientes de "Exploiting XSS" estaban todos referenciados desde `analisis-xss`, lo cual es incorrecto desde el modelo del inventario (los labs de explotación pertenecen a la fase de explotación).
+
+### Archivo nuevo (129 técnicas total)
+- **`inventario/04-explotacion/web/explotacion-xss.md`** (T1539 + T1185 + T1059.007): cubre cookie hijacking (3 variantes incluyendo auto-exfiltración same-origin), XSS chain hacia CSRF, form override / credential capture, keylogger client-side, port scan interno desde el navegador de la víctima, bypass de CSP (JSONP, framework gadgets, side-channels CSS), tabla de exfil same-origin para entornos con firewall (PortSwigger Academy). 9 secciones, 8 contramedidas.
+
+### Redistribución de learning_refs
+- `analisis-xss.md`: -2 refs (`exploiting-xss-to-steal-cookies`, `exploiting-xss-to-bypass-csrf-defenses` salen de aquí, son labs de explotación pura).
+- `explotacion-xss.md`: +2 refs (los anteriores, en su nuevo sitio correcto).
+- Los 7 labs de descubrimiento/contexto/CSTI permanecen en `analisis-xss.md`.
+
+### Conexión bidireccional
+- `analisis-xss.md`: + `explotacion-xss` en `related:`.
+- `explotacion-xss.md`: `related: [analisis-xss, analisis-csrf, analisis-seguridad-cabeceras]`.
+
+### Verificación
+- `bash scripts/check.sh` → all green.
+- 143 tests passing.
+- 129/129 validate OK (era 128, +1 por explotacion-xss.md).
+- `build_indexes --check` regenera 6 archivos: `04-explotacion/web/INDEX.md`, `TOPICS.md`, los 4 meta/* (by-mitre, by-difficulty, by-platform, by-fase).
+
 ## [2026-05-03] — Sesión 19r (writeup PortSwigger XSS cookie stealing + hallazgo del firewall del lab)
 
 Lab: "Exploiting cross-site scripting to steal cookies". Stored XSS trivial en comentarios; el reto real fue exfiltrar la cookie del bot sin Burp Pro. La sesión documenta dos hallazgos no obvios que merecen quedar registrados.

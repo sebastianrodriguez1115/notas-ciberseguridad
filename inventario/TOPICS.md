@@ -154,8 +154,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-xss.md`](./03-analisis-vulnerabilidades/web/analisis-xss.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
 - **Aliases**: XSS, Cross-Site Scripting, Reflected XSS, Stored XSS, DOM XSS, Client-Side Template Injection, CSTI, AngularJS sandbox escape
-- **Related**: `analisis-csrf`, `analisis-seguridad-cabeceras`
-- **Learning**: [`portswigger/exploiting-xss-to-bypass-csrf-defenses`](../learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/), [`portswigger/exploiting-xss-to-steal-cookies`](../learning/portswigger/exploiting-xss-to-steal-cookies/), [`portswigger/reflected-xss-angularjs-sandbox-escape-and-csp`](../learning/portswigger/reflected-xss-angularjs-sandbox-escape-and-csp/), [`portswigger/reflected-xss-angularjs-sandbox-escape-without-strings`](../learning/portswigger/reflected-xss-angularjs-sandbox-escape-without-strings/), [`portswigger/reflected-xss-canonical-link-tag`](../learning/portswigger/reflected-xss-canonical-link-tag/), [`portswigger/reflected-xss-js-string-angle-quotes-encoded`](../learning/portswigger/reflected-xss-js-string-angle-quotes-encoded/), [`portswigger/reflected-xss-js-string-sq-backslash-escaped`](../learning/portswigger/reflected-xss-js-string-sq-backslash-escaped/), [`portswigger/reflected-xss-js-template-literal-escapes`](../learning/portswigger/reflected-xss-js-template-literal-escapes/), [`portswigger/stored-xss-onclick-html-entity-bypass`](../learning/portswigger/stored-xss-onclick-html-entity-bypass/)
+- **Related**: `explotacion-xss`, `analisis-csrf`, `analisis-seguridad-cabeceras`
+- **Learning**: [`portswigger/reflected-xss-angularjs-sandbox-escape-and-csp`](../learning/portswigger/reflected-xss-angularjs-sandbox-escape-and-csp/), [`portswigger/reflected-xss-angularjs-sandbox-escape-without-strings`](../learning/portswigger/reflected-xss-angularjs-sandbox-escape-without-strings/), [`portswigger/reflected-xss-canonical-link-tag`](../learning/portswigger/reflected-xss-canonical-link-tag/), [`portswigger/reflected-xss-js-string-angle-quotes-encoded`](../learning/portswigger/reflected-xss-js-string-angle-quotes-encoded/), [`portswigger/reflected-xss-js-string-sq-backslash-escaped`](../learning/portswigger/reflected-xss-js-string-sq-backslash-escaped/), [`portswigger/reflected-xss-js-template-literal-escapes`](../learning/portswigger/reflected-xss-js-template-literal-escapes/), [`portswigger/stored-xss-onclick-html-entity-bypass`](../learning/portswigger/stored-xss-onclick-html-entity-bypass/)
 
 ## `analisis-xxe` — Análisis de XXE (XML External Entity)
 
@@ -603,6 +603,14 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Aliases**: SQLi, SQL Injection, Inyección SQL, sqlmap
 - **Related**: `analisis-sqli`, `explotacion-nosqli`
 - **Learning**: [`portswigger/visible-error-based-sql-injection`](../learning/portswigger/visible-error-based-sql-injection/), [`portswigger/blind-sqli-time-delays`](../learning/portswigger/blind-sqli-time-delays/), [`portswigger/blind-sqli-time-delays-info-retrieval`](../learning/portswigger/blind-sqli-time-delays-info-retrieval/), [`portswigger/blind-sqli-out-of-band`](../learning/portswigger/blind-sqli-out-of-band/), [`portswigger/sqli-filter-bypass-xml-encoding`](../learning/portswigger/sqli-filter-bypass-xml-encoding/)
+
+## `explotacion-xss` — Explotación de Cross-Site Scripting (XSS)
+
+- **Archivo**: [`inventario/04-explotacion/web/explotacion-xss.md`](./04-explotacion/web/explotacion-xss.md)
+- **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
+- **Aliases**: XSS exploitation, cookie hijacking, session theft, BeEF, form override, keylogger client-side, XSS to CSRF, XSS chain, same-origin auto-exfiltration
+- **Related**: `analisis-xss`, `analisis-csrf`, `analisis-seguridad-cabeceras`
+- **Learning**: [`portswigger/exploiting-xss-to-steal-cookies`](../learning/portswigger/exploiting-xss-to-steal-cookies/), [`portswigger/exploiting-xss-to-bypass-csrf-defenses`](../learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/)
 
 ## `explotacion-zerologon` — Explotación de Zerologon (CVE-2020-1472)
 
