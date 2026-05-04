@@ -2,6 +2,27 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19u (writeup PortSwigger XSS event handlers/href blocked - SVG animate)
+
+Lab "Reflected XSS with event handlers and href attributes blocked". Vuelta a la fase de descubrimiento de contexto. Whitelist de tags + bloqueo de TODOS los `on*` y de `href=` literal. La técnica clave es nueva: **SVG `<animate>` para escribir un atributo prohibido sin escribirlo literalmente**. El bot del lab clickea texto que diga "Click", así que el target es un `<a>` SVG con `href` animado a `javascript:alert(1)`.
+
+### Hallazgo metodológico documentado en el writeup
+
+La descripción del lab lista los filtros explícitamente. En engagements reales esa lista no existe. El writeup deja un "honesty check" señalado: el camino riguroso es sondear tag a tag (tabla de probes en sección 2), pero acepté la pista del lab por brevedad. Lección operacional para el siguiente lab que NO liste los filtros.
+
+### Archivo nuevo
+- **`learning/portswigger/reflected-xss-event-handlers-href-blocked/writeup.md`** + `solved.png`: 10 secciones cubriendo el modelo de filtro, por qué cada ruta clásica está cerrada, cómo `<animate>` escribe atributos sin que aparezcan en el wire format, payload completo con análisis de cada elemento, mermaid del flujo, contramedidas (allowlist + parser semántico vs blocklist + regex) y lección general sobre sub-lenguajes embebidos en HTML (SVG, MathML, CSS, JS).
+
+### Conexión inventario
+- `analisis-xss.md`: + `portswigger/reflected-xss-event-handlers-href-blocked` en `learning_refs:`.
+- `analisis-xss.md`: + aliases `SVG animate XSS, mutation XSS, mXSS`.
+
+### Verificación
+- `bash scripts/check.sh` → all green.
+- 143 tests passing.
+- 129/129 validate OK.
+- `build_indexes --check` up to date tras regeneración de TOPICS.md.
+
 ## [2026-05-03] — Sesión 19t (writeup PortSwigger XSS capture passwords + ampliación de explotacion-xss)
 
 Lab "Exploiting cross-site scripting to capture passwords". Mismo bot/firewall que el de cookie stealing, pero el target son credenciales en plano (no la cookie). La técnica clave es nueva: **abuso del autofill del password manager del navegador**. Inyectar `<input name=username>` + `<input type=password onchange=...>` en un comentario stored XSS hace que el navegador del bot autocomplete silenciosamente y el handler `onchange` exfiltre user:password. Reusa el patrón same-origin establecido en el writeup de cookies (publicar como comentario en el blog).
