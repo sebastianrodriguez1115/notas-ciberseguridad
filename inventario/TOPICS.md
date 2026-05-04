@@ -608,9 +608,9 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/web/explotacion-xss.md`](./04-explotacion/web/explotacion-xss.md)
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: XSS exploitation, cookie hijacking, session theft, BeEF, form override, keylogger client-side, XSS to CSRF, XSS chain, same-origin auto-exfiltration
+- **Aliases**: XSS exploitation, cookie hijacking, session theft, BeEF, form override, keylogger client-side, XSS to CSRF, XSS chain, same-origin auto-exfiltration, password manager autofill abuse, credential capture
 - **Related**: `analisis-xss`, `analisis-csrf`, `analisis-seguridad-cabeceras`
-- **Learning**: [`portswigger/exploiting-xss-to-steal-cookies`](../learning/portswigger/exploiting-xss-to-steal-cookies/), [`portswigger/exploiting-xss-to-bypass-csrf-defenses`](../learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/)
+- **Learning**: [`portswigger/exploiting-xss-to-steal-cookies`](../learning/portswigger/exploiting-xss-to-steal-cookies/), [`portswigger/exploiting-xss-to-capture-passwords`](../learning/portswigger/exploiting-xss-to-capture-passwords/), [`portswigger/exploiting-xss-to-bypass-csrf-defenses`](../learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/)
 
 ## `explotacion-zerologon` — Explotación de Zerologon (CVE-2020-1472)
 

