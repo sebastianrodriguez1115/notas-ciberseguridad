@@ -2,6 +2,29 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-03] — Sesión 19v (writeup PortSwigger XSS javascript URL chars blocked - throw onerror trick)
+
+Lab "Reflected XSS in a JavaScript URL with some characters blocked". Reflejo en el body de un `fetch()` dentro de una URL `javascript:` que es el `href` de un `<a>`. Filtros descubiertos vía sondeos atómicos (8 probes esta vez, metodología completa): el server BORRA paréntesis y backticks; el resto pasa URL-encoded.
+
+### Hallazgos clave en el writeup
+
+1. **Stack de codificación de 4 capas** entre input y ejecución (URL-request → server URL-encode → HTML attr decode al parsear → URL-decode del browser al navegar a `javascript:` → JS parser). Cada capa es una superficie potencial.
+2. **`throw onerror=alert,X` + override de `toString`** como forma de invocar funciones sin paréntesis ni backticks. El trick canónico cuando un blocklist cubre las dos formas convencionales (`f()` y `` f`` ``).
+3. **Bug de balanceo de llaves en mi primer payload**: cerrar el object literal con `}` propio dejaba un `}` huérfano del original sin consumir → SyntaxError. Fix documentado: terminar el payload con `+{a:'` para que el `}` original cierre `{a:''}`. Lección reusable: cualquier breakout en sinks anidados tiene que dejar el árbol sintáctico válido.
+
+### Archivo nuevo
+- **`learning/portswigger/reflected-xss-javascript-url-some-characters-blocked/writeup.md`** + `solved.png`: 9 secciones cubriendo el sink, las 4 capas de codificación, los 8 sondeos atómicos como tabla, el truco `throw onerror`, el debug del syntax error de mi primer payload, mermaid del flujo, contramedidas y comparación con labs anteriores en términos de "número de capas".
+
+### Conexión inventario
+- `analisis-xss.md`: + `portswigger/reflected-xss-javascript-url-some-characters-blocked` en `learning_refs:`.
+- `analisis-xss.md`: + aliases `javascript URL injection, throw onerror trick, toString override XSS`.
+
+### Verificación
+- `bash scripts/check.sh` → all green.
+- 143 tests passing.
+- 129/129 validate OK.
+- TOPICS.md regenerado.
+
 ## [2026-05-03] — Sesión 19u (writeup PortSwigger XSS event handlers/href blocked - SVG animate)
 
 Lab "Reflected XSS with event handlers and href attributes blocked". Vuelta a la fase de descubrimiento de contexto. Whitelist de tags + bloqueo de TODOS los `on*` y de `href=` literal. La técnica clave es nueva: **SVG `<animate>` para escribir un atributo prohibido sin escribirlo literalmente**. El bot del lab clickea texto que diga "Click", así que el target es un `<a>` SVG con `href` animado a `javascript:alert(1)`.
