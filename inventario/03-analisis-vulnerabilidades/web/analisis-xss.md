@@ -1,13 +1,13 @@
 ---
 title: "Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)"
 slug: analisis-xss
-aliases: [XSS, Cross-Site Scripting, Reflected XSS, Stored XSS, DOM XSS, Client-Side Template Injection, CSTI, AngularJS sandbox escape, SVG animate XSS, mutation XSS, mXSS, javascript URL injection, throw onerror trick, toString override XSS, postMessage XSS, web message XSS, cross-origin messaging XSS, indexOf URL bypass, javascript URL comment trick, JSON.parse postMessage, iframe.src javascript URL]
+aliases: [XSS, Cross-Site Scripting, Reflected XSS, Stored XSS, DOM XSS, Client-Side Template Injection, CSTI, AngularJS sandbox escape, SVG animate XSS, mutation XSS, mXSS, javascript URL injection, throw onerror trick, toString override XSS, postMessage XSS, web message XSS, cross-origin messaging XSS, indexOf URL bypass, javascript URL comment trick, JSON.parse postMessage, iframe.src javascript URL, cookie XSS, document.write XSS, lastViewedProduct cookie poisoning]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
 related: [explotacion-xss, analisis-csrf, analisis-seguridad-cabeceras]
-learning_refs: [portswigger/reflected-xss-angularjs-sandbox-escape-and-csp, portswigger/reflected-xss-angularjs-sandbox-escape-without-strings, portswigger/reflected-xss-canonical-link-tag, portswigger/reflected-xss-event-handlers-href-blocked, portswigger/reflected-xss-javascript-url-some-characters-blocked, portswigger/reflected-xss-js-string-angle-quotes-encoded, portswigger/reflected-xss-js-string-sq-backslash-escaped, portswigger/reflected-xss-js-template-literal-escapes, portswigger/stored-xss-onclick-html-entity-bypass, portswigger/clickjacking-dom-xss, portswigger/dom-xss-using-web-messages, portswigger/dom-xss-using-web-messages-and-javascript-url, portswigger/dom-xss-using-web-messages-and-json-parse]
+learning_refs: [portswigger/reflected-xss-angularjs-sandbox-escape-and-csp, portswigger/reflected-xss-angularjs-sandbox-escape-without-strings, portswigger/reflected-xss-canonical-link-tag, portswigger/reflected-xss-event-handlers-href-blocked, portswigger/reflected-xss-javascript-url-some-characters-blocked, portswigger/reflected-xss-js-string-angle-quotes-encoded, portswigger/reflected-xss-js-string-sq-backslash-escaped, portswigger/reflected-xss-js-template-literal-escapes, portswigger/stored-xss-onclick-html-entity-bypass, portswigger/clickjacking-dom-xss, portswigger/dom-xss-using-web-messages, portswigger/dom-xss-using-web-messages-and-javascript-url, portswigger/dom-xss-using-web-messages-and-json-parse, portswigger/dom-cookie-manipulation]
 ---
 
 # Análisis de Vulnerabilidades: Cross-Site Scripting (XSS)
