@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Básica
 mitre: [T1595.002]
 related: [analisis-xss]
-learning_refs: [portswigger/reflected-xss-angularjs-sandbox-escape-and-csp, portswigger/reflected-xss-csp-directive-injection]
+learning_refs: [portswigger/reflected-xss-angularjs-sandbox-escape-and-csp, portswigger/reflected-xss-csp-directive-injection, portswigger/clickjacking-prefilled-form-input, portswigger/clickjacking-frame-buster-script, portswigger/clickjacking-dom-xss, portswigger/clickjacking-multistep]
 ---
 
 # Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP
