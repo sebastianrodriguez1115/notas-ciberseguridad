@@ -93,7 +93,9 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-open-redirect.md`](./03-analisis-vulnerabilidades/web/analisis-open-redirect.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Básica
-- **Aliases**: Análisis de Open Redirect
+- **Aliases**: Open Redirect, Unvalidated Redirect, DOM-based Open Redirect, Client-side Open Redirect, Redirect URI bypass, OAuth redirect_uri abuse
+- **Related**: `analisis-xss`
+- **Learning**: [`portswigger/dom-open-redirection`](../learning/portswigger/dom-open-redirection/)
 
 ## `analisis-parches-windows` — Análisis de Vulnerabilidades: Gestión de Parches en Windows
 

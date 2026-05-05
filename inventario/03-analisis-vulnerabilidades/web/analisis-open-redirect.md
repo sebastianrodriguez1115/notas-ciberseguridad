@@ -1,13 +1,13 @@
 ---
 title: Análisis de Open Redirect
 slug: analisis-open-redirect
-aliases: [Análisis de Open Redirect]
+aliases: [Open Redirect, Unvalidated Redirect, DOM-based Open Redirect, Client-side Open Redirect, Redirect URI bypass, OAuth redirect_uri abuse]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Básica
 mitre: [T1190]
-related: []
-learning_refs: []
+related: [analisis-xss]
+learning_refs: [portswigger/dom-open-redirection]
 ---
 
 # Análisis de Open Redirect
