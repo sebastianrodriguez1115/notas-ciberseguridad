@@ -1,13 +1,13 @@
 ---
 title: Análisis de SSRF (Server-Side Request Forgery)
 slug: analisis-ssrf
-aliases: [SSRF, Server-Side Request Forgery]
+aliases: [SSRF, Server-Side Request Forgery, blind SSRF, AWS IMDS exploitation, EC2 metadata SSRF, 169.254.169.254, link-local IP abuse, cloud metadata theft, IAM credential theft via SSRF, IMDSv1 vs IMDSv2, Capital One breach pattern, XXE to SSRF, gopher SSRF, internal port scan via SSRF, redirect chain SSRF]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Avanzada
 mitre: [T1190]
 related: [fuzzing-lfi-ssrf, analisis-xxe]
-learning_refs: []
+learning_refs: [portswigger/exploiting-xxe-to-perform-ssrf]
 ---
 
 # Análisis de SSRF (Server-Side Request Forgery)

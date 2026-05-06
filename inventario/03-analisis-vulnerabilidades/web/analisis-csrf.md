@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
 related: [analisis-xss, analisis-cors, analisis-seguridad-cabeceras]
-learning_refs: [portswigger/exploiting-xss-to-bypass-csrf-defenses, portswigger/samesite-lax-bypass-via-cookie-refresh]
+learning_refs: [portswigger/exploiting-xss-to-bypass-csrf-defenses, portswigger/samesite-lax-bypass-via-cookie-refresh, portswigger/clickjacking-prefilled-form-input, portswigger/clickjacking-basic-csrf-protected]
 ---
 
 # Análisis de Vulnerabilidades: Cross-Site Request Forgery (CSRF)

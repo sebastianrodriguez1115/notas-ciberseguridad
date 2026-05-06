@@ -2,6 +2,230 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-06] — Sesión 20h (writeup PortSwigger XXE retrieving data by repurposing local DTD)
+
+Lab Practitioner más sofisticado de la serie XXE. Sin Collaborator, sin exploit server, sin red externa. Técnica: "Local DTD Repurposing" (Yunusov & Osipov, 2018). Resuelto leyendo `/etc/passwd` cargando `/usr/share/yelp/dtd/docbookx.dtd` (DTD local del paquete docbook-xml) y redefiniendo `%ISOamso` con cadena maliciosa que dispara FileNotFoundException con el contenido del archivo en el mensaje. Encontré un gotcha crítico durante el debugging: `&apos;` no se expande en parsers Java estrictos en contexto DTD nested.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **XXE blind con cero infraestructura externa es resoluble**. Si el server tiene cualquier DTD local con declaraciones internas que se referencien a sí mismas, redefiniendo el parameter entity correcto antes de cargar el DTD permite ejecutar cadena maliciosa sin necesidad de hostear nada. La técnica abusa que XML 1.0 §4.4.1 obliga a parsers a usar la primera declaración cuando un parameter entity se declara múltiples veces.
+
+2. **GOTCHA crítico: `&apos;` y `&quot;` no son confiables en DTD entity values nested**. Apache Xerces (default Java) en modo estricto solo expande character entity references numéricas (`&#xHH;`) en `EntityValue` nested. Las nombradas predefinidas quedan literales. Si un payload "casi funcional" da error `"system identifier must begin with quote"`, sospechar primero entidades nombradas no expandidas, no comillas mal escritas. La regla universal del paper Yunusov/Osipov: **solo numéricas en posiciones nested** (`&#x25;`, `&#x26;`, `&#x27;`, `&#x22;`).
+
+3. **DocBook DTDs son objetivo común y predecible**: viene como dependencia transitiva de cientos de paquetes Linux. Sus parameter entities (`ISOamso`, `ISOdia`, `ISOgrk1`...) son nombres ISO 8879:1986 estandarizados. PortSwigger usa `/usr/share/yelp/dtd/docbookx.dtd` con `%ISOamso` precisamente porque es estable. Para auditorías reales: **GoSecure dtd-finder** (github.com/GoSecure/dtd-finder) cataloga DTDs por distro con qué entity redefinir en cada uno.
+
+4. **Lección operacional sobre el hint del lab**: PortSwigger pone path y entity en el hint precisamente porque varían entre labs/versiones. **No inventar**, respetarlo. (Yo me equivoqué afirmando "el lab está calibrado para legal.dtd"; el usuario me corrigió. Lección personal: no presentar especulación como hecho cuando el hint oficial está disponible.)
+
+5. **`load-external-dtd` es feature separada de `external-general-entities`**. Para mitigar esta técnica específica hay que deshabilitar **explícitamente** `http://apache.org/xml/features/nonvalidating/load-external-dtd`. Sin él, los otros features anti-XXE no son suficientes contra el vector de DTD local.
+
+### Archivos nuevos
+- **`learning/portswigger/xxe-trigger-error-via-local-dtd/writeup.md`**: 9 secciones, sección 3.3 dedicada al gotcha `&apos;` vs `&#x27;` con explicación detallada del comportamiento Xerces, sección 5.2 explica por qué DocBook es target predecible.
+- **`learning/portswigger/xxe-trigger-error-via-local-dtd/payload.xml`**: payload validado con encoding numérico exclusivo.
+
+### Conexión inventario
+- `analisis-xxe.md`: + `portswigger/xxe-trigger-error-via-local-dtd` en `learning_refs:`. + 9 aliases nuevos (`local DTD repurposing, ISOamso, docbookx.dtd, dtd-finder, parameter entity redefinition, &#x27; vs &apos; in DTD, Xerces strict entity expansion, no infrastructure XXE, GoSecure dtd-finder`).
+
+### Cierre real de la serie XXE Practitioner
+
+8 labs XXE completados sin Burp Pro:
+1. `exploiting-xxe-to-retrieve-files`
+2. `exploiting-xxe-to-perform-ssrf`
+3. `blind-xxe-data-retrieval-via-error-messages` (DTD remoto via exploit server)
+4. `xinclude-attack-retrieve-files`
+5. `xxe-via-file-upload-svg`
+6. **`xxe-trigger-error-via-local-dtd`** (este lab)
+
+3 labs aplazados en PENDING (requieren Collaborator):
+- `lab-xxe-with-out-of-band-interaction`
+- `lab-xxe-with-out-of-band-interaction-using-parameter-entities`
+- `lab-xxe-with-data-exfiltration` (DTD remoto + Collaborator)
+
+---
+
+## [2026-05-06] — Sesión 20g (writeup PortSwigger Exploiting XXE via image file upload)
+
+Sexto y último lab Practitioner de la serie XXE. Cierra la categoría con el vector más relevante para auditorías reales: SVG es XML, así que cualquier upload de SVG procesado server-side es XXE potencial. Lab resuelto leyendo `/etc/hostname` (container ID Docker `64186f984a81`) que se renderizó visualmente en el avatar del comentario.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **SVG es XML, y por extensión muchos formatos "imagen/documento" son XML escondido**: DOCX, XLSX, ODT, EPUB, RSS, KML, plist macOS, PDF con XFA, etc. Auditar uploads no es solo "qué tipos acepta" sino "qué hace con cada tipo después de aceptarlo". Solo "almacenar y servir" es seguro; cualquier procesamiento (validación de schema, conversión, extracción de metadata, thumbnail) es superficie XXE.
+
+2. **Validación de "es una imagen" no es validación de "es seguro"**. Extension, MIME type, magic bytes, dimensiones — ninguna detecta XXE en SVG. La amenaza vive en el contenido del XML, no en si el archivo se parece a SVG. Defensa correcta: separar validación de procesamiento, rasterizar y descartar el SVG original, o sanitizar con DOMPurify SVG/SVGO con plugins.
+
+3. **Canal de exfiltración visual**: SVG con `<text>` que renderiza el contenido de un archivo es técnica genérica reusable. Limitada por viewBox y falta de word-wrap (target debe ser de una línea), pero perfecta para hostnames, IDs cortos, secrets, hashes. Para targets multilinea: exfil OOB, base64-encoded wrappers, o múltiples elementos `<text>` calibrados.
+
+4. **Lab requiere "Submit solution" manual del valor leído**. Distinto a labs anteriores donde la validación es automática al detectar el patrón en respuesta. Si el ataque "funciona" pero el lab no marca Solved, revisar siempre el botón "Submit solution" antes de buscar bugs en el payload. Lección: hay clases de validación distintas en PortSwigger; reconocer cuál aplica antes de diagnosticar.
+
+5. **Distinción server-side vs client-side expansion**: si el SVG servido contiene `&xxe;` literal en el source, el ataque NO es genuino — los browsers no resuelven `file://` desde SVGs remotos por seguridad. Solo cuenta como XXE real si el SVG servido tiene el contenido del archivo embebido literal.
+
+### Archivos nuevos
+- **`learning/portswigger/xxe-via-file-upload-svg/writeup.md`**: 9 secciones, sección 3 dedicada al catálogo de "formatos ocultamente XML", sección 4.2 explica la distinción server-side vs client-side de la expansión.
+- **`learning/portswigger/xxe-via-file-upload-svg/exploit.svg`**: SVG malicioso validado (idéntico al que el usuario usó en el lab, leyendo `/etc/hostname`).
+
+### Conexión inventario
+- `analisis-xxe.md`: + `portswigger/xxe-via-file-upload-svg` en `learning_refs:`. + 10 aliases nuevos (`SVG XXE, malicious SVG upload, file upload XXE, ImageTragick, image processor XXE, DOCX XXE, EPUB XXE, RSS XXE, hidden XML formats, visual exfiltration via SVG text`).
+
+### Cierre de la serie XXE Practitioner
+
+Con este writeup queda completa la serie XXE Practitioner sin Pro:
+1. `exploiting-xxe-to-retrieve-files` — DOCTYPE inline + general entity, file://
+2. `exploiting-xxe-to-perform-ssrf` — mismo + http://, IMDS exploitation
+3. `blind-xxe-data-retrieval-via-error-messages` — DTD remoto + parameter entities + error-based exfil
+4. `xinclude-attack-retrieve-files` — XInclude vector ortogonal a DOCTYPE/ENTITY
+5. `xxe-via-file-upload-svg` — XXE en formato "imagen", canal visual
+
+Aplazados en PENDING (requieren Burp Pro Collaborator):
+- `lab-xxe-with-out-of-band-interaction` — blind puro
+- `lab-xxe-with-out-of-band-interaction-using-parameter-entities` — parameter entities OOB
+- `lab-xxe-with-data-exfiltration` — DTD remoto + Collaborator
+
+---
+
+## [2026-05-05] — Sesión 20f (writeup PortSwigger Exploiting XInclude to retrieve files)
+
+Quinto lab de la serie XXE, primer cambio fundamental respecto a los anteriores: la app no acepta XML directo del usuario, recibe form-urlencoded (`productId=1&storeId=1`) y construye XML server-side embebiendo los valores. El atacante pierde control del documento entero (no puede declarar DOCTYPE), pero gana acceso a un vector ortogonal: XInclude.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **XInclude bypassa la mitigación principal de XXE**. La defensa clásica `disallow-doctype-decl=true` no afecta XInclude porque XInclude no usa DOCTYPE/ENTITY: vive como un elemento XML normal con namespace `xmlns:xi="http://www.w3.org/2001/XInclude"`. Se controla con un setting separado (`setXIncludeAware(false)`). Equipos que mitigan XXE clásico y se quedan tranquilos siguen vulnerables si XInclude está activo.
+
+2. **No necesitas controlar el documento entero para atacar XML server-side**. Si controlas un fragmento que el server inyecta dentro de un XML construido server-side y luego parsea, es atacable. Reformula la categoría: XXE no es "el atacante envía XML"; es "el parser server-side procesa entidades/inclusiones controladas por el atacante en algún punto del documento". Apps que envuelven JSON/form input en XML para legacy backends son vulnerables aunque jamás reciban XML directo.
+
+3. **`parse="text"` es default operacional para exfiltración de archivos no-XML**. Sin `parse="text"`, el parser intenta validar el contenido del archivo como XML. `/etc/passwd` falla esa validación y el ataque rompe silenciosamente. Olvidarlo es uno de los errores más frecuentes en payloads XInclude.
+
+4. **Vectores XML paralelos a XInclude**: XSLT con `document()`, XPath con `doc()`, schema imports, todos resuelven recursos externos basándose en input. Auditar features del parser es más amplio que "deshabilité DOCTYPE".
+
+### Archivos nuevos
+- **`learning/portswigger/xinclude-attack-retrieve-files/writeup.md`**: 9 secciones, sección 2 dedicada a la diferencia con los XXE anteriores, sección 5.1 explica por qué XInclude bypassa la mitigación clásica.
+- **`learning/portswigger/xinclude-attack-retrieve-files/payload.txt`**: snippet XInclude + body URL-encoded.
+
+### Conexión inventario
+- `analisis-xxe.md`: + `portswigger/xinclude-attack-retrieve-files` en `learning_refs:`. + 7 aliases nuevos (`XInclude, xi:include, parse=text XInclude, server-side XML construction, form-encoded XML injection, setXIncludeAware bypass, XInclude without DOCTYPE`).
+
+---
+
+## [2026-05-05] — Sesión 20e (writeup PortSwigger Blind XXE to retrieve data via error messages)
+
+Lab Practitioner de XXE, primero de la serie blind que se completa sin Burp Pro. Junta tres trucos no obvios: parameter entities anidadas, double encoding del `%` con `&#x25;`, y path inexistente como canal de salida vía `FileNotFoundException`. Resuelto con DTD malicioso hospedado en el exploit server del lab + payload XML con DOCTYPE que carga el DTD remoto.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Parameter entities + DTD externo desbloquean anidamientos prohibidos en DTD interno**. XML 1.0 prohíbe que general entities en DTDs inline contengan referencias a otras entidades. Parameter entities sí pueden anidarse, pero solo si la declaración vive en un DTD externo. La técnica genérica reusable: **si necesitas encadenar entidades en XXE, mueves la cadena al exploit server**.
+
+2. **Double encoding `&#x25;` (=`%`) controla el momento de expansión**. Si pones `%` literal en el valor de una entity declaration, el parser intenta expandir esa referencia al **declarar** la entidad (orden de expansión XML). `&#x25;` se decodifica a `%` solo cuando la outer entity se **expande**, difiriendo la interpretación de la declaración interna. Técnica reusable en cualquier ataque que requiera una segunda ronda de procesamiento (path traversal, SQLi, template injection).
+
+3. **Path inexistente como canal de salida vía error message**. Cualquier `SYSTEM URL` que el parser falla en resolver produce un error con el path completo en el mensaje. Concatenar el contenido leído del archivo dentro de un path inválido lo expone en el stack trace. Patrón reusable: SQL error-based, XSLT error-based, XPath error-based — todos siguen "construct que falla específicamente cuando el dato target tiene cierta propiedad, reflejado al cliente".
+
+4. **Lección operacional para PENDING**: aplazar un lab "blind XXE" sin verificar si tiene exploit server es prematuro. PortSwigger provee exploit server (`*.exploit-server.net`) whitelisted en el firewall; hospedar el DTD ahí + exfil por error messages permite resolver sin Collaborator/Burp Pro. PENDING.md actualizado para registrar esta distinción.
+
+### Archivos nuevos
+- **`learning/portswigger/blind-xxe-data-retrieval-via-error-messages/writeup.md`**: 9 secciones, sección 3 dedicada a parameter entities vs general entities, sección 4.3 con el desenrolle paso por paso de la cadena, sección 5.2 explica el double encoding en términos del orden de expansión XML.
+- **`learning/portswigger/blind-xxe-data-retrieval-via-error-messages/malicious.dtd`**: DTD para hospedar en exploit server.
+- **`learning/portswigger/blind-xxe-data-retrieval-via-error-messages/payload.xml`**: XML body con DOCTYPE que carga el DTD remoto.
+
+### Conexión inventario
+- `analisis-xxe.md`: + `portswigger/blind-xxe-data-retrieval-via-error-messages` en `learning_refs:`. + 9 aliases nuevos (`blind XXE, parameter entity, error-based XXE, malicious external DTD, FileNotFoundException leak, double encoding XML, character entity reference, deferred entity expansion, Yunusov Osipov technique`).
+- `learning/portswigger/PENDING.md`: nota agregada sobre el matiz de blind XXE con exploit server.
+
+---
+
+## [2026-05-05] — Sesión 20d (writeup PortSwigger Exploiting XXE to perform SSRF)
+
+Segundo lab de la serie XXE. Cambia un solo carácter en el payload del lab anterior (`file://` → `http://`) y se vuelve un vector completamente distinto: SSRF al cloud metadata service de AWS para leakear credenciales IAM. Se resolvió saltando directo a `/latest/meta-data/iam/security-credentials/admin` y obteniendo `AccessKeyId`, `SecretAccessKey`, `Token` del rol.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **XXE no es solo file disclosure; es SSRF gratis**. El URL handler del parser XML resuelve cualquier esquema (`file:`, `http:`, `https:`, `ftp:`, `gopher:`, `jar:`...). No hay separación entre "esquemas seguros para input externo" y "esquemas seguros para internal-only". Cualquier endpoint que parsee XML user-controlled con un parser default-vulnerable es potencialmente SSRF a la red interna del server.
+
+2. **Cloud metadata services son target #1 de SSRF**. AWS IMDSv1 en `169.254.169.254` no requiere auth porque asume "si puedes hablar con esta IP, ya estás dentro de la instancia". La asunción se rompe en presencia de SSRF. AWS IMDSv2 lo arregla con protocolo de dos pasos (PUT para token + GET con header del token), incompatible con SSRF GET-only típico. Forzar IMDSv2 (`http-tokens required`) es la mitigación moderna; instancias legacy en IMDSv1 siguen vulnerables.
+
+3. **Capital One (2019) es el case study canónico de este vector**. WAF mal configurado dejó SSRF a `169.254.169.254`, atacante leyó credenciales IAM, accedió a S3, exfiltró 100M+ records. La mitigación post-incident no fue solo arreglar el WAF: AWS lanzó IMDSv2 como respuesta directa al patrón.
+
+4. **JSON sobrevive parsing XML porque no contiene `<` ni `&` literales**. El JSON del IMDS usa `{`, `}`, `:`, `"`, `,`, todos benignos en XML. Eso permite insertion sin necesidad de wrapper de codificación. Si el target devolviera HTML/XML, el parse rompería y necesitarías exfil OOB.
+
+5. **La premisa "no auth porque red aislada" se rompe transitivamente**. Cualquier servicio interno sin auth (Redis, Elasticsearch, Memcached, paneles admin "solo LAN", IMDS, Consul/etcd) es atacable a través de SSRF que viaje desde un endpoint externo. Auth en todos los servicios internos, incluso "no expuestos", es defense in depth real.
+
+### Archivos nuevos
+- **`learning/portswigger/exploiting-xxe-to-perform-ssrf/writeup.md`**: 9 secciones, sección 2 dedicada a la diferencia con el lab gemelo (file retrieval), sección 5.2 explica IMDSv1 vs IMDSv2 y el contexto Capital One.
+- **`learning/portswigger/exploiting-xxe-to-perform-ssrf/payload.xml`**: payload validado.
+
+### Conexión inventario
+- `analisis-xxe.md`: + `portswigger/exploiting-xxe-to-perform-ssrf` en `learning_refs:`.
+- `analisis-ssrf.md`: + `portswigger/exploiting-xxe-to-perform-ssrf` en `learning_refs:` (antes vacío). + 14 aliases nuevos (`AWS IMDS exploitation, EC2 metadata SSRF, 169.254.169.254, link-local IP abuse, cloud metadata theft, IAM credential theft via SSRF, IMDSv1 vs IMDSv2, Capital One breach pattern, XXE to SSRF, gopher SSRF, internal port scan via SSRF, redirect chain SSRF, blind SSRF`).
+
+---
+
+## [2026-05-05] — Sesión 20c (writeup PortSwigger Exploiting XXE to retrieve files)
+
+Primer lab de la serie XXE, foundational. Mecánica básica de external entities con `SYSTEM "file:///..."` exfiltrando vía reflexión del `productId` en mensaje de error "Invalid product ID: ...". El inventario tenía `analisis-xxe.md` pero `learning_refs` estaba vacío; ahora apunta a este writeup.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **`<?xml ?>` declaration tiene una invariante de byte 0**. Cualquier carácter previo (newline, espacio, BOM) la convierte en processing instruction y el parser rechaza con `"The processing instruction target matching '[xX][mM][lL]' is not allowed"` (error que tuve que diagnosticar en vivo). La forma robusta es **omitir la declaración** completamente; XML 1.0 la permite opcional (UTF-8 y version 1.0 son defaults). Pegar payloads en Burp Repeater es fuente común de este bug porque el editor a veces deja un newline inicial.
+
+2. **Reflexión de input en error es un bug independiente que se vuelve crítico en combo**. El "Invalid product ID: <valor>" reflejado es inocuo por sí solo (usuario ve su propio input). Combinado con XXE se vuelve canal de exfiltración inmediato. Pattern recurrente: dos defectos individualmente menores acoplándose en uno crítico.
+
+3. **El parser sustituye contenido de archivo sin escapar caracteres XML**. Si el archivo target contiene `<`, `>`, `&`, rompe el documento padre y el parse falla. `/etc/passwd` funciona porque solo tiene chars seguros; archivos de config/source code requieren wrapper (`php://filter` para base64 si es PHP, o exfil OOB si no).
+
+4. **Default-vulnerability matrix de parsers XML**: Java DocumentBuilderFactory (vuln antes de hardening explicit), libxml2 (antes de versions recientes), .NET XmlDocument (antes 4.5.2 con XmlResolver no null), Python lxml/xml.sax (vuln, defusedxml es el wrapper canónico). Documentar cuál estás usando y verificar settings concretos.
+
+### Archivos nuevos
+- **`learning/portswigger/exploiting-xxe-to-retrieve-files/writeup.md`**: 8 secciones, sección 3.3 dedicada al escollo del `<?xml ?>` declaration por aprendizaje en vivo.
+- **`learning/portswigger/exploiting-xxe-to-retrieve-files/payload.xml`**: payload validado (sin `<?xml ?>` para robustez).
+
+### Conexión inventario
+- `analisis-xxe.md`: + `portswigger/exploiting-xxe-to-retrieve-files` en `learning_refs:` (antes vacío). + 12 aliases nuevos (`SYSTEM entity, DOCTYPE injection, file:// XXE, XML LFI, billion laughs, XML bomb, XInclude injection, defusedxml, DocumentBuilderFactory hardening, php://filter base64 XXE`, etc.) — el archivo tenía solo 3 aliases mínimos derivados del título.
+
+---
+
+## [2026-05-05] — Sesión 20b (writeup PortSwigger Clobbering DOM attributes to bypass HTML filters)
+
+Segundo capítulo de DOM clobbering en la serie. Donde el lab anterior (`dom-xss-exploiting-dom-clobbering`) clobbereaba variables de la app, este clobberea **propiedades del propio DOM API** (`form.attributes`) para bypassear el sanitizer **HTMLJanitor** desde dentro. La diferencia didáctica vale el writeup separado.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Named access en `<form>` shadow-ea propiedades de prototipo**. `<form><input id=attributes></form>` hace que `form.attributes` apunte al input, no al `NamedNodeMap`. El lookup se resuelve en propiedades propias antes de llegar al getter de `Element.prototype.attributes`. Esto rompe cualquier sanitizer que enumere atributos vía `node.attributes` con dot notation.
+
+2. **DOM clobbering puede atacar al sanitizer, no solo a la app**. Reformula la categoría de ataque: si el sanitizer enumera/inspecciona vía propiedades clobbereables del DOM, está atacable con HTML estático bien formado. Fix correcta: usar APIs no clobbereables (`Element.prototype.getAttributeNames.call(node)`) o sanitizers que operen sobre representaciones internas (DOMPurify).
+
+3. **Race condition con fragment focus en SPAs/blogs async**. Un redirect top-level a `URL#x` falla cuando el target del hash se carga async después del initial HTML: el browser procesa el fragment antes de que `id=x` exista, no encuentra match, y descarta sin reaplicar focus cuando el elemento aparece después. Solución genérica: iframe con onload re-navegando al mismo URL+`#x` (same-document navigation que procesa fragment contra DOM ya poblado).
+
+4. **El truco del flag `window.x` en el onload**. Cambiar `iframe.src` dispara otro onload; sin guard, loop infinito. Idiom estándar: `if (!window.x) { window.x = 1; this.src += '#x' }`.
+
+5. **SOP no impide cambiar `iframe.src` ni escuchar `load` del elemento**. Esas dos primitivas son suficientes para orquestar el ataque cross-origin sin necesidad de leer DOM del lab.
+
+### Archivos nuevos
+- **`learning/portswigger/clobbering-dom-attributes-bypass-html-filters/writeup.md`**: 9 secciones, sección 2 explicita la diferencia con el lab gemelo, sección 4.3 cubre la race condition completa.
+- **`learning/portswigger/clobbering-dom-attributes-bypass-html-filters/exploit.html`**: payload del exploit server (iframe + onload).
+
+### Conexión inventario
+- `analisis-xss.md`: + `portswigger/clobbering-dom-attributes-bypass-html-filters` en `learning_refs:`. + aliases `HTMLJanitor bypass, form.attributes clobbering, sanitizer bypass via DOM clobbering, fragment focus race condition, iframe re-navigation fragment`.
+
+---
+
+## [2026-05-05] — Sesión 20 (writeup PortSwigger Basic clickjacking with CSRF token protection)
+
+Lab gemelo del de "prefilled form input" que ya estaba documentado. Misma mecánica operacional (iframe + decoy sobre `/my-account?email=...`), distinta lección didáctica: este lab aísla la pregunta "¿el token CSRF defiende contra clickjacking?". Respuesta: no, porque la request la fabrica el navegador de la víctima sobre la página real, así que el token siempre es válido.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Token CSRF y clickjacking defienden cosas distintas**. El token defiende el origen de la request; clickjacking secuestra el origen del *click*. Son ortogonales, no sustitutos. Una protección no implica la otra.
+
+2. **El `?email=...` en la URL es el habilitador real**. Sin prefill por query param, la víctima tendría que escribir el valor además de hacer click; el ataque escala a múltiples acciones de la víctima y se vuelve mucho menos confiable.
+
+3. **Calibración con `opacity` intermedia es la forma profesional**. Trabajar con `opacity: 0` desde el principio es ciego; `0.5` permite ver el iframe debajo del decoy y ajustar `top`/`left` con confianza. Para este lab afinó en `top: 555px` (vs `top: 400px` del lab prefilled, distinto layout).
+
+4. **El bot del lab acepta `opacity: 0.5` igual**. La invisibilidad real (`opacity: 0.0001`) es para un ataque "creíble" en producción; para resolver el lab basta con que el click programado caiga en el botón.
+
+### Archivos nuevos
+- **`learning/portswigger/clickjacking-basic-csrf-protected/writeup.md`**: 9 secciones, sección 2 explícita sobre la diferencia con el lab `prefilled-form-input` para que el par tenga sentido como unidad didáctica.
+- **`learning/portswigger/clickjacking-basic-csrf-protected/exploit.html`**: payload validado con `top: 555px`, `opacity: 0.5`.
+
+### Conexión inventario
+- `analisis-csrf.md`: + `portswigger/clickjacking-prefilled-form-input` y `portswigger/clickjacking-basic-csrf-protected` en `learning_refs:`. (Antes solo enlazaba labs de bypass por XSS y SameSite; ahora cubre también el vector de clickjacking, que es ortogonal al CSRF token.)
+
+---
+
 ## [2026-05-04] — Sesión 19x (writeup PortSwigger CSP bypass via directive injection)
 
 Lab corto pero muy didáctico. La CSP del lab incluía `report-uri /csp-report?token=` con el `token` reflejado tal cual desde el query string. Pasar `;` y comillas sin sanitizar permite añadir directivas nuevas al header. La directiva `script-src-elem 'unsafe-inline'`, al ser más específica que `script-src`, gana sobre `script-src 'self'` para los `<script>` elements y permite ejecutar inline.

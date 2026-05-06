@@ -1,13 +1,13 @@
 ---
 title: Análisis de XXE (XML External Entity)
 slug: analisis-xxe
-aliases: [XXE, XML External Entity, XML Injection]
+aliases: [XXE, XML External Entity, XML Injection, external entity injection, SYSTEM entity, DOCTYPE injection, file:// XXE, XML LFI, billion laughs, XML bomb, XInclude injection, defusedxml, DocumentBuilderFactory hardening, php://filter base64 XXE, blind XXE, parameter entity, error-based XXE, malicious external DTD, FileNotFoundException leak, double encoding XML, character entity reference, deferred entity expansion, Yunusov Osipov technique, XInclude, xi:include, parse=text XInclude, server-side XML construction, form-encoded XML injection, setXIncludeAware bypass, XInclude without DOCTYPE, SVG XXE, malicious SVG upload, file upload XXE, ImageTragick, image processor XXE, DOCX XXE, EPUB XXE, RSS XXE, hidden XML formats, visual exfiltration via SVG text, local DTD repurposing, ISOamso, docbookx.dtd, dtd-finder, parameter entity redefinition, numeric vs named entity in DTD, Xerces strict entity expansion, no infrastructure XXE, GoSecure dtd-finder]
 fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
 related: [analisis-ssrf, analisis-deserialization, analisis-sqli]
-learning_refs: []
+learning_refs: [portswigger/exploiting-xxe-to-retrieve-files, portswigger/exploiting-xxe-to-perform-ssrf, portswigger/blind-xxe-data-retrieval-via-error-messages, portswigger/xinclude-attack-retrieve-files, portswigger/xxe-via-file-upload-svg, portswigger/xxe-trigger-error-via-local-dtd]
 ---
 
 # Análisis de XXE (XML External Entity)
