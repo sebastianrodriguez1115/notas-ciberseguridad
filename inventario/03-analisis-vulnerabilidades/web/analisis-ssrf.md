@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Avanzada
 mitre: [T1190]
 related: [fuzzing-lfi-ssrf, analisis-xxe]
-learning_refs: [portswigger/exploiting-xxe-to-perform-ssrf, portswigger/basic-ssrf-against-localhost, portswigger/basic-ssrf-against-backend-system]
+learning_refs: [portswigger/exploiting-xxe-to-perform-ssrf, portswigger/basic-ssrf-against-localhost, portswigger/basic-ssrf-against-backend-system, portswigger/ssrf-with-blacklist-filter, portswigger/ssrf-filter-bypass-via-open-redirection]
 ---
 
 # Análisis de SSRF (Server-Side Request Forgery)

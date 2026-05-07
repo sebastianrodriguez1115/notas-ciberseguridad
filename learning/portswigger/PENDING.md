@@ -15,6 +15,24 @@ PortSwigger bloquea por firewall el tráfico saliente desde el navegador del bot
 
 ## Labs aplazados
 
+### SSRF Blind con detección out-of-band — aplazado 2026-05-06
+
+- **Blind SSRF with out-of-band detection**
+  https://portswigger.net/web-security/ssrf/blind/lab-out-of-band-detection
+  Razón: `infra-externa-bloqueada-por-firewall + lab cuyo único objetivo es disparar callback OOB`.
+
+  El lab tiene la cabecera `Referer` como vector vulnerable: el back-end hace una petición server-side al valor de `Referer` cuando se navega a un producto. Detectar la SSRF requiere que ese request llegue a un punto de escucha controlado por el atacante. No hay reflejo in-band ni exploit server, y la métrica de éxito del lab es literalmente "Burp Collaborator recibió un DNS o HTTP lookup". No hay forma honesta de cumplirlo sin Collaborator (`*.oastify.com`), webhook.site/interactsh/requestbin están bloqueados por el firewall.
+
+  Payload listo para retomar (con Burp Pro):
+  ```http
+  GET /product?productId=1 HTTP/2
+  Host: <lab-host>.web-security-academy.net
+  Referer: http://COLLAB-ID.oastify.com
+  ```
+  Esperar un DNS lookup en el panel de Collaborator. Lab Solved.
+
+  Nota: a diferencia de los XXE blind, acá ni siquiera la auto-exfiltración same-origin sirve, porque la "exfiltración" no existe — no hay datos que robar, sólo un callback que confirme la SSRF. La verificación es del lado del atacante (recibir el ping), no del lado del lab.
+
 ### XXE serie blind (requieren Burp Collaborator) — aplazados 2026-05-05
 
 Los tres labs comparten la misma limitación: el endpoint `/product/stock` no refleja nada en la respuesta (blind), no hay exploit server provisto, y el firewall del lab bloquea egress a webhook.site/interactsh/requestbin. La ruta same-origin tampoco aplica porque el endpoint no almacena ni renderiza datos user-visible donde leerlos después. Único canal de salida: Collaborator (`*.oastify.com`), que requiere Burp Suite Professional.

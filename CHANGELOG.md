@@ -2,6 +2,58 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-06] — Writeup PortSwigger SSRF filter bypass via open redirection
+
+Cuarto lab de SSRF (Practitioner). Cambia la clase de bypass: el filtro sobre `stockApi` ahora es allowlist same-origin (estricta y "correcta" en su contexto), pero el lab tiene un open redirect en `/product/nextProduct?path=` dentro del propio dominio. Se encadenan: `stockApi=/product/nextProduct?path=http://192.168.0.12:8080/admin/delete?username=carlos`. El filtro valida el primer hop (same-origin), el cliente HTTP del back-end sigue automáticamente la 302 al destino externo.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Severidad emergente por composición**. Open redirect aislado se clasifica "informational/low" (sólo facilita phishing). Filtro same-origin aislado se considera "mitigado, no es vulnerabilidad". Compuestos por un cliente HTTP que sigue redirects automáticamente: SSRF crítica con compromise interno completo. La auditoría por componentes deja gaps en las interacciones; las clasificaciones por tipo de bug son aproximaciones engañosas.
+2. **Validar el destino final post-redirects, no sólo el primer hop**. La fix elegante: deshabilitar follow-redirects en el cliente HTTP server-side (`allow_redirects=False`). Si la feature no necesita seguir redirects (raramente lo necesita en flujos server-to-server), eso cierra la clase entera.
+3. **Open redirects son anti-pattern incluso sin SSRF**. Cualquier endpoint que refleje `redirect`/`goto`/`path` en `Location` sin allowlist es bug latente que eventualmente compone. Fix universal: aceptar IDs (no URLs/paths) y construir el destino server-side.
+4. **Progresión de clases de bypass en la serie SSRF**: lab #1 sin filtro (directo), lab #2 sin filtro pero target desconocido (sweep), lab #3 blacklist (representación alternativa + parser differential), lab #4 allowlist same-origin (composición con feature legítima). Cada lab cambia la *clase* de bypass, no sólo el payload.
+
+### Archivos nuevos
+- **`learning/portswigger/ssrf-filter-bypass-via-open-redirection/writeup.md`**: 7 secciones, énfasis en severidad emergente por composición y por qué allowlist de origen no alcanza para SSRF cuando el cliente HTTP sigue redirects.
+
+### Conexión inventario
+- `analisis-ssrf.md`: + `portswigger/ssrf-filter-bypass-via-open-redirection` en `learning_refs:` (5 writeups SSRF: loopback, backend discovery, blacklist bypass, open redirect chain, XXE→IMDS).
+
+### Verificación
+- `bash scripts/check.sh` ✓ (143 tests, 129/129 frontmatter OK, indexes idempotentes).
+
+---
+
+## [2026-05-06] — Writeup PortSwigger SSRF with blacklist-based input filter + PENDING blind SSRF OOB
+
+Tercer lab de SSRF (Practitioner). Doble blacklist (host: `localhost`/`127.0.0.1`; path: `admin`) que se bypassea con dos técnicas combinadas:
+- Host: `127.1` (POSIX expande a `127.0.0.1` pero la string literal no matchea la blacklist).
+- Path: double URL encoding sobre la `a` de `admin` → `%2561dmin`. El filtro decodea una vez y ve `%61dmin`; el cliente HTTP del back-end decodea otra vez y ve `admin`. **Parser differential**.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Las dos blacklists son independientes** y se aplican sobre dimensiones distintas del mismo request. Romperlas requiere combinar host bypass + path bypass simultáneamente (mi primer intento dejaba `127.0.0.1` literal y el server seguía bloqueando aunque el path ya estaba ofuscado).
+2. **Double encoding va sólo sobre el carácter a esconder, no sobre todo el body**. Mi segundo intento encodee dos veces toda la línea incluyendo el `=` separador de form, así el parser de form vio un único string sin clave-valor y respondió `"Missing parameter 'stockApi'"`. La regla: form-transport encoding es UNA capa sobre el valor (sin tocar `=`/`&` separadores); bypass encoding es UNA capa extra sobre el carácter específico que evade el filtro.
+3. **Parser differential como clase de bug, no truco aislado**. Doble encoding contra blacklist es la misma idea que HTTP request smuggling (CL vs TE), path traversal con `%252e%252e`, unicode normalization differentials, JSON parser differentials. Cualquier sistema con check-y-act donde los dos parsers no coinciden en normalización tiene la clase. Reconocerla como categoría > acumular trucos.
+4. **Allowlist post-DNS es la fix correcta**. Validar input sobre IP resuelta (rechazar loopback/RFC1918/link-local), no sobre string del input. Eso neutraliza representaciones alternativas (`127.1`, `2130706433`, `0`, `[::1]`, `localtest.me`) en una sola regla.
+
+### Sección "Errores comunes" pedagógica
+El writeup incluye §4 "Errores comunes (vividos durante este lab)" con los dos errores que cometí al resolverlo, ambos didácticos. Patrón a replicar: cuando el debugging revela un mecanismo del input/parser, vale más documentar el camino completo (intento fallido → diagnóstico → fix) que sólo el payload final. El error es el momento donde el estudiante construye el modelo mental.
+
+### Archivos nuevos
+- **`learning/portswigger/ssrf-with-blacklist-filter/writeup.md`**: 8 secciones, énfasis en la separación entre las dos blacklists, mecánica del double encoding como parser differential, errores comunes, contramedidas en orden de robustez.
+
+### Conexión inventario
+- `analisis-ssrf.md`: + `portswigger/ssrf-with-blacklist-filter` en `learning_refs:` (4 writeups SSRF: loopback, backend discovery, blacklist bypass, XXE→IMDS).
+
+### PENDING actualizado
+- `learning/portswigger/PENDING.md`: añadido **Blind SSRF with out-of-band detection** (https://portswigger.net/web-security/ssrf/blind/lab-out-of-band-detection). Razón: única métrica de éxito es callback OOB recibido por Collaborator, no hay reflejo in-band ni exploit server. Aplaza con payload listo para retomar con Burp Pro: cabecera `Referer: http://COLLAB-ID.oastify.com` en GET `/product?productId=1`.
+
+### Verificación
+- `bash scripts/check.sh` ✓ (143 tests, 129/129 frontmatter OK, indexes idempotentes).
+
+---
+
 ## [2026-05-06] — Writeup PortSwigger Basic SSRF against another back-end system + script de scan
 
 Segundo lab de SSRF (Apprentice). Mismo `stockApi`, pero el panel admin vive en `192.168.0.X:8080/admin` con `X` desconocido. La diferencia clave con el lab #1: ahora hay que **descubrir** la IP del back-end. Burp Community throttlea Intruder severamente (~1 req/s), así que escribí un script Python concurrente (`scan.py`, 30 workers, stdlib + requests) que termina los 255 requests en ~10-20s.
