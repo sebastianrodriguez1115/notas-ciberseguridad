@@ -2,6 +2,27 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-06] — Writeup PortSwigger Basic SSRF against the local server
+
+Primer writeup de SSRF en la serie. Lab Apprentice clásico: parámetro `stockApi` en POST `/product/stock` acepta una URL completa controlada por el cliente; la aplicación la sigue server-side sin validación. Resolución en dos hits a Repeater: (1) `stockApi=http://localhost/admin` revela el panel admin no autenticado (asume `remote_addr == 127.0.0.1` ⇒ caller confiable); (2) `stockApi=http%3A%2F%2Flocalhost%2Fadmin%2Fdelete%3Fusername%3Dcarlos` ejecuta el delete y devuelve 302 a `/admin`.
+
+### Foco del writeup
+
+- **El antipatrón "loopback ⇒ confiable"**: la auth del panel admin se salta cuando `request.remote_addr == 127.0.0.1`. SSRF rompe la premisa porque la fuente de la petición (loopback de la app) miente sobre el actor real (atacante remoto). La fix correcta no es bloquear loopback sino *exigir auth siempre*, incluso desde 127.0.0.1.
+- **Diferencia con SSRF→IMDS** (lab `exploiting-xxe-to-perform-ssrf`): mismo paradigma (server convertido en proxy), distinto vector (form param que espera URL vs parser XML que delega resolución) y distinto blast radius (panel admin local vs cuenta cloud entera).
+- **Cuándo encodear el valor de `stockApi`**: como viaja en `application/x-www-form-urlencoded`, los `:`, `/`, `?`, `=` necesitan escape para no ser interpretados como separadores de form, no por el server-side request en sí.
+
+### Archivos nuevos
+- **`learning/portswigger/lab-basic-ssrf-against-localhost/writeup.md`**: 7 secciones con tabla comparativa loopback-SSRF vs IMDS-SSRF y diagrama Mermaid de la cadena.
+
+### Conexión inventario
+- `analisis-ssrf.md`: + `portswigger/lab-basic-ssrf-against-localhost` en `learning_refs:` (ahora 2 writeups apuntando a SSRF: el clásico loopback y el XXE→IMDS).
+
+### Verificación
+- `bash scripts/check.sh` ✓ (143 tests, 129/129 frontmatter OK, indexes idempotentes tras regenerar `TOPICS.md`).
+
+---
+
 ## [2026-05-06] — Sesión 20h (writeup PortSwigger XXE retrieving data by repurposing local DTD)
 
 Lab Practitioner más sofisticado de la serie XXE. Sin Collaborator, sin exploit server, sin red externa. Técnica: "Local DTD Repurposing" (Yunusov & Osipov, 2018). Resuelto leyendo `/etc/passwd` cargando `/usr/share/yelp/dtd/docbookx.dtd` (DTD local del paquete docbook-xml) y redefiniendo `%ISOamso` con cadena maliciosa que dispara FileNotFoundException con el contenido del archivo en el mensaje. Encontré un gotcha crítico durante el debugging: `&apos;` no se expande en parsers Java estrictos en contexto DTD nested.
