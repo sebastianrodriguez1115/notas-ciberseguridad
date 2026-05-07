@@ -1,13 +1,13 @@
 ---
 title: Ataques de Fuerza Bruta Avanzados
 slug: explotacion-brute-force-advanced
-aliases: [Ataques de Fuerza Bruta Avanzados]
+aliases: [Ataques de Fuerza Bruta Avanzados, brute force, password guessing, username enumeration, account enumeration, side-channel auth, response differential, observable response discrepancy, login form fuzzing, credential bruteforce, hydra, medusa, password spraying]
 fase: [Explotación]
 plataforma: Multi
 dificultad: Intermedia
 mitre: [T1110.001, T1110.003]
-related: []
-learning_refs: []
+related: [explotacion-password-spraying]
+learning_refs: [portswigger/username-enumeration-via-different-responses]
 ---
 
 # Ataques de Fuerza Bruta Avanzados

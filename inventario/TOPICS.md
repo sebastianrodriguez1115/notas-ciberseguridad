@@ -474,7 +474,9 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/credenciales/explotacion-brute-force-advanced.md`](./04-explotacion/credenciales/explotacion-brute-force-advanced.md)
 - **Fase**: Explotación · **Plataforma**: Multi · **Dificultad**: Intermedia
-- **Aliases**: Ataques de Fuerza Bruta Avanzados
+- **Aliases**: Ataques de Fuerza Bruta Avanzados, brute force, password guessing, username enumeration, account enumeration, side-channel auth, response differential, observable response discrepancy, login form fuzzing, credential bruteforce, hydra, medusa, password spraying
+- **Related**: `explotacion-password-spraying`
+- **Learning**: [`portswigger/username-enumeration-via-different-responses`](../learning/portswigger/username-enumeration-via-different-responses/)
 
 ## `explotacion-buffer-overflow-stack` — Explotación de Buffer Overflow (Stack-based x86)
 

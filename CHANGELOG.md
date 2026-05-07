@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-06] — Writeup PortSwigger Username enumeration via different responses + script bruteforce.py
+
+Primer lab de la serie Authentication (Apprentice). El login form responde "Invalid username" (length 3244) cuando el usuario no existe y "Incorrect password" (length 3246) cuando existe pero el password está mal. Diferencia textual de 2 bytes que se automatiza por response-length outlier. Side-channel divide el espacio de 100×100 = 10k a 100+100 = 200 requests (**reducción de 50x**).
+
+Burp Community throttlea Intruder, así que escribí `bruteforce.py` (paralelo, 20 workers, dos fases secuenciales) que termina ambas en ~10s. Output del run real: fase 1 detectó username `acceso` por outlier `(200, 3246)` contra 100 hosts en `(200, 3244)`; fase 2 detectó password `1qaz2wsx` por outlier `(302, 0)` contra 99 en `(200, 3246)`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Side-channels en auth son la categoría más explotable**, no sólo texto del error: length, status code, timing (bcrypt sólo si user existe → short-circuit timing differential), cookies set, lockout differential per-user, status del endpoint de password reset. El defender debe cerrar **todos**, no sólo el más obvio. Mensaje uniforme + status uniforme + constant-time + sin Set-Cookie diferenciado.
+2. **Constant-time response es defensa orthogonal y no opcional**. Aunque el texto y length se igualen, sin hash dummy en la rama "user not found" el atacante mide latencia y descubre usernames válidos por respuesta lenta. La fix: en rama de fallo de username, hashear el password contra `DUMMY_HASH` precomputado para igualar el costo computacional al del bcrypt real.
+3. **Rate limiting per-IP + per-username** son ortogonales: solo per-IP permite distributed brute-force; solo per-user habilita username enumeration vía lockout differential. Hay que combinarlos. Con jitter en el lockout para no entregar el timing exacto.
+4. **Username enumeration + password spraying se complementan en sistemas reales con lockout**. Enum con un password dummy compartido (no aumenta intentos malos contra ningún user específico); spraying de uno o dos passwords comunes para bypass del lockout per-user.
+5. **El cambio de status 200→302 en el login exitoso es la firma más fuerte de fase 2**, mejor que length differential. Diseño común: 200 con re-render del form y mensaje de error vs 302 con `Location: /my-account` y body vacío.
+
+### Archivos nuevos
+- **`learning/portswigger/username-enumeration-via-different-responses/writeup.md`**: 7 secciones con tabla de side-channels en auth, mecánica de la fix con constant-time, y diagrama Mermaid de la cadena.
+- **`learning/portswigger/username-enumeration-via-different-responses/bruteforce.py`**: script reutilizable con detección de outlier por `(status, length)` fingerprint. Sirve para cualquier lab de login con response differential cambiando wordlists.
+- **`learning/portswigger/username-enumeration-via-different-responses/usernames.txt`** y **`passwords.txt`**: wordlists oficiales de PortSwigger guardadas localmente.
+
+### Conexión inventario
+- `explotacion-brute-force-advanced.md`: + 12 aliases (`brute force, password guessing, username enumeration, account enumeration, side-channel auth, response differential, observable response discrepancy, login form fuzzing, credential bruteforce, hydra, medusa, password spraying`). + `related: [explotacion-password-spraying]` (cross-link al pair conceptual). + `learning_refs: [portswigger/username-enumeration-via-different-responses]`.
+
+### Verificación
+- `bash scripts/check.sh` ✓ (143 tests, 129/129 frontmatter OK, indexes idempotentes).
+
+---
+
 ## [2026-05-06] — Writeup PortSwigger SSRF with whitelist-based input filter + PENDING blind shellshock
 
 Quinto lab de SSRF (Practitioner). Whitelist estricta del dominio del microservicio de stock (`stock.weliketoshop.net`); bypass por **parser differential sobre el componente host/userinfo de la URL** usando double encoding del `#`. Payload final: `stockApi=http://localhost:80%[email protected]/admin/delete?username=carlos`.
