@@ -330,6 +330,10 @@ archivos por valor de `by-mitre`.
 
 - [`pass-the-ticket`](../05-post-explotacion/lateral-movement/pass-the-ticket.md) — Pass-the-Ticket
 
+## T1556 (1)
+
+- [`explotacion-password-reset-flaws`](../04-explotacion/web/explotacion-password-reset-flaws.md) — Vulnerabilidades en Flujos de Password Reset
+
 ## T1556.006 (1)
 
 - [`explotacion-mfa-bypass`](../04-explotacion/web/explotacion-mfa-bypass.md) — Bypass de Autenticación Multi-Factor (MFA / 2FA)

@@ -2,6 +2,32 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-06] — Writeup PortSwigger Password reset broken logic + nuevo explotacion-password-reset-flaws.md
+
+Tercer lab de Authentication, primero del subgrupo Other mechanisms (Apprentice). El form de reset incluye `username` como hidden field; el server valida el token correctamente pero usa el `username` del request para decidir a quién aplicar el cambio de password. Tampering del campo: `wiener` → `carlos`, password `password`. Login como carlos con la nueva password. Lab solved.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Confused deputy aplicado a password reset**: el server tiene autoridad legítima para cambiar passwords pero deriva el target del request del cliente, no de su propio estado (BD). El cliente miente sobre la identidad y el server obedece. La fix es de una línea: usar `token.user` en vez de `User.find(username=request.form['username'])`.
+2. **Hidden inputs en flujos sensibles son red flag universal**. Si un campo no necesita ser cliente-controlable (por diseño de la operación), no debería estar como input. Cuando aparece, asumir que el bug está ahí hasta probar lo contrario.
+3. **Smell heurístico**: el campo `username` en form de reset es señal canónica del bug. La pregunta de diseño correcta: "¿cómo el server identifica al usuario que está reseteando?" Si la respuesta involucra al cliente, bug.
+4. **Schema correcto del token**: `(token PK, user_id FK, expires_at, consumed_at)`. Token tiene un user dueño en BD; identidad se deriva de esa relación; tras uso se invalida. Cuatro principios juntos.
+5. **Por qué este bug es frecuente en producción**: tentación de "pasar todo al backend para no perder contexto" (frontend embebe username como hidden), migraciones a microservicios sin re-pensar el modelo (el endpoint de reset no tiene acceso a la tabla de tokens), tests que cubren happy path no detectan el tampering.
+
+### Nuevo archivo de inventario
+- **`inventario/04-explotacion/web/explotacion-password-reset-flaws.md`**: cubre password reset bugs como categoría con 8 sub-clases documentadas (token no ligado al usuario, predecible, leakeado vía Referer, sin expiración, host header poisoning, response differential enum, sin rate-limit, brute-force de token de baja entropía). MITRE T1556. 13 aliases ricos. `related: [explotacion-mfa-bypass, explotacion-brute-force-advanced, explotacion-jwt]`. Anchor para los próximos labs de la serie Other Mechanisms.
+
+### Archivos nuevos
+- **`learning/portswigger/password-reset-broken-logic/writeup.md`**: 7 secciones con tabla comparativa de clases de bugs en password reset, schema correcto en pseudo-código, y diagrama Mermaid de la cadena.
+
+### Conexión inventario
+- `explotacion-password-reset-flaws.md`: + `portswigger/password-reset-broken-logic` en `learning_refs:`.
+
+### Verificación
+- `bash scripts/check.sh` ✓ (131 archivos, 131/131 OK, indexes idempotentes tras regenerar).
+
+---
+
 ## [2026-05-06] — Writeup PortSwigger 2FA simple bypass + nuevo archivo inventario explotacion-mfa-bypass.md
 
 Segundo lab de la serie Authentication, primero del subgrupo Multi-Factor (Apprentice). El server marca la sesión como totalmente autenticada tras el paso 1 (`/login` con username:password); el paso 2 (`/login2` con OTP) es decorativo. Bypass: login del paso 1 con `carlos:montoya`, **no completar paso 2**, navegar directo a `/my-account?id=carlos` con la cookie de sesión recibida en paso 1. Lab solved.

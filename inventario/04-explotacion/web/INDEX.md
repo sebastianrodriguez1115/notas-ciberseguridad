@@ -15,6 +15,7 @@ Explotación de vulnerabilidades en aplicaciones web y CMS.
 | [File Upload Exploitation](./explotacion-fileupload.md) | T1190 | Intermedia | Web |
 | [Inyección NoSQL (NoSQLi)](./explotacion-nosqli.md) | T1190 | Intermedia | Web |
 | [Inyección SQL (SQLi)](./explotacion-sqli.md) | T1190 | Intermedia | Web |
+| [Vulnerabilidades en Flujos de Password Reset](./explotacion-password-reset-flaws.md) | T1556 | Intermedia | Web |
 
 ---
 [Volver a Explotación](../INDEX.md)

@@ -67,7 +67,7 @@ archivos por valor de `by-fase`.
 - [`fuzzing-subdominios-vhosts`](../02-enumeracion/fuzzing/fuzzing-subdominios-vhosts.md) — Fuzzing de Subdominios y Virtual Hosts
 - [`nikto`](../02-enumeracion/web/nikto.md) — Escaneo de Vulnerabilidades Web con Nikto
 
-## Explotación (31)
+## Explotación (32)
 
 - [`configuracion-uso-avanzado`](../06-frameworks-herramientas/burp-suite/configuracion-uso-avanzado.md) — Configuración y Uso Avanzado
 - [`enumeracion-docker`](../02-enumeracion/servicios/enumeracion-docker.md) — Enumeración Docker (Puerto 2375/2376)
@@ -91,6 +91,7 @@ archivos por valor de `by-fase`.
 - [`explotacion-mitm6`](../04-explotacion/red/explotacion-mitm6.md) — IPv6 DNS Takeover con mitm6
 - [`explotacion-msfvenom`](../04-explotacion/client-side/explotacion-msfvenom.md) — Generación de Payloads con msfvenom
 - [`explotacion-nosqli`](../04-explotacion/web/explotacion-nosqli.md) — Inyección NoSQL (NoSQLi)
+- [`explotacion-password-reset-flaws`](../04-explotacion/web/explotacion-password-reset-flaws.md) — Vulnerabilidades en Flujos de Password Reset
 - [`explotacion-password-spraying`](../04-explotacion/credenciales/explotacion-password-spraying.md) — Password Spraying
 - [`explotacion-phishing-tecnico`](../04-explotacion/client-side/explotacion-phishing-tecnico.md) — Phishing Técnico (Evilginx2 & Gophish)
 - [`explotacion-process-injection`](../04-explotacion/client-side/explotacion-process-injection.md) — Process Injection y Evasión

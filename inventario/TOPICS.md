@@ -579,6 +579,14 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Aliases**: NoSQLi, NoSQL Injection, MongoDB Injection
 - **Related**: `analisis-sqli`, `explotacion-sqli`, `enumeracion-mongodb`
 
+## `explotacion-password-reset-flaws` — Vulnerabilidades en Flujos de Password Reset
+
+- **Archivo**: [`inventario/04-explotacion/web/explotacion-password-reset-flaws.md`](./04-explotacion/web/explotacion-password-reset-flaws.md)
+- **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
+- **Aliases**: password reset bugs, broken password reset, password reset poisoning, host header injection password reset, token leak via referer, predictable reset token, reset token reuse, account takeover via password reset, ATO via password reset, forgot password vulnerabilities, password recovery flaws, broken reset logic, confused deputy password reset
+- **Related**: `explotacion-mfa-bypass`, `explotacion-brute-force-advanced`, `explotacion-jwt`
+- **Learning**: [`portswigger/password-reset-broken-logic`](../learning/portswigger/password-reset-broken-logic/)
+
 ## `explotacion-password-spraying` — Password Spraying
 
 - **Archivo**: [`inventario/04-explotacion/credenciales/explotacion-password-spraying.md`](./04-explotacion/credenciales/explotacion-password-spraying.md)
