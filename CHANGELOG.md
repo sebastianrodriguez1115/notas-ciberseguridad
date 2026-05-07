@@ -2,6 +2,36 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-07] — Writeup PortSwigger Broken brute-force protection, IP block
+
+Lab Practitioner que cierra el cluster de protección contra brute-force después de la serie de username enumeration. La defensa parece sólida (3 fallos consecutivos por IP → lock), pero contiene una falla **lógica explícita**: cualquier login exitoso desde esa IP resetea el contador. Atacante con cuenta propia (`wiener:peter`) puede intercalar logins exitosos entre intentos contra `carlos`, manteniendo el contador siempre por debajo del threshold. Credenciales encontradas: `carlos:yankees` (posición 85 del wordlist).
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Reset-on-any-success es un antipattern silencioso**. La defensa parece estricta vista en aislamiento ("3 fallos → bloqueo") pero la regla de reset la hace inerte ante cualquier atacante con una cuenta válida. La auditoría debe revisar siempre las reglas de **exención** del rate-limit, no sólo el threshold y el window.
+2. **Counter dual per-(IP) + per-(username) sin reset on success** es la versión correcta. Per-IP frena password spraying multi-cuenta desde una IP; per-username frena brute-force concentrado distribuido. Combinarlos sin reset (sólo decay temporal o ventana deslizante) cierra ambos vectores.
+3. **El nuevo trade-off introducido**: counter per-username permite que un atacante bloquee la cuenta ajena (DoS trivial: 3 intentos basura contra `carlos:anything`). Mitigación: **captcha tras N en vez de lock duro** + 2FA para cuentas críticas. Lock duro es siempre DoSeable, captcha no.
+4. **Cadencia de interleave con margen**: usar `reset-every=2` en vez de 3 (al límite del threshold) absorbe glitches de red, retries duplicados y ventanas de carrera. Costo extra: 50% más requests de reset (50 wieners vs 33). Trivial frente al beneficio de robustez.
+5. **Single-threaded por construcción**: a diferencia del lab de timing donde concurrencia paralelizaba enumeración, acá la concurrencia rompería la garantía del intercalado. El orden importa porque los resets tienen que ocurrir *entre* intentos contiguos.
+6. **Comparación con bypass por XFF spoofing**: el lab de username enumeration via response timing tenía rate-limit por IP también, pero el bypass fue spoofear `X-Forwarded-For`. Acá ese vector no aplica (probablemente el server lee la IP del socket); pero la falla lógica de reset es independiente del mecanismo de identificación de la IP. Cierre por XFF no defiende contra reset-on-success y viceversa.
+
+### Verificación end-to-end
+
+Script ejecutado contra instancia real del usuario: 100 candidate passwords con interleave 1:2, encontró `yankees` en posición 85. Verificación post-ataque (login + GET /my-account?id=carlos): banner del lab cambió a `<section class='academyLabBanner is-solved'>`. Lab marcado como solved.
+
+### Archivos nuevos
+- **`learning/portswigger/broken-bruteforce-protection-ip-block/writeup.md`**: 7 secciones con análisis de la falla lógica, código del antipatrón vs fix, tabla comparativa de bypasses de rate-limit, y diagrama Mermaid del intercalado.
+- **`learning/portswigger/broken-bruteforce-protection-ip-block/bruteforce.py`**: script secuencial con `--reset-every` configurable, detección por status 302 + Location, abort en marker `BLOCKED` para diagnosticar fallos del intercalado.
+- **`learning/portswigger/broken-bruteforce-protection-ip-block/passwords.txt`**: lista oficial de candidate passwords de PortSwigger.
+
+### Conexión inventario
+- `explotacion-brute-force-advanced.md`: + `portswigger/broken-bruteforce-protection-ip-block` en `learning_refs:` (ahora 4 writeups, los 3 de enum + este). + 3 aliases nuevos: `reset-on-success counter bypass, interleaved login attack, broken bruteforce protection`.
+
+### Verificación
+- `bash scripts/check.sh` ✓ (131 archivos, 131/131 OK, indexes idempotentes).
+
+---
+
 ## [2026-05-06] — Writeup PortSwigger Username enumeration via response timing
 
 Tercer y último lab de la serie de username enumeration (Practitioner). Body+status uniformes; signal exclusivamente en **timing**: el server hace bcrypt sólo cuando el username es válido, short-circuit si no existe. **Ultimo nivel de la tabla de signals (nivel 6)**. Adicional: rate-limit por IP que se bypassea con `X-Forwarded-For: <random IP>` única por request. Credenciales: `auto:jordan`.
