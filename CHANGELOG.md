@@ -2,6 +2,41 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-06] — Writeup PortSwigger SSRF with whitelist-based input filter + PENDING blind shellshock
+
+Quinto lab de SSRF (Practitioner). Whitelist estricta del dominio del microservicio de stock (`stock.weliketoshop.net`); bypass por **parser differential sobre el componente host/userinfo de la URL** usando double encoding del `#`. Payload final: `stockApi=http://localhost:80%[email protected]/admin/delete?username=carlos`.
+
+### Mecánica del bypass (decodificación asimétrica)
+
+| Componente | Pasadas de decode sobre `%2523` | Qué ve | Decisión |
+|---|---|---|---|
+| Form parser | 1 (`%2523` → `%23`) | `%23` literal en string | entrega valor al filtro |
+| Filtro de whitelist | 0 (URL parser preserva `%XX` en userinfo) | `userinfo=localhost:80%23`, `host=stock.weliketoshop.net` | match → pasa |
+| HTTP client (basic auth handling) | 1 más (`%23` → `#`) | re-procesa: `host=localhost`, `fragment=@stock...` | conecta a localhost |
+
+El bypass vive en el gap: filtro hace 1 decode (form), cliente HTTP hace 2 (form + userinfo basic-auth). El target final no es el que la whitelist validó.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Las clases de bypass se generalizan a través de los componentes URL**. Lab #3 fue double encoding sobre **path** (`%2561dmin`); este lab es double encoding sobre **userinfo** (`%2523`). Misma idea, distinto componente. Aprender la clase, no el truco.
+2. **Whitelists son tan rotas como blacklists cuando hay parser differential**. La fortaleza nominal de "enumerar lo bueno" depende de que el componente que valida y el que ejecuta vean el mismo host.
+3. **Fix raíz: canonicalizar antes de validar**. `urlparse(url).hostname` (descarta userinfo automáticamente), rechazar `parsed.username`/`parsed.password`/`parsed.fragment`, validar IP post-DNS, conectar usando IP resuelta. Eso cierra la clase.
+4. **Tres errores didácticos del flujo real**: (a) asumí dominio `weliveshecurity.net` cuando el lab usaba `weliketoshop.net` (ignoré que el error 400 era hint explícito); (b) invertí la dirección de `%2523`/`@` (puse el dominio confiable adelante en vez de detrás del `@`); (c) usé `%23` simple en vez de `%2523`. Los tres están en sección §4 del writeup como aprendizaje genuino del proceso.
+
+### Archivos nuevos
+- **`learning/portswigger/ssrf-with-whitelist-filter/writeup.md`**: 8 secciones, énfasis en parser differential sobre componente host de URL, comparación con la generalización a otros componentes (path, scheme, query), y tres errores comunes vividos al resolverlo.
+
+### Conexión inventario
+- `analisis-ssrf.md`: + `portswigger/ssrf-with-whitelist-filter` en `learning_refs:` (6 writeups SSRF: loopback, backend discovery, blacklist bypass, open redirect chain, **whitelist parser differential**, XXE→IMDS).
+
+### PENDING actualizado
+- `learning/portswigger/PENDING.md`: añadido **Blind SSRF with Shellshock exploitation** (https://portswigger.net/web-security/ssrf/blind/lab-shellshock-exploitation). Razón: `infra-externa-bloqueada-por-firewall + canal de exfil exclusivamente OAST`. Cadena multietapa (SSRF en `Referer` + sweep para descubrir CGI + Shellshock vía `User-Agent` + DNS exfil del whoami a Collaborator). Payload listo para retomar con Burp Pro.
+
+### Verificación
+- `bash scripts/check.sh` ✓ (143 tests, 129/129 frontmatter OK, indexes idempotentes).
+
+---
+
 ## [2026-05-06] — Writeup PortSwigger SSRF filter bypass via open redirection
 
 Cuarto lab de SSRF (Practitioner). Cambia la clase de bypass: el filtro sobre `stockApi` ahora es allowlist same-origin (estricta y "correcta" en su contexto), pero el lab tiene un open redirect en `/product/nextProduct?path=` dentro del propio dominio. Se encadenan: `stockApi=/product/nextProduct?path=http://192.168.0.12:8080/admin/delete?username=carlos`. El filtro valida el primer hop (same-origin), el cliente HTTP del back-end sigue automáticamente la 302 al destino externo.
