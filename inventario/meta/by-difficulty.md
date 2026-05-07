@@ -83,7 +83,7 @@ archivos por valor de `by-difficulty`.
 - [`whois-registros-dominio`](../01-reconocimiento/pasivo/whois-registros-dominio.md) — WHOIS y Registros de Dominio
 - [`windows-arquitectura-ad`](../07-fundamentos/sistemas/windows-arquitectura-ad.md) — Arquitectura de Windows y Active Directory
 
-## Intermedia (57)
+## Intermedia (58)
 
 - [`abuso-cron-jobs`](../05-post-explotacion/privilege-escalation/linux/abuso-cron-jobs.md) — Abuso de Cron Jobs
 - [`abuso-servicios-windows`](../05-post-explotacion/privilege-escalation/windows/abuso-servicios-windows.md) — Abuso de Servicios de Windows
@@ -124,6 +124,7 @@ archivos por valor de `by-difficulty`.
 - [`explotacion-hash-cracking`](../04-explotacion/credenciales/explotacion-hash-cracking.md) — Crackeo de Hashes (Metodología)
 - [`explotacion-jwt`](../04-explotacion/web/explotacion-jwt.md) — Explotación de JSON Web Tokens (JWT)
 - [`explotacion-kerberoasting`](../04-explotacion/credenciales/explotacion-kerberoasting.md) — Kerberoasting y AS-REP Roasting
+- [`explotacion-mfa-bypass`](../04-explotacion/web/explotacion-mfa-bypass.md) — Bypass de Autenticación Multi-Factor (MFA / 2FA)
 - [`explotacion-mitm-responder`](../04-explotacion/red/explotacion-mitm-responder.md) — Envenenamiento LLMNR/NBT-NS con Responder
 - [`explotacion-nosqli`](../04-explotacion/web/explotacion-nosqli.md) — Inyección NoSQL (NoSQLi)
 - [`explotacion-shellshock`](../04-explotacion/sistema/explotacion-shellshock.md) — Shellshock (CVE-2014-6271)

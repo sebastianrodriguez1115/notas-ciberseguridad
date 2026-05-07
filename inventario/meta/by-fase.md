@@ -67,7 +67,7 @@ archivos por valor de `by-fase`.
 - [`fuzzing-subdominios-vhosts`](../02-enumeracion/fuzzing/fuzzing-subdominios-vhosts.md) — Fuzzing de Subdominios y Virtual Hosts
 - [`nikto`](../02-enumeracion/web/nikto.md) — Escaneo de Vulnerabilidades Web con Nikto
 
-## Explotación (30)
+## Explotación (31)
 
 - [`configuracion-uso-avanzado`](../06-frameworks-herramientas/burp-suite/configuracion-uso-avanzado.md) — Configuración y Uso Avanzado
 - [`enumeracion-docker`](../02-enumeracion/servicios/enumeracion-docker.md) — Enumeración Docker (Puerto 2375/2376)
@@ -86,6 +86,7 @@ archivos por valor de `by-fase`.
 - [`explotacion-kerberoasting`](../04-explotacion/credenciales/explotacion-kerberoasting.md) — Kerberoasting y AS-REP Roasting
 - [`explotacion-kernel-linux`](../04-explotacion/sistema/explotacion-kernel-linux.md) — Explotación de Kernel Linux
 - [`explotacion-kernel-windows`](../04-explotacion/sistema/explotacion-kernel-windows.md) — Explotación de Kernel Windows
+- [`explotacion-mfa-bypass`](../04-explotacion/web/explotacion-mfa-bypass.md) — Bypass de Autenticación Multi-Factor (MFA / 2FA)
 - [`explotacion-mitm-responder`](../04-explotacion/red/explotacion-mitm-responder.md) — Envenenamiento LLMNR/NBT-NS con Responder
 - [`explotacion-mitm6`](../04-explotacion/red/explotacion-mitm6.md) — IPv6 DNS Takeover con mitm6
 - [`explotacion-msfvenom`](../04-explotacion/client-side/explotacion-msfvenom.md) — Generación de Payloads con msfvenom

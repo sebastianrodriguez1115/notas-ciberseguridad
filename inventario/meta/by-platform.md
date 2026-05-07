@@ -80,7 +80,7 @@ archivos por valor de `by-platform`.
 - [`explotacion-smb-relay`](../04-explotacion/red/explotacion-smb-relay.md) — SMB Relay Attack
 - [`modelo-osi-tcp-ip`](../07-fundamentos/redes/modelo-osi-tcp-ip.md) — Modelo OSI y Protocolos TCP/IP
 
-## Web (38)
+## Web (39)
 
 - [`analisis-command-injection`](../03-analisis-vulnerabilidades/web/analisis-command-injection.md) — Análisis de Command Injection
 - [`analisis-cors`](../03-analisis-vulnerabilidades/web/analisis-cors.md) — Análisis de CORS (Cross-Origin Resource Sharing)
@@ -105,6 +105,7 @@ archivos por valor de `by-platform`.
 - [`explotacion-deserialization`](../04-explotacion/web/explotacion-deserialization.md) — Explotación de Deserialización Insegura
 - [`explotacion-fileupload`](../04-explotacion/web/explotacion-fileupload.md) — File Upload Exploitation
 - [`explotacion-jwt`](../04-explotacion/web/explotacion-jwt.md) — Explotación de JSON Web Tokens (JWT)
+- [`explotacion-mfa-bypass`](../04-explotacion/web/explotacion-mfa-bypass.md) — Bypass de Autenticación Multi-Factor (MFA / 2FA)
 - [`explotacion-nosqli`](../04-explotacion/web/explotacion-nosqli.md) — Inyección NoSQL (NoSQLi)
 - [`explotacion-sqli`](../04-explotacion/web/explotacion-sqli.md) — Inyección SQL (SQLi)
 - [`explotacion-xss`](../04-explotacion/web/explotacion-xss.md) — Explotación de Cross-Site Scripting (XSS)

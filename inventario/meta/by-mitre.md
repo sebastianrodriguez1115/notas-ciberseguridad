@@ -330,6 +330,10 @@ archivos por valor de `by-mitre`.
 
 - [`pass-the-ticket`](../05-post-explotacion/lateral-movement/pass-the-ticket.md) — Pass-the-Ticket
 
+## T1556.006 (1)
+
+- [`explotacion-mfa-bypass`](../04-explotacion/web/explotacion-mfa-bypass.md) — Bypass de Autenticación Multi-Factor (MFA / 2FA)
+
 ## T1557.001 (4)
 
 - [`explotacion-adcs-relay`](../04-explotacion/red/explotacion-adcs-relay.md) — Abuso de ADCS y Ataques de Relay

@@ -544,6 +544,14 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Explotación · **Plataforma**: Windows · **Dificultad**: Avanzada
 - **Aliases**: Explotación de Kernel Windows
 
+## `explotacion-mfa-bypass` — Bypass de Autenticación Multi-Factor (MFA / 2FA)
+
+- **Archivo**: [`inventario/04-explotacion/web/explotacion-mfa-bypass.md`](./04-explotacion/web/explotacion-mfa-bypass.md)
+- **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
+- **Aliases**: MFA bypass, 2FA bypass, multi-factor bypass, two-factor bypass, OTP bypass, TOTP bypass, broken auth state, auth state confusion, intermediate session bypass, pending-2FA bypass, skip second factor, broken authentication, broken MFA logic, response manipulation 2FA
+- **Related**: `explotacion-brute-force-advanced`, `explotacion-jwt`, `explotacion-auth-bypass-oauth`
+- **Learning**: [`portswigger/2fa-simple-bypass`](../learning/portswigger/2fa-simple-bypass/)
+
 ## `explotacion-mitm-responder` — Envenenamiento LLMNR/NBT-NS con Responder
 
 - **Archivo**: [`inventario/04-explotacion/red/explotacion-mitm-responder.md`](./04-explotacion/red/explotacion-mitm-responder.md)

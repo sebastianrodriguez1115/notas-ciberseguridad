@@ -2,6 +2,32 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-06] — Writeup PortSwigger 2FA simple bypass + nuevo archivo inventario explotacion-mfa-bypass.md
+
+Segundo lab de la serie Authentication, primero del subgrupo Multi-Factor (Apprentice). El server marca la sesión como totalmente autenticada tras el paso 1 (`/login` con username:password); el paso 2 (`/login2` con OTP) es decorativo. Bypass: login del paso 1 con `carlos:montoya`, **no completar paso 2**, navegar directo a `/my-account?id=carlos` con la cookie de sesión recibida en paso 1. Lab solved.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Auth state vs auth ceremony**: el flujo del 2FA es ceremonia UX (redirects, JS, mensajes); el estado real de auth vive en el server. Cuando el server reduce dos estados ("paso 1 OK" vs "paso 1 + paso 2 OK") a una variable booleana `is_logged_in`, el cliente ignora el paso 2 y navega directo a recursos protegidos.
+2. **Frontend-only enforcement como anti-pattern universal**: redirects, JavaScript, localStorage flags, headers controlables por el cliente, hidden inputs. Cualquier defensa que dependa del comportamiento del cliente es teatro.
+3. **Implementación correcta requiere state machine explícito**: enum `SessionStage = {UNAUTHENTICATED, PENDING_OTP, AUTHENTICATED}`. Paso 1 setea `PENDING_OTP`; sólo paso 2 exitoso lo promueve a `AUTHENTICATED`; rotación de session ID tras paso 2 (anti session-fixation); endpoints sensibles exigen `AUTHENTICATED`.
+4. **Disciplina pedagógica del recon**: probar el bypass primero con la cuenta legítima propia (`wiener:peter`), no con la víctima. Validar el modelo del server con la cuenta propia evita gastar intentos contra la víctima si la vulnerabilidad no aplica.
+5. **MFA mal implementado es peor que no tener MFA**: da falsa sensación de defensa. Implementación rota = fricción para usuarios legítimos sin protección real contra atacantes.
+
+### Nuevo archivo de inventario
+- **`inventario/04-explotacion/web/explotacion-mfa-bypass.md`**: cubre la categoría completa de bypass MFA/2FA con 7 sub-categorías documentadas (auth state mal modelado, frontend-only enforcement, brute-force OTP, cambio de usuario entre pasos, response manipulation, OTP no expira, response differential). MITRE T1556.006. Aliases ricos para discoverabilidad: 14 variantes ES/EN incluidas (`MFA bypass, 2FA bypass, OTP bypass, broken auth state, intermediate session bypass, skip second factor`, etc.). `related: [explotacion-brute-force-advanced, explotacion-jwt, explotacion-auth-bypass-oauth]`. Va a ser el anchor para los próximos labs de MFA en la serie.
+
+### Archivos nuevos
+- **`learning/portswigger/2fa-simple-bypass/writeup.md`**: 7 secciones con tabla comparativa de clases de bypass MFA, implementación correcta del state machine en pseudo-código, y diagrama Mermaid de la cadena.
+
+### Conexión inventario
+- `explotacion-mfa-bypass.md`: + `portswigger/2fa-simple-bypass` en `learning_refs:`.
+
+### Verificación
+- `bash scripts/check.sh` ✓ (144 archivos validados, 144/144 OK, indexes idempotentes tras regenerar).
+
+---
+
 ## [2026-05-06] — Writeup PortSwigger Username enumeration via different responses + script bruteforce.py
 
 Primer lab de la serie Authentication (Apprentice). El login form responde "Invalid username" (length 3244) cuando el usuario no existe y "Incorrect password" (length 3246) cuando existe pero el password está mal. Diferencia textual de 2 bytes que se automatiza por response-length outlier. Side-channel divide el espacio de 100×100 = 10k a 100+100 = 200 requests (**reducción de 50x**).
