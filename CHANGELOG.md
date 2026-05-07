@@ -2,6 +2,35 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-06] — Writeup PortSwigger Username enumeration via response timing
+
+Tercer y último lab de la serie de username enumeration (Practitioner). Body+status uniformes; signal exclusivamente en **timing**: el server hace bcrypt sólo cuando el username es válido, short-circuit si no existe. **Ultimo nivel de la tabla de signals (nivel 6)**. Adicional: rate-limit por IP que se bypassea con `X-Forwarded-For: <random IP>` única por request. Credenciales: `auto:jordan`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Más bytes en payload no necesariamente ayudan, pueden empeorar**. Probé tres configuraciones: 50KB con 8 workers (spread 160ms, falso positivo `admin`), 1MB con 4 workers (spread *peor* 70ms, falso positivo `agent`), y 100 bytes con `workers=1` (spread 450ms, outlier real `auto` 1166ms vs baseline 725ms). Razón: bcrypt trunca el input a 72 bytes (limit del algoritmo); más bytes sólo amplifican la transmisión TCP y parsing, sumando noise uniforme que ahoga el signal.
+2. **Workers concurrentes pelean por bandwidth y server threads**. Sequential (`workers=1`) elimina contention TCP, queueing del server y congestion control jitter. Para timing attacks, sequential beats concurrent salvo que la red sea muy estable.
+3. **`X-Forwarded-For` como bypass de rate-limit per-IP**: vector clásico cuando el server confía en headers para identificar al cliente. La defensa real es usar `REMOTE_ADDR` (IP de la conexión TCP) o validar que XFF venga de un proxy confiable upstream (validar peer IP).
+4. **bcrypt-as-oracle**: bcrypt está diseñado para ser lento (cost factor 10-12). En auth offline esa lentitud defiende contra brute-force; en auth online la misma lentitud es el side-channel. Patrón antipatrón canónico: `if user is None: return error()` short-circuit en ms; `else: bcrypt.checkpw(...)` toma 100-200ms. El código limpio: hashear contra `DUMMY_HASH` precomputado en la rama "user not found" para igualar costos. Fix de 2-3 líneas.
+5. **Tabla de niveles de signal completa la serie**: lab #1 nivel 2 (length differential 2 bytes); lab #2 nivel 5 (byte-level differential, mismo length); lab #3 nivel 6 (timing differential, body byte-idéntico). Cada lab cierra la defensa del anterior y abre nueva. La serie enseña que defenderse de uno no defiende del siguiente: respuesta uniforme en bytes no es suficiente sin constant-time response.
+
+### Iteración real del calibrado
+
+Documentado en el writeup §3.2: tres intentos con configuraciones distintas, mostrando que el sweet spot es contraintuitivo (100 bytes + sequential, no 1MB + concurrent). Pedagógicamente valioso para entender por qué timing attacks requieren disciplina experimental, no sólo "lanzar el script más agresivo posible".
+
+### Archivos nuevos
+- **`learning/portswigger/username-enumeration-via-response-timing/writeup.md`**: 7 secciones con tabla comparativa de los 3 labs de username enum, mecánica de bcrypt-as-oracle con código antipatrón vs correcto, y diagrama Mermaid de la cadena.
+- **`learning/portswigger/username-enumeration-via-response-timing/bruteforce.py`**: script con timing-based fingerprint (median de N trials), `X-Forwarded-For` random per request, configurable workers/trials/pwd-bytes para experimentación.
+- **`learning/portswigger/username-enumeration-via-response-timing/{usernames,passwords}.txt`**: wordlists copiadas del lab #1.
+
+### Conexión inventario
+- `explotacion-brute-force-advanced.md`: + `portswigger/username-enumeration-via-response-timing` en `learning_refs:` (ahora 3 writeups en este archivo, los tres de username enum). + 5 aliases nuevos: `timing attack, response timing differential, bcrypt timing oracle, X-Forwarded-For rate-limit bypass, IP-based rate limit bypass`.
+
+### Verificación
+- `bash scripts/check.sh` ✓ (131 archivos, 131/131 OK, indexes idempotentes).
+
+---
+
 ## [2026-05-06] — Writeup PortSwigger Username enumeration via subtly different responses
 
 Variante Practitioner del lab #1 de Auth. Misma técnica conceptual (enum por response differential) pero la diferencia es **un solo byte oculto en el mensaje de error**: username válido devuelve `"Invalid username or password "` (espacio al final) en vez de `"Invalid username or password."` (punto). **Mismo length, distinto último char**. Para enmascararlo, el response tiene noise random (analytics ID con dígitos variables + comentario HTML opcional) que hace variar el length total entre 3335-3356 bytes.
