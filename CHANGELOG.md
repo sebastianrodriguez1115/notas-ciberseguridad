@@ -2,6 +2,36 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-06] — Writeup PortSwigger Username enumeration via subtly different responses
+
+Variante Practitioner del lab #1 de Auth. Misma técnica conceptual (enum por response differential) pero la diferencia es **un solo byte oculto en el mensaje de error**: username válido devuelve `"Invalid username or password "` (espacio al final) en vez de `"Invalid username or password."` (punto). **Mismo length, distinto último char**. Para enmascararlo, el response tiene noise random (analytics ID con dígitos variables + comentario HTML opcional) que hace variar el length total entre 3335-3356 bytes.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Length-based detection tiene techo bajo cuando el server tiene noise random**. Para signals < 20 bytes, el noise random (CSRF tokens, analytics IDs, comentarios opcionales) domina el delta. Hay que escalar a content-level fingerprinting: extraer el campo de interés con regex y comparar exactamente.
+2. **Niveles de detección de signals**, en orden de robustez decreciente: status code → body length → hash de body → hash de content extraído → byte específico de campo extraído → timing. Cada lab en la serie sube de nivel; este requiere nivel 5 (byte específico).
+3. **Multi-trial consensus filtra noise estable**: con response no determinístico (mismo input produce distintos hashes), exigir signal idéntico en N trials. 3 trials descartan noise <50% efectivamente. El script v2 lo implementa con `if len(set(signals)) == 1` antes de aceptar como outlier.
+4. **Casi descarté el lab antes de ver el hint**: análisis fue (a) length tiene noise → no sirve; (b) hash de content limpio → todos idénticos; (c) conclusión preliminar "no hay signal". El error: el byte-level differential requiere una **hipótesis sobre dónde mirar**. Sin la hipótesis, "diff de cada campo posible" es impráctico exhaustivamente. Hint del lab fue equivalente al thread de un security researcher diciendo "el bug está en el mensaje de error".
+5. **Burp Comparer es la herramienta canónica para detectar este nivel** en auditorías reales sin hint: comparación visual byte-a-byte entre dos responses con highlight de diferencias. Después de identificar el campo con Comparer, automatizar con Intruder + grep-extract o script con regex.
+6. **Padding aleatorio como contramedida**: cuando no se puede garantizar que ramas del código generen response byte-idéntico, agregar token random de longitud fija que iguale lengths. Es defensa "de fuerza bruta" cuando la respuesta uniforme literal es muy difícil arquitecturalmente.
+
+### Iteración del flow de debugging
+
+El writeup documenta el camino real (no el final limpio): primer intento length-based falló (85 outliers); intento de normalización agresiva mostró que content limpio era byte-idéntico para todos los usernames; búsqueda en hint del lab reveló el byte exacto; reescritura del fingerprint a "último char del warning message"; consenso de 3 trials para descartar noise; outlier limpio (`adkit` con espacio, contra 100 con punto); fase 2 de password reveló `freedom` por 302/0 outlier.
+
+### Archivos nuevos
+- **`learning/portswigger/username-enumeration-via-subtly-different-responses/writeup.md`**: 7 secciones con tabla de niveles de detección de signals, comparación con lab Apprentice, y diagrama Mermaid.
+- **`learning/portswigger/username-enumeration-via-subtly-different-responses/bruteforce.py`**: variante del script anterior con fingerprint por último char del warning message + multi-trial consensus para filtrar noise.
+- **`learning/portswigger/username-enumeration-via-subtly-different-responses/{usernames,passwords}.txt`**: wordlists copiadas del lab Apprentice (mismas).
+
+### Conexión inventario
+- `explotacion-brute-force-advanced.md`: + `portswigger/username-enumeration-via-subtly-different-responses` en `learning_refs:` (ahora 2 writeups en este archivo, ambos sobre username enum).
+
+### Verificación
+- `bash scripts/check.sh` ✓ (131 archivos, 131/131 OK, indexes idempotentes).
+
+---
+
 ## [2026-05-06] — Writeup PortSwigger Password reset broken logic + nuevo explotacion-password-reset-flaws.md
 
 Tercer lab de Authentication, primero del subgrupo Other mechanisms (Apprentice). El form de reset incluye `username` como hidden field; el server valida el token correctamente pero usa el `username` del request para decidir a quién aplicar el cambio de password. Tampering del campo: `wiener` → `carlos`, password `password`. Login como carlos con la nueva password. Lab solved.

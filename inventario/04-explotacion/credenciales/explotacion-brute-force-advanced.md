@@ -7,7 +7,7 @@ plataforma: Multi
 dificultad: Intermedia
 mitre: [T1110.001, T1110.003]
 related: [explotacion-password-spraying]
-learning_refs: [portswigger/username-enumeration-via-different-responses]
+learning_refs: [portswigger/username-enumeration-via-different-responses, portswigger/username-enumeration-via-subtly-different-responses]
 ---
 
 # Ataques de Fuerza Bruta Avanzados
