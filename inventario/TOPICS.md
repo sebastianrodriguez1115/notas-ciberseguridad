@@ -143,7 +143,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Avanzada
 - **Aliases**: SSRF, Server-Side Request Forgery, blind SSRF, AWS IMDS exploitation, EC2 metadata SSRF, 169.254.169.254, link-local IP abuse, cloud metadata theft, IAM credential theft via SSRF, IMDSv1 vs IMDSv2, Capital One breach pattern, XXE to SSRF, gopher SSRF, internal port scan via SSRF, redirect chain SSRF
 - **Related**: `fuzzing-lfi-ssrf`, `analisis-xxe`
-- **Learning**: [`portswigger/exploiting-xxe-to-perform-ssrf`](../learning/portswigger/exploiting-xxe-to-perform-ssrf/), [`portswigger/lab-basic-ssrf-against-localhost`](../learning/portswigger/lab-basic-ssrf-against-localhost/)
+- **Learning**: [`portswigger/exploiting-xxe-to-perform-ssrf`](../learning/portswigger/exploiting-xxe-to-perform-ssrf/), [`portswigger/basic-ssrf-against-localhost`](../learning/portswigger/basic-ssrf-against-localhost/), [`portswigger/basic-ssrf-against-backend-system`](../learning/portswigger/basic-ssrf-against-backend-system/)
 
 ## `analisis-ssti` — Análisis de SSTI (Server-Side Template Injection)
 

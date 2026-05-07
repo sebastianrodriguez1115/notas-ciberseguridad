@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-06] — Writeup PortSwigger Basic SSRF against another back-end system + script de scan
+
+Segundo lab de SSRF (Apprentice). Mismo `stockApi`, pero el panel admin vive en `192.168.0.X:8080/admin` con `X` desconocido. La diferencia clave con el lab #1: ahora hay que **descubrir** la IP del back-end. Burp Community throttlea Intruder severamente (~1 req/s), así que escribí un script Python concurrente (`scan.py`, 30 workers, stdlib + requests) que termina los 255 requests en ~10-20s.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **SSRF como port scanner indirecto cuando los responses son distinguibles**. La distribución bimodal (253 hosts con 500/2454 bytes "connection refused" + 1 host con 200/3245 bytes "HTML del admin") es la firma canónica. Cuando status/length no varían, queda timing differential; cuando ni eso varía, es blind SSRF y necesita OOB.
+2. **Outliers en sweeps tienen ruido inherente**. En el run real, `192.168.0.1` también apareció como outlier (400/19 bytes). Era el gateway respondiendo "Bad request" al handshake HTTP en un puerto que no es HTTP. Lección: outlier ≠ target automáticamente, hay que mirar el body para distinguir target real del ruido de infraestructura (gateways, balancers, IPs reservadas).
+3. **Diferencia operativa con el lab #1**: lab #1 = 2 requests con target conocido (Repeater), lab #2 = 256 requests con target a descubrir (script o Intruder). Misma vulnerabilidad clase, distinto patrón de explotación. La fix raíz es la misma (no aceptar URL del cliente para calls server-side); la mitigación adicional crítica es **egress filtering desde el componente público a toda la VPC**, no sólo a loopback.
+4. **Auth obligatoria en todos los servicios internos**: la asunción "está en red privada ⇒ confiable" es incompatible con SSRF. Patrón típico: un servicio interno con auth deshabilitada porque "sólo escucha en VPC" se vuelve atacable a través de cualquier SSRF en el perímetro.
+
+### Archivos nuevos
+- **`learning/portswigger/basic-ssrf-against-backend-system/writeup.md`**: 7 secciones con foco en SSRF como herramienta de descubrimiento de red interna y comparación operativa con lab #1.
+- **`learning/portswigger/basic-ssrf-against-backend-system/scan.py`**: scanner concurrente con `ThreadPoolExecutor`, agrupa por status/length distribution e imprime outliers. Reutilizable para sweeps similares cambiando `--subnet`/`--port`/`--path`.
+- **`learning/portswigger/basic-ssrf-against-backend-system/octets-1-255.txt`**: lista 1..255 para Intruder Simple list (alternativa al payload type Numbers).
+
+### Conexión inventario
+- `analisis-ssrf.md`: + `portswigger/basic-ssrf-against-backend-system` en `learning_refs:` (ahora 3 writeups SSRF: loopback + back-end discovery + XXE→IMDS).
+
+### Rename (limpieza de naming)
+- `learning/portswigger/lab-basic-ssrf-against-localhost/` → `learning/portswigger/basic-ssrf-against-localhost/` (sin prefijo `lab-` para coherencia con el resto de writeups). Actualizado `learning_refs:` en `analisis-ssrf.md` y referencias en CHANGELOG. URLs de PortSwigger en el writeup intactas (esas sí llevan `lab-` en el dominio real).
+
+### Verificación
+- `bash scripts/check.sh` ✓ (143 tests, 129/129 frontmatter OK, indexes idempotentes tras regenerar `TOPICS.md`).
+
+---
+
 ## [2026-05-06] — Writeup PortSwigger Basic SSRF against the local server
 
 Primer writeup de SSRF en la serie. Lab Apprentice clásico: parámetro `stockApi` en POST `/product/stock` acepta una URL completa controlada por el cliente; la aplicación la sigue server-side sin validación. Resolución en dos hits a Repeater: (1) `stockApi=http://localhost/admin` revela el panel admin no autenticado (asume `remote_addr == 127.0.0.1` ⇒ caller confiable); (2) `stockApi=http%3A%2F%2Flocalhost%2Fadmin%2Fdelete%3Fusername%3Dcarlos` ejecuta el delete y devuelve 302 a `/admin`.
@@ -13,10 +40,10 @@ Primer writeup de SSRF en la serie. Lab Apprentice clásico: parámetro `stockAp
 - **Cuándo encodear el valor de `stockApi`**: como viaja en `application/x-www-form-urlencoded`, los `:`, `/`, `?`, `=` necesitan escape para no ser interpretados como separadores de form, no por el server-side request en sí.
 
 ### Archivos nuevos
-- **`learning/portswigger/lab-basic-ssrf-against-localhost/writeup.md`**: 7 secciones con tabla comparativa loopback-SSRF vs IMDS-SSRF y diagrama Mermaid de la cadena.
+- **`learning/portswigger/basic-ssrf-against-localhost/writeup.md`**: 7 secciones con tabla comparativa loopback-SSRF vs IMDS-SSRF y diagrama Mermaid de la cadena.
 
 ### Conexión inventario
-- `analisis-ssrf.md`: + `portswigger/lab-basic-ssrf-against-localhost` en `learning_refs:` (ahora 2 writeups apuntando a SSRF: el clásico loopback y el XXE→IMDS).
+- `analisis-ssrf.md`: + `portswigger/basic-ssrf-against-localhost` en `learning_refs:` (ahora 2 writeups apuntando a SSRF: el clásico loopback y el XXE→IMDS).
 
 ### Verificación
 - `bash scripts/check.sh` ✓ (143 tests, 129/129 frontmatter OK, indexes idempotentes tras regenerar `TOPICS.md`).
