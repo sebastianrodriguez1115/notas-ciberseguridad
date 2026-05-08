@@ -2,6 +2,35 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-07] — Writeup PortSwigger User ID controlled by request parameter with data leakage in redirect
+
+Séptimo lab del cluster Access Control. Apprentice. Variante con **defensa parcial rota**: el server detecta el IDOR (`?id=carlos` con sesión de wiener), responde `302 Found` con `Location: /login`, pero el body de la 302 contiene la página de cuenta de carlos completa, con su API key renderizada. El browser sigue el redirect y oculta la fuga; Burp Repeater (sin follow) la ve directo. API key carlos: `3eIiuox6om0XcCWdJPKnEiTdmk5Pgp9E`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Status code y body son canales separados**: 302/403/404 indican intención al browser; el body lleva los bytes igual. Filtrar uno no filtra el otro. Cualquier cliente que no siga redirects (Repeater, `curl` sin `-L`, `fetch({redirect:'manual'})`, MITM proxies) ve el body.
+2. **El antipatrón clásico**: `body = render_template(...)`, después `if user.id != session.user_id: return redirect()`. El render ya cargó queries y serializó datos antes del check; el redirect sólo cambia metadata, el body viaja igual.
+3. **Testing por canal incorrecto**: el dev probablemente probó manualmente con browser ("URL bar → me lleva al login → funciona"), confiando en que el browser disimule la fuga. El browser nunca fue el límite de seguridad; el server lo es.
+4. **Patrón general de data leakage en respuestas con error**: 302 con HTML completo del recurso negado, 403/500 con stack trace y query SQL, 401 con detalle que actúa de oracle de existence (enumeración de usernames), 404 que distingue "no existe" vs "no autorizado".
+5. **Fix correcto**: authz **antes** de cargar/renderizar. Frameworks que retornan tuplas `(body, status, headers)` o donde el redirect helper no aborta el render son particularmente propensos a este bug.
+6. **RFC 9110 §15.4** recomienda body breve indicando el redirect en respuestas 3xx, no contenido del recurso. Frameworks deberían generarlo automáticamente.
+
+### Archivos nuevos
+
+- **`learning/portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect/writeup.md`**: 6 secciones, request/response capturada real, antipatrón vs 3 fixes correctos, tabla de patrones equivalentes (302/403/404/401/500 con body filtrante), conexión con los 2 labs IDOR previos del cluster.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `analisis-idor.md` y `explotacion-idor.md`. Inventario en 134 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-idor.md`: + writeup en `learning_refs:`.
+- `inventario/04-explotacion/web/explotacion-idor.md`: + writeup en `learning_refs:`, + 5 aliases nuevos (`data leakage in redirect`, `redirect cosmetico no es authz`, `body leak en 302`, `render antes de check`, `status code no es access control`).
+
+### Lección de proceso
+
+Lab resuelto WITH user. User capturó request real (incluyendo el body completo de la 302 con la API key renderizada in-line). Writeup escrito con datos reales: status `302 Location: /login`, content-length 3759, API key `3eIiuox6om0XcCWdJPKnEiTdmk5Pgp9E`. Mecánica concreta documentada en lugar de versión genérica.
+
+---
+
 ## [2026-05-07] — Writeup PortSwigger User ID controlled by request parameter, with unpredictable user IDs
 
 Sexto lab del cluster Access Control. Apprentice. Variante del lab anterior con GUIDs (UUIDs) en lugar de usernames como identificador de user. Mismo bug subyacente (`/my-account?id=<X>` no chequea ownership), pero el atacante necesita conocer el GUID exacto del target. El blog público lo filtra: cada post linkea al autor vía `/blogs?userId=<GUID>`. Recon trivial, IDOR igual de explotable. API key carlos: `5Kdgi2v7XilvaBdBTwgdNzvxG1ahw6ej`.
