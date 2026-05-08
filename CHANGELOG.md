@@ -2,6 +2,35 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-07] — Writeup PortSwigger Multi-step process with no access control on one step
+
+Doceavo lab del cluster Access Control. Practitioner. Vector: **multi-step bypass / workflow flaw**. La acción admin de promote tiene 2 pasos (POST `username&action=upgrade` → confirm page → POST `confirmed=true`). El check de admin está en el paso 1 (render del confirm page), el paso 2 no re-valida porque "asume que llegaste desde paso 1". Wiener salta directo al paso 2 con `action=upgrade&confirmed=true&username=wiener` → 302 → admin.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **HTTP es stateless, el workflow lo controla el cliente**: la UI dicta el orden de la UX, no del request. Atacante manda cualquier endpoint en cualquier orden. Mental model UI-first del dev produce el bug; el atacante piensa API-first.
+2. **Páginas de confirmación no son auth gate**: el "are you sure?" se siente como barrera, pero es UX. Atacante salta directo al commit.
+3. **`confirmed=true` como flag client-controlled**: si el server diferencia ramas (`if confirmed: commit() else: render()`) según un campo del cliente, el cliente decide la rama. La auth tiene que estar antes del fork, no en una rama.
+4. **CSRF token no protege contra esto**: a veces el dev cree que CSRF token del paso 1 protege paso 2. CSRF protege contra cross-site forge, no contra requests legítimos del propio user. Wiener autenticado tiene su propio CSRF token.
+5. **Familia de variantes de multi-step bypass**: saltarse el paso anterior (este lab), saltarse el paso final (evita auditoría), re-ejecutar pasos (doble crédito), reordenar pasos (paso 3 antes que 2), TOCTOU (datos cambian entre pasos), mixing de actores (paso 1 sesión A + paso 2 sesión B).
+6. **Fix correcto con state server-side**: workflow guarda el estado entre pasos en memoria/DB del server con tokens cortos (TTL 5 min) asociados a la sesión que los creó. Cliente no controla el estado. + auth check en cada handler que muta estado.
+7. **Patrón estructural común con los 2 labs Practitioner previos del cluster**: todos son **defensa colocada en un punto del pipeline; atacante alcanza el efecto evitando ese punto**. URL-based (frontend vs backend), method-based (filtro vs handler), multi-step (paso intermedio vs paso final). Fix: deny by default + auth en cada operación con efecto.
+
+### Archivos nuevos
+
+- **`learning/portswigger/multi-step-process-with-no-access-control-on-one-step/writeup.md`**: 6 secciones, request/response real con `action=upgrade&confirmed=true&username=wiener`, antipatrón (auth check en render del confirm page) vs fix (auth en commit + state server-side con tokens), tabla comparativa con los 2 labs Practitioner previos del cluster, lista de 6 variantes de multi-step bypass.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `explotacion-broken-access-control.md`. Inventario en 134 archivos.
+- `inventario/04-explotacion/web/explotacion-broken-access-control.md`: + writeup en `learning_refs:`, + 7 aliases nuevos (`multi-step bypass`, `workflow flaw`, `state machine bypass`, `confirmed=true bypass`, `saltarse paso intermedio`, `business logic flaw`, `paso final sin authz`).
+
+### Lección de proceso
+
+User resolvió el lab en paralelo mientras yo escribía el writeup del lab anterior (method-based). Excepción explícita al workflow "resolver con user antes de writeup": el user ya lo resolvió antes de pedir el writeup. Captura real (cookie, body, response 302) provista por user, escribí el writeup con datos reales sin tener que volver a resolverlo.
+
+---
+
 ## [2026-05-07] — Writeup PortSwigger Method-based access control can be circumvented
 
 Onceavo lab del cluster Access Control. Practitioner. Vector: **verb tampering** / method-based bypass. El filtro de admin chequea sólo si el método es `POST` literal; el handler del controller (Servlet doGet+doPost, `@RequestMapping` sin method=) acepta múltiples métodos con la misma lógica. Cambiar a `GET` con params en query string saltea el filtro y promueve a wiener a admin. Endpoint vulnerable: `/admin-roles?username=wiener&action=upgrade`.
