@@ -476,7 +476,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Básica
 - **Aliases**: BAC, broken access control, access control bypass, authorization bypass, missing function level access control, vertical privilege escalation, horizontal privilege escalation, forced browsing, unprotected admin, security through obscurity, role-based bypass, privilege escalation web, OWASP A01
 - **Related**: `analisis-idor`, `explotacion-mfa-bypass`, `explotacion-jwt`
-- **Learning**: [`portswigger/unprotected-admin-functionality`](../learning/portswigger/unprotected-admin-functionality/), [`portswigger/unprotected-admin-functionality-with-unpredictable-url`](../learning/portswigger/unprotected-admin-functionality-with-unpredictable-url/)
+- **Learning**: [`portswigger/unprotected-admin-functionality`](../learning/portswigger/unprotected-admin-functionality/), [`portswigger/unprotected-admin-functionality-with-unpredictable-url`](../learning/portswigger/unprotected-admin-functionality-with-unpredictable-url/), [`portswigger/user-role-controlled-by-request-parameter`](../learning/portswigger/user-role-controlled-by-request-parameter/)
 
 ## `explotacion-brute-force-advanced` — Ataques de Fuerza Bruta Avanzados
 

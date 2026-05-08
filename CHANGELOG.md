@@ -2,6 +2,32 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger User role controlled by request parameter
+
+Tercer lab del cluster Access Control. Apprentice. Vector clásico: el server arma autorización a partir de una cookie `Admin=true|false` plaintext, controlable por el cliente. Tampering directo (`Admin=false` → `Admin=true`) escala a admin. Resuelto con 1 curl.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Cookies plaintext semánticas son input del cliente**: cookies persisten en el browser, el cliente las controla. `Admin=false` plaintext sin firma = campo de formulario disfrazado de estado server-side. Antipatrón canónico.
+2. **Tres categorías de cookies**: opaque/random (`session=ABC...`, key hacia state real), firmadas/cifradas (JWT, signed cookies; cliente puede leer pero modificar invalida firma), plaintext semántico (`Admin=false`; nunca para autorización).
+3. **Authz siempre desde sesión opaque + lookup server-side**: la sesión es token random; el role se consulta en DB indexado por user_id. El cliente nunca controla el role.
+4. **Patrón general aparece en múltiples capas**: cookies, hidden inputs, JWTs sin verify firma, headers custom (`X-User-Role: admin`), query/body params, localStorage flags. Defensa uniforme: no confiar en input del cliente para decisiones de seguridad.
+
+### Archivos nuevos
+
+- **`learning/portswigger/user-role-controlled-by-request-parameter/writeup.md`**: 7 secciones con tabla de las 3 categorías de cookies, código del antipatrón vs decorator `@require_role`, comparación con los 2 labs hermanos.
+
+### Conexión inventario
+
+- `explotacion-broken-access-control.md`: + writeup en `learning_refs:` (3 writeups ahora).
+
+### Verificación
+
+- `bash scripts/check.sh` ✓ (133/133 OK, indexes idempotentes).
+- Lab marcado solved.
+
+---
+
 ## [2026-05-08] — Writeup PortSwigger Unprotected admin functionality with unpredictable URL
 
 Segundo lab del cluster Access Control. Apprentice. Variante del anterior: el path admin es random por instancia (`/admin-gvzkbk`), pero JavaScript del frontend lo lleva hardcoded como string literal junto a un `var isAdmin = false` que solo controla si renderear el link en el DOM. El path leakea a todos los visitantes incluyendo anónimos.
