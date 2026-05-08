@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Básica
 mitre: [T1190]
 related: [analisis-idor, explotacion-mfa-bypass, explotacion-jwt]
-learning_refs: [portswigger/unprotected-admin-functionality]
+learning_refs: [portswigger/unprotected-admin-functionality, portswigger/unprotected-admin-functionality-with-unpredictable-url]
 ---
 
 # Broken Access Control

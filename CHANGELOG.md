@@ -2,6 +2,32 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger Unprotected admin functionality with unpredictable URL
+
+Segundo lab del cluster Access Control. Apprentice. Variante del anterior: el path admin es random por instancia (`/admin-gvzkbk`), pero JavaScript del frontend lo lleva hardcoded como string literal junto a un `var isAdmin = false` que solo controla si renderear el link en el DOM. El path leakea a todos los visitantes incluyendo anónimos.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Frontend nunca enforce**: cualquier defensa que dependa del comportamiento del cliente es teatro. Hidden inputs, JS que oculta features, disabled buttons, validación client-side, role flags en HTML son todos bypasseables porque el cliente está bajo control del atacante.
+2. **Random URLs no son auth**: agregan entropía al path pero el path leakea por múltiples vectores (JS, JSON responses, error messages, browser history). El path puede ser predecible si el endpoint exige role server-side.
+3. **El antipatrón del role-check client-side**: el dev pensó "el botón solo se muestra si sos admin, así que solo admins lo ven". La pregunta correcta es "¿qué pasa si alguien construye la request directamente?". Si el server le permite la acción, el botón es decorativo.
+4. **Diferencia con lab anterior**: ambos labs prueban la misma lección (obscuridad es defensa decorativa, auth es defensa real). Cambia el vector de leak: robots.txt en el primero, JS del frontend en este.
+
+### Archivos nuevos
+
+- **`learning/portswigger/unprotected-admin-functionality-with-unpredictable-url/writeup.md`**: 7 secciones con el JS leakeado real, tabla comparativa con el lab hermano, código del antipatrón vs implementación correcta del decorator.
+
+### Conexión inventario
+
+- `explotacion-broken-access-control.md`: + `portswigger/unprotected-admin-functionality-with-unpredictable-url` en `learning_refs:` (2 writeups ahora).
+
+### Verificación
+
+- `bash scripts/check.sh` ✓ (133/133 OK, indexes idempotentes).
+- Lab marcado solved.
+
+---
+
 ## [2026-05-08] — Writeup PortSwigger Unprotected admin functionality + nuevo `explotacion-broken-access-control.md`
 
 Primer lab del cluster Access Control. Apprentice. Vector trivial: `robots.txt` revela `/administrator-panel`, panel sin auth permite borrar a carlos con un GET. Resuelto con 3 curl commands en <30 segundos. El valor del lab está en la lección de diseño, no en la dificultad técnica.
