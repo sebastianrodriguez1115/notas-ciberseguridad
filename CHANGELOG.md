@@ -2,6 +2,34 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-07] — Writeup PortSwigger User ID controlled by request parameter, with unpredictable user IDs
+
+Sexto lab del cluster Access Control. Apprentice. Variante del lab anterior con GUIDs (UUIDs) en lugar de usernames como identificador de user. Mismo bug subyacente (`/my-account?id=<X>` no chequea ownership), pero el atacante necesita conocer el GUID exacto del target. El blog público lo filtra: cada post linkea al autor vía `/blogs?userId=<GUID>`. Recon trivial, IDOR igual de explotable. API key carlos: `5Kdgi2v7XilvaBdBTwgdNzvxG1ahw6ej`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Random IDs no son control de acceso**: UUID v4 tiene ~5.3×10^36 valores, no enumerable por brute-force, pero el atacante no necesita forzar; necesita el ID concreto del target. Si la app expone ese ID en cualquier superficie pública, el random pierde valor.
+2. **Superficies que típicamente filtran user IDs**: author links (`/posts?author=<UUID>`), comentarios firmados con `authorId` en JSON embebido, mentions/`@tags`, API responses con `expand=author`, shared resources públicos para SEO/reviews, Referer header, sourcemaps, error pages.
+3. **UUID v1 es enumerable**: incluye timestamp + MAC del nodo generador. Conociendo un UUID legítimo, las variantes cercanas reducen el espacio de búsqueda de 2^122 a unos miles. Solo v4 (random) es seguro para IDs públicos.
+4. **Cuándo UUIDs sí ayudan**: defensa-en-profundidad real cuando el ID **no leakea** (endpoints internos, recursos sólo accesibles por link directo tipo "anyone with the link", sharing explícito + invitados). En cuanto el ID aparece en alguna superficie pública, el random pasa a ser equivalente a un username.
+5. **El bug es la línea `request.args['id']`, no el formato del ID**: cambiar de username a UUID no toca la causa raíz. Fix: derivar el target de la sesión cuando el endpoint es self-only.
+
+### Archivos nuevos
+
+- **`learning/portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids/writeup.md`**: 6 secciones, tabla comparativa con el lab predecesor (mismo bug, distinto recon), patrones de leak de UUIDs en apps reales, distinción v1 vs v4.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: el lab refuerza `explotacion-idor.md` y `analisis-idor.md`. Inventario sigue en 134 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-idor.md`: + writeup en `learning_refs:`.
+- `inventario/04-explotacion/web/explotacion-idor.md`: + writeup en `learning_refs:`, + 4 aliases nuevos (`GUID leak`, `UUID leak`, `unpredictable IDs no son authz`, `random IDs no son control acceso`).
+
+### Lección de proceso
+
+Lab resuelto WITH user respetando el workflow: recon previo (buscar leaks del GUID en superficies públicas) → user encontró `/blogs?userId=<GUID>` → tampering directo → API key. Writeup escrito DESPUÉS de confirmar lab solved.
+
+---
+
 ## [2026-05-08] — Writeup PortSwigger User ID controlled by request parameter + nuevo `explotacion-idor.md`
 
 Quinto lab del cluster Access Control. Apprentice. Primer lab **horizontal** del cluster: no escalamos a admin, accedemos lateralmente a otro user del mismo nivel. IDOR canónico: URL `/my-account?id=wiener` carga datos de wiener; cambiar a `?id=carlos` carga datos de carlos (incluyendo API key) sin chequeo de ownership. 1 request, lab solved.

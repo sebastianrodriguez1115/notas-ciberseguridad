@@ -1,13 +1,13 @@
 ---
 title: "Explotación: Insecure Direct Object Reference (IDOR)"
 slug: explotacion-idor
-aliases: [IDOR, Insecure Direct Object Reference, BOLA, Broken Object Level Authorization, horizontal privilege escalation, object-level authz bypass, parameter tampering ID, predictable IDs, sequential IDs leak]
+aliases: [IDOR, Insecure Direct Object Reference, BOLA, Broken Object Level Authorization, horizontal privilege escalation, object-level authz bypass, parameter tampering ID, predictable IDs, sequential IDs leak, GUID leak, UUID leak, unpredictable IDs no son authz, random IDs no son control acceso]
 fase: [Explotación]
 plataforma: Web
 dificultad: Básica
 mitre: [T1190]
 related: [analisis-idor, explotacion-broken-access-control]
-learning_refs: [portswigger/user-id-controlled-by-request-parameter]
+learning_refs: [portswigger/user-id-controlled-by-request-parameter, portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids]
 ---
 
 # Explotación: Insecure Direct Object Reference (IDOR)
