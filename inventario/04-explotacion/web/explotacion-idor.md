@@ -1,13 +1,13 @@
 ---
 title: "Explotación: Insecure Direct Object Reference (IDOR)"
 slug: explotacion-idor
-aliases: [IDOR, Insecure Direct Object Reference, BOLA, Broken Object Level Authorization, horizontal privilege escalation, object-level authz bypass, parameter tampering ID, predictable IDs, sequential IDs leak, GUID leak, UUID leak, unpredictable IDs no son authz, random IDs no son control acceso, data leakage in redirect, redirect cosmetico no es authz, body leak en 302, render antes de check, status code no es access control]
+aliases: [IDOR, Insecure Direct Object Reference, BOLA, Broken Object Level Authorization, horizontal privilege escalation, object-level authz bypass, parameter tampering ID, predictable IDs, sequential IDs leak, GUID leak, UUID leak, unpredictable IDs no son authz, random IDs no son control acceso, data leakage in redirect, redirect cosmetico no es authz, body leak en 302, render antes de check, status code no es access control, password disclosure en HTML, IDOR chain a vertical privesc, plaintext password storage, mascara input no es seguridad, prefilled password value]
 fase: [Explotación]
 plataforma: Web
 dificultad: Básica
 mitre: [T1190]
 related: [analisis-idor, explotacion-broken-access-control]
-learning_refs: [portswigger/user-id-controlled-by-request-parameter, portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids, portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect]
+learning_refs: [portswigger/user-id-controlled-by-request-parameter, portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids, portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect, portswigger/user-id-controlled-by-request-parameter-with-password-disclosure]
 ---
 
 # Explotación: Insecure Direct Object Reference (IDOR)

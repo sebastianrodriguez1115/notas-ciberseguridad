@@ -69,7 +69,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Básica
 - **Aliases**: IDOR, Insecure Direct Object Reference, BOLA, Broken Object Level Authorization
 - **Related**: `analisis-csrf`, `explotacion-idor`
-- **Learning**: [`portswigger/user-id-controlled-by-request-parameter`](../learning/portswigger/user-id-controlled-by-request-parameter/), [`portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids`](../learning/portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids/), [`portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect`](../learning/portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect/)
+- **Learning**: [`portswigger/user-id-controlled-by-request-parameter`](../learning/portswigger/user-id-controlled-by-request-parameter/), [`portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids`](../learning/portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids/), [`portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect`](../learning/portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect/), [`portswigger/user-id-controlled-by-request-parameter-with-password-disclosure`](../learning/portswigger/user-id-controlled-by-request-parameter-with-password-disclosure/)
 
 ## `analisis-lfi-rfi` — Análisis de Vulnerabilidades: LFI y RFI
 
@@ -531,9 +531,9 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/web/explotacion-idor.md`](./04-explotacion/web/explotacion-idor.md)
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Básica
-- **Aliases**: IDOR, Insecure Direct Object Reference, BOLA, Broken Object Level Authorization, horizontal privilege escalation, object-level authz bypass, parameter tampering ID, predictable IDs, sequential IDs leak, GUID leak, UUID leak, unpredictable IDs no son authz, random IDs no son control acceso, data leakage in redirect, redirect cosmetico no es authz, body leak en 302, render antes de check, status code no es access control
+- **Aliases**: IDOR, Insecure Direct Object Reference, BOLA, Broken Object Level Authorization, horizontal privilege escalation, object-level authz bypass, parameter tampering ID, predictable IDs, sequential IDs leak, GUID leak, UUID leak, unpredictable IDs no son authz, random IDs no son control acceso, data leakage in redirect, redirect cosmetico no es authz, body leak en 302, render antes de check, status code no es access control, password disclosure en HTML, IDOR chain a vertical privesc, plaintext password storage, mascara input no es seguridad, prefilled password value
 - **Related**: `analisis-idor`, `explotacion-broken-access-control`
-- **Learning**: [`portswigger/user-id-controlled-by-request-parameter`](../learning/portswigger/user-id-controlled-by-request-parameter/), [`portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids`](../learning/portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids/), [`portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect`](../learning/portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect/)
+- **Learning**: [`portswigger/user-id-controlled-by-request-parameter`](../learning/portswigger/user-id-controlled-by-request-parameter/), [`portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids`](../learning/portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids/), [`portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect`](../learning/portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect/), [`portswigger/user-id-controlled-by-request-parameter-with-password-disclosure`](../learning/portswigger/user-id-controlled-by-request-parameter-with-password-disclosure/)
 
 ## `explotacion-jwt` — Explotación de JSON Web Tokens (JWT)
 

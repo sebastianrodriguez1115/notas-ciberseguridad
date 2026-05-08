@@ -2,6 +2,34 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-07] — Writeup PortSwigger User ID controlled by request parameter with password disclosure
+
+Octavo lab del cluster Access Control. Apprentice. **Primer lab del cluster IDOR donde el chain pasa de horizontal a vertical privesc**: dos bugs encadenados (IDOR + password disclosure en HTML) elevan account takeover de admin desde una sesión user normal. La cuenta `/my-account?id=administrator` renderiza un form de change-password con `<input type=password value='wb8n28nija2hetkpyaql'/>`; login admin → delete carlos. Password admin: `wb8n28nija2hetkpyaql`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Chains cambian categoría de impacto**: IDOR aislado es info disclosure (medio); con un segundo bug que leakea credenciales pasa a privesc total + account takeover (crítico). Threat models tienen que considerar combinaciones, no bugs aislados.
+2. **Password en cleartext del lado server es el pecado original**: si la DB guarda passwords reversibles (sin hash one-way), cualquier render del user object es leak potencial. Hash con bcrypt/argon2id/scrypt elimina la categoría entera (la app no puede recuperar el password ni queriendo).
+3. **`type="password"` no es seguridad**: sólo afecta render visual del input (• en lugar de letras). El `value` viaja en cleartext en el HTML; View Source / DevTools / scrapeo lo ven directo. La máscara es UX contra shoulder surfing del propio user, no defensa contra el server.
+4. **Por qué se prerellena el password (UX antipattern)**: dev quiere "no obligar al user a retipear el password al cambiar email", solución incorrecta: serializar el password en el form. Solución correcta: forms separados por concern + re-prompt de current password sólo cuando hace falta cambiar password.
+5. **Vectores típicos de password leak en HTML**: `value` en input, hidden field "verificación", JSON embedded en `<script>` (`window.user = {password:...}`), form action con auth en URL, comments HTML de debug, sourcemaps con seeds, console.log del frontend.
+
+### Archivos nuevos
+
+- **`learning/portswigger/user-id-controlled-by-request-parameter-with-password-disclosure/writeup.md`**: 6 secciones, request/response real con HTML del form (incluyendo el `value` con el password en cleartext), antipatrón vs fix, tabla con los 4 labs IDOR del cluster mostrando cómo el dato leakeado determina el impacto (API key → data; password → control).
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: cuarto writeup IDOR del cluster, refuerza `analisis-idor.md` y `explotacion-idor.md`. Inventario en 134 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-idor.md`: + writeup en `learning_refs:`.
+- `inventario/04-explotacion/web/explotacion-idor.md`: + writeup en `learning_refs:`, + 5 aliases nuevos (`password disclosure en HTML`, `IDOR chain a vertical privesc`, `plaintext password storage`, `mascara input no es seguridad`, `prefilled password value`).
+
+### Lección de proceso
+
+Lab resuelto WITH user. User capturó request real con response HTML completa, mostrando el form de change-password con el password admin en el atributo `value`. Writeup escrito con datos reales (password `wb8n28nija2hetkpyaql`, sesión `CwLLM4bN8HwptISiAR70zrqCSn2iHAbB`).
+
+---
+
 ## [2026-05-07] — Writeup PortSwigger User ID controlled by request parameter with data leakage in redirect
 
 Séptimo lab del cluster Access Control. Apprentice. Variante con **defensa parcial rota**: el server detecta el IDOR (`?id=carlos` con sesión de wiener), responde `302 Found` con `Location: /login`, pero el body de la 302 contiene la página de cuenta de carlos completa, con su API key renderizada. El browser sigue el redirect y oculta la fuga; Burp Repeater (sin follow) la ve directo. API key carlos: `3eIiuox6om0XcCWdJPKnEiTdmk5Pgp9E`.
