@@ -15,6 +15,7 @@ Explotación de vulnerabilidades en aplicaciones web y CMS.
 | [Explotación de Deserialización Insegura](./explotacion-deserialization.md) | T1190 | Avanzada | Web |
 | [Explotación de JSON Web Tokens (JWT)](./explotacion-jwt.md) | T1190 | Intermedia | Web |
 | [File Upload Exploitation](./explotacion-fileupload.md) | T1190 | Intermedia | Web |
+| [Insecure Direct Object Reference (IDOR)](./explotacion-idor.md) | T1190 | Básica | Web |
 | [Inyección NoSQL (NoSQLi)](./explotacion-nosqli.md) | T1190 | Intermedia | Web |
 | [Inyección SQL (SQLi)](./explotacion-sqli.md) | T1190 | Intermedia | Web |
 | [Vulnerabilidades en Flujos de Password Reset](./explotacion-password-reset-flaws.md) | T1556 | Intermedia | Web |

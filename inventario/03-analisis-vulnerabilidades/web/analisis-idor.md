@@ -6,8 +6,8 @@ fase: [Análisis de Vulnerabilidades]
 plataforma: Web
 dificultad: Básica
 mitre: [T1190]
-related: [analisis-csrf]
-learning_refs: []
+related: [analisis-csrf, explotacion-idor]
+learning_refs: [portswigger/user-id-controlled-by-request-parameter]
 ---
 
 # Análisis de Vulnerabilidades: Insecure Direct Object Reference (IDOR)

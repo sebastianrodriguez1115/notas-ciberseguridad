@@ -2,6 +2,34 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger User ID controlled by request parameter + nuevo `explotacion-idor.md`
+
+Quinto lab del cluster Access Control. Apprentice. Primer lab **horizontal** del cluster: no escalamos a admin, accedemos lateralmente a otro user del mismo nivel. IDOR canónico: URL `/my-account?id=wiener` carga datos de wiener; cambiar a `?id=carlos` carga datos de carlos (incluyendo API key) sin chequeo de ownership. 1 request, lab solved.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Identificar y autorizar son cosas distintas**: identificar el recurso a cargar puede venir del cliente; autorizar al cliente a leerlo siempre del server. Cuando ambas se contestan con el mismo dato del cliente, hay IDOR.
+2. **El parámetro `?id=` en endpoint self-service no debería existir**: la URL `/my-account?id=wiener` es semánticamente redundante (la sesión ya identifica al user). El smell sugiere que el dev compartió endpoint para "self" y "other" tomando atajo. Fix más simple: derivar de sesión, sin params.
+3. **IDOR es la sub-categoría más prevalente de Broken Access Control**: aparece en cualquier endpoint donde el ID del recurso se mande explícito (orders, invoices, messages, photos, tickets). Tests automatizados deben cubrir todos los endpoints de recurso.
+4. **Patrones correctos**: 3 patterns válidos según semántica del endpoint. Self-only access (target = session.user_id, sin `?id=`). Admin access (endpoint separado con permission check). Sharing entre users (ownership check + opt-in del owner).
+
+### Archivos nuevos
+
+- **`learning/portswigger/user-id-controlled-by-request-parameter/writeup.md`**: 6 secciones con código del antipatrón vs 3 implementaciones correctas (self-only, admin, sharing), tabla comparativa con los 4 labs anteriores del cluster (primer horizontal vs verticales).
+- **`inventario/04-explotacion/web/explotacion-idor.md`**: archivo nuevo del inventario, par cross-fase de `analisis-idor.md` (Phase 03). Cubre categorías de IDs explotables (numéricos, usernames, UUIDs predecibles, hashes débiles), categorías de objetos afectados, herramientas (Burp Authorize, ffuf, autorize), workflows de tampering y enumeración. MITRE T1190.
+
+### Conexión inventario
+
+- Inventario crece a **134 archivos** (era 133). Nuevo archivo `explotacion-idor.md` linkea con `analisis-idor.md` vía `related:`.
+- `analisis-idor.md` (Phase 03): + `explotacion-idor` en `related:`, + writeup en `learning_refs:`.
+
+### Verificación
+
+- `bash scripts/check.sh` ✓ (134/134 OK, indexes idempotentes).
+- Lab marcado solved.
+
+---
+
 ## [2026-05-08] — Writeup PortSwigger User role can be modified in user profile
 
 Cuarto lab del cluster Access Control. Apprentice. Mass assignment clásico: el endpoint `POST /my-account/change-email` deserializa el JSON del body sin allowlist y aplica todos los campos al modelo del user. Agregando `"roleid": 2` al body, escalamos la propia cuenta a admin. La response del legítimo update email leakea el nombre del campo (`{"username":...,"roleid":1}`), lo que vuelve trivial el discovery del vector.

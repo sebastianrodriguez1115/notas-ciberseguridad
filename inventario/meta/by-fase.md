@@ -67,7 +67,7 @@ archivos por valor de `by-fase`.
 - [`fuzzing-subdominios-vhosts`](../02-enumeracion/fuzzing/fuzzing-subdominios-vhosts.md) — Fuzzing de Subdominios y Virtual Hosts
 - [`nikto`](../02-enumeracion/web/nikto.md) — Escaneo de Vulnerabilidades Web con Nikto
 
-## Explotación (34)
+## Explotación (35)
 
 - [`configuracion-uso-avanzado`](../06-frameworks-herramientas/burp-suite/configuracion-uso-avanzado.md) — Configuración y Uso Avanzado
 - [`enumeracion-docker`](../02-enumeracion/servicios/enumeracion-docker.md) — Enumeración Docker (Puerto 2375/2376)
@@ -83,6 +83,7 @@ archivos por valor de `by-fase`.
 - [`explotacion-eternalblue`](../04-explotacion/sistema/explotacion-eternalblue.md) — EternalBlue (MS17-010)
 - [`explotacion-fileupload`](../04-explotacion/web/explotacion-fileupload.md) — File Upload Exploitation
 - [`explotacion-hash-cracking`](../04-explotacion/credenciales/explotacion-hash-cracking.md) — Crackeo de Hashes (Metodología)
+- [`explotacion-idor`](../04-explotacion/web/explotacion-idor.md) — Insecure Direct Object Reference (IDOR)
 - [`explotacion-jwt`](../04-explotacion/web/explotacion-jwt.md) — Explotación de JSON Web Tokens (JWT)
 - [`explotacion-kerberoasting`](../04-explotacion/credenciales/explotacion-kerberoasting.md) — Kerberoasting y AS-REP Roasting
 - [`explotacion-kernel-linux`](../04-explotacion/sistema/explotacion-kernel-linux.md) — Explotación de Kernel Linux

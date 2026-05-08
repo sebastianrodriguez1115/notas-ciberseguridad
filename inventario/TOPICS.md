@@ -68,7 +68,8 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-idor.md`](./03-analisis-vulnerabilidades/web/analisis-idor.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Básica
 - **Aliases**: IDOR, Insecure Direct Object Reference, BOLA, Broken Object Level Authorization
-- **Related**: `analisis-csrf`
+- **Related**: `analisis-csrf`, `explotacion-idor`
+- **Learning**: [`portswigger/user-id-controlled-by-request-parameter`](../learning/portswigger/user-id-controlled-by-request-parameter/)
 
 ## `analisis-lfi-rfi` — Análisis de Vulnerabilidades: LFI y RFI
 
@@ -525,6 +526,14 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Explotación · **Plataforma**: Multi · **Dificultad**: Intermedia
 - **Aliases**: Crackeo de Hashes (Metodología), Hash Cracking, hashcat, John the Ripper, JtR, NTLM cracking, TGS cracking, AS-REP cracking
 - **Related**: `credential-dumping`, `pass-the-hash`, `enumeracion-kerberos`, `explotacion-mitm-responder`, `explotacion-kerberoasting`
+
+## `explotacion-idor` — Explotación: Insecure Direct Object Reference (IDOR)
+
+- **Archivo**: [`inventario/04-explotacion/web/explotacion-idor.md`](./04-explotacion/web/explotacion-idor.md)
+- **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Básica
+- **Aliases**: IDOR, Insecure Direct Object Reference, BOLA, Broken Object Level Authorization, horizontal privilege escalation, object-level authz bypass, parameter tampering ID, predictable IDs, sequential IDs leak
+- **Related**: `analisis-idor`, `explotacion-broken-access-control`
+- **Learning**: [`portswigger/user-id-controlled-by-request-parameter`](../learning/portswigger/user-id-controlled-by-request-parameter/)
 
 ## `explotacion-jwt` — Explotación de JSON Web Tokens (JWT)
 

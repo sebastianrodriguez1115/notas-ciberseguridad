@@ -29,7 +29,7 @@ archivos por valor de `by-difficulty`.
 - [`silver-ticket`](../05-post-explotacion/lateral-movement/silver-ticket.md) — Silver Ticket
 - [`volatility-memoria`](../08-forense-dfir/analisis-forense/volatility-memoria.md) — Análisis Forense de Memoria
 
-## Básica (52)
+## Básica (53)
 
 - [`abuso-sudo`](../05-post-explotacion/privilege-escalation/linux/abuso-sudo.md) — Abuso de Configuraciones Sudo
 - [`analisis-idor`](../03-analisis-vulnerabilidades/web/analisis-idor.md) — Insecure Direct Object Reference (IDOR)
@@ -63,6 +63,7 @@ archivos por valor de `by-difficulty`.
 - [`enumeracion-winrm`](../02-enumeracion/servicios/enumeracion-winrm.md) — Enumeración WinRM (Windows Remote Management)
 - [`escaneo-puertos`](../01-reconocimiento/activo/escaneo-puertos.md) — Escaneo de Puertos
 - [`explotacion-broken-access-control`](../04-explotacion/web/explotacion-broken-access-control.md) — Broken Access Control
+- [`explotacion-idor`](../04-explotacion/web/explotacion-idor.md) — Insecure Direct Object Reference (IDOR)
 - [`explotacion-msfvenom`](../04-explotacion/client-side/explotacion-msfvenom.md) — Generación de Payloads con msfvenom
 - [`explotacion-password-spraying`](../04-explotacion/credenciales/explotacion-password-spraying.md) — Password Spraying
 - [`fingerprinting-tecnologias-web`](../01-reconocimiento/pasivo/fingerprinting-tecnologias-web.md) — Fingerprinting Pasivo de Tecnologías Web

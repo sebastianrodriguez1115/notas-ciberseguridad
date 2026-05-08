@@ -240,7 +240,7 @@ archivos por valor de `by-mitre`.
 
 - [`explotacion-adcs-relay`](../04-explotacion/red/explotacion-adcs-relay.md) — Abuso de ADCS y Ataques de Relay
 
-## T1190 (23)
+## T1190 (24)
 
 - [`analisis-command-injection`](../03-analisis-vulnerabilidades/web/analisis-command-injection.md) — Análisis de Command Injection
 - [`analisis-cors`](../03-analisis-vulnerabilidades/web/analisis-cors.md) — Análisis de CORS (Cross-Origin Resource Sharing)
@@ -261,6 +261,7 @@ archivos por valor de `by-mitre`.
 - [`explotacion-cms-wordpress`](../04-explotacion/web/explotacion-cms-wordpress.md) — Explotación de CMS WordPress
 - [`explotacion-deserialization`](../04-explotacion/web/explotacion-deserialization.md) — Explotación de Deserialización Insegura
 - [`explotacion-fileupload`](../04-explotacion/web/explotacion-fileupload.md) — File Upload Exploitation
+- [`explotacion-idor`](../04-explotacion/web/explotacion-idor.md) — Insecure Direct Object Reference (IDOR)
 - [`explotacion-jwt`](../04-explotacion/web/explotacion-jwt.md) — Explotación de JSON Web Tokens (JWT)
 - [`explotacion-nosqli`](../04-explotacion/web/explotacion-nosqli.md) — Inyección NoSQL (NoSQLi)
 - [`explotacion-shellshock`](../04-explotacion/sistema/explotacion-shellshock.md) — Shellshock (CVE-2014-6271)
