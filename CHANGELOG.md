@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger User role can be modified in user profile
+
+Cuarto lab del cluster Access Control. Apprentice. Mass assignment clásico: el endpoint `POST /my-account/change-email` deserializa el JSON del body sin allowlist y aplica todos los campos al modelo del user. Agregando `"roleid": 2` al body, escalamos la propia cuenta a admin. La response del legítimo update email leakea el nombre del campo (`{"username":...,"roleid":1}`), lo que vuelve trivial el discovery del vector.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Mass assignment es default sin allowlist**: cualquier framework que setea atributos directos del request body es vulnerable hasta que el dev ponga el filtro explícito (Rails `permit`, Django REST `Meta.fields`, Spring `@JsonView`/DTOs). Default opt-out es la fix.
+2. **Responses verbosas son discovery gratis para el atacante**: el server devuelve el modelo completo del user en cada update, regalando los nombres de los campos manipulables. Anti-patrón doble: aceptar más de lo debido + devolver más de lo debido. Response minima por endpoint.
+3. **Authz check en `/admin` no alcanza**: el dato que `/admin` consulta (`roleid`) puede ser modificable desde otro endpoint. Defensa en profundidad requiere que cada endpoint que modifica datos sensibles tenga su propio authz check y que datos de role sean modificables solo desde endpoints admin específicos.
+4. **Patrón aparece en múltiples dominios**: signup endpoints (`is_admin=true`), profile update, account settings, subscription/billing (`tier=premium`), order creation (`discount=100`). Regla: el server siempre define qué campos puede modificar el cliente, allowlist por endpoint.
+5. **Comparación con labs hermanos**: 4 mecánicas distintas en 4 labs: ausencia de auth (paths leak), authz en input cliente (cookie tampering), authz correcto pero bypass por endpoint adyacente (este lab), [próximos en el cluster]. La defensa unificada no es una sola cosa: requiere auth en cada endpoint + authz consistente + allowlist en input + responses minimal.
+
+### Archivos nuevos
+
+- **`learning/portswigger/user-role-can-be-modified-in-user-profile/writeup.md`**: 7 secciones con código del antipatrón vs allowlist explícita, mapeo de framework-specific solutions (Rails strong_parameters, Django ModelSerializer, Spring DTOs), tabla comparativa con los 3 labs anteriores del cluster.
+
+### Conexión inventario
+
+- `explotacion-broken-access-control.md`: + writeup en `learning_refs:` (4 writeups). + 6 aliases nuevos: `mass assignment, sobre-aceptacion de campos, BOPLA, broken object property level authorization, autobinding vulnerability, strong parameters bypass`.
+
+### Verificación
+
+- `bash scripts/check.sh` ✓ (133/133 OK, indexes idempotentes).
+- Lab marcado solved.
+
+---
+
 ## [2026-05-08] — Writeup PortSwigger User role controlled by request parameter
 
 Tercer lab del cluster Access Control. Apprentice. Vector clásico: el server arma autorización a partir de una cookie `Admin=true|false` plaintext, controlable por el cliente. Tampering directo (`Admin=false` → `Admin=true`) escala a admin. Resuelto con 1 curl.
