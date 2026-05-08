@@ -6,6 +6,7 @@ Explotación de vulnerabilidades en aplicaciones web y CMS.
 
 | Técnica | MITRE | Dificultad | Plataforma |
 | :--- | :--- | :--- | :--- |
+| [Broken Access Control](./explotacion-broken-access-control.md) | T1190 | Básica | Web |
 | [Bypass de Autenticación en OAuth2 y OpenID](./explotacion-auth-bypass-oauth.md) | T1190 | Avanzada | Web |
 | [Bypass de Autenticación Multi-Factor (MFA / 2FA)](./explotacion-mfa-bypass.md) | T1556.006 | Intermedia | Web |
 | [Explotación de CMS WordPress](./explotacion-cms-wordpress.md) | T1190 | Intermedia | Web |

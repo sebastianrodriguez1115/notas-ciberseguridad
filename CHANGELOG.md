@@ -2,6 +2,63 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger Unprotected admin functionality + nuevo `explotacion-broken-access-control.md`
+
+Primer lab del cluster Access Control. Apprentice. Vector trivial: `robots.txt` revela `/administrator-panel`, panel sin auth permite borrar a carlos con un GET. Resuelto con 3 curl commands en <30 segundos. El valor del lab está en la lección de diseño, no en la dificultad técnica.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **`robots.txt` es lista de objetivos para el atacante**: archivos cuyo único propósito es decir a crawlers "no indexes esto" anuncian explícitamente las rutas sensibles. La fix correcta es auth en el endpoint, no esconder el path.
+2. **Security through obscurity como anti-pattern**: si el único impedimento al acceso es no conocer la URL, eventualmente alguien la conoce. Vectores de descubrimiento múltiples: robots.txt, sitemap, JS leaks, wordlists (dirb/gobuster), Google dorking, errores con stack traces.
+3. **GET para mutaciones es CSRF-vulnerable**: incluso si el panel tuviera auth, un delete via `GET /delete?user=X` permite que `<img src=...>` en cualquier sitio ejecute la acción cuando un admin lo carga. POST/DELETE + CSRF token es la forma correcta.
+4. **Deny by default en lugar de allow by default**: cada endpoint debe declarar explícitamente sus requisitos. Decorators/middleware consistentes evitan olvidos por endpoint.
+
+### Archivos nuevos
+
+- **`learning/portswigger/unprotected-admin-functionality/writeup.md`**: 7 secciones con código del antipatrón vs implementación correcta del decorator `@require_admin`, sub-patterns de OWASP A01, diagrama Mermaid.
+- **`inventario/04-explotacion/web/explotacion-broken-access-control.md`**: archivo nuevo del inventario que cubre el umbrella de Broken Access Control (OWASP A01:2021). Categorías: functional level missing, IDOR, method-based bypass, URL-based bypass, multi-step bypass, referer-based, vertical/horizontal privesc. MITRE T1190. Hogar para futuros labs del cluster Access Control.
+
+### Conexión inventario
+
+- Inventario crece a **133 archivos** (era 132). `04-explotacion/web/INDEX.md` regenerado con la nueva entrada. `TOPICS.md` y los 4 facetados regenerados.
+
+### Verificación
+
+- `bash scripts/check.sh` ✓ (133/133 OK, indexes idempotentes).
+- Lab marcado solved: banner `is-solved` confirmado.
+
+---
+
+## [2026-05-08] — Writeup PortSwigger 2FA bypass using a brute-force attack + script `bruteforce.py`
+
+Lab Practitioner que cierra el cluster MFA bypass de PortSwigger (3 writeups: simple bypass, broken logic, este). Vector: brute-force directo del OTP de 4 dígitos. El defender implementó dos "defensas decorativas" — CSRF token que rota en cada response y session kick al segundo intento de OTP — pero ninguna mitiga brute-force. Costo del atacante: 4 requests por candidato (GET /login → POST /login → GET /login2 → POST /login2). Con 40 workers paralelos en sesiones independientes, el ataque completo termina en <5 minutos. Credenciales objetivo provistas por el lab (`carlos:montoya`); el OTP se encontró en `0255` con ~200 intentos.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **CSRF rotation no es rate-limit**: defienden contra threat models distintos. CSRF mitiga ataques cross-site (otra origin haciendo POST al endpoint vulnerable); rate-limit mitiga brute-force same-origin con script. Bypass del CSRF rotation = 1 línea de regex sobre la response anterior. Apilar CSRF sobre un endpoint sin rate-limit es defensa parcial.
+2. **Session kick al N-ésimo intento es defensa decorativa**: parece reducir el espacio de ataque pero solo agrega un re-login al costo del atacante. En este lab, kick al 2do intento → 4 requests/candidato vs 1 request/candidato sin defensa. Multiplicador 4× sobre 10⁴ = trivial. Para defender se necesita lockout que escale **no-linealmente** con N intentos: por usuario (no sesión), absoluto, idealmente exponencial.
+3. **El threat model "atacante interactivo" vs "atacante con script" requiere defensas distintas**: CSRF y session kick mitigan al primero (un user que tipea mal una vez); rate-limit/lockout mitigan al segundo. Un sistema con solo las primeras protege UX legítima pero no atacantes reales.
+4. **Patrón general - defensas decorativas**: aparece en CAPTCHA solo en login (no en password reset), rate-limit por IP bypassable con rotation, password complexity sin breached-password check, MFA por SMS sin defensa contra SIM swap, HTTPS sin HSTS. La regla universal: cada defensa atiende un threat model específico, apilar una capa no protege otros vectores.
+5. **Comparación cuantitativa con 2fa-broken-logic**: mismo espacio (10⁴), mismo objetivo (acceder a /my-account?id=carlos), distinto wrapper. Broken logic: 1 req/candidato (con sesión persistente), <1 minuto. Este: 4 req/candidato (re-login completo), <5 minutos. La diferencia visible (4× cost) es insignificante; el espacio sigue siendo brute-forceable porque sigue siendo finito y barato.
+6. **Implementación correcta del state machine**: rate-limit por user_id (no session_id), lockout temporal absoluto tras 5 intentos, OTP ligado a sesión específica (`(user_id, session_id)`), one-shot use, notificación al usuario. La fix del lab no es "tener csrf más fuerte" sino "agregar lockout".
+
+### Iteración real durante la resolución
+
+El user inicialmente confundió "me saca al segundo intento" con "kick al primero". Tuvimos que aclarar: tras submitir 1 OTP, la sesión sigue válida; al submitir el 2do, kick. Por eso 1 intento útil por sesión. El script se diseñó alrededor de eso: cada candidato es un cycle independiente con su propia sesión.
+
+### Archivos nuevos
+- **`learning/portswigger/2fa-bypass-using-a-brute-force-attack/writeup.md`**: 7 secciones con datos reales (cookies, status codes, csrf tokens), tabla comparativa con los 2 labs MFA hermanos, código del antipatrón vs implementación correcta del state machine + binding OTP a sesión, sección sobre threat models distintos y defensas decorativas, diagrama Mermaid.
+- **`learning/portswigger/2fa-bypass-using-a-brute-force-attack/bruteforce.py`**: ~140 líneas, `ThreadPoolExecutor` con 4 requests/candidato (GET /login → POST /login → GET /login2 → POST /login2), regex CSRF para extraer tokens de cada response, sessions independientes por worker. Default 30 workers, configurable.
+
+### Conexión inventario
+- `explotacion-mfa-bypass.md`: + `portswigger/2fa-bypass-using-a-brute-force-attack` en `learning_refs:` (3 writeups ahora). + 5 aliases nuevos: `2FA brute force, OTP brute force, CSRF rotation bypass, decorative defenses, session kick bypass`.
+
+### Verificación
+- `bash scripts/check.sh` ✓ (132/132 OK, indexes idempotentes).
+- Lab marcado solved: banner `is-solved` confirmado tras visit a `/my-account` con la session post-2FA.
+
+---
+
 ## [2026-05-08] — Writeup PortSwigger Broken brute-force protection, multiple credentials per request
 
 Lab Practitioner que cierra el cluster auth de PortSwigger sumando un séptimo writeup. Vector único en la familia: el endpoint de login es JSON-nativo (`Content-Type: application/json`), y `password` puede ser un array que el server itera completo. El rate-limit del defender cuenta requests, no candidatos. Resultado: empacando 100 passwords en una sola request, el ataque completo se ejecuta en **1 sola request HTTP** (~987 bytes de body, <1 segundo de tiempo). Credenciales encontradas: `carlos:555555` (binary search post-hoc en 7 requests adicionales para identificar el match exacto).

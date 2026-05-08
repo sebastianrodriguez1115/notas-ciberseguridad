@@ -240,7 +240,7 @@ archivos por valor de `by-mitre`.
 
 - [`explotacion-adcs-relay`](../04-explotacion/red/explotacion-adcs-relay.md) — Abuso de ADCS y Ataques de Relay
 
-## T1190 (22)
+## T1190 (23)
 
 - [`analisis-command-injection`](../03-analisis-vulnerabilidades/web/analisis-command-injection.md) — Análisis de Command Injection
 - [`analisis-cors`](../03-analisis-vulnerabilidades/web/analisis-cors.md) — Análisis de CORS (Cross-Origin Resource Sharing)
@@ -257,6 +257,7 @@ archivos por valor de `by-mitre`.
 - [`configuracion-uso-avanzado`](../06-frameworks-herramientas/burp-suite/configuracion-uso-avanzado.md) — Configuración y Uso Avanzado
 - [`enumeracion-webdav`](../02-enumeracion/web/enumeracion-webdav.md) — Enumeración y Prueba de WebDAV
 - [`explotacion-auth-bypass-oauth`](../04-explotacion/web/explotacion-auth-bypass-oauth.md) — Bypass de Autenticación en OAuth2 y OpenID
+- [`explotacion-broken-access-control`](../04-explotacion/web/explotacion-broken-access-control.md) — Broken Access Control
 - [`explotacion-cms-wordpress`](../04-explotacion/web/explotacion-cms-wordpress.md) — Explotación de CMS WordPress
 - [`explotacion-deserialization`](../04-explotacion/web/explotacion-deserialization.md) — Explotación de Deserialización Insegura
 - [`explotacion-fileupload`](../04-explotacion/web/explotacion-fileupload.md) — File Upload Exploitation

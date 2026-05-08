@@ -1,13 +1,13 @@
 ---
 title: Bypass de Autenticación Multi-Factor (MFA / 2FA)
 slug: explotacion-mfa-bypass
-aliases: [MFA bypass, 2FA bypass, multi-factor bypass, two-factor bypass, OTP bypass, TOTP bypass, broken auth state, auth state confusion, intermediate session bypass, pending-2FA bypass, skip second factor, broken authentication, broken MFA logic, response manipulation 2FA]
+aliases: [MFA bypass, 2FA bypass, multi-factor bypass, two-factor bypass, OTP bypass, TOTP bypass, broken auth state, auth state confusion, intermediate session bypass, pending-2FA bypass, skip second factor, broken authentication, broken MFA logic, response manipulation 2FA, 2FA brute force, OTP brute force, CSRF rotation bypass, decorative defenses, session kick bypass]
 fase: [Explotación]
 plataforma: Web
 dificultad: Intermedia
 mitre: [T1556.006]
 related: [explotacion-brute-force-advanced, explotacion-jwt, explotacion-auth-bypass-oauth]
-learning_refs: [portswigger/2fa-simple-bypass, portswigger/2fa-broken-logic]
+learning_refs: [portswigger/2fa-simple-bypass, portswigger/2fa-broken-logic, portswigger/2fa-bypass-using-a-brute-force-attack]
 ---
 
 # Bypass de Autenticación Multi-Factor (MFA / 2FA)

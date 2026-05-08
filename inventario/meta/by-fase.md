@@ -67,7 +67,7 @@ archivos por valor de `by-fase`.
 - [`fuzzing-subdominios-vhosts`](../02-enumeracion/fuzzing/fuzzing-subdominios-vhosts.md) — Fuzzing de Subdominios y Virtual Hosts
 - [`nikto`](../02-enumeracion/web/nikto.md) — Escaneo de Vulnerabilidades Web con Nikto
 
-## Explotación (33)
+## Explotación (34)
 
 - [`configuracion-uso-avanzado`](../06-frameworks-herramientas/burp-suite/configuracion-uso-avanzado.md) — Configuración y Uso Avanzado
 - [`enumeracion-docker`](../02-enumeracion/servicios/enumeracion-docker.md) — Enumeración Docker (Puerto 2375/2376)
@@ -75,6 +75,7 @@ archivos por valor de `by-fase`.
 - [`explotacion-adcs-relay`](../04-explotacion/red/explotacion-adcs-relay.md) — Abuso de ADCS y Ataques de Relay
 - [`explotacion-arp-spoofing`](../04-explotacion/red/explotacion-arp-spoofing.md) — ARP Spoofing y Envenenamiento de Red
 - [`explotacion-auth-bypass-oauth`](../04-explotacion/web/explotacion-auth-bypass-oauth.md) — Bypass de Autenticación en OAuth2 y OpenID
+- [`explotacion-broken-access-control`](../04-explotacion/web/explotacion-broken-access-control.md) — Broken Access Control
 - [`explotacion-brute-force-advanced`](../04-explotacion/credenciales/explotacion-brute-force-advanced.md) — Ataques de Fuerza Bruta Avanzados
 - [`explotacion-buffer-overflow-stack`](../04-explotacion/sistema/explotacion-buffer-overflow-stack.md) — Explotación de Buffer Overflow (Stack-based x86)
 - [`explotacion-cms-wordpress`](../04-explotacion/web/explotacion-cms-wordpress.md) — Explotación de CMS WordPress

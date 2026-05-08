@@ -470,6 +470,14 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Aliases**: OAuth bypass, OpenID Connect bypass, OIDC bypass, OAuth2
 - **Related**: `explotacion-jwt`
 
+## `explotacion-broken-access-control` — Broken Access Control
+
+- **Archivo**: [`inventario/04-explotacion/web/explotacion-broken-access-control.md`](./04-explotacion/web/explotacion-broken-access-control.md)
+- **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Básica
+- **Aliases**: BAC, broken access control, access control bypass, authorization bypass, missing function level access control, vertical privilege escalation, horizontal privilege escalation, forced browsing, unprotected admin, security through obscurity, role-based bypass, privilege escalation web, OWASP A01
+- **Related**: `analisis-idor`, `explotacion-mfa-bypass`, `explotacion-jwt`
+- **Learning**: [`portswigger/unprotected-admin-functionality`](../learning/portswigger/unprotected-admin-functionality/)
+
 ## `explotacion-brute-force-advanced` — Ataques de Fuerza Bruta Avanzados
 
 - **Archivo**: [`inventario/04-explotacion/credenciales/explotacion-brute-force-advanced.md`](./04-explotacion/credenciales/explotacion-brute-force-advanced.md)
@@ -548,9 +556,9 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/web/explotacion-mfa-bypass.md`](./04-explotacion/web/explotacion-mfa-bypass.md)
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
-- **Aliases**: MFA bypass, 2FA bypass, multi-factor bypass, two-factor bypass, OTP bypass, TOTP bypass, broken auth state, auth state confusion, intermediate session bypass, pending-2FA bypass, skip second factor, broken authentication, broken MFA logic, response manipulation 2FA
+- **Aliases**: MFA bypass, 2FA bypass, multi-factor bypass, two-factor bypass, OTP bypass, TOTP bypass, broken auth state, auth state confusion, intermediate session bypass, pending-2FA bypass, skip second factor, broken authentication, broken MFA logic, response manipulation 2FA, 2FA brute force, OTP brute force, CSRF rotation bypass, decorative defenses, session kick bypass
 - **Related**: `explotacion-brute-force-advanced`, `explotacion-jwt`, `explotacion-auth-bypass-oauth`
-- **Learning**: [`portswigger/2fa-simple-bypass`](../learning/portswigger/2fa-simple-bypass/), [`portswigger/2fa-broken-logic`](../learning/portswigger/2fa-broken-logic/)
+- **Learning**: [`portswigger/2fa-simple-bypass`](../learning/portswigger/2fa-simple-bypass/), [`portswigger/2fa-broken-logic`](../learning/portswigger/2fa-broken-logic/), [`portswigger/2fa-bypass-using-a-brute-force-attack`](../learning/portswigger/2fa-bypass-using-a-brute-force-attack/)
 
 ## `explotacion-mitm-responder` — Envenenamiento LLMNR/NBT-NS con Responder
 
