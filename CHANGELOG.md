@@ -2,6 +2,35 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger Referer-based access control
+
+Treceavo lab del cluster Access Control. Practitioner. Vector: el endpoint `/admin-roles?username=X&action=upgrade` no chequea sesión/rol; chequea el header `Referer`. Si `Referer` matchea `/admin`, autoriza. Razonamiento del dev: "si el cliente vino del admin panel (que sí está protegido), es admin". El bug: `Referer` lo setea el cliente. En Burp/curl se forja. Wiener manda la request con su sesión + `Referer: https://lab/admin` → 302 → admin.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Referer es client-controlled**: cualquier cliente lo manda como quiera. Browsers también lo manipulan vía `Referrer-Policy`, link tags, JS. Curl/Burp lo forjan trivialmente. No es atributo de seguridad.
+2. **"Browser-set automático" ≠ trustworthy**: trampa específica del Referer es que se siente browser-set (no es header que devs setean explícitamente como `Authorization`). Pero el browser obedece al cliente, y el cliente puede ser un atacante con DevTools.
+3. **Familia de headers client-controlled mal usados como authz**: `Referer` (este lab), `X-Forwarded-For` (IP whitelisting), `Origin` (CSRF sin token), `User-Agent` (anti-bot), cookies arbitrarias tipo `Admin=true`. Misma clase de error: confiar en dato que el cliente decide.
+4. **Cuándo Referer es legítimamente útil**: anti-CSRF defensa-en-profundidad (validar dominio, no path interno) sumado a CSRF tokens; analytics; hotlink protection; UX (redirect post-login). Patrón: información de bajo trust complementando otra defensa, no decisión principal.
+5. **Razonamiento defensivo del dev (auth retrofit)**: app empezó sin admin panel; cuando se agregó, el dev extrapoló la protección del UI (`/admin` requiere admin) a los endpoints de acción (`/admin-roles`) con la heurística "si llegaron desde admin, son admin". Testing manual con browser pasa pruebas porque el browser manda Referer correcto.
+6. **Vectores adicionales**: Referer parcial/substring (`if 'admin' in referer`), Referer ausente con fallback "interno", redirect chain para forzar Referer en browser real, `Referrer-Policy: unsafe-url` para forzar full URL.
+7. **Patrón estructural común con los 3 labs Practitioner previos del cluster**: server delega autorización a un atributo manipulable por el atacante (path en url-based, método en method-based, "vino del paso 1" en multi-step, Referer en este). Fix común: authz por sesión, único atributo que el server controla y ata al user autenticado.
+
+### Archivos nuevos
+
+- **`learning/portswigger/referer-based-access-control/writeup.md`**: 6 secciones, request/response real con `Referer` falsificado, antipatrón Flask vs fix con `@require_admin` decorator + CSRF token, tabla comparativa con los 3 labs Practitioner previos del cluster (URL-based, method-based, multi-step, referer-based), 5 vectores adicionales con `Referer`.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `explotacion-broken-access-control.md`. Inventario en 134 archivos.
+- `inventario/04-explotacion/web/explotacion-broken-access-control.md`: + writeup en `learning_refs:`, + 7 aliases nuevos (`Referer-based access control`, `Referer header authz`, `client-controlled headers`, `header trust bypass`, `X-Forwarded-For trust`, `Origin header trust`, `browser-set no es trustworthy`).
+
+### Lección de proceso
+
+User resolvió el lab antes de pedir el writeup, pero esta vez con una pregunta sustantiva: "¿qué tiene de distinto este vs los anteriores?". Respondí inline antes de escribir el writeup, contrastando los 4 labs Practitioner del cluster en una tabla. Pregunta del user destapó que la diferencia entre Referer-based y los otros bypass del cluster no era obvia desde el bug raw — el patrón estructural es idéntico, la diferencia es **qué atributo de la request el server confía erróneamente**. El writeup encarna esa narrativa.
+
+---
+
 ## [2026-05-07] — Writeup PortSwigger Multi-step process with no access control on one step
 
 Doceavo lab del cluster Access Control. Practitioner. Vector: **multi-step bypass / workflow flaw**. La acción admin de promote tiene 2 pasos (POST `username&action=upgrade` → confirm page → POST `confirmed=true`). El check de admin está en el paso 1 (render del confirm page), el paso 2 no re-valida porque "asume que llegaste desde paso 1". Wiener salta directo al paso 2 con `action=upgrade&confirmed=true&username=wiener` → 302 → admin.
