@@ -2,6 +2,35 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-07] — Writeup PortSwigger Insecure direct object references (static file IDOR)
+
+Noveno lab del cluster Access Control. Apprentice. Variante donde el IDOR está en el **layer de file serving**, no en endpoint dinámico: la app guarda transcripts del live chat como `/download-transcript/<N>.txt` con N entero secuencial. Sin authz check sobre el archivo. Decrementar el `2.txt` propio a `1.txt` accede al transcript de carlos, donde un user dictó su password al "soporte" en cleartext. Password carlos: `a2xhv9it2vspzij7jsy7`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **IDOR no es solo `?id=` en URLs dinámicas**: cualquier path predecible que mapee a un recurso sin authz check es IDOR. Static files servidos por nginx/Express, CDN paths, image proxies, URLs de download. El concepto es agnóstico de capa: client-controlled mapping → server-resource sin check.
+2. **Mental model que produce el bug**: dev separa "URLs dinámicas" (necesitan auth) de "static content" (público). Pero static content puede ser sensible. Reverse proxies seteados por defecto a "serve everything in /var/www" no pasan por threat model.
+3. **Dos bugs encadenados, distinta naturaleza**: (a) IDOR sobre static files es access control; (b) credenciales en logs (transcript del chat conserva el password en cleartext) es data hygiene. Cualquiera solo no resuelve el lab; combinados, takeover en una request.
+4. **Logs son recursos sensibles**: chat transcripts, audit trails, error reports pueden contener credenciales, PII, tokens. Mitigaciones: sanitización pre-storage (regex/ML detectando patterns tipo "password is", entropía alta), retention policies cortas, DLP en egress a SaaS de logs.
+5. **CDN cache amplifica el riesgo**: si un reverse proxy cachea archivos sensibles del origin, el bug persiste incluso si el origin se corrige. `Cache-Control: private, no-store` en respuestas con datos de user.
+6. **Layer correcto de fix**: storage interno fuera del webroot (`/var/data/transcripts/` no `/var/www/static/`), accedido sólo via app con authz check. Tokens random opacos por sesión que mapean a paths internos (doble check: token random + ownership match con sesión).
+
+### Archivos nuevos
+
+- **`learning/portswigger/insecure-direct-object-references/writeup.md`**: 6 secciones, request/response real (transcript de carlos completo con el password en cleartext), antipatrón nginx + Flask, fix con authz check + indirection layer por token random, tabla comparativa con los 4 labs IDOR previos del cluster mostrando el cambio sustancial (ID en path en lugar de query param, file serving en lugar de endpoint dinámico, dato leakeado proviene de logs no del recurso primario).
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: quinto writeup IDOR del cluster, refuerza `analisis-idor.md` y `explotacion-idor.md`. Inventario en 134 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-idor.md`: + writeup en `learning_refs:`.
+- `inventario/04-explotacion/web/explotacion-idor.md`: + writeup en `learning_refs:`, + 8 aliases nuevos (`IDOR sobre static files`, `static file enumeration`, `predictable filenames`, `integer ID en path`, `transcript download IDOR`, `credenciales en logs`, `chat logs sin sanitizar`, `file serving sin authz`).
+
+### Lección de proceso
+
+Lab resuelto WITH user en una sola iteración. User capturó request real con response completa (transcript de carlos con password en cleartext). Writeup escrito con datos reales: cookie `H2sTqjGLNB2qIbzgKhHHz6KW1eLRSk9C`, password `a2xhv9it2vspzij7jsy7`, transcript completo citado.
+
+---
+
 ## [2026-05-07] — Writeup PortSwigger User ID controlled by request parameter with password disclosure
 
 Octavo lab del cluster Access Control. Apprentice. **Primer lab del cluster IDOR donde el chain pasa de horizontal a vertical privesc**: dos bugs encadenados (IDOR + password disclosure en HTML) elevan account takeover de admin desde una sesión user normal. La cuenta `/my-account?id=administrator` renderiza un form de change-password con `<input type=password value='wb8n28nija2hetkpyaql'/>`; login admin → delete carlos. Password admin: `wb8n28nija2hetkpyaql`.

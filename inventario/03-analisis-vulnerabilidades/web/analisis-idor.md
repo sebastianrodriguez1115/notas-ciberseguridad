@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Básica
 mitre: [T1190]
 related: [analisis-csrf, explotacion-idor]
-learning_refs: [portswigger/user-id-controlled-by-request-parameter, portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids, portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect, portswigger/user-id-controlled-by-request-parameter-with-password-disclosure]
+learning_refs: [portswigger/user-id-controlled-by-request-parameter, portswigger/user-id-controlled-by-request-parameter-with-unpredictable-user-ids, portswigger/user-id-controlled-by-request-parameter-with-data-leakage-in-redirect, portswigger/user-id-controlled-by-request-parameter-with-password-disclosure, portswigger/insecure-direct-object-references]
 ---
 
 # Análisis de Vulnerabilidades: Insecure Direct Object Reference (IDOR)
