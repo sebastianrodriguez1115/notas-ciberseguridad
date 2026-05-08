@@ -2,6 +2,38 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger Broken brute-force protection, multiple credentials per request
+
+Lab Practitioner que cierra el cluster auth de PortSwigger sumando un séptimo writeup. Vector único en la familia: el endpoint de login es JSON-nativo (`Content-Type: application/json`), y `password` puede ser un array que el server itera completo. El rate-limit del defender cuenta requests, no candidatos. Resultado: empacando 100 passwords en una sola request, el ataque completo se ejecuta en **1 sola request HTTP** (~987 bytes de body, <1 segundo de tiempo). Credenciales encontradas: `carlos:555555` (binary search post-hoc en 7 requests adicionales para identificar el match exacto).
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Type confusion entre JSON y form-encoded**: el contrato implícito de "1 request = 1 credencial" se mantiene en form-encoded (clave-valor flat), pero JSON permite estructuras anidadas. Si el backend acepta `password` como array y lo procesa, una request lleva N credenciales. La defensa diseñada para form-encoded no se actualizó al contrato JSON. Es la clase de bug que aparece cuando se agrega una API nueva sin auditar las defensas perimetrales que asumían el contrato anterior.
+2. **Rate-limit mide la métrica equivocada**: contar requests es proxy del esfuerzo del atacante, pero lo que importa es el esfuerzo de validación del backend. La fix correcta no es "no permitir arrays" sino "contar `len(array)` attempts" en el rate-limit. Patrón general: medir lo que cuesta mucho (operaciones lógicas), no lo que cuesta poco (HTTP requests).
+3. **Validación de tipo estricta como primera línea de defensa**: rechazar `password` que no sea string en una sola línea de código cierra el vector independientemente del estado del rate-limit. Es la fix más limpia: local al endpoint, fail-safe (rechaza antes de tocar lógica de auth), self-documenting.
+4. **El vector escala más allá de login**: el mismo antipattern aparece en search endpoints, email blast prevention, coupon redemption, GraphQL batch queries. Cualquier endpoint con defenses scalar-input que acepta JSON sin validar tipo es vulnerable. La regla universal: medir la métrica correcta y validar tipos estrictamente.
+5. **Trampa operacional con "Follow redirects" + cookies**: el primer test del vector (peter al inicio del array) parecía fallar porque Burp Repeater seguía redirects perdiendo la cookie nueva entre saltos. La login real (302 a `/my-account`) sucedía en la **primera response** de la cadena, pero la última visible era el re-render del login. Lección: cuando se inspecciona redirect chains, mirar la primera response cruda. Confiar en la última induce falsos negativos.
+6. **Binary search reusa el mismo vector como oráculo**: identificar exactamente cuál de los 100 passwords matcheó requiere log2(100) ≈ 7 requests adicionales, usando el mismo "array de passwords" pero como oráculo binario sobre subsets. Mismo mecanismo, dos preguntas distintas: oneshot pregunta "¿alguno match?", bsearch pregunta "¿en qué mitad?".
+7. **Mejor relación brute-force/request del cluster auth**: 1 request para 100 candidatos vs 100-200 requests en los labs hermanos (IP block, change-password). Por orden de magnitud el ataque más eficiente del cluster.
+
+### Iteración real durante la resolución
+
+El usuario inicialmente concluyó "no hizo login" cuando la primera response de un test era 302 success pero el "Follow redirects" de Burp llevaba a la chain hasta /login. Faltaba la configuración de "Process Cookies..." de Burp para seguir la cadena correctamente. Lección incorporada al writeup como anti-tip operacional.
+
+### Archivos nuevos
+- **`learning/portswigger/broken-bruteforce-protection-multiple-credentials-per-request/writeup.md`**: 7 secciones con datos reales (cookies, status codes, request bytes), tabla comparativa de costos del cluster auth (este es 1 request vs ~200 en otros), código del antipatrón vs implementación correcta del state machine + binding de OTP a sesión, mapeo del patrón general de type confusion en API rate-limits, diagrama Mermaid.
+- **`learning/portswigger/broken-bruteforce-protection-multiple-credentials-per-request/bruteforce.py`**: ~110 líneas, dos modos: `oneshot` (1 request con todos los candidatos) y `bsearch` (binary search log2(N) para identificar el password exacto post-hoc).
+- **`learning/portswigger/broken-bruteforce-protection-multiple-credentials-per-request/passwords.txt`**: wordlist canónica de PortSwigger (100 passwords).
+
+### Conexión inventario
+- `explotacion-brute-force-advanced.md`: + `portswigger/broken-bruteforce-protection-multiple-credentials-per-request` en `learning_refs:` (7 writeups ahora). + 6 aliases nuevos: `multiple credentials per request, password array bypass, JSON type confusion login, rate-limit metric bypass, agregacion de candidatos en un request, type confusion bruteforce`.
+
+### Verificación
+- `bash scripts/check.sh` ✓ (132/132 OK, indexes idempotentes).
+- Lab marcado solved: banner `is-solved` confirmado tras visit a `/my-account` con la session de carlos.
+
+---
+
 ## [2026-05-08] — Writeup PortSwigger Password brute-force via password change + script `bruteforce.py`
 
 Lab Practitioner que cierra el cluster auth de PortSwigger sumando un sexto writeup. Cambia el target del ataque: no es el login form (donde están todas las defensas - rate-limit, lockout, captcha) sino el endpoint **post-login** `POST /my-account/change-password`. El defender concentró defensas en el login asumiendo que post-auth ya no era superficie crítica; el resultado es un endpoint que valida credenciales sin las defensas del login y termina siendo brute-force oracle universal. Combinación de tres defectos: `username` honrado del body (no de sesión), branches de error distinguibles según validez del current-password, y kick-on-failure que invalida sesión sin lockear cuenta. Credenciales encontradas: `carlos:summer` (~50 intentos del wordlist canónico).
