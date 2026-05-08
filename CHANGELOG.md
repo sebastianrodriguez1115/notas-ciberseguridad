@@ -2,6 +2,36 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-07] — Writeup PortSwigger URL-based access control can be circumvented
+
+Décimo lab del cluster Access Control. **Practitioner** (primer lab Practitioner del cluster). Vector estructuralmente distinto al resto: no IDOR ni mass assignment ni cookie tampering, sino **split-brain entre frontend y backend** sobre la URL de la request. Frontend (proxy/WAF) bloquea `/admin` mirando la request line; backend respeta `X-Original-URL` para routing. Atacante manda `GET /` (frontend permite) + `X-Original-URL: /admin/delete` (backend dispatch admin/delete) + `username=carlos` en body → 302 a `/admin`, lab solved.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Split-brain como clase de bug general**: misma raíz que HTTP request smuggling, host header injection, HTTP/2 downgrade smuggling, cache poisoning vía header. Patrón: dos sistemas operando sobre la misma request pero interpretándola distinto. Solución estructural: normalizar agresivamente en el primer hop + duplicar checks críticos.
+2. **Familia de headers explotables**: `X-Original-URL` (Symfony, IIS, Apache), `X-Rewrite-URL` (mod_rewrite legado), `X-Forwarded-Path`, `X-Forwarded-URI`, `X-Override-URL`, `X-HTTP-Method-Override`, `X-Custom-IP-Authorization` (Akamai). Cualquiera que el backend honre y el frontend no strippee es split-brain.
+3. **Por qué el frontend no elimina el header (causas estructurales)**: fail-open por default (no hay regla por header no estándar), header pasa "como información" (proxies internos legítimos lo agregan), equipos separados sin revisar config del otro, doc oscura que habilita estos headers por default.
+4. **Authz pertenece al backend, no al frontend**: el frontend opera con visibilidad limitada (URL, IPs, headers) y no conoce sesiones/roles/ownership. Cualquier decisión que requiera "este user es admin" tiene que hacerla el backend. Frontend = primera línea de defensa (rate-limit, OWASP rules); backend = decisión final.
+5. **Detección del bug por canary path**: `GET / + X-Original-URL: /invalid` → si responde 404 (en lugar de 200 del home), confirma que el backend está routeando contra el header. Test trivial para fingerprint.
+6. **Stripping correcto en frontend**: `proxy_set_header X-Original-URL "";` o mejor `proxy_pass_request_headers off;` con allowlist explícita (Host, X-Real-IP, X-Forwarded-For). Allowlist > blocklist.
+7. **Body en GET funcionó**: `username=carlos` se mandó en body con method GET. No canónico pero el framework lo parseó como form data igual. La solución oficial sugiere query string; ambos vectores funcionan.
+
+### Archivos nuevos
+
+- **`learning/portswigger/url-based-access-control-can-be-circumvented/writeup.md`**: 6 secciones, request/response real, tabla de 7 headers explotables, tabla de 5 vulnerabilidades hermanas que comparten patrón split-brain (request smuggling, host header injection, HTTP/2 downgrade, cache poisoning), antipatrón nginx + fix con allowlist de headers + authz duplicada en backend.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `explotacion-broken-access-control.md`. Inventario en 134 archivos.
+- `inventario/04-explotacion/web/explotacion-broken-access-control.md`: + writeup en `learning_refs:`, + 7 aliases nuevos (`URL-based access control bypass`, `X-Original-URL bypass`, `X-Rewrite-URL bypass`, `header rewrite bypass`, `frontend backend split-brain`, `header smuggling routing`, `X-Forwarded-Path`).
+- Cross-ref con `password-reset-poisoning-via-middleware` (mismo patrón de header confusion entre capas, distinto header).
+
+### Lección de proceso
+
+Lab resuelto WITH user. User capturó request final (`GET /` + `X-Original-Url: /admin/delete` + body `username=carlos`) con response 302 a /admin. Escribir el writeup obligó a documentar que el body funcionó en lugar del query string sugerido por la solución oficial, hallazgo concreto del lab.
+
+---
+
 ## [2026-05-07] — Writeup PortSwigger Insecure direct object references (static file IDOR)
 
 Noveno lab del cluster Access Control. Apprentice. Variante donde el IDOR está en el **layer de file serving**, no en endpoint dinámico: la app guarda transcripts del live chat como `/download-transcript/<N>.txt` con N entero secuencial. Sin authz check sobre el archivo. Decrementar el `2.txt` propio a `1.txt` accede al transcript de carlos, donde un user dictó su password al "soporte" en cleartext. Password carlos: `a2xhv9it2vspzij7jsy7`.
