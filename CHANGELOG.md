@@ -2,6 +2,35 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-07] — Writeup PortSwigger Method-based access control can be circumvented
+
+Onceavo lab del cluster Access Control. Practitioner. Vector: **verb tampering** / method-based bypass. El filtro de admin chequea sólo si el método es `POST` literal; el handler del controller (Servlet doGet+doPost, `@RequestMapping` sin method=) acepta múltiples métodos con la misma lógica. Cambiar a `GET` con params en query string saltea el filtro y promueve a wiener a admin. Endpoint vulnerable: `/admin-roles?username=wiener&action=upgrade`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Patrón estructural del bug**: filtro de auth acoplado al método (`if request.method == "POST" and path == "/admin"`), handler que acepta múltiples métodos con lógica idéntica (Servlet con `doGet` y `doPost` delegando al mismo `handle()`). El gap entre los dos abre el bypass.
+2. **Método HTTP no es atributo de seguridad**: enumerar métodos en filtros es allowlist al revés. La regla correcta es deny by default (auth en cada handler/anotación), no enumerar verbos a chequear.
+3. **400 Bad Request ≠ 401 Unauthorized — no confundirlos**: 400 dice "el handler corrió, params no llegaron". Si pasas auth y ves 400, el bug es de transporte (params en lugar incorrecto, encoding wrong, content-type wrong); seguís con eso, no con auth. 401/403 = todavía bloqueado, probá otro método. Cada code marca un punto distinto en el pipeline.
+4. **Trampa puntual**: GET con body no se parsea en frameworks default (Spring, Express, Flask). Los params tienen que ir en query string. Mandé el primer intento con body en GET y obtuve "missing parameter" (auth ya pasada, pero handler no lee body en GET).
+5. **Familia completa de verbos para probar**: `POST`, `GET`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS`, custom (`POSTX`, `FOOBAR`), WebDAV (`PROPFIND`, `MKCOL`, `LOCK`, `COPY`, `MOVE`), method override headers (`X-HTTP-Method-Override`). Si el filtro enumera, cualquier verbo no enumerado es candidato.
+6. **Servlet Java es vector típico** (`doGet` + `doPost` que delegan al mismo `handle()`): legacy filter pattern donde la auth se escribió pensando POST de forms y el endpoint pasó a aceptar JSON via PUT/PATCH manteniendo el filtro original.
+7. **Conexión con lab anterior `url-based-access-control-can-be-circumvented`**: ambos son **defensa parcial mal acoplada**. URL-based mira el path, method-based mira el método. Filtro y dispatcher tienen que coincidir en superficie completa, cualquier asimetría es bypass.
+
+### Archivos nuevos
+
+- **`learning/portswigger/method-based-access-control-can-be-circumvented/writeup.md`**: 6 secciones, request/response real (POST original con `username=wiener&action=upgrade` body → cambio a GET con query string), código Servlet Java mostrando el antipatrón vs 3 fixes (allowlist de métodos, auth en cada handler, deny-by-default con `@PreAuthorize`), tabla de familia de verbos explotables.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `explotacion-broken-access-control.md`. Inventario en 134 archivos.
+- `inventario/04-explotacion/web/explotacion-broken-access-control.md`: + writeup en `learning_refs:`, + 7 aliases nuevos (`method-based access control bypass`, `verb tampering`, `HTTP method bypass`, `POSTX bypass`, `GET en lugar de POST`, `X-HTTP-Method-Override`, `filtro acoplado al metodo`).
+
+### Lección de proceso
+
+Lab resuelto WITH user. User capturó request original (POST admin) y experimentó con cambio de método. Punto de confusión real: al cambiar a GET con body, recibió 400 "Missing parameter" y pensó que seguía bloqueado. Aclaré la diferencia 400 vs 401 (auth ya pasó, params en lugar incorrecto), user movió params a query string en una iteración → solved. El writeup incluye esta lección como sección dedicada porque es trampa común en pentesting.
+
+---
+
 ## [2026-05-07] — Writeup PortSwigger URL-based access control can be circumvented
 
 Décimo lab del cluster Access Control. **Practitioner** (primer lab Practitioner del cluster). Vector estructuralmente distinto al resto: no IDOR ni mass assignment ni cookie tampering, sino **split-brain entre frontend y backend** sobre la URL de la request. Frontend (proxy/WAF) bloquea `/admin` mirando la request line; backend respeta `X-Original-URL` para routing. Atacante manda `GET /` (frontend permite) + `X-Original-URL: /admin/delete` (backend dispatch admin/delete) + `username=carlos` en body → 302 a `/admin`, lab solved.

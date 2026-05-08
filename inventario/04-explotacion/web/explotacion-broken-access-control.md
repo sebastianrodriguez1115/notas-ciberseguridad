@@ -1,13 +1,13 @@
 ---
 title: Broken Access Control
 slug: explotacion-broken-access-control
-aliases: [BAC, broken access control, access control bypass, authorization bypass, missing function level access control, vertical privilege escalation, horizontal privilege escalation, forced browsing, unprotected admin, security through obscurity, role-based bypass, privilege escalation web, OWASP A01, mass assignment, sobre-aceptacion de campos, BOPLA, broken object property level authorization, autobinding vulnerability, strong parameters bypass, URL-based access control bypass, X-Original-URL bypass, X-Rewrite-URL bypass, header rewrite bypass, frontend backend split-brain, header smuggling routing, X-Forwarded-Path]
+aliases: [BAC, broken access control, access control bypass, authorization bypass, missing function level access control, vertical privilege escalation, horizontal privilege escalation, forced browsing, unprotected admin, security through obscurity, role-based bypass, privilege escalation web, OWASP A01, mass assignment, sobre-aceptacion de campos, BOPLA, broken object property level authorization, autobinding vulnerability, strong parameters bypass, URL-based access control bypass, X-Original-URL bypass, X-Rewrite-URL bypass, header rewrite bypass, frontend backend split-brain, header smuggling routing, X-Forwarded-Path, method-based access control bypass, verb tampering, HTTP method bypass, POSTX bypass, GET en lugar de POST, X-HTTP-Method-Override, filtro acoplado al metodo]
 fase: [Explotación]
 plataforma: Web
 dificultad: Básica
 mitre: [T1190]
 related: [analisis-idor, explotacion-mfa-bypass, explotacion-jwt]
-learning_refs: [portswigger/unprotected-admin-functionality, portswigger/unprotected-admin-functionality-with-unpredictable-url, portswigger/user-role-controlled-by-request-parameter, portswigger/user-role-can-be-modified-in-user-profile, portswigger/url-based-access-control-can-be-circumvented]
+learning_refs: [portswigger/unprotected-admin-functionality, portswigger/unprotected-admin-functionality-with-unpredictable-url, portswigger/user-role-controlled-by-request-parameter, portswigger/user-role-can-be-modified-in-user-profile, portswigger/url-based-access-control-can-be-circumvented, portswigger/method-based-access-control-can-be-circumvented]
 ---
 
 # Broken Access Control
