@@ -474,9 +474,9 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 
 - **Archivo**: [`inventario/04-explotacion/credenciales/explotacion-brute-force-advanced.md`](./04-explotacion/credenciales/explotacion-brute-force-advanced.md)
 - **Fase**: Explotación · **Plataforma**: Multi · **Dificultad**: Intermedia
-- **Aliases**: Ataques de Fuerza Bruta Avanzados, brute force, password guessing, username enumeration, account enumeration, side-channel auth, response differential, observable response discrepancy, login form fuzzing, credential bruteforce, hydra, medusa, password spraying, timing attack, response timing differential, bcrypt timing oracle, X-Forwarded-For rate-limit bypass, IP-based rate limit bypass, reset-on-success counter bypass, interleaved login attack, broken bruteforce protection
+- **Aliases**: Ataques de Fuerza Bruta Avanzados, brute force, password guessing, username enumeration, account enumeration, side-channel auth, response differential, observable response discrepancy, login form fuzzing, credential bruteforce, hydra, medusa, password spraying, timing attack, response timing differential, bcrypt timing oracle, X-Forwarded-For rate-limit bypass, IP-based rate limit bypass, reset-on-success counter bypass, interleaved login attack, broken bruteforce protection, account lock as oracle, lockout asymmetry, blast through lockout, password brute-force via change-password, change-password as oracle, post-login auth oracle, asymmetric defense, defense asymmetry login vs change-password
 - **Related**: `explotacion-password-spraying`
-- **Learning**: [`portswigger/username-enumeration-via-different-responses`](../learning/portswigger/username-enumeration-via-different-responses/), [`portswigger/username-enumeration-via-subtly-different-responses`](../learning/portswigger/username-enumeration-via-subtly-different-responses/), [`portswigger/username-enumeration-via-response-timing`](../learning/portswigger/username-enumeration-via-response-timing/), [`portswigger/broken-bruteforce-protection-ip-block`](../learning/portswigger/broken-bruteforce-protection-ip-block/)
+- **Learning**: [`portswigger/username-enumeration-via-different-responses`](../learning/portswigger/username-enumeration-via-different-responses/), [`portswigger/username-enumeration-via-subtly-different-responses`](../learning/portswigger/username-enumeration-via-subtly-different-responses/), [`portswigger/username-enumeration-via-response-timing`](../learning/portswigger/username-enumeration-via-response-timing/), [`portswigger/broken-bruteforce-protection-ip-block`](../learning/portswigger/broken-bruteforce-protection-ip-block/), [`portswigger/username-enumeration-via-account-lock`](../learning/portswigger/username-enumeration-via-account-lock/), [`portswigger/password-brute-force-via-password-change`](../learning/portswigger/password-brute-force-via-password-change/)
 
 ## `explotacion-buffer-overflow-stack` — Explotación de Buffer Overflow (Stack-based x86)
 
@@ -550,7 +550,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
 - **Aliases**: MFA bypass, 2FA bypass, multi-factor bypass, two-factor bypass, OTP bypass, TOTP bypass, broken auth state, auth state confusion, intermediate session bypass, pending-2FA bypass, skip second factor, broken authentication, broken MFA logic, response manipulation 2FA
 - **Related**: `explotacion-brute-force-advanced`, `explotacion-jwt`, `explotacion-auth-bypass-oauth`
-- **Learning**: [`portswigger/2fa-simple-bypass`](../learning/portswigger/2fa-simple-bypass/)
+- **Learning**: [`portswigger/2fa-simple-bypass`](../learning/portswigger/2fa-simple-bypass/), [`portswigger/2fa-broken-logic`](../learning/portswigger/2fa-broken-logic/)
 
 ## `explotacion-mitm-responder` — Envenenamiento LLMNR/NBT-NS con Responder
 
@@ -585,7 +585,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
 - **Aliases**: password reset bugs, broken password reset, password reset poisoning, host header injection password reset, token leak via referer, predictable reset token, reset token reuse, account takeover via password reset, ATO via password reset, forgot password vulnerabilities, password recovery flaws, broken reset logic, confused deputy password reset
 - **Related**: `explotacion-mfa-bypass`, `explotacion-brute-force-advanced`, `explotacion-jwt`
-- **Learning**: [`portswigger/password-reset-broken-logic`](../learning/portswigger/password-reset-broken-logic/)
+- **Learning**: [`portswigger/password-reset-broken-logic`](../learning/portswigger/password-reset-broken-logic/), [`portswigger/password-reset-poisoning-via-middleware`](../learning/portswigger/password-reset-poisoning-via-middleware/)
 
 ## `explotacion-password-spraying` — Password Spraying
 
@@ -604,6 +604,14 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/04-explotacion/client-side/explotacion-process-injection.md`](./04-explotacion/client-side/explotacion-process-injection.md)
 - **Fase**: Explotación · **Plataforma**: Windows · **Dificultad**: Avanzada
 - **Aliases**: Process Injection y Evasión
+
+## `explotacion-session-cookies-debiles` — Explotación de Cookies de Sesión Débiles
+
+- **Archivo**: [`inventario/04-explotacion/web/explotacion-session-cookies-debiles.md`](./04-explotacion/web/explotacion-session-cookies-debiles.md)
+- **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
+- **Aliases**: Cookies de Sesión Débiles, weak session cookie, predictable session token, remember-me cookie attack, stay-logged-in cookie, persistent auth cookie, cookie brute force, session token forgery, hash-as-token, derived auth cookie, cookie exfiltration via XSS, offline password cracking from cookie, MD5 password hash leak
+- **Related**: `explotacion-jwt`, `explotacion-brute-force-advanced`
+- **Learning**: [`portswigger/brute-forcing-stay-logged-in-cookie`](../learning/portswigger/brute-forcing-stay-logged-in-cookie/), [`portswigger/offline-password-cracking`](../learning/portswigger/offline-password-cracking/)
 
 ## `explotacion-shellshock` — Shellshock (CVE-2014-6271)
 
@@ -632,7 +640,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
 - **Aliases**: XSS exploitation, cookie hijacking, session theft, BeEF, form override, keylogger client-side, XSS to CSRF, XSS chain, same-origin auto-exfiltration, password manager autofill abuse, credential capture, dangling markup attack, formaction hijack, two-stage CSRF chain, SameSite bypass via GET, CSP directive injection, script-src-elem override
 - **Related**: `analisis-xss`, `analisis-csrf`, `analisis-seguridad-cabeceras`
-- **Learning**: [`portswigger/exploiting-xss-to-steal-cookies`](../learning/portswigger/exploiting-xss-to-steal-cookies/), [`portswigger/exploiting-xss-to-capture-passwords`](../learning/portswigger/exploiting-xss-to-capture-passwords/), [`portswigger/exploiting-xss-to-bypass-csrf-defenses`](../learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/), [`portswigger/reflected-xss-very-strict-csp-dangling-markup`](../learning/portswigger/reflected-xss-very-strict-csp-dangling-markup/), [`portswigger/reflected-xss-csp-directive-injection`](../learning/portswigger/reflected-xss-csp-directive-injection/)
+- **Learning**: [`portswigger/exploiting-xss-to-steal-cookies`](../learning/portswigger/exploiting-xss-to-steal-cookies/), [`portswigger/exploiting-xss-to-capture-passwords`](../learning/portswigger/exploiting-xss-to-capture-passwords/), [`portswigger/exploiting-xss-to-bypass-csrf-defenses`](../learning/portswigger/exploiting-xss-to-bypass-csrf-defenses/), [`portswigger/reflected-xss-very-strict-csp-dangling-markup`](../learning/portswigger/reflected-xss-very-strict-csp-dangling-markup/), [`portswigger/reflected-xss-csp-directive-injection`](../learning/portswigger/reflected-xss-csp-directive-injection/), [`portswigger/offline-password-cracking`](../learning/portswigger/offline-password-cracking/)
 
 ## `explotacion-zerologon` — Explotación de Zerologon (CVE-2020-1472)
 

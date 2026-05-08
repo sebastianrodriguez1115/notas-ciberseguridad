@@ -67,7 +67,7 @@ archivos por valor de `by-fase`.
 - [`fuzzing-subdominios-vhosts`](../02-enumeracion/fuzzing/fuzzing-subdominios-vhosts.md) — Fuzzing de Subdominios y Virtual Hosts
 - [`nikto`](../02-enumeracion/web/nikto.md) — Escaneo de Vulnerabilidades Web con Nikto
 
-## Explotación (32)
+## Explotación (33)
 
 - [`configuracion-uso-avanzado`](../06-frameworks-herramientas/burp-suite/configuracion-uso-avanzado.md) — Configuración y Uso Avanzado
 - [`enumeracion-docker`](../02-enumeracion/servicios/enumeracion-docker.md) — Enumeración Docker (Puerto 2375/2376)
@@ -95,6 +95,7 @@ archivos por valor de `by-fase`.
 - [`explotacion-password-spraying`](../04-explotacion/credenciales/explotacion-password-spraying.md) — Password Spraying
 - [`explotacion-phishing-tecnico`](../04-explotacion/client-side/explotacion-phishing-tecnico.md) — Phishing Técnico (Evilginx2 & Gophish)
 - [`explotacion-process-injection`](../04-explotacion/client-side/explotacion-process-injection.md) — Process Injection y Evasión
+- [`explotacion-session-cookies-debiles`](../04-explotacion/web/explotacion-session-cookies-debiles.md) — Explotación de Cookies de Sesión Débiles
 - [`explotacion-shellshock`](../04-explotacion/sistema/explotacion-shellshock.md) — Shellshock (CVE-2014-6271)
 - [`explotacion-smb-relay`](../04-explotacion/red/explotacion-smb-relay.md) — SMB Relay Attack
 - [`explotacion-sqli`](../04-explotacion/web/explotacion-sqli.md) — Inyección SQL (SQLi)

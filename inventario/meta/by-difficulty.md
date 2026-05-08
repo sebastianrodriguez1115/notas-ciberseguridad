@@ -83,7 +83,7 @@ archivos por valor de `by-difficulty`.
 - [`whois-registros-dominio`](../01-reconocimiento/pasivo/whois-registros-dominio.md) — WHOIS y Registros de Dominio
 - [`windows-arquitectura-ad`](../07-fundamentos/sistemas/windows-arquitectura-ad.md) — Arquitectura de Windows y Active Directory
 
-## Intermedia (59)
+## Intermedia (60)
 
 - [`abuso-cron-jobs`](../05-post-explotacion/privilege-escalation/linux/abuso-cron-jobs.md) — Abuso de Cron Jobs
 - [`abuso-servicios-windows`](../05-post-explotacion/privilege-escalation/windows/abuso-servicios-windows.md) — Abuso de Servicios de Windows
@@ -128,6 +128,7 @@ archivos por valor de `by-difficulty`.
 - [`explotacion-mitm-responder`](../04-explotacion/red/explotacion-mitm-responder.md) — Envenenamiento LLMNR/NBT-NS con Responder
 - [`explotacion-nosqli`](../04-explotacion/web/explotacion-nosqli.md) — Inyección NoSQL (NoSQLi)
 - [`explotacion-password-reset-flaws`](../04-explotacion/web/explotacion-password-reset-flaws.md) — Vulnerabilidades en Flujos de Password Reset
+- [`explotacion-session-cookies-debiles`](../04-explotacion/web/explotacion-session-cookies-debiles.md) — Explotación de Cookies de Sesión Débiles
 - [`explotacion-shellshock`](../04-explotacion/sistema/explotacion-shellshock.md) — Shellshock (CVE-2014-6271)
 - [`explotacion-sqli`](../04-explotacion/web/explotacion-sqli.md) — Inyección SQL (SQLi)
 - [`explotacion-xss`](../04-explotacion/web/explotacion-xss.md) — Explotación de Cross-Site Scripting (XSS)

@@ -381,6 +381,17 @@ grep -rl "Allen, L." inventario/
 
 **No son linkeables**: directorios con sólo scripts (`.py`, `.sh`, `.rb`), wordlists, archivos sueltos al nivel raíz de `learning/<plataforma>/`, material de curso fragmentado sin `writeup.md` consolidado, ni directorios donde el archivo Markdown se llame distinto (`notes.md`, `solution.md`, etc.). El validador `scripts/validate.py` rechaza cualquier `learning_refs:` que apunte a un directorio sin `writeup.md`.
 
+## Workflow de Labs Prácticos (PortSwigger, TryHackMe, etc.)
+
+Cuando el usuario solicite seguir o resolver un lab práctico (ej. PortSwigger Web Security Academy, TryHackMe, HackTheBox), el agente **NO debe escribir el `writeup.md` directamente**. El flujo correcto es:
+
+1. **Resolver el lab juntos primero**: ayudar al usuario paso a paso (reconocimiento, formulación de hipótesis, construcción de payloads, interpretación de respuestas, ajustes). El usuario es quien interactúa con la plataforma del lab; el agente acompaña con guía técnica, sugerencias de qué probar, y análisis de los resultados que el usuario reporta.
+2. **Esperar confirmación de "lab solved"**: el writeup sólo se escribe cuando el usuario confirma explícitamente que el lab está resuelto en la plataforma. No anticipar la solución desde la documentación oficial del lab y consolidarla como si hubiera sido el camino real.
+3. **El writeup refleja el camino real**: incluir las hipótesis que el usuario probó (incluso las fallidas si aportan insight), los datos concretos observados durante la resolución (cookies reales, status codes, longitudes de respuesta), y las decisiones tomadas en el momento. Un writeup honesto vale más que uno idealizado.
+4. **Excepción explícita**: si el usuario dice algo como "ya resolví el lab, redactá el writeup" o "saltate la resolución", entonces sí proceder directo al writeup. La regla por defecto es resolver primero.
+
+Anti-patrón: fetchear la página oficial del lab, deducir la solución, y escribir el writeup completo antes de que el usuario haya tocado la plataforma. Esto produce writeups técnicamente correctos pero pedagógicamente vacíos para el usuario y rompe el propósito del directorio `learning/` (registro del aprendizaje real, no compendio de soluciones oficiales).
+
 ## Heurísticas de Prioridad
 
 Para garantizar la precisión y actualidad del inventario, los agentes deben seguir este orden de prioridad al recopilar información:

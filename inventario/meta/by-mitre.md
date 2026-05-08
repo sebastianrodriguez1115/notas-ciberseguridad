@@ -207,11 +207,12 @@ archivos por valor de `by-mitre`.
 - [`enumeracion-oracle`](../02-enumeracion/servicios/enumeracion-oracle.md) — Enumeración Oracle Database
 - [`enumeracion-smb`](../02-enumeracion/red/enumeracion-smb.md) — Enumeración SMB (Server Message Block)
 
-## T1110.001 (3)
+## T1110.001 (4)
 
 - [`enumeracion-ftp`](../02-enumeracion/servicios/enumeracion-ftp.md) — Enumeración FTP (File Transfer Protocol)
 - [`enumeracion-ssh`](../02-enumeracion/servicios/enumeracion-ssh.md) — Enumeración SSH (Secure Shell)
 - [`explotacion-brute-force-advanced`](../04-explotacion/credenciales/explotacion-brute-force-advanced.md) — Ataques de Fuerza Bruta Avanzados
+- [`explotacion-session-cookies-debiles`](../04-explotacion/web/explotacion-session-cookies-debiles.md) — Explotación de Cookies de Sesión Débiles
 
 ## T1110.002 (1)
 
@@ -287,8 +288,9 @@ archivos por valor de `by-mitre`.
 
 - [`web-shells`](../05-post-explotacion/persistencia/web-shells.md) — Web Shells
 
-## T1539 (1)
+## T1539 (2)
 
+- [`explotacion-session-cookies-debiles`](../04-explotacion/web/explotacion-session-cookies-debiles.md) — Explotación de Cookies de Sesión Débiles
 - [`explotacion-xss`](../04-explotacion/web/explotacion-xss.md) — Explotación de Cross-Site Scripting (XSS)
 
 ## T1543.003 (1)

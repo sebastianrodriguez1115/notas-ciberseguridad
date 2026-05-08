@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Intermedia
 mitre: [T1556]
 related: [explotacion-mfa-bypass, explotacion-brute-force-advanced, explotacion-jwt]
-learning_refs: [portswigger/password-reset-broken-logic]
+learning_refs: [portswigger/password-reset-broken-logic, portswigger/password-reset-poisoning-via-middleware]
 ---
 
 # Vulnerabilidades en Flujos de Password Reset

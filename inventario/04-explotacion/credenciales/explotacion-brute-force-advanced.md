@@ -1,13 +1,13 @@
 ---
 title: Ataques de Fuerza Bruta Avanzados
 slug: explotacion-brute-force-advanced
-aliases: [Ataques de Fuerza Bruta Avanzados, brute force, password guessing, username enumeration, account enumeration, side-channel auth, response differential, observable response discrepancy, login form fuzzing, credential bruteforce, hydra, medusa, password spraying, timing attack, response timing differential, bcrypt timing oracle, X-Forwarded-For rate-limit bypass, IP-based rate limit bypass, reset-on-success counter bypass, interleaved login attack, broken bruteforce protection]
+aliases: [Ataques de Fuerza Bruta Avanzados, brute force, password guessing, username enumeration, account enumeration, side-channel auth, response differential, observable response discrepancy, login form fuzzing, credential bruteforce, hydra, medusa, password spraying, timing attack, response timing differential, bcrypt timing oracle, X-Forwarded-For rate-limit bypass, IP-based rate limit bypass, reset-on-success counter bypass, interleaved login attack, broken bruteforce protection, account lock as oracle, lockout asymmetry, blast through lockout, password brute-force via change-password, change-password as oracle, post-login auth oracle, asymmetric defense, defense asymmetry login vs change-password]
 fase: [Explotación]
 plataforma: Multi
 dificultad: Intermedia
 mitre: [T1110.001, T1110.003]
 related: [explotacion-password-spraying]
-learning_refs: [portswigger/username-enumeration-via-different-responses, portswigger/username-enumeration-via-subtly-different-responses, portswigger/username-enumeration-via-response-timing, portswigger/broken-bruteforce-protection-ip-block]
+learning_refs: [portswigger/username-enumeration-via-different-responses, portswigger/username-enumeration-via-subtly-different-responses, portswigger/username-enumeration-via-response-timing, portswigger/broken-bruteforce-protection-ip-block, portswigger/username-enumeration-via-account-lock, portswigger/password-brute-force-via-password-change]
 ---
 
 # Ataques de Fuerza Bruta Avanzados

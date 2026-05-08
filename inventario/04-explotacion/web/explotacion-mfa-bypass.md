@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Intermedia
 mitre: [T1556.006]
 related: [explotacion-brute-force-advanced, explotacion-jwt, explotacion-auth-bypass-oauth]
-learning_refs: [portswigger/2fa-simple-bypass]
+learning_refs: [portswigger/2fa-simple-bypass, portswigger/2fa-broken-logic]
 ---
 
 # Bypass de Autenticación Multi-Factor (MFA / 2FA)

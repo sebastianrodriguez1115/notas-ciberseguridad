@@ -80,7 +80,7 @@ archivos por valor de `by-platform`.
 - [`explotacion-smb-relay`](../04-explotacion/red/explotacion-smb-relay.md) — SMB Relay Attack
 - [`modelo-osi-tcp-ip`](../07-fundamentos/redes/modelo-osi-tcp-ip.md) — Modelo OSI y Protocolos TCP/IP
 
-## Web (40)
+## Web (41)
 
 - [`analisis-command-injection`](../03-analisis-vulnerabilidades/web/analisis-command-injection.md) — Análisis de Command Injection
 - [`analisis-cors`](../03-analisis-vulnerabilidades/web/analisis-cors.md) — Análisis de CORS (Cross-Origin Resource Sharing)
@@ -108,6 +108,7 @@ archivos por valor de `by-platform`.
 - [`explotacion-mfa-bypass`](../04-explotacion/web/explotacion-mfa-bypass.md) — Bypass de Autenticación Multi-Factor (MFA / 2FA)
 - [`explotacion-nosqli`](../04-explotacion/web/explotacion-nosqli.md) — Inyección NoSQL (NoSQLi)
 - [`explotacion-password-reset-flaws`](../04-explotacion/web/explotacion-password-reset-flaws.md) — Vulnerabilidades en Flujos de Password Reset
+- [`explotacion-session-cookies-debiles`](../04-explotacion/web/explotacion-session-cookies-debiles.md) — Explotación de Cookies de Sesión Débiles
 - [`explotacion-sqli`](../04-explotacion/web/explotacion-sqli.md) — Inyección SQL (SQLi)
 - [`explotacion-xss`](../04-explotacion/web/explotacion-xss.md) — Explotación de Cross-Site Scripting (XSS)
 - [`fingerprinting-tecnologias-web`](../01-reconocimiento/pasivo/fingerprinting-tecnologias-web.md) — Fingerprinting Pasivo de Tecnologías Web
