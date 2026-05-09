@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger Web shell upload via Content-Type restriction bypass
+
+Segundo lab del cluster File Upload (Apprentice). La defensa: la app valida el `Content-Type` del part multipart del archivo, rechaza tipos no-imagen con mensaje verbose ("Only image/jpeg and image/png are allowed"). Bypass: interceptar en Burp y cambiar el `Content-Type` del part de `application/x-php` a `image/jpeg`. Server acepta el upload, archivo queda en `/files/avatars/exploit.php`, ejecución idéntica al lab anterior.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Validar el `Content-Type` del part multipart es trust-the-client**: el header lo setea el cliente al construir el request. El browser lo deriva de la extensión local del archivo (mapeo OS), pero cualquier cliente no-browser (Burp, curl, scripts) lo manda como quiera. RFC 2388 lo describe como opcional e informativo, no como input de seguridad.
+2. **Familia del antipatrón "trust client-set headers"**: `Content-Type` (multipart, request), `Referer` (validar origen para authz), `User-Agent` (anti-bot), `X-Forwarded-For` (IP whitelisting), `Origin` (CSRF sin token), `Host` (SSRF allowlist). Patrón común: server delega decisión de seguridad a atributo que el cliente controla. Defensa correcta usa atributos que el server controla (sesión, contenido real del archivo, IP de la conexión TCP).
+3. **Mensajes de error verbose facilitan reconocimiento del atacante**: el error filtró exactamente la whitelist (`image/jpeg`, `image/png`). Bypass evidente. Regla defensiva: rechazar con mensaje genérico ("File type not allowed") y loguear detalles server-side para forensics, no devolverlos al cliente.
+4. **Magic bytes es la defensa correcta**: `mime_content_type()` (PHP), `python-magic`, `Tika` (Java) leen los primeros bytes del archivo y detectan el tipo desde el contenido real. Un archivo PHP no empieza con `FF D8 FF` (JPEG) ni `89 50 4E 47` (PNG). El cliente puede declarar lo que quiera en el header; el contenido es lo único autoritativo.
+5. **Workflow operacional con Burp para multipart**: dos opciones — (A) interceptor activo, modificar el part y forward; (B) más cómodo, usar Repeater después del primer intento fallido en HTTP history. La línea a editar es solo el `Content-Type` del part del archivo, no el `Content-Type` del request global (`multipart/form-data; boundary=...`).
+6. **Lo que `$_FILES['x']['type']` (PHP) y equivalentes reflejan**: el header del part, no el contenido real. Equivalentes en otros stacks: `request.files['avatar'].content_type` (Flask), `MultipartFile.getContentType()` (Spring), `req.file.mimetype` (Express). Todos pasan el header tal cual lo mandó el cliente. Code review checklist: cualquier uso de estos accessors para decisión de seguridad es bug.
+7. **Tabla de progresión de los 2 labs del cluster**: simple-rce (sin defensa) → content-type-bypass (validación de Content-Type del part, bypass cambiando el header). Caso particular del patrón general "trust client-set data" repetido en path traversal, access control, etc.
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-upload-content-type-restriction-bypass/writeup.md`**: 6 secciones, request multipart real con la línea exacta a editar, antipatrón PHP `$_FILES['avatar']['type']`, tabla de la familia "trust client-set headers" (7 headers comunes mal usados como autoridad), workflow operacional con Burp (interceptor vs Repeater), defensa correcta con magic bytes + 3 capas.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `explotacion-fileupload.md`. Inventario en 134 archivos.
+- `inventario/04-explotacion/web/explotacion-fileupload.md`: + writeup en `learning_refs:`. Ahora linkea ambos labs del cluster File Upload.
+
+### Lección de proceso
+
+User preguntó cómo "poner el attachment desde Burp" — confusión entre disparar un upload vs interceptar uno existente. Burp no construye requests desde cero, intercepta lo que el cliente ya envía (o uno mandado a Repeater). Documenté ambas opciones operacionales (interceptor activo vs Repeater desde HTTP history) para que sean reusables. Generalización: cuando el user pregunta cómo "hacer X en Burp", chequear que el modelo mental del flujo (browser dispara → Burp intercepta → editás → Burp manda) esté claro antes de los pasos específicos.
+
 ## [2026-05-08] — Writeup PortSwigger Remote code execution via web shell upload
 
 Primer lab del cluster File Upload Vulnerabilities (Apprentice, baseline sin defensas). El upload de avatar en `/my-account/avatar` no valida nada (extensión, Content-Type, magic bytes). Webshell PHP `<?php echo file_get_contents('/home/carlos/secret'); ?>` queda en `/files/avatars/exploit.php` y el server lo ejecuta. Lab solved leyendo el secret desde la URL del avatar.
