@@ -2,6 +2,29 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger Blind OS command injection with output redirection
+
+Tercer lab del cluster OS Command Injection (Practitioner). Misma forma que time-delays (feedback form, validación de email, command substitution `$(...)` para mantener formato) pero ahora se exfiltra output completo en lugar de detectar binariamente. Payload: `email=x$(whoami>/var/www/images/whoami)@y.com`. Recuperación: `GET /image?filename=whoami` devuelve `peter-nwuHUj` (con Content-Type: image/jpeg engañoso, body es texto). Tropiezo operacional: pasar path completo al filename del GET concatena dos veces el directorio raíz; pasar solo el nombre relativo funciona.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Composición de servicios legítimos = canal de exfiltración**: tres capas separadas (inyección + filesystem escribible por web user + endpoint que sirve archivos del filesystem) cada una con justificación de diseño. Combinadas forman lectura arbitraria. El error no está en una capa, está en no analizar la composición.
+2. **Output redirection vs time-based: 1500x diferencia de eficiencia**: extraer un username de 12 chars con time-based requiere ~50 minutos (12 × 26 × 10s, con búsqueda binaria menos pero del orden). Output redirection: 2 requests, segundos. Cuando hay canal de archivos, siempre superior a inferencia bit-a-bit.
+3. **`>` vs `>>` importa para tests iterativos**: truncar (`>`) hace que cada test sobrescriba; appendear (`>>`) acumula y mezcla outputs. Para iterar comandos contra el mismo archivo de salida, `>` es correcto.
+4. **El endpoint sirve sin enumeración previa**: cualquier filename en el dir, no whitelist. Razonable para app de imágenes (filenames variables por producto), pero combinado con escritura arbitraria es trampa. Whitelist de extensiones (`\.(jpg|png|...)$`) cierra parcialmente — rechaza `whoami` sin extensión.
+5. **Path canonicalization (`realpath` + verificar prefijo) es la defensa transversal** para endpoints que toman filename: bloquea `../` y symlinks. Combinado con whitelist de extensiones reduce el universo a archivos esperados.
+6. **Por qué Practitioner sobre simple case**: cuatro saltos — sin reflejo, validación previa al shell, identificación de filesystem servido, composición de canales. Cada uno habilidad adicional sobre el baseline.
+
+### Archivos nuevos
+
+- **`learning/portswigger/blind-os-command-injection-output-redirection/writeup.md`**: 6 secciones, tabla de tres capas componibles del bug, comparación cuantitativa output redirection vs time-based, fix del endpoint con whitelist + realpath, defensas operacionales (FIM, mínimo privilegio, network egress filtering).
+
+### Conexión inventario
+
+- `inventario/03-analisis-vulnerabilidades/web/analisis-command-injection.md`: + writeup en `learning_refs:`. Cluster OS Command Injection 3/N labs.
+
+---
+
 ## [2026-05-08] — Writeup PortSwigger Blind OS command injection with time delays
 
 Segundo lab del cluster OS Command Injection (Practitioner). Mismo patrón de feedback form, pero la respuesta no refleja output. Detección vía time delay con `sleep 10`. Primer intento `email=a@b.c;sleep 10` falla (500 en <1s) porque hay validación de regex de email previa al shell. Bypass con command substitution: `email=x$(sleep 10)@y.com` — pasa el regex (estructura `<algo>@<algo>` válida), shell evalúa `$(sleep 10)` y deja `x@y.com` para `mail`. Response: 200 OK en 10,240ms.

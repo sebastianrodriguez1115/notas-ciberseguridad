@@ -34,7 +34,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-command-injection.md`](./03-analisis-vulnerabilidades/web/analisis-command-injection.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
 - **Aliases**: Análisis de Command Injection
-- **Learning**: [`portswigger/os-command-injection-simple-case`](../learning/portswigger/os-command-injection-simple-case/), [`portswigger/blind-os-command-injection-time-delays`](../learning/portswigger/blind-os-command-injection-time-delays/)
+- **Learning**: [`portswigger/os-command-injection-simple-case`](../learning/portswigger/os-command-injection-simple-case/), [`portswigger/blind-os-command-injection-time-delays`](../learning/portswigger/blind-os-command-injection-time-delays/), [`portswigger/blind-os-command-injection-output-redirection`](../learning/portswigger/blind-os-command-injection-output-redirection/)
 
 ## `analisis-cors` — Análisis de CORS (Cross-Origin Resource Sharing)
 
