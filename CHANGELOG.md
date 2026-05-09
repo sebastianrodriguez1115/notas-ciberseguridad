@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-09] — Writeup PortSwigger Web shell upload via extension blacklist bypass
+
+Cuarto lab del cluster File Upload (Practitioner — primer Practitioner del cluster). Defensa: blacklist comprensiva de extensiones PHP (`.php`, `.phtml`, todas las variantes `.ph*`) con mensaje "Sorry, php files are not allowed". Bypass: dos uploads — primero `.htaccess` con `AddType application/x-httpd-php .l33t`, después `exploit.l33t` con webshell. Apache lee el `.htaccess` del directorio y procesa `.l33t` como PHP.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **`.htaccess` upload rompe la asunción "extensiones ejecutables son conjunto fijo"**: la blacklist asume que el set de extensiones que Apache mapea a PHP es estático y conocido. `.htaccess` permite redefinir esos mapeos por-directorio. La blacklist correcta no es "qué extensiones son PHP" sino "qué archivos pueden cambiar la config del server".
+2. **Por qué Apache respeta `.htaccess`**: feature originalmente para shared hosting donde el cliente no podía editar `httpd.conf`. Habilitada por default vía `AllowOverride All`. Permite directivas tipo `AddType`, `AddHandler`, `SetHandler`, `RewriteRule`, `Options`, ACLs por IP.
+3. **Familia de archivos peligrosos en uploads más allá de `.php`**: `.htaccess` (Apache), `web.config` (IIS — equivalente con XML que define handlers), archivos con BOM, archivos referenciados desde otras configs. La blacklist por extensión no captura ninguno; whitelist sí.
+4. **Variantes del bypass `.htaccess`** si `AddType` no funciona: `SetHandler application/x-httpd-php`, `AddHandler application/x-httpd-php .l33t`, `RewriteRule` para servir `.l33t` como `.php`. Si `AllowOverride None`, el `.htaccess` no se aplica — fallback a extensiones que el server YA mapea pero no estén en la blacklist.
+5. **Por qué este lab es Practitioner y los anteriores Apprentice**: bypass requiere conocimiento del stack defensivo (Apache, `.htaccess`, `AllowOverride`), no solo del input. Primera vez en el cluster donde el atacante necesita conocer el server, no solo experimentar con el comportamiento de la app.
+6. **IIS analog**: subir `web.config` con `<handlers>` que mapea `.config` a ASP. Misma clase de bug en Windows. Defensa equivalente: deshabilitar override por-directorio o usar whitelist.
+7. **Filename server-controlled cierra TODA la familia de bypasses basados en filename**: rename a UUID/hash ignorando filename del cliente cierra `.htaccess`, `web.config`, dotfiles, doble extensión, null byte, path traversal, extensiones alternativas. Defensa más fuerte que cualquier filter de string sobre el filename.
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-upload-extension-blacklist-bypass/writeup.md`**: 6 secciones, dos requests reales (`.htaccess` upload + webshell upload), explicación de qué es `.htaccess` y por qué Apache lo respeta, antipatrón PHP blacklist + Apache `AllowOverride All`, variantes del bypass (SetHandler, AddHandler, RewriteRule), IIS analog con `web.config`, 5 capas de defensa con énfasis en filename server-controlled, tabla comparativa de los 4 labs del cluster.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `explotacion-fileupload.md`. Inventario en 134 archivos.
+- `inventario/04-explotacion/web/explotacion-fileupload.md`: + writeup en `learning_refs:`. Ahora linkea los 4 labs del cluster File Upload (3 Apprentice + 1 Practitioner).
+
+### Lección de proceso
+
+User probó `.phtml` después de `.php` con el mismo mensaje de error. Antes de seguir probando variantes (`.php5`, `.phar`, `.pht`), salté directamente a `.htaccess` porque la blacklist parecía comprensiva y enumerar variantes era consumir tiempo. Heurística: cuando el primer recon (`.php`) y el secundario (`.phtml` — la variante más común) dan el mismo mensaje verbose, asumir blacklist comprensiva y atacar la asunción detrás (no las extensiones específicas). Pasar a un bypass conceptualmente distinto (`.htaccess` redefine el mapeo) en lugar de intentar bypass del mismo tipo (otra extensión PHP).
+
 ## [2026-05-09] — Writeup PortSwigger Web shell upload via path traversal
 
 Tercer lab del cluster File Upload (Apprentice). Dos defensas activas: (A) Content-Type del part (heredada del lab anterior) y (B) `/files/avatars/` no ejecuta PHP (texto plano). Bypass: Content-Type → `image/jpeg` + filename → `..%2fexploit.php`. El server strippea `../` literal pero no decodifica `%2f` antes del filter; después del decode interno, el archivo aterriza en `/files/exploit.php` que sí ejecuta PHP.
