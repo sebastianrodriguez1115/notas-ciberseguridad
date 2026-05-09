@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger File path traversal, superfluous URL-decode
+
+Cuarto lab del cluster File path traversal (Practitioner). La defensa: la app rechaza `../` y `..%2f` después del primer URL-decode (el del framework), pero llama explícitamente a `urldecode()` una segunda vez antes de `open()`. Bypass: doble encoding `..%252f`. Después del decode #1 queda `..%2f` (filter no matchea), después del decode #2 queda `../` (path traversal). Payload final: `..%252f..%252f..%252fetc/passwd`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Validar entre dos transformaciones idénticas del input es bypass-eable por construcción**: la representación intermedia (la que el filter ve) es inocua, la representación final (la que se ejecuta) es maliciosa. Patrón general independiente del tipo de encoding.
+2. **Decode redundante es vector, no defensa-en-profundidad**: el framework HTTP ya decodifica la query string al parsear. Llamar a `urldecode()` explícitamente otra vez introduce un punto de divergencia entre lo validado y lo ejecutado. "Por las dudas" es el origen del bug.
+3. **Diagnóstico operacional vía recon escalonado**: probar payloads de labs anteriores en orden (simple, absolute, non-recursive, single-encode, double-encode). Que single-encode falle y double-encode funcione confirma específicamente que el filter corre **después** del primer decode (sino single-encode pasaría por no contener `../` literal) y **antes** del segundo (sino el bypass no funcionaría).
+4. **`urldecode(urldecode(x)) ≠ urldecode(x)`**: la idempotencia parece intuitiva pero falla cuando `x` contiene `%25` literal en el wire. El primer decode convierte `%25` en `%`, formando un nuevo escape `%2X` que el segundo decode resuelve. Asunción común en código que decodifica "por costumbre".
+5. **Familia del antipatrón "validar antes de la última transformación"**: HTML decode (`&lt;script&gt;` revertido), Unicode normalization (full-width chars como `SELECＴ`), symlink follow, IDN punycode (`еxample.com` con е cirílica), case folding. Cada uno tiene su lab equivalente en otros dominios — el principio es el mismo: validar la representación final, no la intermedia.
+6. **Variantes de encoding cuando el filter rechaza también `..%2f`**: encoding mixto (`..%252f..%2f`), encoding del punto en lugar de la barra (`%2e%2e/`, `..%252e/`), triple encoding (`..%25252f` en stacks WAF+framework+app), UTF-8 overlong (`%c0%af`, casi todos los parsers modernos lo rechazan).
+7. **Tabla de progresión de los 4 labs del cluster**: simple (sin defensa) → absolute (filter `../`, bypass `/etc/passwd`) → non-recursive (filter strip una pasada, bypass `....//`) → superfluous-decode (filter entre 2 decodes, bypass `..%252f`). Cada lab agrega una capa de defensa naïve y la rompe con una asunción nueva. Defensa correcta es idéntica desde el primer lab: `realpath(join(base, input))` + `startswith(base + sep)`.
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-path-traversal-superfluous-url-decode/writeup.md`**: 6 secciones, recon escalonado documentado (qué falla y por qué), trace conceptual del doble decode, antipatrón Python con flujo wire→decode#1→filter→decode#2→open, tabla del antipatrón generalizado a HTML/Unicode/symlink/IDN/case folding, variantes de encoding cuando el filter es más estricto, tabla comparativa de los 4 labs del cluster.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `analisis-lfi-rfi.md`. Inventario en 134 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md`: + writeup en `learning_refs:`. Ahora linkea los 4 labs del cluster Path Traversal.
+
+### Lección de proceso
+
+User probó directamente el doble encoding sin pasar por single-encode y los demás escalones del recon. Eficiente para resolver, pero el writeup necesita el escalonamiento explícito para ser pedagógico — el insight "single-encode falla pero double-encode funciona" es lo que diagnostica específicamente el doble decode (vs. otras hipótesis posibles). Documenté el escalón aunque el user no lo haya ejecutado, marcando claramente el orden de complejidad esperado.
+
 ## [2026-05-08] — Writeup PortSwigger File path traversal, sequences stripped non-recursively
 
 Tercer lab del cluster File path traversal (Practitioner). La defensa: la app strippea `../` con un `replace` no recursivo (una sola pasada). Bypass canónico: `....//`. Trace: el filter elimina `../` del medio (los dos puntos centrales + barra), las puntas (`..` + `/`) se juntan formando `../`. Tres iteraciones de `....//` después del strip = `../../../`. Payload final: `....//....//....//etc/passwd`.

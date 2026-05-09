@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
 related: [fuzzing-lfi-ssrf, analisis-ssrf]
-learning_refs: [portswigger/file-path-traversal-simple-case, portswigger/file-path-traversal-absolute-path-bypass, portswigger/file-path-traversal-sequences-stripped-non-recursively]
+learning_refs: [portswigger/file-path-traversal-simple-case, portswigger/file-path-traversal-absolute-path-bypass, portswigger/file-path-traversal-sequences-stripped-non-recursively, portswigger/file-path-traversal-superfluous-url-decode]
 ---
 
 # Análisis de Vulnerabilidades: LFI y RFI

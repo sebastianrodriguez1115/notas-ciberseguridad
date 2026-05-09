@@ -77,7 +77,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
 - **Aliases**: LFI, RFI, Local File Inclusion, Remote File Inclusion, Path Traversal, Directory Traversal
 - **Related**: `fuzzing-lfi-ssrf`, `analisis-ssrf`
-- **Learning**: [`portswigger/file-path-traversal-simple-case`](../learning/portswigger/file-path-traversal-simple-case/), [`portswigger/file-path-traversal-absolute-path-bypass`](../learning/portswigger/file-path-traversal-absolute-path-bypass/), [`portswigger/file-path-traversal-sequences-stripped-non-recursively`](../learning/portswigger/file-path-traversal-sequences-stripped-non-recursively/)
+- **Learning**: [`portswigger/file-path-traversal-simple-case`](../learning/portswigger/file-path-traversal-simple-case/), [`portswigger/file-path-traversal-absolute-path-bypass`](../learning/portswigger/file-path-traversal-absolute-path-bypass/), [`portswigger/file-path-traversal-sequences-stripped-non-recursively`](../learning/portswigger/file-path-traversal-sequences-stripped-non-recursively/), [`portswigger/file-path-traversal-superfluous-url-decode`](../learning/portswigger/file-path-traversal-superfluous-url-decode/)
 
 ## `analisis-nessus` — Análisis de Vulnerabilidades con Nessus
 
