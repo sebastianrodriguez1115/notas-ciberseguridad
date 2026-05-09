@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger File path traversal, null byte bypass
+
+Sexto y último lab del cluster File path traversal (Practitioner). La defensa: la app valida que el `filename` termine en una extensión permitida (`.jpg`/`.png`/`.gif`). Bypass: insertar un null byte (`%00`) entre el path real y la extensión falsa. Para la validación string-level, el filename termina en `.jpg`. Para el syscall del kernel (C, donde `\0` es terminador), el path efectivo es lo que está antes del null byte. Payload: `../../../etc/passwd%00.jpg`. Notar que este lab NO requiere prefijo (a diferencia del lab anterior); solo valida extensión.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Null byte explota la diferencia de semántica de string entre lenguajes managed (Python/Java/PHP) y C**: el lenguaje de la app trata `\0` como un char más con longitud explícita; la libc/kernel lo trata como terminador de string. La interfaz entre las dos capas transfiere el contenido sin propagar la longitud, perdiendo información crítica para seguridad.
+2. **Historia de la mitigación por stack**: PHP < 5.3.4 vulnerable, ≥ 5.3.4 (Dec 2010) cerrado. Java < 7u40 vulnerable, ≥ 7u40 (Sep 2013) lanza `InvalidPathException`. Python 3 rechaza desde 3.0 con `ValueError: embedded null byte`. Ruby ≥ 1.9, Node moderno también. C/C++ raw nunca tuvo mitigación. PortSwigger emula la versión vulnerable.
+3. **Variantes análogas del antipatrón**: `?`/`#` para parsers que tratan path como URL parcial, newline (`\n`) para parsers de líneas, doble extensión (`passwd.php.jpg` con Apache `mod_mime` mal configurado), long filename truncation por límite del filesystem. Patrón común: la validación procesa el string completo, el ejecutor interpreta solo un prefijo definido por algún byte/char delimitador.
+4. **Por qué PortSwigger pone este lab a pesar de la mitigación moderna**: bug class sigue apareciendo en apps PHP legacy sin actualizar desde 2010, code paths que pasan filename a binarios externos vía subprocess (el child hereda el bug), APIs que usan librerías nativas C/C++ sin wrapper que valide, sistemas embebidos con runtimes recortados.
+5. **Detalle operacional con Burp**: el `%00` debe quedar literal en la request line (3 chars: `%`, `0`, `0`). Si Burp tiene "URL-decode" activo en alguna capa convierte `%00` en byte nulo literal, lo cual rompe el HTTP/2 framing y produce errores 400 raros. Verificar Raw view antes de enviar.
+6. **Defensa correcta combinada con lab anterior**: si el server combinara `startswith(BASE)` + `endswith('.jpg')`, el bypass requiere combinar también: `/var/www/images/../../../etc/passwd%00.jpg`. Cada defensa naïve compuesta es bypass-eable componiendo bypasses. La defensa correcta única: canonicalizar (`realpath`) + validar prefijo + validar extensión sobre el path canónico + rechazar null bytes explícitos.
+7. **Tabla de progresión de los 6 labs del cluster**: simple → absolute → non-recursive → superfluous-decode → validate-start-of-path → null-byte-bypass. 6 asunciones rotas distintas (no hay defensa, traversal requiere `..`, strip elimina patrón, input validado = ejecutado, prefijo string = contención path, string validado = string ejecutado por OS). Una sola defensa correcta cubre todas: `realpath(join(base, input))` + validaciones sobre el resultado canonicalizado.
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-path-traversal-validate-file-extension-null-byte-bypass/writeup.md`**: 6 secciones, request/response real, antipatrón Python con trace explícito de cómo `\0` cambia de semántica al cruzar la frontera Python→libc→kernel, historia de la mitigación por stack con CVEs, variantes análogas del antipatrón (URL/`?#`, newline, doble extensión, truncation), composición con start-of-path validation del lab anterior, tabla comparativa final de los 6 labs del cluster.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `analisis-lfi-rfi.md`. Inventario en 134 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md`: + writeup en `learning_refs:`. Cluster Path Traversal completo con 6/6 labs linkeados.
+
+### Cluster File path traversal completado
+
+Los 6 labs del cluster cubren las defensas naïves más comunes contra path traversal y sus bypasses específicos. El insight transversal del cluster: la defensa estructuralmente robusta es independiente de la defensa naïve atacada — siempre canonicalizar la representación final con `realpath` y validar el resultado. Los string filters, validaciones de prefijo/sufijo, replaces y filters entre transformaciones son todos bypass-eables porque operan sobre representaciones intermedias del input, no sobre lo que el sistema ejecuta.
+
 ## [2026-05-08] — Writeup PortSwigger File path traversal, validation of start of path
 
 Quinto lab del cluster File path traversal (Practitioner). La defensa: la app valida que el `filename` empiece con un directorio base esperado (`/var/www/images`). Bypass: incluir el prefijo y agregar traversal después. Payload: `/var/www/images/../../../etc/passwd`. La validación `startswith('/var/www/images')` pasa porque el string empieza con el prefijo, pero `open()` canonicaliza `..` durante la resolución y abre `/etc/passwd`.
