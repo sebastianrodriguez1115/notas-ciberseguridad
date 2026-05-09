@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-09] — Writeup PortSwigger RCE via polyglot web shell upload
+
+Sexto lab del cluster File Upload (Practitioner). Defensa: validación de magic bytes del contenido (cierra todos los bypasses anteriores que cambiaban filename/Content-Type sin tocar el contenido). Bypass: polyglot JPEG+PHP — archivo válido como dos formatos a la vez. `exiftool -Comment='<?php ...'` inyecta el código en el campo Comment del EXIF; el archivo mantiene magic bytes JPEG (`FF D8 FF`) y pasa la validación, pero contiene el bloque PHP que Apache ejecuta cuando procesa la extensión `.php`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Polyglot rompe la asunción "un archivo, un formato"**: un archivo puede contener múltiples formatos válidos simultáneamente. La validación lo lee como imagen y "acierta"; Apache lo lee como PHP y "acierta". Las dos lecturas son consistentes con el archivo. El bug está en asumir formato único.
+2. **`mime_content_type` solo mira los primeros bytes**: detecta tipo desde magic bytes en el header. Bytes posteriores al header no afectan la decisión. Por eso un archivo que empieza con header JPEG y contiene PHP después es "image/jpeg" según esta función. Diseño correcto para detección rápida; insuficiente como defensa contra polyglots.
+3. **Anatomía del polyglot JPEG+PHP en EXIF**: `exiftool -Comment` inyecta el PHP en el segmento APP1 (EXIF) del JPEG. La estructura JPEG queda estrictamente válida — magic bytes correctos, marcadores SOI/EOI presentes, scan data intacta. Image viewers, `mime_content_type`, `getimagesize` todos lo aceptan como JPEG normal. Más sigiloso que concatenación cruda.
+4. **Concatenación cruda (`cat image.jpg shell.php > polyglot.php`) también suele funcionar**: bytes después del marcador EOI son técnicamente inválidos según la spec JPEG, pero `mime_content_type` no parsea hasta el EOI; image viewers paran ahí; PHP parsea el archivo entero secuencialmente y encuentra el `<?php>`. Defensas más estrictas (`getimagesize` que parsea pixel data) detectan; defensas comunes no.
+5. **Familia de polyglots**: JPEG+PHP, PNG+PHP (en chunk `tEXt`), GIF+JS (`GIF89a;<script>`), PDF+ZIP (header PDF al principio + central directory ZIP al final), JAR+ZIP (cualquier JAR es ZIP). Recurso de referencia: Ange Albertini "Funky File Formats" / Corkami docs.
+6. **Re-encoding server-side es la defensa estructural**: cargar la imagen con una librería que parsea el formato real (GD, ImageMagick, Pillow, ImageIO), convertir a representación interna, re-escribir como JPEG/PNG nuevo. Descarta metadata, segmentos extra, código embebido. Produce archivo estrictamente del formato declarado y solo eso. CPU-intensive pero estructuralmente robusto.
+7. **Tabla de progresión completa de los 6 labs del cluster**: simple → content-type → path-traversal → extension-blacklist (.htaccess) → obfuscated-extension (null byte) → polyglot. 6 asunciones rotas, una sola defensa correcta (whitelist + magic bytes + re-encoding + filename server-controlled + dir sin scripts + mínimo privilegio). Catálogo completo de "qué representación del input la defensa mira vs cuál el sistema ejecuta".
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-upload-polyglot-web-shell/writeup.md`**: 6 secciones, dos métodos de construcción del polyglot (exiftool limpio + cat crudo), antipatrón PHP `mime_content_type` sin re-encoding, anatomía de la estructura JPEG con segmentos SOI/APP0/APP1/SOS/EOI, familia de polyglots conocidos, defensa correcta con re-encoding + 5 capas, tabla comparativa de los 6 labs del cluster.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `explotacion-fileupload.md` (que ya cubre polyglots y exiftool en sección Comandos / Ejemplos). Inventario en 134 archivos.
+- `inventario/04-explotacion/web/explotacion-fileupload.md`: + writeup en `learning_refs:`. Cluster File Upload completo con 6/6 labs (3 Apprentice + 3 Practitioner) linkeados.
+
+### Cluster File Upload completado
+
+Los 6 labs del cluster cubren las defensas progresivas más comunes contra upload + RCE y sus bypasses específicos. El insight transversal: la defensa estructuralmente robusta es la combinación de capas — whitelist de extensión, magic bytes, re-encoding server-side, filename server-controlled, directorio sin ejecución, mínimo privilegio. Cada capa cierra una clase de bypass; ninguna por sí sola es suficiente. Filename server-controlled + re-encoding son las dos defensas más fuertes — cada una cierra una familia entera de bypasses.
+
 ## [2026-05-09] — Writeup PortSwigger Web shell upload via obfuscated file extension
 
 Quinto lab del cluster File Upload (Practitioner). Defensa: blacklist de extensiones PHP **+ bloqueo de `.htaccess`** (cierra el bypass del lab anterior). Bypass: null byte para obfuscar la extensión. `exploit.php%00.jpg` — el validador parsea la extensión post-último-punto y ve `.jpg` (PHP/Python tratan `\0` como char válido en strings). El filesystem trunca en `\0` y guarda como `exploit.php`. Apache lo procesa como PHP.
