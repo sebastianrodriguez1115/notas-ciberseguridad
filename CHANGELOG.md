@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger File path traversal, sequences stripped non-recursively
+
+Tercer lab del cluster File path traversal (Practitioner). La defensa: la app strippea `../` con un `replace` no recursivo (una sola pasada). Bypass canónico: `....//`. Trace: el filter elimina `../` del medio (los dos puntos centrales + barra), las puntas (`..` + `/`) se juntan formando `../`. Tres iteraciones de `....//` después del strip = `../../../`. Payload final: `....//....//....//etc/passwd`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Strip non-recursive es estructuralmente vulnerable**: cualquier filter que elimina ocurrencias de un token en una sola pasada se rompe con inputs del tipo "patrón rodeado por sí mismo". El bypass es construcción, no encoding/escape.
+2. **Trace exacto del payload**: en `....//`, el filter matchea `../` en posiciones 2-4 (los dos puntos del medio + la primera barra). Lo strippea. Quedan los chars `[0,1,5]` = `..` + `/` = `../`. La estructura del payload está diseñada para que el strip "extraiga" un `../` y deje las puntas formando otro.
+3. **Familia del antipatrón**: el mismo principio explota filters análogos en otros contextos: SQLi (`SELSELECTECT` cuando se filtra `SELECT`), XSS (`<scr<script>ipt>` cuando se filtra `<script>`), prefijos URL (`javasjavascript:cript:` cuando se filtra `javascript:`). Patrón general: blacklist por substring + strip non-recursive = bypass por construcción.
+4. **`replace` global ≠ recursivo**: en muchos lenguajes `replace`/`replaceAll` aplica todas las ocurrencias en una pasada, pero **no re-evalúa el resultado**. La diferencia entre "todos los matches en una pasada" y "loop hasta que no haya matches" es sutil. Defensa correcta si se insiste en strip: `while pattern in s: s = s.replace(pattern, '')`.
+5. **¿Por qué el dev escribe el filter?**: razones habituales — "sanitización defensiva" (preferir limpiar input que rechazarlo), creer que un solo replace alcanza para inputs no maliciosos, confundir `replace` con loop recursivo.
+6. **La defensa correcta no cambia entre labs del cluster**: `os.path.realpath(os.path.join(BASE, filename))` + `startswith(BASE + sep)`. Resuelve relativo, absoluto, dobles barras, encoding, links simbólicos en una operación. Independiente de cómo se ve el payload de entrada.
+7. **Tabla de progresión del cluster**: simple-case (sin defensa) → absolute-path-bypass (defensa "rechazo de `../`", bypass conceptual con path absoluto) → stripped-non-recursively (defensa "strip de `../`", bypass por construcción con `....//`). Cada lab muestra una defensa naïve más sofisticada y rompe la asunción detrás de ella.
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-path-traversal-sequences-stripped-non-recursively/writeup.md`**: 6 secciones, request/response real, antipatrón Python `replace('../', '')` con trace char-por-char del bypass, generalización a SQLi/XSS/URL prefixes, tabla comparativa de los 3 labs del cluster con asunción rota en cada uno.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `analisis-lfi-rfi.md`. Inventario en 134 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md`: + writeup en `learning_refs:`. Ahora linkea los 3 labs del cluster Path Traversal.
+
+### Lección de proceso
+
+User resolvió el lab a la primera con el payload propuesto. No probó el caso intermedio (`../../../etc/passwd` para confirmar que se strippea). El writeup documenta el comportamiento esperado del caso strippeado por inferencia desde la descripción del lab y el comportamiento de `replace` en lenguajes comunes, sin claim de medición empírica. Heurística: cuando el payload bypass funciona a la primera, el caso "lab stock fallaría" se infiere — está bien marcarlo como inferencia, no como observación.
+
 ## [2026-05-08] — Writeup PortSwigger File path traversal, absolute path bypass
 
 Segundo lab del cluster File path traversal (Practitioner). La app filtra secuencias `../` pero acepta paths absolutos. Payload `filename=/etc/passwd` bypass-ea el filter porque no contiene `..`. Resuelto en una request al cambiar el payload del lab simple por uno absoluto.
