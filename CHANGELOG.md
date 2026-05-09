@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger Remote code execution via web shell upload
+
+Primer lab del cluster File Upload Vulnerabilities (Apprentice, baseline sin defensas). El upload de avatar en `/my-account/avatar` no valida nada (extensión, Content-Type, magic bytes). Webshell PHP `<?php echo file_get_contents('/home/carlos/secret'); ?>` queda en `/files/avatars/exploit.php` y el server lo ejecuta. Lab solved leyendo el secret desde la URL del avatar.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **RCE vía upload requiere dos bugs simultáneos, no uno**: (A) falta de validación al subir, y (B) ejecución de scripts en el directorio de upload. Cualquiera cerrado mitiga al otro: con whitelist de extensiones el atacante no puede colocar el `.php`; con `php_flag engine off` en el directorio, el archivo se sirve como texto inerte aunque haya pasado el upload. Defensa-en-profundidad clásica.
+2. **HTML del form ≠ contrato del backend**: la página de blog post tenía un form de comentarios con `<input type="file" name="avatar">` que aparentaba aceptar uploads, pero el endpoint `/post/comment` rechazaba el archivo con 400 "Missing parameter". El upload real estaba en `/my-account/avatar`. Lección: cuando un upload falla pese a HTML que sugiere lo contrario, probar otros endpoints antes de asumir defensa.
+3. **Filename predecible facilita la explotación**: el server guardó el archivo con el filename del cliente (`exploit.php`), así que la URL fue determinable (`/files/avatars/exploit.php`) y el HTML del avatar la reveló explícitamente. Rename server-side a UUID/hash convierte upload exitoso en archivo no-localizable, defensa-en-profundidad útil incluso si la validación de extensión funciona.
+4. **Webshells útiles más allá del lab**: el shell del lab es de un comando. Variantes operacionales — webshell genérico (`<?php system($_GET['cmd']); ?>`), webshell con auth (`if ($_GET['key'] !== 'mySecret') exit;`), reverse shell (no funciona en PortSwigger por firewall del lab, sí en pentest real).
+5. **Por qué este lab es Apprentice**: no hay defensas. Los demás labs del cluster agregan validación de Content-Type, blacklist de extensiones, magic bytes, y sus bypasses específicos. Este lab establece el patrón: subir, identificar URL, ejecutar.
+6. **5 capas de defensa correctas**: (1) whitelist de extensiones, (2) magic bytes del contenido real, (3) rename server-side a UUID, (4) almacenamiento fuera del document root o directorio sin ejecución de scripts, (5) mínimo privilegio del proceso del web server.
+7. **Bug A vs Bug B en el catálogo de defensas**: Bug A (upload sin validación) se cierra en código de la app. Bug B (ejecución en directorio público) se cierra en config del server (Apache `php_flag engine off`, Nginx `location ~ \.php$ { deny all; }`). Los dos son responsabilidad de equipos distintos y se confunden con frecuencia — el dev cree que el sysadmin restringe el directorio, el sysadmin asume que el dev valida los uploads.
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-upload-rce-via-web-shell-upload/writeup.md`**: 6 secciones, request/response real, antipatrón PHP `move_uploaded_file` + Apache config sin restricciones, 5 capas de defensa, 3 variantes de webshell (mínimo, genérico, con auth), lección operacional sobre HTML form vs backend contract.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `explotacion-fileupload.md` (que ya cubre webshell upload, bypass de extensión, polyglots). Inventario en 134 archivos.
+- `inventario/04-explotacion/web/explotacion-fileupload.md`: + writeup en `learning_refs:` (antes era `[]`, primer learning_ref del archivo).
+
+### Lección de proceso
+
+User intentó primero el upload por el form de comentarios del blog post (que tenía un input `type="file"` engañosamente). El server respondió 400 "Missing parameter" — distinto a "ok pero archivo bloqueado" o "endpoint no existe". Yo asumí endpoint equivocado pero pude haber considerado primero que faltaba algún campo del form de comments (email/website). Sí redirigí correctamente a `/my-account` que era el endpoint real, pero el camino más rápido era leer cuidadosamente el HTML del form de comentarios y notar que email/website estaban afuera del form (HTML malformado). Aplicación de la memoria `feedback_form_handlers_js.md`: HTML del form ≠ contrato real.
+
 ## [2026-05-08] — Writeup PortSwigger File path traversal, null byte bypass
 
 Sexto y último lab del cluster File path traversal (Practitioner). La defensa: la app valida que el `filename` termine en una extensión permitida (`.jpg`/`.png`/`.gif`). Bypass: insertar un null byte (`%00`) entre el path real y la extensión falsa. Para la validación string-level, el filename termina en `.jpg`. Para el syscall del kernel (C, donde `\0` es terminador), el path efectivo es lo que está antes del null byte. Payload: `../../../etc/passwd%00.jpg`. Notar que este lab NO requiere prefijo (a diferencia del lab anterior); solo valida extensión.
