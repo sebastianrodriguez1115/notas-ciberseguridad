@@ -2,6 +2,43 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-09] — Writeup PortSwigger Web shell upload via race condition
+
+Séptimo y último lab del cluster File Upload (Expert). El server escribe el archivo a disco antes de validar. Si la validación falla, devuelve 403 al cliente y borra el archivo. Pero entre la escritura y el borrado hay ~2-15ms durante los cuales `/files/avatars/exploit.php` es accesible vía HTTP. Un GET que cae en esa ventana ejecuta el PHP antes de que el delete corra. Resuelto con script Python con 5 uploaders + 30 readers concurrentes — secret obtenido en <2 segundos pese a que TODOS los uploads devolvieron 403.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **TOCTOU en server: estado de la operación ≠ estado del recurso**. El 403 al cliente dice "upload rechazado", pero entre escritura y borrado el archivo fue brevemente accesible. Asumir equivalencia entre los dos estados es bug categórico. Defensa naïve: "rechazo el upload, así que no hay archivo malicioso disponible". Realidad: "rechazo el upload, pero el archivo malicioso fue brevemente disponible".
+2. **El sanity check del exploit confirma el modelo mental**: `upload_ok=0 upload_err=2 reads=28` con secret obtenido. Los uploads devuelven 403 al thread del cliente; los reads paralelos hit la ventana entre write y delete. Sin comprender esto, el atacante asume que 403 = no hay archivo y se rinde.
+3. **Race conditions requieren tooling concurrente**: el bypass no es manual. Scripting con threads (Python `requests`), Burp Pro Turbo Intruder, o request grouping de Burp 2024+. Sin concurrencia, ventana de ms es imposible de hit.
+4. **Tres arquitecturas posibles del server, solo una es vulnerable**: (A) validación post-write con borrado — vulnerable, este lab. (B) validación pre-write — no vulnerable. (C) staging dir + atomic move al directorio público — defensa correcta. Diferenciar entre las tres requiere análisis empírico (manual upload manual + GET + observar comportamiento).
+5. **Patrón TOCTOU se repite en muchos dominios**: `access()`+`open()` (symlink swap), priv check + acción (rotación de sesión), cache invalidation, email confirmation tokens, auth + uso de archivo. La defensa estructural es **atomicidad** — combinar check+use en operación no-interleavable, locks, transacciones.
+6. **Por qué este lab es Expert y no Practitioner**: requiere conocimiento de TOCTOU, tooling para concurrencia, modelo mental de pipeline server-side, y escritura de exploit funcional (no solo construcción de payload). Es el primer lab del cluster donde la habilidad probada es código de explotación.
+7. **Defensa correcta = staging + atomic move**: validación cara (re-encoding, AV) en directorio fuera del document root, atomic `rename()` solo después de pasar todas las validaciones. Atomic dentro del mismo filesystem. Cierra el race por construcción. Combinado con filename server-controlled (UUID), incluso si race se ganara el atacante no sabe el filename para hacer el GET.
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-upload-race-condition/writeup.md`**: 6 secciones, script Python real (sanity check + 5 uploaders + 30 readers), trace temporal del bug (W → V → D), tabla TOCTOU generalizada a 6 dominios, comparación de 3 arquitecturas server-side, defensa correcta con staging dir + atomic rename, tabla comparativa final de los 7 labs del cluster (3 Apprentice + 3 Practitioner + 1 Expert).
+- **`/tmp/race.py`**: script reusable para race condition exploits. Sanity check inicial, marcadores `BEGIN_..._END` para distinguir output PHP de noise, abort detection si todos los uploads fallan.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `explotacion-fileupload.md`. Inventario en 134 archivos.
+- `inventario/04-explotacion/web/explotacion-fileupload.md`: + writeup en `learning_refs:`. **Cluster File Upload completo con 7/7 labs linkeados** (3 Apprentice + 3 Practitioner + 1 Expert).
+
+### Cluster File Upload completado al 100%
+
+Los 7 labs del cluster cubren las defensas progresivas más comunes contra upload + RCE y sus bypasses específicos. La defensa estructuralmente correcta combina capas: whitelist de extensión + magic bytes + re-encoding server-side + filename server-controlled + validación pre-write o staging dir + atomic move + dir sin scripts + mínimo privilegio. Cada capa cierra una clase de bypass; ninguna por sí sola alcanza. **Filename server-controlled + re-encoding + staging dir** son las tres defensas más fuertes — cada una cierra una familia entera de bypasses.
+
+### Lección de proceso
+
+Code review con ultrathink antes de correr el script identificó issues críticos que ahorraron debugging:
+1. Sanity check inicial (detecta CSRF/session inválidos antes de spawn).
+2. Counter separado `upload_ok` vs `upload_err` (visibilidad operacional crítica — confirmó que el race funciona pese a 403s).
+3. Abort detection si todos los uploads fallan.
+
+El insight más importante del review: **`upload_err > 0` no es señal de fracaso del exploit**. En este lab específico, todos los uploads devuelven 403 y el secret se obtiene igual. Sin esa hipótesis explícita en el código (counters separados), un debugger se confundiría asumiendo que CSRF expiró cuando en realidad el race está funcionando perfectamente.
+
 ## [2026-05-09] — Writeup PortSwigger RCE via polyglot web shell upload
 
 Sexto lab del cluster File Upload (Practitioner). Defensa: validación de magic bytes del contenido (cierra todos los bypasses anteriores que cambiaban filename/Content-Type sin tocar el contenido). Bypass: polyglot JPEG+PHP — archivo válido como dos formatos a la vez. `exiftool -Comment='<?php ...'` inyecta el código en el campo Comment del EXIF; el archivo mantiene magic bytes JPEG (`FF D8 FF`) y pasa la validación, pero contiene el bloque PHP que Apache ejecuta cuando procesa la extensión `.php`.
