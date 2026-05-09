@@ -79,38 +79,21 @@ def image():
     return send_file(path)
 ```
 
-El replace recorre el string una vez de izquierda a derecha. Cuando matchea `../`, lo elimina y **continúa desde la posición posterior al match** — no re-evalúa los chars de antes. Esto es lo que rompe la defensa:
+El replace recorre el string una vez de izquierda a derecha y **no re-evalúa el resultado**. Trace char-por-char sobre `....//`:
 
 ```
-Input:    . . . . / / . . . . / / e t c / p a s s w d
-Posición: 0 1 2 3 4 5 6 7 8 9 ...
-
-El filter mira posición 0-2: "..." -> no es "../", avanza.
-Posición 1-3: "../" -> MATCH. Strippea. Cursor avanza a posición 4.
-
-Resultado parcial: "."(0) + "."(1) + "/"(4) + "/"(5) + ...
-                 = ".../"
-                 
-Wait no — el replace global elimina el match y los chars adyacentes que NO matchean se mantienen.
+Input:    .  .  .  .  /  /
+Posición: 0  1  2  3  4  5
 ```
 
-Más preciso:
+- Pattern buscado: `../` (longitud 3).
+- Posición 0-2: `[., ., .]` = `...` → no match, avanzar.
+- Posición 1-3: `[., ., .]` = `...` → no match, avanzar.
+- Posición 2-4: `[., ., /]` = `../` → **match**. Strippea pos 2-4.
+- Caracteres que sobreviven: pos 0 (`.`), pos 1 (`.`), pos 5 (`/`).
+- Resultado concatenado: `../`.
 
-- Input: `....//`
-- Pattern: `../` (longitud 3)
-- El replace busca el primer match. Posición 1: chars `[1,2,3]` = `../` → match. Lo elimina.
-- String resultante: `.` (pos 0) + `/` (pos 4) + `/` (pos 5) = `../`. Espera, eso no es exacto. Veamos chars uno a uno:
-  - pos 0: `.`
-  - pos 1: `.`
-  - pos 2: `.`
-  - pos 3: `.`
-  - pos 4: `/`
-  - pos 5: `/`
-- Match en pos 1-3: `../` (pos 1=`.`, pos 2=`.`, pos 3=`.`) — **NO** matchea, ese es `...`, no `../`.
-- Match en pos 2-4: pos 2=`.`, pos 3=`.`, pos 4=`/` → `../`. **Match**.
-- Strippea pos 2-4. Resultado: `.` (pos 0) + `.` (pos 1) + `/` (pos 5) = `../`.
-
-Eso es: el match consume **dos puntos del medio + la barra**, dejando los **dos puntos de afuera + la otra barra** = `../`. La estructura `....//` está diseñada para que el filter saque exactamente el `../` del medio y deje uno bien formado.
+El match consume **dos puntos del medio + la barra**, dejando los **dos puntos del principio + la otra barra del final** = `../`. La estructura `....//` está diseñada para que el filter extraiga exactamente el `../` del medio y deje las puntas formando otro.
 
 Y crucialmente: el filter **no vuelve a inspeccionar el resultado**. Si lo hiciera (`while '../' in s: s = s.replace('../', '')`), strippearía el `../` que acaba de quedar y eliminaría el bypass.
 

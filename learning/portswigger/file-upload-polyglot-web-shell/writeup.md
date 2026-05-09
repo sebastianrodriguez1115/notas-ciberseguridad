@@ -72,6 +72,8 @@ exiftool -Comment='<?php echo file_get_contents("/home/carlos/secret"); ?>' \
 
 Instalar exiftool en Ubuntu: `sudo apt install -y libimage-exiftool-perl`.
 
+> Nota operacional: el flag `-o` requiere que el archivo destino no exista. Si re-ejecutás el comando, eliminá `polyglot.php` primero o usá `-overwrite_original_in_place` sin `-o`.
+
 **Método B — concatenación cruda**:
 
 ```bash
@@ -105,7 +107,7 @@ Buscar el secret entre la basura. Pista: no son chars binarios, es texto ASCII v
 
 ```php
 // Antipatron - magic bytes pero sin re-encoding
-$mime = mime_content_type($_FILES['avatar']['tmp_name']);  // Lee primeros ~256 bytes
+$mime = mime_content_type($_FILES['avatar']['tmp_name']);  // Aplica reglas libmagic sobre el header
 if (!in_array($mime, ['image/jpeg', 'image/png'])) {
     die("File type not allowed");
 }
@@ -116,7 +118,7 @@ move_uploaded_file($_FILES['avatar']['tmp_name'], '/var/www/files/avatars/' . $_
 
 Tres componentes:
 
-1. **`mime_content_type` lee solo los primeros bytes**: detecta el tipo desde el header. Para JPEG mira `FF D8 FF`, para PNG mira `89 50 4E 47`. No analiza el archivo completo. Un archivo que empieza con header JPEG y contiene PHP después es "JPEG" según esta función.
+1. **`mime_content_type` aplica reglas de libmagic basadas en magic bytes y heurísticas**: prioriza los bytes del header (`FF D8 FF` para JPEG, `89 50 4E 47` para PNG) pero puede leer más profundo según la regla. En la práctica, para formatos comunes el header alcanza y los bytes posteriores no afectan la decisión. Un archivo que empieza con header JPEG y contiene PHP en metadata después es "image/jpeg" según esta función.
 2. **El archivo se guarda intacto**: `move_uploaded_file` escribe el archivo tal cual está, sin normalizarlo. Los bytes posteriores al header (incluyendo el `<?php>`) quedan en el archivo final.
 3. **Apache procesa la extensión `.php` parsing el archivo entero**: cuando alguien navega a `/files/avatars/polyglot.php`, Apache ve la extensión `.php`, invoca el motor PHP. PHP parsea el archivo completo buscando `<?php ... ?>`. Encuentra el bloque entre los bytes del JPEG, lo ejecuta. El resto del archivo (header JPEG, basura) se imprime literal.
 
@@ -156,7 +158,7 @@ cat input.jpg shell.php > polyglot.php
 
 Este archivo no es JPEG estrictamente válido — los bytes después del marcador `FF D9` (EOI) son inválidos según la spec. Pero:
 
-- `mime_content_type` solo mira los primeros bytes; los bytes posteriores no le importan.
+- `mime_content_type` decide el tipo desde el header (libmagic prioriza magic bytes iniciales); los bytes posteriores al header no afectan la decisión para formatos comunes.
 - Image viewers usualmente paran de leer en EOI; los bytes posteriores son ignorados.
 - PHP parsea el archivo entero secuencialmente; encuentra el `<?php>` después del EOI y lo ejecuta.
 

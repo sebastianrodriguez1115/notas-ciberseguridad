@@ -96,8 +96,8 @@ El bug es ampliamente conocido desde mediados de los 2000s. Mitigaciones por sta
 
 - **PHP < 5.3.4**: vulnerable. `include()`, `require()`, `fopen()`, `file_get_contents()` aceptan paths con `\0`.
 - **PHP ≥ 5.3.4** (Dec 2010): rechaza explícitamente null bytes en filenames de las funciones de filesystem. Bug class cerrada en PHP a nivel de stdlib.
-- **Java < 7u40**: vulnerable. `File`, `FileInputStream`, etc. pasan el path con `\0` a la libc.
-- **Java ≥ 7u40** (Sep 2013): `File` constructor lanza `InvalidPathException` si el path contiene `\0`. CVE-2010-0738 family.
+- **Java legacy**: vulnerable. `File`, `FileInputStream`, etc. pasan el path con `\0` a la libc.
+- **Java 7 con patch posterior** (~2013-2014, ver release notes específicas del JDK): el `File` constructor lanza `InvalidPathException` si el path contiene `\0`. La versión exacta del patch depende del vendor (OpenJDK, Oracle, IBM J9).
 - **Python 3.x**: rechaza null bytes en paths del módulo `os` desde la 3.0 (`ValueError: embedded null byte`). Python 2 era vulnerable.
 - **Node.js**: rechaza null bytes en paths del módulo `fs` desde versiones tempranas.
 - **Ruby ≥ 1.9**: rechaza null bytes en paths.
@@ -141,7 +141,7 @@ Reglas:
 
 El null byte es el caso clásico, pero la idea general — "insertar un byte que la validación ignora pero el ejecutor interpreta" — tiene variantes:
 
-- **Question mark / hash en URL parsing**: `../../../etc/passwd?.jpg` o `../../../etc/passwd#.jpg` en parsers que tratan el archivo como una URL parcial. El parser corta en `?` o `#`, pero la validación de extensión ve el string completo.
+- **Question mark / hash en URL parsing**: `../../../etc/passwd?.jpg` o `../../../etc/passwd#.jpg` cuando el ejecutor procesa el filename como URL (no como path de filesystem; típico en proxies/handlers que reescriben URLs). El URL parser corta en `?` o `#`, pero la validación de extensión ve el string completo. No aplica a APIs de filesystem directas.
 - **Newline injection**: `../../../etc/passwd\n.jpg` cuando la capa nativa parsea por líneas.
 - **Tab/space**: poco común pero algunos parsers ad-hoc cortan en whitespace.
 - **Carriage return en HTTP smuggling**: análogo conceptual en otra capa.
@@ -204,7 +204,7 @@ Tres ideas:
 2. **Canonicalizar antes de validar**: `os.path.realpath(os.path.join(BASE, filename))` y verificar prefijo + extensión sobre el path canónico. Cubre traversal, links, encoding y null bytes (que el realpath o el syscall rechazan en stacks modernos).
 3. **Whitelist o IDs**: la defensa estructuralmente más fuerte. Si el endpoint sirve N imágenes conocidas, exponer un identificador y mapear server-side. El input no toca el filesystem ni la lógica de validación de extensión.
 4. **Validar magic bytes después de leer**: chequear que el archivo empiece con bytes JPEG/PNG/etc. Detecta exfil aunque el bypass de path funcione. La validación de extensión por sí sola es débil (cualquier archivo se puede llamar `.jpg`).
-5. **Mantener el stack actualizado**: PHP ≥ 5.3.4, Java ≥ 7u40, Python 3, Ruby ≥ 1.9, Node moderno rechazan null bytes en paths a nivel de stdlib. Stacks viejos (PHP < 5.3.4, apps Java pre-2013) son vulnerables hoy.
+5. **Mantener el stack actualizado**: PHP ≥ 5.3.4, Java 7 con patch de 2013-2014 en adelante, Python 3, Ruby ≥ 1.9, Node moderno rechazan null bytes en paths a nivel de stdlib. Stacks viejos (PHP < 5.3.4, apps Java pre-patch) son vulnerables hoy.
 6. **Usar APIs de filesystem que acepten path objects con tipo, no strings**: `pathlib.Path` en Python, `java.nio.file.Path` en Java. Algunas validan invariantes en el constructor (rechazan null bytes, paths inválidos). Más difícil de bypass-ear que strings crudos.
 7. **Mínimo privilegio**: el proceso del web server no debe poder leer fuera del directorio de assets. Chroot, contenedor con read-only mount, AppArmor/SELinux. Limita el daño aunque la defensa de path falle por completo.
 8. **Tests automatizados con la suite del cluster**: por cada endpoint que tome filename, payloads `../`, `/etc/passwd`, `....//`, `..%2f`, `..%252f`, `/var/www/images/../../etc/passwd`, `../../../etc/passwd%00.jpg`, `../../../etc/passwd?.jpg`, `../../../etc/passwd#.jpg`, doble extensión `.php.jpg`. Cualquier respuesta distinta al baseline (imagen válida) es bug.
@@ -222,7 +222,7 @@ Tres ideas:
 - MITRE Corporation. (2024). *CWE-158: Improper Neutralization of Null Byte or NUL Character*. https://cwe.mitre.org/data/definitions/158.html
 - MITRE Corporation. (2024). *CWE-626: Null Byte Interaction Error (Poison Null Byte)*. https://cwe.mitre.org/data/definitions/626.html
 - MITRE Corporation. (2024). *ATT&CK Technique T1190: Exploit Public-Facing Application*. https://attack.mitre.org/techniques/T1190/
-- NIST. (2010). *CVE-2006-7243: PHP null byte in include/require*. https://nvd.nist.gov/vuln/detail/CVE-2006-7243
+- NIST. (s.f.). *CVE-2006-7243: PHP null byte in include/require*. https://nvd.nist.gov/vuln/detail/CVE-2006-7243
 - swisskyrepo. (s.f.). *PayloadsAllTheThings — Directory Traversal*. https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Directory%20Traversal
 - Stuttard, D., & Pinto, M. (2011). *The Web Application Hacker's Handbook* (2nd ed.). Wiley. Cap. 10 (Attacking Back-End Components — Path Traversal).
 - Inventario interno: [`inventario/03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md`](../../../inventario/03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md)

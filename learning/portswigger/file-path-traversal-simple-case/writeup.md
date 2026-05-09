@@ -112,7 +112,7 @@ El server devolvió `Content-Type: image/jpeg` pero el body es texto plano. Esto
 Este lab no tiene defensa alguna. Las variantes del cluster cubren cada defensa común y cómo bypass-earla:
 
 - **Filter de `../`**: bypass con doble encoding (`%2e%2e%2f`), encoding mixto, o encoding doble (`%252e%252e%252f` cuando el server decodifica dos veces).
-- **Filter recursivo non-recursive**: bypass con `....//` (al strippear `../` queda `../`).
+- **Filter no recursivo (strip de una pasada)**: bypass con `....//` (al strippear `../` queda `../`).
 - **Validación de prefijo (debe empezar con `/var/www/images`)**: bypass con `/var/www/images/../../../etc/passwd`.
 - **Validación de sufijo (debe terminar en `.jpg`)**: bypass con null byte (`../../../etc/passwd%00.jpg`) en stacks viejos (PHP < 5.3.4, Java 6) o segmentación de path (`../../../etc/passwd#.jpg`, `../../../etc/passwd?.jpg` en algunos parsers).
 

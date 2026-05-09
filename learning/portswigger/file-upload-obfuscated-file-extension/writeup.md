@@ -121,7 +121,7 @@ El null byte es la más confiable, pero hay variantes según la implementación 
 | Trailing dot | `exploit.php.` | `.` (vacía) | `exploit.php` (algunos FS strippean trailing dot) |
 | Trailing space | `exploit.php ` | `.php ` (con espacio) | `exploit.php` (Windows strippea trailing space) |
 | Caracteres invisibles | `exploit.php` + `​` | varía | varía |
-| Case manipulation | `exploit.pHp` | `.pHp` | `.pHp` o `.php` (Apache normalmente case-insensitive) |
+| Case manipulation | `exploit.pHp` | `.pHp` | depende del filesystem y config: ext4 case-sensitive, NTFS case-insensitive, Apache `<FilesMatch>` puede normalizar |
 | Magic bytes spoof | `GIF89a;<?php ...` con `.gif` | `.gif`, magic OK | bypass específico de magic-byte check |
 
 El null byte es el bypass canónico porque ataca la diferencia fundamental de modelo de string entre lenguajes managed y C. Las otras dependen de quirks específicos del filesystem o del server. Stacks modernos cierran null byte (Python 3, Java 7u40+, PHP 5.3.4+) — pero PortSwigger emula un stack vulnerable.
@@ -130,22 +130,20 @@ El null byte es el bypass canónico porque ataca la diferencia fundamental de mo
 
 Variante interesante que merece detalle: `exploit.php.jpg`.
 
-Apache con `mod_mime` por default mapea extensiones a handlers de izquierda a derecha o de derecha a izquierda según versión y config. En algunos casos legacy (Apache 2.x con `AddHandler` en lugar de `AddType`):
+Apache `mod_mime` procesa extensiones de **derecha a izquierda** buscando la última que tenga handler mapeado. El bug histórico (Apache 2.x con `AddHandler application/x-httpd-php .php` en lugar de `AddType`): si el archivo es `exploit.php.jpg` y `.jpg` no tiene handler asociado, Apache retrocede y encuentra `.php`, ejecutando como PHP. En Apache moderno con `AddType` correcto, el archivo se sirve como `image/jpeg` (la última extensión reconocida define el tipo). Variante legacy:
 
 ```apache
 AddHandler application/x-httpd-php .php
 ```
 
-Esto puede hacer que `exploit.php.jpg` sea procesado como PHP porque el archivo "tiene la extensión .php en algún lugar". El bug se conoce como **Apache double extension RCE**.
-
-En Apache moderno con `AddType` correcto, el archivo se sirve como `image/jpeg` (Apache toma la última extensión reconocida). Pero PortSwigger no lo usa para este lab — el null byte fue suficiente.
+El bug se conoce como **Apache double extension RCE**. PortSwigger no lo usa para este lab — el null byte fue suficiente.
 
 ### 3.4 ¿Por qué el null byte sigue funcionando en este lab pese a stacks modernos?
 
 PortSwigger emula un stack vulnerable a null bytes (PHP < 5.3.4). En la práctica hoy:
 
 - PHP ≥ 5.3.4: rechaza null bytes en filesystem APIs. Bug class cerrada.
-- Java ≥ 7u40: `InvalidPathException`. Cerrado.
+- Java 7 con patch posterior (~2013-2014, versión exacta por vendor): `InvalidPathException`. Cerrado.
 - Python 3: `ValueError: embedded null byte`. Cerrado.
 - Ruby ≥ 1.9, Node moderno: cerrados.
 
@@ -236,7 +234,7 @@ Tres ideas:
 2. **Whitelist de extensiones permitidas** (no blacklist): falla cerrada para extensiones desconocidas. Más robusta cuando se actualiza el server (nuevos handlers PHP/JSP/etc no rompen la defensa).
 3. **Magic bytes del contenido real**: detecta archivos masquerading. Independiente del filename y del Content-Type.
 4. **Rechazar null bytes y caracteres de control en filenames**: defensa-en-profundidad incluso en stacks que ya validan. Falla rápido si llegan, antes de procesar.
-5. **Mantener el stack actualizado**: PHP ≥ 5.3.4, Java ≥ 7u40, Python 3, Ruby ≥ 1.9, Node moderno cierran null bytes a nivel de stdlib. Stacks legacy son vulnerables hoy.
+5. **Mantener el stack actualizado**: PHP ≥ 5.3.4, Java 7 con patch de 2013-2014 en adelante, Python 3, Ruby ≥ 1.9, Node moderno cierran null bytes a nivel de stdlib. Stacks legacy son vulnerables hoy.
 6. **Deshabilitar ejecución de scripts en TODO el árbol de uploads**: defensa-en-profundidad. `php_flag engine off`, `Options -ExecCGI`, `AddType text/plain .php .phtml .php5 .phar .pht`. En todo el subtree, no solo en el directorio inmediato.
 7. **Almacenar uploads fuera del document root**: solución más robusta. Servir vía endpoint dedicado con Content-Type explícito; el web server nunca toca los archivos directamente.
 8. **Tests automatizados con la suite del cluster**: por cada endpoint que acepte uploads, archivos con todas las obfuscaciones (`%00`, doble extensión, trailing dot, trailing space, case mixto, magic bytes spoof, `.htaccess`, `web.config`). Cualquier ejecución es bug.

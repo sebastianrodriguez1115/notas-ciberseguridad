@@ -130,7 +130,7 @@ Patrón común: **el header lo setea el cliente, así que cualquier defensa que 
 
 ### 3.3 Por qué `Content-Type` del part NO es trustworthy
 
-El RFC 2388 (multipart/form-data) describe el `Content-Type` del part como **opcional y de uso informativo**. No es un campo de seguridad. El cliente lo manda cuando puede inferirlo (browsers usualmente sí), o lo omite (scripts/curl pueden o no mandarlo).
+El RFC 7578 (multipart/form-data, que obsoleta al RFC 2388) describe el `Content-Type` del part como **opcional y de uso informativo**. No es un campo de seguridad. El cliente lo manda cuando puede inferirlo (browsers usualmente sí), o lo omite (scripts/curl pueden o no mandarlo).
 
 Consecuencias prácticas:
 
@@ -237,7 +237,8 @@ Tres ideas:
 
 - PortSwigger Web Security Academy. (s.f.). *Lab: Web shell upload via Content-Type restriction bypass*. https://portswigger.net/web-security/file-upload/lab-file-upload-web-shell-upload-via-content-type-restriction-bypass
 - PortSwigger Web Security Academy. (s.f.). *File upload vulnerabilities*. https://portswigger.net/web-security/file-upload
-- IETF. (1998). *RFC 2388: Returning Values from Forms — multipart/form-data*. https://www.rfc-editor.org/rfc/rfc2388
+- IETF. (2015). *RFC 7578: Returning Values from Forms — multipart/form-data*. https://www.rfc-editor.org/rfc/rfc7578
+- IETF. (1998). *RFC 2388: Returning Values from Forms — multipart/form-data* (obsoletado por RFC 7578). https://www.rfc-editor.org/rfc/rfc2388
 - OWASP Foundation. (s.f.). *Unrestricted File Upload*. https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload
 - OWASP Foundation. (s.f.). *File Upload Cheat Sheet*. https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
 - MITRE Corporation. (2024). *CWE-434: Unrestricted Upload of File with Dangerous Type*. https://cwe.mitre.org/data/definitions/434.html
