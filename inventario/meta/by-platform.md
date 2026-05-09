@@ -80,7 +80,7 @@ archivos por valor de `by-platform`.
 - [`explotacion-smb-relay`](../04-explotacion/red/explotacion-smb-relay.md) — SMB Relay Attack
 - [`modelo-osi-tcp-ip`](../07-fundamentos/redes/modelo-osi-tcp-ip.md) — Modelo OSI y Protocolos TCP/IP
 
-## Web (43)
+## Web (44)
 
 - [`analisis-command-injection`](../03-analisis-vulnerabilidades/web/analisis-command-injection.md) — Análisis de Command Injection
 - [`analisis-cors`](../03-analisis-vulnerabilidades/web/analisis-cors.md) — Análisis de CORS (Cross-Origin Resource Sharing)
@@ -89,6 +89,7 @@ archivos por valor de `by-platform`.
 - [`analisis-idor`](../03-analisis-vulnerabilidades/web/analisis-idor.md) — Insecure Direct Object Reference (IDOR)
 - [`analisis-lfi-rfi`](../03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md) — LFI y RFI
 - [`analisis-open-redirect`](../03-analisis-vulnerabilidades/web/analisis-open-redirect.md) — Análisis de Open Redirect
+- [`analisis-request-smuggling`](../03-analisis-vulnerabilidades/web/analisis-request-smuggling.md) — Análisis de HTTP Request Smuggling
 - [`analisis-seguridad-cabeceras`](../03-analisis-vulnerabilidades/web/analisis-seguridad-cabeceras.md) — Seguridad de Cabeceras HTTP
 - [`analisis-sqli`](../03-analisis-vulnerabilidades/web/analisis-sqli.md) — SQL Injection (SQLi)
 - [`analisis-ssrf`](../03-analisis-vulnerabilidades/web/analisis-ssrf.md) — Análisis de SSRF (Server-Side Request Forgery)

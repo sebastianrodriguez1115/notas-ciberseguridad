@@ -240,7 +240,7 @@ archivos por valor de `by-mitre`.
 
 - [`explotacion-adcs-relay`](../04-explotacion/red/explotacion-adcs-relay.md) — Abuso de ADCS y Ataques de Relay
 
-## T1190 (24)
+## T1190 (25)
 
 - [`analisis-command-injection`](../03-analisis-vulnerabilidades/web/analisis-command-injection.md) — Análisis de Command Injection
 - [`analisis-cors`](../03-analisis-vulnerabilidades/web/analisis-cors.md) — Análisis de CORS (Cross-Origin Resource Sharing)
@@ -249,6 +249,7 @@ archivos por valor de `by-mitre`.
 - [`analisis-idor`](../03-analisis-vulnerabilidades/web/analisis-idor.md) — Insecure Direct Object Reference (IDOR)
 - [`analisis-lfi-rfi`](../03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md) — LFI y RFI
 - [`analisis-open-redirect`](../03-analisis-vulnerabilidades/web/analisis-open-redirect.md) — Análisis de Open Redirect
+- [`analisis-request-smuggling`](../03-analisis-vulnerabilidades/web/analisis-request-smuggling.md) — Análisis de HTTP Request Smuggling
 - [`analisis-sqli`](../03-analisis-vulnerabilidades/web/analisis-sqli.md) — SQL Injection (SQLi)
 - [`analisis-ssrf`](../03-analisis-vulnerabilidades/web/analisis-ssrf.md) — Análisis de SSRF (Server-Side Request Forgery)
 - [`analisis-ssti`](../03-analisis-vulnerabilidades/web/analisis-ssti.md) — Análisis de SSTI (Server-Side Template Injection)

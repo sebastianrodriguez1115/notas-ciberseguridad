@@ -112,6 +112,13 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Linux · **Dificultad**: Intermedia
 - **Aliases**: Análisis de Vulnerabilidades: Permisos Inseguros en Linux
 
+## `analisis-request-smuggling` — Análisis de HTTP Request Smuggling
+
+- **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-request-smuggling.md`](./03-analisis-vulnerabilidades/web/analisis-request-smuggling.md)
+- **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Avanzada
+- **Aliases**: HTTP Request Smuggling, HTTP Desync, CL.TE, TE.CL, TE.TE
+- **Learning**: [`portswigger/confirming-cl-te-via-differential-responses`](../learning/portswigger/confirming-cl-te-via-differential-responses/)
+
 ## `analisis-seguridad-cabeceras` — Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP
 
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-seguridad-cabeceras.md`](./03-analisis-vulnerabilidades/web/analisis-seguridad-cabeceras.md)

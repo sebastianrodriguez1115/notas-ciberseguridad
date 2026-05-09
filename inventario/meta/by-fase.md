@@ -5,7 +5,7 @@
 Índice facetado generado desde frontmatter. Cada sección agrupa los
 archivos por valor de `by-fase`.
 
-## Análisis de Vulnerabilidades (22)
+## Análisis de Vulnerabilidades (23)
 
 - [`analisis-command-injection`](../03-analisis-vulnerabilidades/web/analisis-command-injection.md) — Análisis de Command Injection
 - [`analisis-cors`](../03-analisis-vulnerabilidades/web/analisis-cors.md) — Análisis de CORS (Cross-Origin Resource Sharing)
@@ -18,6 +18,7 @@ archivos por valor de `by-fase`.
 - [`analisis-open-redirect`](../03-analisis-vulnerabilidades/web/analisis-open-redirect.md) — Análisis de Open Redirect
 - [`analisis-parches-windows`](../03-analisis-vulnerabilidades/sistema/analisis-parches-windows.md) — Gestión de Parches en Windows
 - [`analisis-permisos-linux`](../03-analisis-vulnerabilidades/sistema/analisis-permisos-linux.md) — Permisos Inseguros en Linux
+- [`analisis-request-smuggling`](../03-analisis-vulnerabilidades/web/analisis-request-smuggling.md) — Análisis de HTTP Request Smuggling
 - [`analisis-seguridad-cabeceras`](../03-analisis-vulnerabilidades/web/analisis-seguridad-cabeceras.md) — Seguridad de Cabeceras HTTP
 - [`analisis-servicios-mal-configurados`](../03-analisis-vulnerabilidades/sistema/analisis-servicios-mal-configurados.md) — Servicios Mal Configurados
 - [`analisis-software-obsoleto`](../03-analisis-vulnerabilidades/sistema/analisis-software-obsoleto.md) — Software Obsoleto

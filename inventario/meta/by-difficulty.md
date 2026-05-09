@@ -5,10 +5,11 @@
 Índice facetado generado desde frontmatter. Cada sección agrupa los
 archivos por valor de `by-difficulty`.
 
-## Avanzada (21)
+## Avanzada (22)
 
 - [`analisis-deserialization`](../03-analisis-vulnerabilidades/web/analisis-deserialization.md) — Análisis de Insecure Deserialization
 - [`analisis-estatico-dinamico`](../08-forense-dfir/malware-analysis/analisis-estatico-dinamico.md) — Estático y Dinámico
+- [`analisis-request-smuggling`](../03-analisis-vulnerabilidades/web/analisis-request-smuggling.md) — Análisis de HTTP Request Smuggling
 - [`analisis-sqli`](../03-analisis-vulnerabilidades/web/analisis-sqli.md) — SQL Injection (SQLi)
 - [`analisis-ssrf`](../03-analisis-vulnerabilidades/web/analisis-ssrf.md) — Análisis de SSRF (Server-Side Request Forgery)
 - [`canales-encubiertos`](../05-post-explotacion/exfiltracion/canales-encubiertos.md) — Exfiltración por Canales Encubiertos

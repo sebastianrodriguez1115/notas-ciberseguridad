@@ -8,6 +8,7 @@ Identificación de fallos en aplicaciones web.
 | :--- | :--- | :--- | :--- |
 | [Análisis de Command Injection](./analisis-command-injection.md) | T1190 | Intermedia | Web |
 | [Análisis de CORS (Cross-Origin Resource Sharing)](./analisis-cors.md) | T1190 | Intermedia | Web |
+| [Análisis de HTTP Request Smuggling](./analisis-request-smuggling.md) | T1190 | Avanzada | Web |
 | [Análisis de Insecure Deserialization](./analisis-deserialization.md) | T1190 | Avanzada | Web |
 | [Análisis de Open Redirect](./analisis-open-redirect.md) | T1190 | Básica | Web |
 | [Análisis de SSRF (Server-Side Request Forgery)](./analisis-ssrf.md) | T1190 | Avanzada | Web |

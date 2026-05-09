@@ -2,6 +2,31 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger Confirming CL.TE via differential responses + nuevo análisis de Request Smuggling
+
+Primer lab del cluster HTTP Request Smuggling (Practitioner). Detección de CL.TE: front-end usa Content-Length, back-end usa Transfer-Encoding chunked. Headers contradictorios crean gap de parseo: front-end forwardea N bytes, back-end consume M < N por chunked terminator (`0\r\n\r\n`), los `N-M` sobrantes quedan en socket TCP keep-alive y se prependen a la siguiente request. Payload de 35 bytes con prefix `GET /404 HTTP/1.1` smuggled → segunda request del cliente es procesada como GET /404 → 404 confirma desync.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Smuggling es bug de frontera entre parsers, no de aplicación**: front-end y back-end procesan los mismos bytes con reglas distintas. El gap entre las dos vistas es el canal. La aplicación en sí es irrelevante — bug enteramente de infraestructura HTTP/1.1.
+2. **Detection via differential responses requiere modelo mental de keep-alive**: la víctima del gap es la siguiente request en el mismo socket, no la propia. La response observable es la de request 2, no de request 1. Sin entender keep-alive sockets compartidos entre requests, el comportamiento es opaco.
+3. **HTTP/2 cierra la categoría completa por construcción**: bodies con frames de longitud explícita, no hay ambigüedad CL/TE. Si el path frontend↔backend es HTTP/2, el bug no existe. Defensa estructural preferible a normalización defensiva en HTTP/1.
+4. **CL=35 byte-perfect importa**: el body no debe tener CRLF trailing después del último char. Burp puede agregarlo automático y el conteo pasa a 37, lo cual hace que el sobrante quede en socket del frontend (no del backend) y no smuggle. Conteo manual byte-por-byte es parte del workflow.
+5. **Setup de Burp es parte del bug**: requiere desactivar "Update Content-Length" + downgrade a HTTP/1 (HTTP/2 es default). Tooling automático (curl, requests) maneja CL automático y no permite reproducir el bug. La elección de tool determina si el bug es reproducible.
+6. **Tres variantes (CL.TE, TE.CL, TE.TE) requieren payloads distintos**: cada combinación de quién prioriza qué header tiene su propia mecánica. PortSwigger tiene labs separados para cada una.
+
+### Archivos nuevos
+
+- **`learning/portswigger/confirming-cl-te-via-differential-responses/writeup.md`**: 6 secciones, trazado byte-por-byte del flujo CL.TE, tabla comparativa CL.TE/TE.CL/TE.TE, contramedidas (HTTP/2 + sin keep-alive + parser strict + same-software).
+- **`inventario/03-analisis-vulnerabilidades/web/analisis-request-smuggling.md`**: nuevo análisis de la vulnerabilidad. Cubre las tres variantes, payloads de detección, herramientas (Burp Smuggler, smuggler.py, h2c-smuggler), contramedidas estructurales.
+
+### Conexión inventario
+
+- **Nuevo archivo en inventario**: `analisis-request-smuggling.md` (Avanzada, Web). Inventario sube de 134 a 135 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-request-smuggling.md`: writeup en `learning_refs:`. Cluster Request Smuggling 1/N labs.
+
+---
+
 ## [2026-05-08] — Aplazados los 2 labs OS command injection OOB (requieren Burp Pro)
 
 Los labs `lab-blind-out-of-band` y `lab-blind-out-of-band-data-exfiltration` validan que Collaborator reciba un DNS lookup. Sin Burp Pro y con el firewall de PortSwigger Academy bloqueando exfil a webhook.site/interactsh/requestbin, no hay ruta honesta de resolución. Documentados en `learning/portswigger/PENDING.md` con payloads listos para retomar y razón. Cluster OS Command Injection: 3 labs resueltos (simple, time-delays, output-redirection) + 2 aplazados a Pro.
