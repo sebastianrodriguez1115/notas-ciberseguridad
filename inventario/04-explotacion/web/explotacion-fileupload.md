@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
 related: [web-shells, analisis-lfi-rfi]
-learning_refs: [portswigger/file-upload-rce-via-web-shell-upload, portswigger/file-upload-content-type-restriction-bypass, portswigger/file-upload-path-traversal, portswigger/file-upload-extension-blacklist-bypass]
+learning_refs: [portswigger/file-upload-rce-via-web-shell-upload, portswigger/file-upload-content-type-restriction-bypass, portswigger/file-upload-path-traversal, portswigger/file-upload-extension-blacklist-bypass, portswigger/file-upload-obfuscated-file-extension]
 ---
 
 # File Upload Exploitation

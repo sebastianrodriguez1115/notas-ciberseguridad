@@ -520,7 +520,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Intermedia
 - **Aliases**: File Upload Vulnerability, Unrestricted File Upload, Webshell upload
 - **Related**: `web-shells`, `analisis-lfi-rfi`
-- **Learning**: [`portswigger/file-upload-rce-via-web-shell-upload`](../learning/portswigger/file-upload-rce-via-web-shell-upload/), [`portswigger/file-upload-content-type-restriction-bypass`](../learning/portswigger/file-upload-content-type-restriction-bypass/), [`portswigger/file-upload-path-traversal`](../learning/portswigger/file-upload-path-traversal/), [`portswigger/file-upload-extension-blacklist-bypass`](../learning/portswigger/file-upload-extension-blacklist-bypass/)
+- **Learning**: [`portswigger/file-upload-rce-via-web-shell-upload`](../learning/portswigger/file-upload-rce-via-web-shell-upload/), [`portswigger/file-upload-content-type-restriction-bypass`](../learning/portswigger/file-upload-content-type-restriction-bypass/), [`portswigger/file-upload-path-traversal`](../learning/portswigger/file-upload-path-traversal/), [`portswigger/file-upload-extension-blacklist-bypass`](../learning/portswigger/file-upload-extension-blacklist-bypass/), [`portswigger/file-upload-obfuscated-file-extension`](../learning/portswigger/file-upload-obfuscated-file-extension/)
 
 ## `explotacion-hash-cracking` — Crackeo de Hashes (Metodología)
 

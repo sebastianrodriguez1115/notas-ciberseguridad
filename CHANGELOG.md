@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-09] — Writeup PortSwigger Web shell upload via obfuscated file extension
+
+Quinto lab del cluster File Upload (Practitioner). Defensa: blacklist de extensiones PHP **+ bloqueo de `.htaccess`** (cierra el bypass del lab anterior). Bypass: null byte para obfuscar la extensión. `exploit.php%00.jpg` — el validador parsea la extensión post-último-punto y ve `.jpg` (PHP/Python tratan `\0` como char válido en strings). El filesystem trunca en `\0` y guarda como `exploit.php`. Apache lo procesa como PHP.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Validar extensión por string ≠ validar extensión del path final**: el validador opera sobre la representación textual del filename (lenguajes managed soportan `\0` interno como char válido); el filesystem opera sobre bytes hasta `\0` (semántica de string en C). La diferencia entre los dos modelos es el bypass.
+2. **Trace exacto de bytes**: filename string PHP `"exploit.php\x00.jpg"` (16 bytes); `pathinfo` lee ext `".jpg"` (post-último-punto literal); validación pasa. libc/kernel recibe los mismos 16 bytes pero para de leer en `\0`; path efectivo `"exploit.php"` (11 bytes). La validación opera en zona [0,16], el filesystem en [0,11]. Discrepancia = bypass.
+3. **Tabla de técnicas de obfuscación de extensión**: null byte (canónico), doble extensión (Apache `mod_mime` legacy), trailing dot/space (algunos FS strippean), caracteres invisibles, case manipulation (raro en stacks modernos), magic bytes spoof. Null byte es estructural; las otras dependen de quirks específicos del stack.
+4. **Apache double extension RCE**: variante interesante con `exploit.php.jpg`. Apache con `mod_mime` legacy y `AddHandler` (en lugar de `AddType`) puede procesar como PHP "porque tiene .php en algún lugar". Cerrado en Apache moderno con `AddType` correcto. Bug class conocida pero rara hoy.
+5. **Por qué null byte sigue funcionando en este lab pese a stacks modernos**: PortSwigger emula PHP < 5.3.4 vulnerable. En la práctica hoy aparece en apps PHP legacy, code paths que pasan filename a binarios externos vía subprocess, librerías nativas C/C++ sin wrapper, sistemas embebidos.
+6. **Filename server-controlled cierra TODA la familia de obfuscaciones**: rename a UUID/hash convierte cualquier obfuscación en irrelevante porque el filename del cliente no se usa para el path final. Defensa estructuralmente más fuerte que cualquier filter sobre el filename. Cierra null byte, doble extensión, trailing chars, path traversal, `.htaccess`, dotfiles — todos los bypasses del cluster basados en filename.
+7. **Tabla de progresión de los 5 labs del cluster**: simple → content-type → path-traversal → extension-blacklist (`.htaccess`) → obfuscated-extension (null byte). 5 asunciones rotas, una sola defensa correcta (whitelist + magic bytes + filename server-controlled + dir sin scripts). Catálogo de "qué representación del input la defensa mira vs cuál el sistema ejecuta".
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-upload-obfuscated-file-extension/writeup.md`**: 6 secciones, request multipart real, antipatrón PHP `pathinfo` post-último-punto, trace byte-por-byte de la discrepancia entre validación y filesystem, tabla de 7 técnicas de obfuscación, detalle de Apache `mod_mime` doble extensión, historia de mitigación por stack, 5 capas de defensa con énfasis en filename server-controlled.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `explotacion-fileupload.md`. Inventario en 134 archivos.
+- `inventario/04-explotacion/web/explotacion-fileupload.md`: + writeup en `learning_refs:`. Ahora linkea los 5 labs del cluster File Upload (3 Apprentice + 2 Practitioner).
+
+### Lección de proceso
+
+User probó el null byte como primer intento sin necesidad de explorar las otras técnicas (doble extensión, trailing dot, case). Documenté las variantes igual en el writeup como referencia para labs/CTFs futuros donde null byte falle. Heurística operacional: cuando hay múltiples bypasses posibles, ordenar por probabilidad de éxito (null byte = canónico estructural) y caer a las quirky (trailing dot = filesystem-specific) si el primero falla. El writeup debe documentar el árbol de decisión completo, no solo el camino que funcionó.
+
 ## [2026-05-09] — Writeup PortSwigger Web shell upload via extension blacklist bypass
 
 Cuarto lab del cluster File Upload (Practitioner — primer Practitioner del cluster). Defensa: blacklist comprensiva de extensiones PHP (`.php`, `.phtml`, todas las variantes `.ph*`) con mensaje "Sorry, php files are not allowed". Bypass: dos uploads — primero `.htaccess` con `AddType application/x-httpd-php .l33t`, después `exploit.l33t` con webshell. Apache lee el `.htaccess` del directorio y procesa `.l33t` como PHP.
