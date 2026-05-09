@@ -2,6 +2,28 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger Blind OS command injection with time delays
+
+Segundo lab del cluster OS Command Injection (Practitioner). Mismo patrón de feedback form, pero la respuesta no refleja output. Detección vía time delay con `sleep 10`. Primer intento `email=a@b.c;sleep 10` falla (500 en <1s) porque hay validación de regex de email previa al shell. Bypass con command substitution: `email=x$(sleep 10)@y.com` — pasa el regex (estructura `<algo>@<algo>` válida), shell evalúa `$(sleep 10)` y deja `x@y.com` para `mail`. Response: 200 OK en 10,240ms.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Dualidad de representación entre validación y shell**: la regex de email opera sobre la forma literal del input (`x$(sleep 10)@y.com`), el shell opera sobre la forma post-expansión (`x@y.com`). El gap es la trampa: el atacante construye un payload que pasa una vista mientras es ejecutable en la otra. Defensa estructural: pasar argv como array, no concatenar al shell.
+2. **Validación de formato no es defensa contra injection**: regex laxos como `[^@]+@[^@]+\..+` aceptan `$()`, backticks, otros metacaracteres. Whitelist explícita (`[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}`) los rechaza pero sigue siendo capa frágil — la fix correcta es estructural.
+3. **Time-based como canal lateral en blind**: tabla de canales de detección (tiempo, OAST/DNS, redirección a archivo, errores diferenciales) con pros/contras. Time es baseline simple pero ruidoso (network jitter, lentitud por test). OAST es más rápido y permite exfiltrar.
+4. **Confirmación de injection requiere correlación tiempo-payload**: `sleep 5` debe dar ~5s, `sleep 15` debe dar ~15s. Si ambos dan 10s, hay delay fijo del backend, no injection. La correlación es el control que distingue inyección real de coincidencia.
+5. **Por qué este lab es Practitioner sobre el simple case**: tres saltos — detección sin reflejo (canal lateral), validación previa al shell (separadores triviales bloqueados), command substitution como técnica que mantiene formato del input. Cada capa adicional es una habilidad que el simple case no probó.
+
+### Archivos nuevos
+
+- **`learning/portswigger/blind-os-command-injection-time-delays/writeup.md`**: 6 secciones, comparación de payloads válidos vs rechazados, tabla de 4 canales de detección blind, código backend probable con regex laxo + `shell=True`, defensa con SMTP directo + whitelist de caracteres + sin shell.
+
+### Conexión inventario
+
+- `inventario/03-analisis-vulnerabilidades/web/analisis-command-injection.md`: + writeup en `learning_refs:`. Cluster OS Command Injection 2/N labs.
+
+---
+
 ## [2026-05-08] — Writeup PortSwigger OS command injection simple case
 
 Primer lab del cluster OS Command Injection (Apprentice). Endpoint "Check stock" con `productId` y `storeId` que el backend pasa sin sanitizar a un shell (`stockreport.sh <productId> <storeId>`). Inyectando `|whoami` en `storeId`, el shell parsea el pipe y ejecuta `whoami` además del comando original. Output reflejado: `peter-KP0AX5`.

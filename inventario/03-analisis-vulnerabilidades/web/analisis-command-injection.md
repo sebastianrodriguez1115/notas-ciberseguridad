@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
 related: []
-learning_refs: [portswigger/os-command-injection-simple-case]
+learning_refs: [portswigger/os-command-injection-simple-case, portswigger/blind-os-command-injection-time-delays]
 ---
 
 # Análisis de Command Injection
