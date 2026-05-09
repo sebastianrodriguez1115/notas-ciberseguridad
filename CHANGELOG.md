@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger File path traversal, validation of start of path
+
+Quinto lab del cluster File path traversal (Practitioner). La defensa: la app valida que el `filename` empiece con un directorio base esperado (`/var/www/images`). Bypass: incluir el prefijo y agregar traversal después. Payload: `/var/www/images/../../../etc/passwd`. La validación `startswith('/var/www/images')` pasa porque el string empieza con el prefijo, pero `open()` canonicaliza `..` durante la resolución y abre `/etc/passwd`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **`startswith` sobre input crudo no valida el path canónico**: opera sobre la sintaxis del string como secuencia de chars, no sobre la ruta lógica que el filesystem resuelve. El bypass pasa porque la representación validada (string crudo) difiere de la representación ejecutada (path canonicalizado por el kernel durante `open()`).
+2. **El filesystem canonicaliza independientemente de la app**: `..` se resuelve durante el syscall `open()`. La app no necesita procesar `..` para que se resuelva — el kernel lo hace. La defensa que solo opera sobre el string del input no controla ese paso.
+3. **Heurística de prefijos para PortSwigger**: `/var/www/images` es el prefijo cableado en el stack PortSwigger Linux para imágenes. Para apps reales, enumerar vía errores que filtren paths, headers, o código fuente filtrado.
+4. **Variantes que también funcionan contra esta defensa**: subdirectorios falsos en el prefijo (`/var/www/images/foo/../../../etc/passwd`), `..` extras (más de los necesarios), `./`/no-ops (`/var/www/images/./../../../etc/passwd`). Cualquier string que (a) empiece con el prefijo y (b) contenga `..` suficientes para escapar.
+5. **Bypass adicional contra `startswith` sin separador**: `/var/www/imagesEVIL/file` también pasa `startswith('/var/www/images')`. Defensa correcta debe incluir el separador final (`BASE + os.sep`) en el prefijo de comparación.
+6. **Por qué Practitioner**: el payload no es complejo, pero requiere reconocer el patrón distinto de defensa (no rechaza `..` ni paths absolutos — rechaza prefijos), adivinar el prefijo correcto, y confiar en que el filesystem canonicaliza aunque la defensa no lo procese. Conocimiento de OS, no del código de la app.
+7. **Tabla de progresión de los 5 labs del cluster**: simple → absolute → non-recursive → superfluous-decode → validate-start-of-path. Cada lab agrega una capa de defensa naïve y la rompe con una asunción nueva. Cinco asunciones rotas distintas; una sola defensa correcta (`realpath` + `startswith` con separador) las cubre todas.
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-path-traversal-validate-start-of-path/writeup.md`**: 6 secciones, request/response real, antipatrón Python `startswith` sobre input crudo vs fix con `realpath` + separador, trace de cómo el kernel canonicaliza `..` durante `open()`, variantes y bypass adicional `imagesEVIL`, tabla comparativa de los 5 labs del cluster con las 5 asunciones rotas.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `analisis-lfi-rfi.md`. Inventario en 134 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md`: + writeup en `learning_refs:`. Ahora linkea los 5 labs del cluster Path Traversal.
+
+### Lección de proceso
+
+User adivinó el prefijo `/var/www/images` al primer intento. Esa heurística (PortSwigger Linux usa `/var/www/images` para imágenes de productos) la documenté explícitamente porque ahorra tiempo en labs futuros del catálogo y es transferible a CTFs con stacks similares. Para apps reales el prefijo se enumera vía error messages, headers, o source code leak. Generalización: cuando un lab pide adivinar un valor cableado, documentar el valor + el método de enumeración para apps no-PortSwigger.
+
 ## [2026-05-08] — Writeup PortSwigger File path traversal, superfluous URL-decode
 
 Cuarto lab del cluster File path traversal (Practitioner). La defensa: la app rechaza `../` y `..%2f` después del primer URL-decode (el del framework), pero llama explícitamente a `urldecode()` una segunda vez antes de `open()`. Bypass: doble encoding `..%252f`. Después del decode #1 queda `..%2f` (filter no matchea), después del decode #2 queda `../` (path traversal). Payload final: `..%252f..%252f..%252fetc/passwd`.
