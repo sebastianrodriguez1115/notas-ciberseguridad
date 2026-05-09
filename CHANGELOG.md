@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-09] — Writeup PortSwigger Web shell upload via path traversal
+
+Tercer lab del cluster File Upload (Apprentice). Dos defensas activas: (A) Content-Type del part (heredada del lab anterior) y (B) `/files/avatars/` no ejecuta PHP (texto plano). Bypass: Content-Type → `image/jpeg` + filename → `..%2fexploit.php`. El server strippea `../` literal pero no decodifica `%2f` antes del filter; después del decode interno, el archivo aterriza en `/files/exploit.php` que sí ejecuta PHP.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Defensa-en-profundidad colapsa si el atacante elige el directorio**: deshabilitar ejecución de PHP en `/files/avatars/` es defensa correcta solo cuando el filename del cliente no puede mover el archivo. Path traversal en el filename rompe la asunción y restaura ejecución vía aterrizar en directorio padre que sí ejecuta.
+2. **Diagnóstico vía mensaje del server**: primer intento con `../exploit.php` literal devolvió "The file avatars/exploit.php has been uploaded" (notar el `avatars/` sin el `../`). Confirmación inmediata de que el filter strippeó el `../`. Mensaje del server filtra exactamente el path final, lo cual orienta el siguiente bypass.
+3. **Filter `str_replace('../', '')` se bypass-ea con encoding del slash**: `..%2fexploit.php` no contiene `/` literal, así que el strip no matchea. Después la decodificación interna (PHP/framework) convierte `%2f` en `/`. Mismo antipatrón estructural que el lab "superfluous URL decode" del cluster Path Traversal — validar antes de la transformación final.
+4. **Tabla comparativa con lab análogo del cluster Path Traversal**: vector (lectura vs escritura), filter (rechaza vs strippea), bypass (`..%252f` doble vs `..%2f` single), defensa rota (validar antes del 2do decode vs antes del 1er decode). Antipatrón general "validate before canonicalize" tiene instancias simétricas en lectura y escritura.
+5. **Por qué `/files/` ejecuta PHP pero `/files/avatars/` no**: config Apache donde el sysadmin agregó restricción específicamente al directorio donde aterrizan uploads (`<Files *.php> SetHandler text/plain` o `php_flag engine off` en `.htaccess`). El padre quedó con la default. Defensa correcta: deshabilitar ejecución en TODO el subtree de uploads, no solo en el directorio inmediato.
+6. **Composición de bypasses requerida**: este lab necesita Content-Type bypass (heredado del lab anterior) AND path traversal en filename. Las dos defensas existen simultáneamente y se atacan al mismo tiempo. Lab progresivo donde defensas anteriores siguen activas.
+7. **Filename server-controlled como mitigación estructural**: rename a UUID/hash ignorando el filename del cliente cierra todos los bugs basados en path en el filename. La intención del cliente (nombre legible) puede guardarse en metadatos separados sin afectar el path real. Defensa más fuerte que filtros de string sobre el filename.
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-upload-path-traversal/writeup.md`**: 6 secciones, request multipart real con dos cambios (Content-Type + filename encoded), antipatrón PHP `str_replace('../', '')` antes de decode, tabla comparativa con `superfluous-url-decode` del cluster Path Traversal, análisis de Apache config (por qué `/files/` ejecuta y `/files/avatars/` no), 5 capas de defensa con énfasis en filename server-controlled, tabla comparativa de los 3 labs del cluster.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `explotacion-fileupload.md`. Inventario en 134 archivos.
+- `inventario/04-explotacion/web/explotacion-fileupload.md`: + writeup en `learning_refs:`. Ahora linkea los 3 labs del cluster File Upload.
+
+### Lección de proceso
+
+User olvidó el `Content-Type: image/jpeg` en el primer intento de path traversal y reportó "no funciona". Diagnostiqué pidiendo el response del upload (que confirmó "uploaded as avatars/exploit.php" — filter strippeando `../`). Pero la falta de Content-Type también podría haber bloqueado el upload entero. Lección: cuando un bypass progresivo falla, primero verificar que los bypasses anteriores siguen aplicados; los labs del cluster acumulan defensas y los bypasses se componen, no se reemplazan. Heurística operacional para agentes: pedir el request completo (no solo el cambio relevante) cuando un bypass nuevo no funciona, para detectar regresiones en bypasses heredados.
+
 ## [2026-05-08] — Writeup PortSwigger Web shell upload via Content-Type restriction bypass
 
 Segundo lab del cluster File Upload (Apprentice). La defensa: la app valida el `Content-Type` del part multipart del archivo, rechaza tipos no-imagen con mensaje verbose ("Only image/jpeg and image/png are allowed"). Bypass: interceptar en Burp y cambiar el `Content-Type` del part de `application/x-php` a `image/jpeg`. Server acepta el upload, archivo queda en `/files/avatars/exploit.php`, ejecución idéntica al lab anterior.
