@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Avanzada
 mitre: [T1190]
 related: []
-learning_refs: [portswigger/confirming-cl-te-via-differential-responses]
+learning_refs: [portswigger/confirming-cl-te-via-differential-responses, portswigger/confirming-te-cl-via-differential-responses]
 ---
 
 # Análisis de HTTP Request Smuggling

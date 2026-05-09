@@ -2,6 +2,29 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-09] — Writeup PortSwigger Confirming TE.CL via differential responses
+
+Segundo lab del cluster HTTP Request Smuggling (Practitioner). Variante invertida de CL.TE: front-end usa Transfer-Encoding chunked, back-end usa Content-Length. Payload con CL=4 + chunk size `5e` (94 bytes) conteniendo `POST /404 HTTP/1.1` como request smuggled. Frontend forwardea todo (lee chunked OK), backend lee solo 4 bytes (`5e\r\n`) y deja el resto en buffer; segunda request lee desde buffer, procesa POST /404, devuelve 404. Resuelto con tropiezo educativo: primer intento con `GPOST /` y chunk size `5c` (92 bytes) confundió el backend pero produjo "Connection closed" en lugar de 404, y el lab no marcó solved porque su detector matchea status code 404, no error de método.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Chunk size en hex es el byte más frágil del payload TE.CL**: cualquier modificación del contenido del chunk (path, headers, content) requiere recalcular en hex. Es la fuente más común de "el payload no funciona" porque copy-paste de internet sin recálculo es la rutina natural. Defensa operacional: contar dos veces, usar tool externo (Burp HTTP Request Smuggler), no confiar en que un payload modificado mantiene el size original.
+2. **Heurísticas de los labs matchean responses específicas, no comportamiento genérico**: `GPOST /` (método inválido) confunde el backend pero produce 405/connection close, no 404. PortSwigger detecta vía status 404, así que un payload conceptualmente correcto pero con response distinta no satisface el lab. Lección: chequear el "indicador de éxito" del lab antes de inventar variantes del payload.
+3. **CL.TE y TE.CL son inversos pero comparten método de detección**: ambos producen 404 en la segunda request cuando smuggled prefix es `[METHOD] /404`. Misma señal de salida desde la perspectiva del lab pese a mecánicas opuestas. Tabla comparativa en sección 3.2 del writeup.
+4. **`POST /404` vs `GPOST /` no es equivalente**: el primero usa método estándar + path inexistente → 404 predecible. El segundo usa método no estándar → 405/400/cierre, depende del parser. La fragilidad de la primera versión la documenta el writeup como tropiezo.
+5. **Bytes residuales después del smuggle explican el "Connection closed"**: en TE.CL, después que el backend procesa la request smuggled con su CL=15 chico, los bytes restantes (`T / HTTP/1.1...`) son malformed → backend cierra socket. Eso aparece como "Connection closed during request sequence" en Burp. Es comportamiento esperable, no señal de fallo.
+6. **Send group must be "in sequence (single connection)"**: opciones parallel o "separate connections" rompen el bug. Burp ofrece 4 modos en el dropdown del Send group; solo uno funciona.
+
+### Archivos nuevos
+
+- **`learning/portswigger/confirming-te-cl-via-differential-responses/writeup.md`**: 6 secciones, trazado byte-por-byte del flujo TE.CL, tabla comparativa CL.TE vs TE.CL, anécdota del primer intento fallido con `GPOST` y chunk size incorrecto, contramedidas (mismas que CL.TE + heurística específica de CL anormalmente chico con TE chunked).
+
+### Conexión inventario
+
+- `inventario/03-analisis-vulnerabilidades/web/analisis-request-smuggling.md`: + writeup en `learning_refs:`. Cluster Request Smuggling 2/N labs.
+
+---
+
 ## [2026-05-08] — Writeup PortSwigger Confirming CL.TE via differential responses + nuevo análisis de Request Smuggling
 
 Primer lab del cluster HTTP Request Smuggling (Practitioner). Detección de CL.TE: front-end usa Content-Length, back-end usa Transfer-Encoding chunked. Headers contradictorios crean gap de parseo: front-end forwardea N bytes, back-end consume M < N por chunked terminator (`0\r\n\r\n`), los `N-M` sobrantes quedan en socket TCP keep-alive y se prependen a la siguiente request. Payload de 35 bytes con prefix `GET /404 HTTP/1.1` smuggled → segunda request del cliente es procesada como GET /404 → 404 confirma desync.
