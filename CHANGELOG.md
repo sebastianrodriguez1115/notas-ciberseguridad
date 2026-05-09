@@ -2,6 +2,12 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Aplazados los 2 labs OS command injection OOB (requieren Burp Pro)
+
+Los labs `lab-blind-out-of-band` y `lab-blind-out-of-band-data-exfiltration` validan que Collaborator reciba un DNS lookup. Sin Burp Pro y con el firewall de PortSwigger Academy bloqueando exfil a webhook.site/interactsh/requestbin, no hay ruta honesta de resolución. Documentados en `learning/portswigger/PENDING.md` con payloads listos para retomar y razón. Cluster OS Command Injection: 3 labs resueltos (simple, time-delays, output-redirection) + 2 aplazados a Pro.
+
+---
+
 ## [2026-05-08] — Writeup PortSwigger Blind OS command injection with output redirection
 
 Tercer lab del cluster OS Command Injection (Practitioner). Misma forma que time-delays (feedback form, validación de email, command substitution `$(...)` para mantener formato) pero ahora se exfiltra output completo en lugar de detectar binariamente. Payload: `email=x$(whoami>/var/www/images/whoami)@y.com`. Recuperación: `GET /image?filename=whoami` devuelve `peter-nwuHUj` (con Content-Type: image/jpeg engañoso, body es texto). Tropiezo operacional: pasar path completo al filename del GET concatena dos veces el directorio raíz; pasar solo el nombre relativo funciona.
