@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger File path traversal, absolute path bypass
+
+Segundo lab del cluster File path traversal (Practitioner). La app filtra secuencias `../` pero acepta paths absolutos. Payload `filename=/etc/passwd` bypass-ea el filter porque no contiene `..`. Resuelto en una request al cambiar el payload del lab simple por uno absoluto.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **El filter de `../` asume que traversal requiere subir directorios**: un path absoluto no sube — empieza desde la raíz. La asunción del filter no cubre ese caso. Bypass conceptual, no de encoding/escape.
+2. **`os.path.join` y `Path.resolve` descartan componentes anteriores cuando uno posterior es absoluto**: comportamiento documentado de Python y Java (no bug del lenguaje). `os.path.join('/var/www/images', '/etc/passwd')` → `/etc/passwd`. El bug está en el código que asume que el join queda dentro del directorio base.
+3. **Concatenación textual cruda NO es vulnerable a este payload específico**: `'/var/www/images/' + '/etc/passwd'` = `/var/www/images//etc/passwd`, que canonicaliza a `/var/www/images/etc/passwd` (dentro del base). Que el bypass funcione confirma path-join "inteligente" o `chdir+open` relativo.
+4. **Por qué Practitioner y no Apprentice**: el payload es más simple que el del lab Apprentice anterior. Lo que sube la dificultad es el cambio de mental model — reconocer que el filter asume `..` y que la asunción es bypass-eable conceptualmente.
+5. **Patrón general "string filters de input"**: cada filter de string asume cómo se ve un payload "malo" (`../` , empieza con `..`, contiene `/`, etc.). Cada asunción tiene bypass: path absoluto, `....//` post-replace, encoding, doble encoding. Los siguientes labs del cluster son variantes de este mismo principio.
+6. **La defensa correcta no cambia entre labs del cluster**: `os.path.realpath(os.path.join(BASE, filename))` + `startswith(BASE)`. Cubre relativo, absoluto, encoding, dobles barras y links simbólicos en una operación. String filters siempre van a tener bypass.
+7. **Variantes adicionales si el filter también rechaza paths absolutos**: URL encoding (`%2fetc%2fpasswd`), doble encoding (`%252fetc%252fpasswd`) cuando hay decodificación dos veces, backslash en Windows, UNC paths (`\\localhost\c$\...`), `file://` protocol si el código usa una librería que acepta URI.
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-path-traversal-absolute-path-bypass/writeup.md`**: 6 secciones, request/response real con `/etc/passwd`, dos antipatrones (chdir+open relativo vs `os.path.join`) y por qué ambos son bypass-eables, contraste con concatenación textual cruda (que NO sería vulnerable a este payload), defensa correcta idéntica al lab simple, variantes para filters más estrictos.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `analisis-lfi-rfi.md`. Inventario en 134 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md`: + writeup en `learning_refs:`. Ahora linkea ambos labs del cluster Path Traversal (simple-case + absolute-path-bypass).
+
+### Lección de proceso
+
+User reportó "lab solved" mostrando primero la página de descripción de PortSwigger.com en lugar de la URL del lab instance. Detalles operacionales que confunden: la página `portswigger.net/web-security/.../lab-X` es estática (descripción del problema), mientras que la URL del lab corre en `<labid>.web-security-academy.net/...` y muestra el banner "solved". Confirmación correcta requiere mirar la URL del lab, no la página del catálogo. Generalización: cuando se reporta "lab solved", verificar que la screenshot venga de la URL del lab instance, no del catálogo.
+
 ## [2026-05-08] — Writeup PortSwigger File path traversal, simple case
 
 Primer lab del cluster File path traversal (Apprentice, baseline sin defensas). Vector: el endpoint `/image?filename=58.jpg` concatena el `filename` a un directorio base (`/var/www/images/`) y abre el archivo sin canonicalizar. Payload `filename=../../../etc/passwd` resuelve a `/etc/passwd` durante la resolución del path por el syscall `open()`. Response 200 con `Content-Type: image/jpeg` pero body de texto plano: el handler pipea bytes sin chequear MIME real.
