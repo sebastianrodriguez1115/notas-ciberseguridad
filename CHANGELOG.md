@@ -2,6 +2,29 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger OS command injection simple case
+
+Primer lab del cluster OS Command Injection (Apprentice). Endpoint "Check stock" con `productId` y `storeId` que el backend pasa sin sanitizar a un shell (`stockreport.sh <productId> <storeId>`). Inyectando `|whoami` en `storeId`, el shell parsea el pipe y ejecuta `whoami` además del comando original. Output reflejado: `peter-KP0AX5`.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **El bug es estructural, no de filtrado**: construir comandos como string + invocar shell (`shell=True`, `Runtime.exec(String)`, `system()`) es la categoría completa del problema. Filtrar metacaracteres es mitigación frágil — la lista de separadores es larga, los encodings rompen filtros, y un cambio de código puede revertir la protección.
+2. **Inyectar en el último parámetro produce output más limpio**: `stockreport.sh 1 1|whoami` deja `whoami` al final del pipeline sin argumentos espurios. Inyectar en `productId` lo dejaría en el medio (`stockreport.sh 1|whoami 1`), lo cual puede confundir el output según parsing.
+3. **Reflejada vs ciega es eje ortogonal a la severidad**: el lab es trivial de detectar porque la respuesta refleja el output, pero el mismo bug sin reflejo sigue siendo RCE — solo cambia el método de detección (time-based con `sleep`, OAST con `nslookup`, redirección a archivo servible).
+4. **Equivalencia cross-lenguaje del fix**: `subprocess.run([...], shell=False)` en Python, `ProcessBuilder` en Java, `child_process.execFile` en Node, `exec.Command` en Go. Todos comparten la propiedad estructural de pasar `argv[]` literal sin shell intermedio.
+5. **Validación numérica como defensa-en-profundidad**: cuando el dominio del input es enumerable (numérico, set fijo de valores), validar antes de invocar subprocess. No reemplaza la API correcta, la complementa.
+
+### Archivos nuevos
+
+- **`learning/portswigger/os-command-injection-simple-case/writeup.md`**: 6 secciones, anatomía del bug con código backend probable, tabla de separadores de shell, comparación reflejada/ciega/OOB, fix estructural cross-lenguaje, defensa-en-profundidad con validación + mínimo privilegio + WAF.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `analisis-command-injection.md`. Inventario en 134 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-command-injection.md`: + writeup en `learning_refs:`. Cluster OS Command Injection arrancado (1/N labs).
+
+---
+
 ## [2026-05-09] — Writeup PortSwigger Web shell upload via race condition
 
 Séptimo y último lab del cluster File Upload (Expert). El server escribe el archivo a disco antes de validar. Si la validación falla, devuelve 403 al cliente y borra el archivo. Pero entre la escritura y el borrado hay ~2-15ms durante los cuales `/files/avatars/exploit.php` es accesible vía HTTP. Un GET que cae en esa ventana ejecuta el PHP antes de que el delete corra. Resuelto con script Python con 5 uploaders + 30 readers concurrentes — secret obtenido en <2 segundos pese a que TODOS los uploads devolvieron 403.

@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
 related: []
-learning_refs: []
+learning_refs: [portswigger/os-command-injection-simple-case]
 ---
 
 # Análisis de Command Injection
