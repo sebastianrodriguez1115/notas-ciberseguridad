@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Intermedia
 mitre: [T1190]
 related: [fuzzing-lfi-ssrf, analisis-ssrf]
-learning_refs: []
+learning_refs: [portswigger/file-path-traversal-simple-case]
 ---
 
 # Análisis de Vulnerabilidades: LFI y RFI

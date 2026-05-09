@@ -2,6 +2,33 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-08] — Writeup PortSwigger File path traversal, simple case
+
+Primer lab del cluster File path traversal (Apprentice, baseline sin defensas). Vector: el endpoint `/image?filename=58.jpg` concatena el `filename` a un directorio base (`/var/www/images/`) y abre el archivo sin canonicalizar. Payload `filename=../../../etc/passwd` resuelve a `/etc/passwd` durante la resolución del path por el syscall `open()`. Response 200 con `Content-Type: image/jpeg` pero body de texto plano: el handler pipea bytes sin chequear MIME real.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Path traversal es bug de canonicalización, no de filtrado**: el server compone `base + input` y asume que el resultado queda dentro de `base`. La defensa correcta es canonicalizar (resolver `..`, links, encodings) y validar el resultado, no validar el input crudo.
+2. **`/etc/passwd` como target canónico**: world-readable, signature inconfundible (`root:x:0:0:...`), portátil POSIX. No expone secretos críticos por sí solo (los hashes están en `/etc/shadow`). Por eso es la prueba estándar de traversal sin riesgo de falso positivo.
+3. **Mismatch Content-Type vs body es señal**: el server declaró `image/jpeg` pero devolvió texto. El handler está cableado a "siempre image/jpeg" porque el endpoint se llama `/image`; no infiere MIME del contenido. Si se prueba traversal desde el browser y se ve "imagen rota", no asumir que falló — mirar el body en Burp.
+4. **Heurística de profundidad de `../`**: `..` desde `/` resuelve a `/` en POSIX (root es su propio padre), así que sobreestimar la profundidad no rompe nada. Por eso un payload de 8-10 niveles es heurística común cuando no se conoce el cwd.
+5. **Filtro inicial de Burp oculta imágenes**: HTTP history filtra por defecto "CSS, image and general binary content". Endpoint vulnerable a traversal vía parámetro de imagen es invisible hasta desactivar el filtro. Insight operacional: para auditar endpoints de assets, ajustar el filtro antes de empezar.
+6. **Mapa de defensas comunes (vista preview de los próximos labs)**: filter de `../` (bypass con `%2e%2e%2f`, doble encoding), filter non-recursive (bypass con `....//`), validación de prefijo (bypass con `/var/www/images/../../../etc/passwd`), validación de sufijo (bypass con null byte `%00.jpg` o segmentación de path). Cada uno corresponde a un lab separado.
+7. **Vectores derivados del mismo bug**: lectura de código fuente (`/var/www/html/index.php`), config files (`.env`, `web.xml`, `nginx.conf`), keys SSH, logs como vector a RCE (log poisoning), `/proc/self/environ` para vars de entorno con secretos.
+
+### Archivos nuevos
+
+- **`learning/portswigger/file-path-traversal-simple-case/writeup.md`**: 6 secciones, request/response real, antipatrón Python `BASE + filename` vs fix con `os.path.realpath` + validación de prefijo, alternativa con IDs en lugar de paths libres, mapa de defensas comunes y sus bypass, 5 vectores derivados.
+
+### Conexión inventario
+
+- **Sin nuevos archivos en inventario**: refuerza `analisis-lfi-rfi.md` (que ya cubre LFI/RFI/Path Traversal con sus aliases). Inventario en 134 archivos.
+- `inventario/03-analisis-vulnerabilidades/web/analisis-lfi-rfi.md`: + writeup en `learning_refs:` (antes era `[]`, primer learning_ref del archivo).
+
+### Lección de proceso
+
+User no había desactivado el filtro de imágenes en Burp, así que en el primer recon no veía la request del endpoint vulnerable. El instinto inicial fue describir el vector en abstracto; en cambio, el siguiente paso operacional correcto fue diagnosticar el blocker en su tooling (filtro de Burp) antes de avanzar. Generalización: cuando el user reporta "no veo X", priorizar troubleshooting de la herramienta antes que avanzar con la teoría.
+
 ## [2026-05-08] — Writeup PortSwigger Referer-based access control
 
 Treceavo lab del cluster Access Control. Practitioner. Vector: el endpoint `/admin-roles?username=X&action=upgrade` no chequea sesión/rol; chequea el header `Referer`. Si `Referer` matchea `/admin`, autoriza. Razonamiento del dev: "si el cliente vino del admin panel (que sí está protegido), es admin". El bug: `Referer` lo setea el cliente. En Burp/curl se forja. Wiener manda la request con su sesión + `Referer: https://lab/admin` → 302 → admin.

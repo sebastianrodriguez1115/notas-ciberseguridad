@@ -77,6 +77,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Intermedia
 - **Aliases**: LFI, RFI, Local File Inclusion, Remote File Inclusion, Path Traversal, Directory Traversal
 - **Related**: `fuzzing-lfi-ssrf`, `analisis-ssrf`
+- **Learning**: [`portswigger/file-path-traversal-simple-case`](../learning/portswigger/file-path-traversal-simple-case/)
 
 ## `analisis-nessus` — Análisis de Vulnerabilidades con Nessus
 
