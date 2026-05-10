@@ -2,6 +2,31 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-09] — Writeup PortSwigger Capture other users' requests (CL.TE cross-user persistent)
+
+Sexto lab del cluster HTTP Request Smuggling (Practitioner). Primer lab cross-user de la serie: smuggle CL.TE captura el request de otro usuario (administrator simulado) absorbiéndolo como body del campo `comment` de un blog post. La cookie de sesión del víctima queda almacenada en el comentario, accesible para cualquier visitante del post → account takeover. Resolución requirió 5-20 iteraciones por variabilidad de timing del back-end. Helper scripts en Python (raw socket TLS) escritos para automatizar: `test_sockets.py` (sanity check) y `smuggle_capture.py` (loop con regex parsing).
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **La cantidad de bytes absorbida es VARIABLE iteración a iteración**, no determinística: el back-end tiene timeout de body read; cuántos bytes acumula antes del timeout depende de timing TCP, momento de arribo del víctima, comportamiento de pool del front-end. Iteraciones del MISMO payload exacto capturaron entre 745 y 819 bytes raw. Solo la(s) iteración(es) que capturen ≥819 bytes contiene(n) el cookie completo. Estrategia: iterar 10-30 veces con paciencia, no buscar "CL perfecto".
+2. **Las soluciones oficiales de PortSwigger pueden quedar desactualizadas frente a victim simulators evolucionados**: la oficial dice CL=400 (víctima ~400 bytes). El víctima 2026 tiene ~830 bytes con headers `sec-ch-ua-*`, `sec-fetch-*`, `priority`. CL=400 captura solo primeros 281 bytes — antes del cookie. Hay que ajustar CL al tamaño real del víctima actual (CL=950 funcionó). Cuando una solución oficial "no funciona", el bug suele estar en parámetros, no en la técnica.
+3. **Outer a `/` (no a `/post/comment`) afecta la durabilidad de la conexión back-end**: con outer a `/post/comment` el back-end devuelve 400 y puede cerrar antes; con outer a `/` devuelve 200 y mantiene la conexión más tiempo, dándole al smuggle más oportunidad de absorber bytes. Diferencia operacional importante para maximizar absorción.
+4. **"Server Error: Communication timed out" en el browser es signal de smuggle vivo**: si reloadeás la página después del smuggle y ves ese error, significa que el smuggle aún espera body bytes y tu reload se absorbió como continuación, dejando al frontend esperando una response que no llega. Solución: esperar 60+ segundos antes de reloadeár para que el back-end timea y procese.
+5. **Captura de tu propio request en lugar del víctima**: si reloadeás demasiado rápido, tu request browsea antes que el víctima y se absorbe. User-Agent del comentario almacenado va a ser el tuyo (Brave), no `(Victim)`. Por eso los Sec-Ch-Ua-* del víctima son distintos a los del Brave atacante: identificarlos confirma que la captura es del víctima real.
+6. **Smuggling permite cross-user attacks SIN que la víctima haga click ni ejecute código** (a diferencia de XSS o CSRF clásicos): solo necesita browsear normalmente. La intercepción ocurre en capa HTTP transparente. Más sigiloso y harder to detect que XSS/CSRF tradicionales.
+
+### Archivos nuevos
+
+- **`learning/portswigger/capture-other-users-requests/writeup.md`**: 6 secciones, anatomía del smuggle cross-user, tabla de iteraciones reales mostrando absorción variable, comparación con reveal-front-end-request-rewriting (mismo patrón, target distinto), análisis de por qué la solución oficial está desactualizada.
+- **`learning/portswigger/capture-other-users-requests/test_sockets.py`**: 5 tests del transport layer (TLS handshake, GET con/sin session, POST con CSRF dummy, dry-run del payload). Sanity check pre-iteración.
+- **`learning/portswigger/capture-other-users-requests/smuggle_capture.py`**: auto-exploit en loop con raw socket TLS (libs `requests`/`httpx` rechazan CL+TE), regex parsing del comentario via urllib + html.unescape, filter de captures fake (test contamination).
+
+### Conexión inventario
+
+- `inventario/03-analisis-vulnerabilidades/web/analisis-request-smuggling.md`: + writeup en `learning_refs:`. Cluster Request Smuggling 6/N labs (2 detección + 4 explotación).
+
+---
+
 ## [2026-05-09] — Writeup PortSwigger Reveal front-end request rewriting (CL.TE 2-fase)
 
 Quinto lab del cluster HTTP Request Smuggling (Practitioner). Primer lab del cluster con explotación en 2 fases: (1) descubrir el nombre de un header de IP rewriting random (`X-ZuJFJu-Ip` en esta sesión) que el front-end agrega y (2) usar `127.0.0.1` en ese header dentro de un smuggle a `/admin/delete?username=carlos` para bypassar el control "/admin solo desde 127.0.0.1". Resuelto al primer intento sin tropiezos (los 4 labs anteriores construyeron la intuición de bytes-perfect counting y CL interno absorbente).
