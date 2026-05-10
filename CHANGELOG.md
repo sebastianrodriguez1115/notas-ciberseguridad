@@ -2,6 +2,29 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-10] — Writeup PortSwigger Modifying serialized data types (PHP type juggling Practitioner)
+
+Segundo lab del cluster Insecure Deserialization. PHP `unserialize()` + `==` loose comparison para auth bypass via type confusion. Login `wiener:peter`, decodificar cookie revela `O:4:"User":2:{...;s:12:"access_token";s:32:"<hex>";}`. Cambiar `s:32:"<hex>"` por `i:0` (integer cero), reusar como cookie → admin access via `0 == "<no-numeric-string>"` que evalúa true en PHP 5/7. Resuelto al primer intento sin necesidad de modificar el username.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **PHP `==` loose comparison + type juggling es un vector clásico devastador en PHP < 8**: `0 == "abc"` evalúa true porque PHP coerciona el string a int (`intval("abc")` = 0). Aplicado a auth: si el back-end hace `if ($user->access_token == $stored_token)` con loose `==`, substituir el token de string a integer 0 bypassa la comparación sin conocer el secret. La regla sutil: solo funciona si el stored token NO empieza con dígito numérico (porque `intval("3abc")` = 3 ≠ 0).
+2. **El cambio mínimo bypass funcionó sin cambiar username**: la solución oficial sugiere modificar también `username` a `administrator`. En esta resolución solo el type switch del access_token bastó. Indica que la auth del back-end probablemente compara `access_token` standalone, no requiere matching username. Estrategia general: probar el cambio mínimo primero, escalar solo si falla — cada modificación adicional aumenta fragilidad por possible off-by-one en lengths.
+3. **Asimetría serialization: cambiar string → int elimina el length field**: `s:32:"<hex>";` (38 chars) → `i:0;` (4 chars). Total del cookie cambia 34 bytes, pero PHP `unserialize` no valida length total — solo valida cada length de string interno. La modificación es válida.
+4. **PHP 8 cerró este vector con "saner string to number comparisons" (RFC 2020)**: `0 == "abc"` ahora evalúa false en PHP 8+ porque convierte el INT a string para la comparación, no el string a int. Apps PHP 8+ son inmunes a este patrón específico; legacy 5.x/7.x siguen vulnerables.
+5. **Patrón generalizable a magic hashes**: el mismo type juggling es la base del exploit `password_verify("123", "0e123")` (hashes MD5/SHA1 que empiezan con `0e` se interpretan como `0 * 10^N = 0`, todos iguales entre sí). Familia entera de bypasses derivada del mismo principio de coerción de strings a 0.
+
+### Archivos nuevos
+
+- **`learning/portswigger/deserialization-modifying-serialized-data-types/writeup.md`**: 6 secciones, anatomía del type juggling, tabla comparativa PHP 5/7 vs PHP 8 de comportamiento `==`, comparación con lab anterior (modifying objects), explicación del cambio mínimo vs solución oficial.
+
+### Conexión inventario
+
+- `inventario/03-analisis-vulnerabilidades/web/analisis-deserialization.md`: + writeup en `learning_refs:` (2 refs ahora).
+- `inventario/04-explotacion/web/explotacion-deserialization.md`: + writeup en `learning_refs:` (2 refs ahora).
+
+---
+
 ## [2026-05-09] — Writeup PortSwigger Modifying serialized objects (PHP deserialization Apprentice)
 
 Primer lab del cluster Insecure Deserialization. PHP `serialize()` en cookie sin firma. Login `wiener:peter`, decodificar (URL-decode + base64-decode) la cookie de sesión revela `O:4:"User":2:{s:8:"username";s:6:"wiener";s:5:"admin";b:0;}`. Cambiar `b:0` a `b:1`, re-encodear, reusar como cookie → privilege escalation completa. Acceder `/admin/delete?username=carlos` para resolver. Resuelto al primer intento.
