@@ -2,6 +2,31 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-10] — Writeup PortSwigger Arbitrary object injection in PHP (deserialization gadget via __destruct Practitioner)
+
+Cuarto lab del cluster Insecure Deserialization. PHP `unserialize()` sobre cookie sin `allowed_classes` + clase `CustomTemplate` con `__destruct()` que ejecuta `unlink($this->lock_file_path)`. La cookie original solo tiene `User` con 2 atributos (sin `avatar_link`), no se puede reusar la técnica del lab anterior — hay que **inyectar un objeto de OTRA clase**. Recon: HTML comment `<!-- TODO: Refactor once /libs/CustomTemplate.php is updated -->` revela el path; `GET /libs/CustomTemplate.php~` (Vim backup servido como text/plain) entrega el source. Payload: `O:14:"CustomTemplate":1:{s:14:"lock_file_path";s:23:"/home/carlos/morale.txt";}` reusado como cookie. Cualquier request dispara unserialize → fin del request → `__destruct` → `unlink`. Response 500 esperado (handler espera User), pero el sink ya corrió antes.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Salto cualitativo del cluster**: los 3 labs anteriores modificaban un atributo del User existente (boolean flip / type juggling / path injection); este lab **inyecta un objeto de clase distinta**. La primitiva de "cookie no firmada" pasa de "controlo el state de mi User" a "instancio cualquier clase del código y disparo sus magic methods". Este es el paso conceptual antes de POP chains (combinación de gadgets entre clases para escalar a RCE).
+2. **`__destruct` y `__wakeup` son sinks "siempre activos"**: corren automáticamente sobre cualquier objeto deserializado (al final del request o inmediatamente post-unserialize, respectivamente), sin requerir flujo exitoso del handler. En este lab la response es 500 (handler rechaza CustomTemplate), pero el `unlink` ya corrió antes del crash. Auditar magic methods del codebase es la forma sistemática de encontrar gadgets explotables.
+3. **HTML comments como vector de source disclosure subestimado**: ffuf con `raft-small-directories-lowercase.txt` NO encontró `/libs/` (a pesar de estar en posición 213 — probablemente porque el directory listing devolvía 404). El path apareció leyendo el HTML del listado de productos: `<!-- TODO: Refactor once /libs/CustomTemplate.php is updated -->`. Lección operacional: revisar TODOS los assets servidos (HTML comments, JS, CSS, sourcemaps, robots.txt, sitemap.xml, headers) ANTES de tirar wordlists. Los devs filtran info accidentalmente más seguido de lo que parece.
+4. **Source disclosure via Vim backup files (`*~`)**: cuando el web server sirve `*~` como `text/plain` (default Apache/nginx), `GET /libs/CustomTemplate.php~` devuelve el código PHP en plaintext. Variantes a probar: `.bak`, `.old`, `.swp`, `.save`, `.orig`. Cierre defensivo: configurar el server para 403 sobre estos sufijos.
+5. **PHP private property serialization detalle**: `lock_file_path` es `private` en el código (formato canónico `\x00ClassName\x00propname`), pero al inyectar el blob desde fuera sin el null-byte prefix, PHP crea una **propiedad pública** con el mismo nombre. `__destruct` accede `$this->lock_file_path` y la resuelve a la pública. El private vs public visibility no es un obstáculo del exploit. Documentado en una tabla de magic methods peligrosos del writeup.
+6. **El comentario `// Carlos thought this would be a good idea` en el código es el indicador**: el dev pensó que limpiar el lock file en `__destruct` era buena idea (RAII pattern legítimo). El bug no es el destructor per se — es la combinación destructor+atributo controlable+unserialize sin allowed_classes. Cualquiera de las 3 condiciones rotas cierra el vector.
+7. **Defensa única estructural específica de este vector**: `unserialize($input, ['allowed_classes' => ['Whitelist']])` (PHP 7+, 2015). Apps que no la usan son explotables si existe SIQUIERA un magic method peligroso en su codebase o dependencias. Tabla en el writeup mapea los magic methods riesgosos (`__destruct`, `__wakeup`, `__toString`, `__call`, `__invoke`).
+
+### Archivos nuevos
+
+- **`learning/portswigger/deserialization-arbitrary-object-injection-php/writeup.md`**: 6 secciones, anatomía del arbitrary object injection, tabla comparativa de los 4 labs del cluster, tabla de magic methods peligrosos, notas operacionales sobre source disclosure (HTML comments + Vim backups), conexión con POP chains y PHPGGC.
+
+### Conexión inventario
+
+- `inventario/03-analisis-vulnerabilidades/web/analisis-deserialization.md`: + writeup en `learning_refs:` (4 refs ahora).
+- `inventario/04-explotacion/web/explotacion-deserialization.md`: + writeup en `learning_refs:` (4 refs ahora).
+
+---
+
 ## [2026-05-10] — Writeup PortSwigger Using application functionality (PHP deserialization arbitrary file delete Practitioner)
 
 Tercer lab del cluster Insecure Deserialization. PHP `unserialize()` sobre cookie sin firma + handler de `POST /my-account/delete` que ejecuta `unlink($this->avatar_link)` antes de borrar al user. Login `wiener:peter`, decodificar cookie revela `O:4:"User":3:{...;s:11:"avatar_link";s:19:"users/wiener/avatar";}`. Cambiar `s:19:"users/wiener/avatar"` a `s:23:"/home/carlos/morale.txt"` (length recalc obligatorio porque ambos son strings de longitud distinta), re-encodear (Base64 + URL), mandar el delete → la app borra `/home/carlos/morale.txt` arbitrariamente antes de borrar la cuenta de wiener.
