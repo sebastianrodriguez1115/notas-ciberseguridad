@@ -2,6 +2,29 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-10] — Writeup PortSwigger Using application functionality (PHP deserialization arbitrary file delete Practitioner)
+
+Tercer lab del cluster Insecure Deserialization. PHP `unserialize()` sobre cookie sin firma + handler de `POST /my-account/delete` que ejecuta `unlink($this->avatar_link)` antes de borrar al user. Login `wiener:peter`, decodificar cookie revela `O:4:"User":3:{...;s:11:"avatar_link";s:19:"users/wiener/avatar";}`. Cambiar `s:19:"users/wiener/avatar"` a `s:23:"/home/carlos/morale.txt"` (length recalc obligatorio porque ambos son strings de longitud distinta), re-encodear (Base64 + URL), mandar el delete → la app borra `/home/carlos/morale.txt` arbitrariamente antes de borrar la cuenta de wiener.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **El cluster escala de auth bypass a sinks de filesystem**: lab 1 era flip de boolean (`admin: b:0` → `b:1`), lab 2 era type juggling (`access_token: s:32:"…"` → `i:0`), lab 3 introduce un sink **indirecto** en application logic — `unlink()` sobre un atributo controlado. La primitiva de cookie no firmada no cambia entre labs; lo que cambia es qué función del back-end procesa el atributo manipulable. Identificar el sink es ahora la mitad del trabajo.
+2. **String length recalc es obligatorio cuando cambiás strings de longitud distinta** (`s:19:` → `s:23:`). Asimetría con los dos labs anteriores: bools/ints no llevan length, strings sí. PHP `unserialize()` valida cada length declarado contra los bytes leídos; off-by-one → `unserialize() failed`. En el lab pasó: primer intento devolvió ese error por un typo en la sustitución, segundo intento con length correcto funcionó al toque.
+3. **La primitiva genérica de la deserialización insegura: cualquier sink que toque un atributo del objeto deserializado hereda la controlabilidad**. Documentado en una tabla del writeup: `unlink` → file delete, `file_get_contents` → LFI, `include` → RCE, `move_uploaded_file` → write arbitrario, `rename` → hijack. La defensa estructural única es firmar la cookie (HMAC); validar paths post-deserialize es defensa específica por sink.
+4. **Pausar antes de ejecutar acciones destructivas es operacional, no teórico**: el lab usa "Delete account" como vehículo del sink. Si lo mandás antes de tener la cookie tampered, perdés tu sesión sin haber explotado nada (queda solo `gregg:rosebud` de respaldo). Disciplina operacional: identificar el sink → tener el payload listo → ejecutar la acción destructiva una sola vez con el tampering aplicado.
+5. **Pitfalls del workflow Burp Decoder confirmados en práctica**: (a) Decoder agrega `\n` al hacer Base64 encode → URL-encode lo convierte en `%0a` y rompe `unserialize()`; (b) "Encode as URL" default no encodea `=` del padding base64, hay que forzarlo a `%3d`; (c) orden Base64-PRIMERO-URL-DESPUÉS es crítico, invertirlo corrompe el blob.
+
+### Archivos nuevos
+
+- **`learning/portswigger/deserialization-using-application-functionality/writeup.md`**: 6 secciones, anatomía del sink `unlink` con path controlado, tabla comparativa de los 3 labs del cluster, tabla de primitivas genéricas según el sink (`unlink`/`include`/`fopen`/etc.), notas operacionales sobre pausar antes de delete destructivo y pitfalls de Burp Decoder.
+
+### Conexión inventario
+
+- `inventario/03-analisis-vulnerabilidades/web/analisis-deserialization.md`: + writeup en `learning_refs:` (3 refs ahora).
+- `inventario/04-explotacion/web/explotacion-deserialization.md`: + writeup en `learning_refs:` (3 refs ahora).
+
+---
+
 ## [2026-05-10] — Writeup PortSwigger Modifying serialized data types (PHP type juggling Practitioner)
 
 Segundo lab del cluster Insecure Deserialization. PHP `unserialize()` + `==` loose comparison para auth bypass via type confusion. Login `wiener:peter`, decodificar cookie revela `O:4:"User":2:{...;s:12:"access_token";s:32:"<hex>";}`. Cambiar `s:32:"<hex>"` por `i:0` (integer cero), reusar como cookie → admin access via `0 == "<no-numeric-string>"` que evalúa true en PHP 5/7. Resuelto al primer intento sin necesidad de modificar el username.

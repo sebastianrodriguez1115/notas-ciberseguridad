@@ -57,7 +57,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Avanzada
 - **Aliases**: Insecure Deserialization, Object Injection, Deserialization Attack, Java deserialization, ysoserial, CommonsCollections, rO0AB, .NET deserialization
 - **Related**: `explotacion-deserialization`, `analisis-ssti`
-- **Learning**: [`portswigger/deserialization-modifying-serialized-objects`](../learning/portswigger/deserialization-modifying-serialized-objects/), [`portswigger/deserialization-modifying-serialized-data-types`](../learning/portswigger/deserialization-modifying-serialized-data-types/)
+- **Learning**: [`portswigger/deserialization-modifying-serialized-objects`](../learning/portswigger/deserialization-modifying-serialized-objects/), [`portswigger/deserialization-modifying-serialized-data-types`](../learning/portswigger/deserialization-modifying-serialized-data-types/), [`portswigger/deserialization-using-application-functionality`](../learning/portswigger/deserialization-using-application-functionality/)
 
 ## `analisis-estatico-dinamico` — Análisis de Malware: Estático y Dinámico
 
@@ -515,7 +515,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Fase**: Explotación · **Plataforma**: Web · **Dificultad**: Avanzada
 - **Aliases**: Insecure Deserialization, Object Injection RCE, ysoserial, Java deserialization, CommonsCollections, rO0AB, .NET deserialization, marshalsec
 - **Related**: `analisis-deserialization`
-- **Learning**: [`portswigger/deserialization-modifying-serialized-objects`](../learning/portswigger/deserialization-modifying-serialized-objects/), [`portswigger/deserialization-modifying-serialized-data-types`](../learning/portswigger/deserialization-modifying-serialized-data-types/)
+- **Learning**: [`portswigger/deserialization-modifying-serialized-objects`](../learning/portswigger/deserialization-modifying-serialized-objects/), [`portswigger/deserialization-modifying-serialized-data-types`](../learning/portswigger/deserialization-modifying-serialized-data-types/), [`portswigger/deserialization-using-application-functionality`](../learning/portswigger/deserialization-using-application-functionality/)
 
 ## `explotacion-eternalblue` — EternalBlue (MS17-010)
 
