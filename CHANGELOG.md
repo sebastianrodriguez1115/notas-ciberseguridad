@@ -2,6 +2,29 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-09] — Writeup PortSwigger Modifying serialized objects (PHP deserialization Apprentice)
+
+Primer lab del cluster Insecure Deserialization. PHP `serialize()` en cookie sin firma. Login `wiener:peter`, decodificar (URL-decode + base64-decode) la cookie de sesión revela `O:4:"User":2:{s:8:"username";s:6:"wiener";s:5:"admin";b:0;}`. Cambiar `b:0` a `b:1`, re-encodear, reusar como cookie → privilege escalation completa. Acceder `/admin/delete?username=carlos` para resolver. Resuelto al primer intento.
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Asimetría boolean vs string en PHP serialization**: booleans no tienen length field (`b:0`/`b:1` son ambos 4 chars), strings sí (`s:N:"..."`). Modificar un boolean es trivial — no hay que recalcular nada. Modificar un string requiere actualizar también su length field. Esta asimetría hace que el lab sea Apprentice y no Practitioner; el próximo lab del cluster (modifying string properties) introduce el length recalc.
+2. **Doble encoding (base64 + URL-encode) es cosmético, no defensa**: histórico de PHP cookies para evitar caracteres no-cookie-safe. Burp Decoder y CyberChef revelan plaintext en segundos. Cualquier defensa basada en obfuscation cae igual de rápido.
+3. **El bug real es confiar en el cliente como source of truth para state autorizativo**: la cookie viaja por el navegador del usuario, 100% controlable. Defensas estructurales (firma HMAC, JWT, session ID opaco con state server-side) son las correctas; sanitizar/validar contenido post-deserialize es band-aid frágil.
+4. **`O:4:"User":2:` no se descalibra al cambiar boolean value**: el `:4:` es length del class name (`User`), no del objeto. El `:2:` es count de propiedades (2 properties), no bytes. Cambiar valor de boolean no afecta ninguno.
+5. **PHP `unserialize()` puede instanciar objetos arbitrarios y disparar magic methods (`__wakeup`, `__destruct`)**: este lab no lo explota, pero es la base para los próximos labs del cluster que escalan de modificación de atributos a RCE vía POP chain.
+
+### Archivos nuevos
+
+- **`learning/portswigger/deserialization-modifying-serialized-objects/writeup.md`**: 6 secciones, formato PHP serialization explicado en tabla, anatomía del exploit (decode → modify → encode → reuse), análisis de por qué firma HMAC es la defensa estructural correcta.
+
+### Conexión inventario
+
+- `inventario/03-analisis-vulnerabilidades/web/analisis-deserialization.md`: + writeup en `learning_refs:` (era `[]`).
+- `inventario/04-explotacion/web/explotacion-deserialization.md`: + writeup en `learning_refs:` (era `[]`).
+
+---
+
 ## [2026-05-09] — Writeup PortSwigger Capture other users' requests (CL.TE cross-user persistent)
 
 Sexto lab del cluster HTTP Request Smuggling (Practitioner). Primer lab cross-user de la serie: smuggle CL.TE captura el request de otro usuario (administrator simulado) absorbiéndolo como body del campo `comment` de un blog post. La cookie de sesión del víctima queda almacenada en el comentario, accesible para cualquier visitante del post → account takeover. Resolución requirió 5-20 iteraciones por variabilidad de timing del back-end. Helper scripts en Python (raw socket TLS) escritos para automatizar: `test_sockets.py` (sanity check) y `smuggle_capture.py` (loop con regex parsing).

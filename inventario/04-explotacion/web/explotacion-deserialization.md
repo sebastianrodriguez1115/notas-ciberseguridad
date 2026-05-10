@@ -7,7 +7,7 @@ plataforma: Web
 dificultad: Avanzada
 mitre: [T1190]
 related: [analisis-deserialization]
-learning_refs: []
+learning_refs: [portswigger/deserialization-modifying-serialized-objects]
 ---
 
 # Explotación de Deserialización Insegura
