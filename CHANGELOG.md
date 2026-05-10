@@ -2,6 +2,53 @@
 
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 
+## [2026-05-09] — Writeup PortSwigger Reveal front-end request rewriting (CL.TE 2-fase)
+
+Quinto lab del cluster HTTP Request Smuggling (Practitioner). Primer lab del cluster con explotación en 2 fases: (1) descubrir el nombre de un header de IP rewriting random (`X-ZuJFJu-Ip` en esta sesión) que el front-end agrega y (2) usar `127.0.0.1` en ese header dentro de un smuggle a `/admin/delete?username=carlos` para bypassar el control "/admin solo desde 127.0.0.1". Resuelto al primer intento sin tropiezos (los 4 labs anteriores construyeron la intuición de bytes-perfect counting y CL interno absorbente).
+
+### Hallazgos no triviales documentados en el writeup
+
+1. **Smuggling + endpoint reflexivo + Content-Length absorbente = primitiva de leak de headers**: el `Content-Length: 400` interno en el smuggled `POST /` con `search=` absorbe los headers de la request 2 (que el front-end ya rewriteó agregando `X-ZuJFJu-Ip: <client-ip>`). El motor de search del back-end form-decodea el body, toma el valor de `search` (que se extiende hasta los 400 bytes EOF), y refleja ese contenido literal en el HTML `<h1>X search results for '...'</h1>`. La técnica es composable con cualquier feature reflexiva (search, error pages, logs visibles) y permite leakear headers que viven solo entre front-end y back-end (auth tokens, API keys, IP rewriting, internal routing).
+2. **Nombres random de headers no son defensa de seguridad — son obfuscation**: PortSwigger generó `X-ZuJFJu-Ip` esperando que el nombre random impidiera el ataque. Falla por dos vías independientes: (a) smuggling lo expone vía leak directo en una sola request, (b) el espacio de nombres semánticamente válidos para "IP del cliente" es chico (~10 nombres comunes), fuzzing dirigido lo encontraría en minutos. Aplica también a paths admin random, nombres de cookies, etc. La defensa real es autorización con autenticación criptográfica, no security-through-obscurity.
+3. **Mismo `Content-Length` interno absorbente, distinto uso**: en CL.TE/TE.CL bypass labs el CL=10/200 sirvió como trituradora de headers de request 2 para evitar "Duplicate header names". En este lab el CL=400 sirve como absorbente para reflexión. Mecánica HTTP idéntica, propósito diferente. Una vez entendida la primitiva, los labs caen rápidamente — la diferencia operacional principal está en qué bytes se absorben y para qué se usan.
+4. **El front-end agrega su header rewriting solo a requests que él procesa**: el smuggled vive en bytes opacos dentro del body del outer POST; el front-end no lo ve como request, no le agrega headers. El back-end sí lo parsea como request HTTP independiente y confía en sus headers — incluyendo el `X-ZuJFJu-Ip: 127.0.0.1` plantado por el atacante. Misma arquitectura defectuosa que `Host: localhost` bypass de los labs anteriores: back-end confía en un header como mecanismo de autorización.
+5. **Leak completo capturado en una sola request**: el reflejo expuso `X-ZuJFJu-Ip: 152.203.247.18` (IP real del cliente) además de todos los demás headers de la request 2 hasta los 400 bytes consumidos. Suficiente para identificar el header sin necesidad de iteraciones.
+6. **Lab solved al primer intento de fase 2** (no hubo iteraciones de tipo "501/401 con mensaje" como en CL.TE bypass): la suma de los aprendizajes de los 4 labs previos del cluster (chunked terminator, byte counting, single connection, CL interno absorbente) hizo que la fase 2 funcionara directamente con el header descubierto.
+
+### Archivos nuevos
+
+- **`learning/portswigger/reveal-front-end-request-rewriting/writeup.md`**: 6 secciones, 2 fases documentadas (leak via search reflection con CL=400 absorbente, delete con header descubierto + 127.0.0.1), tabla comparativa de los 3 labs de bypass del cluster (CL.TE bypass, TE.CL bypass, reveal request rewriting), insight sobre security-through-obscurity.
+
+### Conexión inventario
+
+- `inventario/03-analisis-vulnerabilidades/web/analisis-request-smuggling.md`: + writeup en `learning_refs:`. Cluster Request Smuggling 5/N labs (2 detección + 3 explotación).
+
+---
+
+## [2026-05-09] — Writeups PortSwigger Bypass front-end controls (CL.TE + TE.CL)
+
+Cluster HTTP Request Smuggling extendido con dos labs de explotación (Practitioner). Mismo escenario en ambos: front-end bloquea `/admin` con regla de path; back-end aplica regla `Host == localhost` para `/admin`; smuggling resuelve ambas restricciones cruzando bytes que el front-end nunca ve. Eliminación final del usuario `carlos` vía `GET /admin/delete?username=carlos` smuggleado.
+
+### Hallazgos no triviales documentados en los writeups
+
+1. **`Content-Length` interno del request smuggleado funciona como trituradora de bytes, no como descriptor de body real**: cuando la request 2 llega al socket TCP, sus headers (`POST / HTTP/1.1`, `Host: <lab>`, etc.) se concatenan al smuggled prefix. Sin `Content-Length` declarado en el smuggled, el backend los parsea como headers adicionales del `GET /admin/...`, produciendo `Host` duplicado → 400 "Duplicate header names are not allowed". Declarar un `Content-Length` (10 en CL.TE, 200 en TE.CL) hace que esos bytes se lean como body en lugar de como headers. El valor exacto no importa, solo que sea ≥ longitud de los headers que vienen detrás.
+2. **`Host: localhost` como bypass de control de acceso es el patrón compartido entre CL.TE y TE.CL**: front-ends bloquean `/admin` para tráfico externo pero back-ends confían en `Host: localhost` como mecanismo de autenticación interno. El smuggling cruza la frontera sin que el front-end vea el Host alternativo. Defensa correcta: autenticación real (cookie/token) en el back-end, no confianza en Host headers.
+3. **TE.CL es operacionalmente más frágil que CL.TE en explotación**: el chunk size en hex obliga a recalcular byte-perfect cada vez que cambia el contenido del smuggled (path, headers, CL interno). En CL.TE solo cambia el outer `Content-Length`. Documentado tropiezo educativo: primer intento con chunk size `71` falló con 400 "Invalid request" porque el conteo real era `70` (off-by-one por contar el separador `\r\n` entre chunks como data). Después de cambiar `/admin` a `/admin/delete?username=carlos`, recálculo a `87` (delta +23 bytes).
+4. **Del lab de detección al lab de explotación el salto conceptual es mínimo**: mismo setup de Burp, misma single connection, mismo principio de chunked terminator / chunk size. La única adición operacional es el `Content-Length` interno para evitar header pollution. Tabla comparativa detección vs explotación en sección 3 de cada writeup.
+5. **Set-Cookie en la response 2 confirma el procesamiento del smuggled**: en TE.CL, la response 2 al delete incluyó un `Set-Cookie: session=...` nuevo. Es el back-end asignando sesión al "cliente" que él cree estar viendo (es decir, al smuggled GET /admin/delete que no tenía cookie). El cliente real no la usa porque tiene la suya. Señal de que el smuggled request fue procesado independientemente del contexto del cliente real.
+6. **Off-by-one tradicional del chunked encoding**: al contar los bytes del chunk, el `\r\n` que sigue a la data NO cuenta — es separador entre chunks. Sumarlo da off-by-one (+2 si contás ambos bytes, +1 si contás solo `\r`). Tabla explícita línea-por-línea con bytes y acumulado en sección 2 de cada writeup, validada manualmente.
+
+### Archivos nuevos
+
+- **`learning/portswigger/bypass-front-end-controls-cl-te/writeup.md`**: 6 secciones, 4 iteraciones documentadas (smuggle sin Host: localhost → 401, smuggle con Host: localhost sin CL → 400 Duplicate, smuggle con CL=10 → admin panel, smuggle del delete → carlos eliminado), explicación del CL interno como mecanismo de absorción.
+- **`learning/portswigger/bypass-front-end-controls-te-cl/writeup.md`**: 6 secciones, 3 iteraciones documentadas (chunk size `71` → 400, recálculo a `70` → admin panel, cambio a `/admin/delete` con recálculo a `87` → carlos eliminado), tabla comparativa CL.TE bypass vs TE.CL bypass.
+
+### Conexión inventario
+
+- `inventario/03-analisis-vulnerabilidades/web/analisis-request-smuggling.md`: + 2 writeups en `learning_refs:`. Cluster Request Smuggling 4/N labs (2 detección + 2 explotación).
+
+---
+
 ## [2026-05-09] — Writeup PortSwigger Confirming TE.CL via differential responses
 
 Segundo lab del cluster HTTP Request Smuggling (Practitioner). Variante invertida de CL.TE: front-end usa Transfer-Encoding chunked, back-end usa Content-Length. Payload con CL=4 + chunk size `5e` (94 bytes) conteniendo `POST /404 HTTP/1.1` como request smuggled. Frontend forwardea todo (lee chunked OK), backend lee solo 4 bytes (`5e\r\n`) y deja el resto en buffer; segunda request lee desde buffer, procesa POST /404, devuelve 404. Resuelto con tropiezo educativo: primer intento con `GPOST /` y chunk size `5c` (92 bytes) confundió el backend pero produjo "Connection closed" en lugar de 404, y el lab no marcó solved porque su detector matchea status code 404, no error de método.

@@ -117,7 +117,7 @@ slugs relacionados y writeups en `learning/`. Generado desde frontmatter.
 - **Archivo**: [`inventario/03-analisis-vulnerabilidades/web/analisis-request-smuggling.md`](./03-analisis-vulnerabilidades/web/analisis-request-smuggling.md)
 - **Fase**: Análisis de Vulnerabilidades · **Plataforma**: Web · **Dificultad**: Avanzada
 - **Aliases**: HTTP Request Smuggling, HTTP Desync, CL.TE, TE.CL, TE.TE
-- **Learning**: [`portswigger/confirming-cl-te-via-differential-responses`](../learning/portswigger/confirming-cl-te-via-differential-responses/), [`portswigger/confirming-te-cl-via-differential-responses`](../learning/portswigger/confirming-te-cl-via-differential-responses/)
+- **Learning**: [`portswigger/confirming-cl-te-via-differential-responses`](../learning/portswigger/confirming-cl-te-via-differential-responses/), [`portswigger/confirming-te-cl-via-differential-responses`](../learning/portswigger/confirming-te-cl-via-differential-responses/), [`portswigger/bypass-front-end-controls-cl-te`](../learning/portswigger/bypass-front-end-controls-cl-te/), [`portswigger/bypass-front-end-controls-te-cl`](../learning/portswigger/bypass-front-end-controls-te-cl/), [`portswigger/reveal-front-end-request-rewriting`](../learning/portswigger/reveal-front-end-request-rewriting/)
 
 ## `analisis-seguridad-cabeceras` — Análisis de Vulnerabilidades: Seguridad de Cabeceras HTTP
 
