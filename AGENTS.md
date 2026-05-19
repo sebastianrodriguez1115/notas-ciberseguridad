@@ -6,7 +6,6 @@ Para cualquier consulta o tarea solicitada por el usuario, el agente debe seguir
 
 1. **Búsqueda Local Primero**: Agotar siempre las fuentes internas antes de recurrir a Internet.
    - Consultar el `inventario/` existente para coherencia y para detectar contenido relacionado o duplicados antes de añadir.
-   - Utilizar el motor `rag` para extraer información de los libros en `referencias/`.
 2. **Recurso a la Web**: Solo se utilizarán herramientas de búsqueda externa (`google_web_search`, `web_fetch`) si la información no se encuentra localmente o si se requiere validación de una fuente oficial (Priority 1).
 3. **Mantenimiento**: Si se descubre información relevante en la web que no está en el inventario, el agente debe proponer su incorporación.
 
@@ -415,7 +414,7 @@ Para garantizar la precisión y actualidad del inventario, los agentes deben seg
 - **Instrucciones**:
   1. Explorar el propio `inventario/` (Glob y Grep) para detectar coverage existente del tema antes de añadir contenido nuevo
   2. Si hay coverage existente, evaluar si actualizar o si el tema requiere un archivo nuevo
-  3. Para temas no cubiertos, consultar `referencias/` (vía RAG) y fuentes web según `Heurísticas de Prioridad`
+  3. Para temas no cubiertos, consultar `referencias/` cuando sea necesario y fuentes web según `Heurísticas de Prioridad`
   4. Agrupar herramientas individuales en técnicas lógicas cuando sirven al mismo propósito
   5. Si el tema tiene subtemas independientes, se pueden lanzar múltiples instancias en paralelo
 
@@ -459,7 +458,7 @@ Para garantizar la precisión y actualidad del inventario, los agentes deben seg
 El siguiente flujo fue validado al construir `01-reconocimiento/`. Usarlo como base para las fases siguientes.
 
 ### Paso 1 — Investigacion
-Lanzar uno o mas agentes `investigador` según la complejidad de la fase. Si hay subtemas claramente independientes (ej: distintas carpetas dentro de la fase), lanzarlos en paralelo para acelerar. Cada agente consulta el `inventario/` actual, las fuentes en `referencias/` (vía RAG) y la web según prioridad, devolviendo lista de técnicas con comandos y rutas fuente.
+Lanzar uno o mas agentes `investigador` según la complejidad de la fase. Si hay subtemas claramente independientes (ej: distintas carpetas dentro de la fase), lanzarlos en paralelo para acelerar. Cada agente consulta el `inventario/` actual, las fuentes en `referencias/` cuando sea necesario y la web según prioridad, devolviendo lista de técnicas con comandos y rutas fuente.
 
 ### Paso 2 — Redaccion
 Con la información del paso anterior, lanzar agentes `redactor`. Se pueden lanzar en paralelo por subtema. Los agentes crean los archivos directamente en `inventario/0X-fase/`.
@@ -489,15 +488,4 @@ Registrar en `CHANGELOG.md` bajo la fecha actual:
 - Técnicas añadidas (lista con nombres de archivo)
 - Correcciones aplicadas
 - Cambios a `AGENTS.md` o formato
-
-## Configuración RAG
-
-Configuración para el motor de búsqueda semántica local sobre los libros de `referencias/`.
-
-| Parámetro | Valor |
-|-----------|-------|
-| `--source-dir` | `/home/sebastian/Documentos/inventario-técnicas-ciberseguridad/referencias/` |
-| `--db-path` | `/home/sebastian/Documentos/rag/chroma_db/` |
-| `--collection-name` | `ciberseguridad-referencias` |
-| `--n-results` | `5` |
 
